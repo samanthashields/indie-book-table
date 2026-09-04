@@ -12,7 +12,7 @@ Right now everything on screen is sample content. This adds real accounts and a 
 
 **Collaborators (editors, designers, illustrators, beta readers)**
 - Invited by email to one specific book cycle, with a role such as copyeditor or cover designer.
-- A lightweight account that only opens the book cycle they were invited to, and only the milestones assigned to them.
+- A full account with its own subscription plan (decided: collaborators are required to have a plan) that opens only the book cycle they were invited to, and only the milestones assigned to them.
 - The author can change a collaborator's role or remove access at any time.
 
 **You (super admin)**
