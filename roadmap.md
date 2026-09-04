@@ -39,3 +39,10 @@
 - [ ] Collaborator invites and per-book permissions
 - [ ] Super-admin area: people, templates, dashboard, activity log
 - [ ] Notifications and emails
+
+## The Indie Table merge (uploaded brief)
+- [ ] Phase 1: Freeze design system into a reference doc
+- [ ] Phase 2: Unified shell + routing (Author's Workshop / The Table / Blog; rebrand; coach named Pen)
+- [ ] Phase 3: Port The Table (catalog, book detail, author profile, submission) — needs the other project's screens pasted in
+- [ ] Phase 4: Port the Blog — needs the other project's posts/components
+- [ ] Phase 5: One author identity + publish → listing → Table handoff
