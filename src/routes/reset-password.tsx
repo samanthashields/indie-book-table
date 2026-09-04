@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/reset-password")({
+  ssr: false,
   head: () => ({ meta: [
     { title: "Reset your password — Book Cycles" },
     { name: "description", content: "Choose a new password for your Book Cycles account." },

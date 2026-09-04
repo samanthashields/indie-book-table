@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 type Mode = "signin" | "signup";
 
 export const Route = createFileRoute("/auth")({
+  ssr: false,
   head: () => ({ meta: [
     { title: "Sign in — Book Cycles" },
     { name: "description", content: "Sign in to your publishing workspace, or create an author or collaborator account." },
