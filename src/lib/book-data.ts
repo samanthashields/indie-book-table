@@ -41,6 +41,20 @@ export type Book = {
   tone: "cool" | "green" | "warm";
 };
 
+const fallbackBook: Book = {
+  id: "salt-lines",
+  title: "The Salt Lines",
+  subtitle: "A novel",
+  author: "Mara Ellison",
+  genre: "Literary fiction",
+  status: "Editing",
+  progress: 42,
+  nextAction: "Review developmental edit",
+  target: "18 September 2026",
+  cover: saltLinesCover,
+  tone: "green",
+};
+
 export const books: Book[] = [
   {
     id: "salt-lines",
@@ -144,7 +158,7 @@ export const phases: Phase[] = [
   },
 ];
 
-export const bookById = (id: string) => books.find((book) => book.id === id) ?? books[0];
+export const bookById = (id: string): Book => books.find((book) => book.id === id) ?? fallbackBook;
 const fallbackMilestone: Milestone & { phase: string } = {
   id: "developmental-edit",
   name: "Review developmental edit",
