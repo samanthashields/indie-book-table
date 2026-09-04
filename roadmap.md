@@ -27,3 +27,15 @@
 
 ## Backend planning (next)
 - [ ] Plan accounts, sign-up, roles, super admin user management, global genre templates
+
+## Accounts, roles and admin (approved plan)
+- [x] Decided: collaborators require their own plan (full accounts, email + Google sign-in)
+- [x] Decided: free plan (templates + scratch) and paid plan (adds AI coach)
+- [x] Decided: author/collaborator accounts independent
+- [ ] Enable backend, accounts, profiles, roles
+- [ ] Sign-up, sign-in, Google, password reset, session-aware header
+- [ ] Books/phases/milestones/reflections as real per-author records
+- [ ] File storage for covers and deliverables
+- [ ] Collaborator invites and per-book permissions
+- [ ] Super-admin area: people, templates, dashboard, activity log
+- [ ] Notifications and emails
