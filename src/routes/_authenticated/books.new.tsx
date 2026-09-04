@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { BookOpen, Check, Eye, Loader2, MessageSquareText, X } from "lucide-react";
+import { toast } from "sonner";
 import { CoachMark } from "@/components/coach-mark";
 import { AppShell } from "@/components/app-shell";
 import { CoachConversation } from "@/components/coach-conversation";
@@ -8,9 +9,11 @@ import { CycleBuilder, blankPhases } from "@/components/cycle-builder";
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { usePlanStream } from "@/lib/use-plan-stream";
 import { toPayload } from "@/lib/coach-intake";
-import { templateById, templates } from "@/lib/template-data";
+import { useCreateBookCycle, useTemplates } from "@/lib/book-db";
+import type { TemplatePhase } from "@/lib/template-data";
 import { cn } from "@/lib/utils";
 
 type PathId = "coach" | "template" | "scratch";
@@ -46,9 +49,23 @@ function CreateBook() {
   const [pending, setPending] = useState<PathId>(selected);
   const { plan, isStreaming, error, canceled, start, cancel } = usePlanStream();
   const phases = plan?.phases ?? [];
+  const templates = useTemplates();
+  const createCycle = useCreateBookCycle();
+  const [coachTitle, setCoachTitle] = useState("");
+  const [coachDate, setCoachDate] = useState("");
 
   const go = (next: Search) => void navigate({ to: "/books/new", search: next });
   const backToChooser = () => void navigate({ to: "/books/new", search: {} });
+
+  const create = (input: { title: string; targetDate: string; phases: TemplatePhase[]; templateId?: string; genre?: string; illustrated?: boolean }) => {
+    createCycle.mutate(
+      { title: input.title, targetDate: input.targetDate || undefined, phases: input.phases, templateId: input.templateId, genre: input.genre, illustrated: input.illustrated },
+      {
+        onSuccess: (bookId) => void navigate({ to: "/books/$bookId", params: { bookId } }),
+        onError: (err) => toast.error(err instanceof Error ? err.message : "Couldn’t create the book cycle"),
+      },
+    );
+  };
 
   if (!started) {
     return (
@@ -70,32 +87,45 @@ function CreateBook() {
   }
 
   if (selected === "template") {
+    const templateList = templates.data ?? [];
     if (!search.template) {
       return (
         <AppShell coachContext="create">
           <PageHeading title="Choose a template" description="Each path is shaped around how that kind of book is really made." />
-          <div className="grid gap-6 lg:grid-cols-2">
-            {templates.map((template, index) => (
-              <article key={template.id} className={cn("overflow-hidden rounded-2xl border border-border p-6 shadow-xs", index === 0 ? "bg-amber/8" : "bg-teal/8")}>
-                <div className="mb-3 flex flex-wrap gap-2"><StatusPill tone={index === 0 ? "warm" : "good"}>{template.category}</StatusPill><StatusPill>{template.phases.length} phases</StatusPill></div>
-                <h2 className="font-serif text-2xl font-normal">{template.name}</h2>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">{template.tagline}</p>
-                <div className="mt-5 flex flex-wrap gap-3">
-                  <Button variant="outline" asChild><Link to="/templates/$templateId" params={{ templateId: template.id }}><Eye />Preview</Link></Button>
-                  <Button onClick={() => go({ path: "template", template: template.id })}>Use this template</Button>
-                </div>
-              </article>
-            ))}
-          </div>
+          {templates.isLoading ? <p className="text-sm text-muted-foreground">Loading templates…</p> : (
+            <div className="grid gap-6 lg:grid-cols-2">
+              {templateList.map((template, index) => (
+                <article key={template.id} className={cn("overflow-hidden rounded-2xl border border-border p-6 shadow-xs", index === 0 ? "bg-amber/8" : "bg-teal/8")}>
+                  <div className="mb-3 flex flex-wrap gap-2"><StatusPill tone={index === 0 ? "warm" : "good"}>{template.genre}</StatusPill><StatusPill>{template.phases.length} phases</StatusPill></div>
+                  <h2 className="font-serif text-2xl font-normal">{template.title}</h2>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">{template.description}</p>
+                  <div className="mt-5 flex flex-wrap gap-3">
+                    <Button variant="outline" asChild><Link to="/templates/$templateId" params={{ templateId: template.id }}><Eye />Preview</Link></Button>
+                    <Button onClick={() => go({ path: "template", template: template.id })}>Use this template</Button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
           <div className="mt-6 flex justify-start"><Button variant="outline" onClick={backToChooser}>Back</Button></div>
         </AppShell>
       );
     }
-    const template = templateById(search.template);
+    const template = templateList.find((entry) => entry.id === search.template);
+    if (templates.isLoading) return <AppShell coachContext="create"><p className="text-sm text-muted-foreground">Loading template…</p></AppShell>;
+    if (!template) return <AppShell coachContext="create"><p className="text-sm text-muted-foreground">This template is no longer available.</p></AppShell>;
     return (
       <AppShell coachContext="create">
-        <PageHeading title={`Customise the ${template.name}`} description="Every phase and milestone is yours to rename, remove, or add to." />
-        <CycleBuilder key={template.id} title={template.name} description={template.tagline} phases={template.phases} onBack={() => go({ path: "template" })} />
+        <PageHeading title={`Customise the ${template.title}`} description="Every phase and milestone is yours to rename, remove, or add to." />
+        <CycleBuilder
+          key={template.id}
+          title={template.title}
+          description={template.description ?? ""}
+          phases={template.phases}
+          creating={createCycle.isPending}
+          onBack={() => go({ path: "template" })}
+          onCreate={(input) => create({ ...input, templateId: template.id, genre: template.genre ?? undefined, illustrated: template.details.illustrated ?? false })}
+        />
       </AppShell>
     );
   }
@@ -104,17 +134,36 @@ function CreateBook() {
     return (
       <AppShell coachContext="create">
         <PageHeading title="Build from scratch" description="Six phases, empty and waiting. Add the milestones that matter for this book." />
-        <CycleBuilder title="Your book cycle" description="Add at least one milestone per phase. Each milestone carries exactly one requirement." phases={blankPhases} onBack={backToChooser} />
+        <CycleBuilder
+          title="Your book cycle"
+          description="Add at least one milestone per phase. Each milestone carries exactly one requirement."
+          phases={blankPhases}
+          creating={createCycle.isPending}
+          onBack={backToChooser}
+          onCreate={(input) => create(input)}
+        />
       </AppShell>
     );
   }
+
+  const planPhases: TemplatePhase[] = phases.filter((phase) => Boolean(phase?.name)).map((phase, index) => ({
+    id: ["writing", "editing", "production", "prelaunch", "launch", "growth"][index] ?? `phase-${index}`,
+    name: phase.name!,
+    mode: (phase.mode ?? "Sprint") as TemplatePhase["mode"],
+    summary: phase.summary ?? "",
+    milestones: (phase.milestones ?? []).filter((milestone) => Boolean(milestone?.name)).map((milestone) => ({
+      name: milestone.name!,
+      requirement: (milestone.requirement ?? "Attach a File") as TemplatePhase["milestones"][number]["requirement"],
+      note: milestone.description ?? milestone.recommendation ?? "",
+    })),
+  }));
 
   return (
     <AppShell coachContext="create">
       <PageHeading title="Plan with Book Coach" description="Answer a few questions and your coach will draft the whole cycle." />
       <div className="grid gap-8 xl:grid-cols-[1fr_300px]">
         <div className="space-y-8">
-          <CoachConversation generating={isStreaming} onGenerate={(answers) => void start(toPayload(answers))} />
+          <CoachConversation generating={isStreaming} onGenerate={(answers) => { setCoachTitle(answers.title ?? ""); void start(toPayload(answers)); }} />
 
           {error && <p className="rounded-xl border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">{error}</p>}
           {canceled && <p className="rounded-xl border border-border bg-secondary p-4 text-sm">You stopped the draft. Everything the coach had written so far is kept below.</p>}
@@ -128,7 +177,7 @@ function CreateBook() {
             {plan.budgetNote && <p className="mt-4 rounded-xl bg-amber/15 p-4 text-sm leading-6">{plan.budgetNote}</p>}
             {(plan.pitfalls?.length ?? 0) > 0 && <ul className="mt-4 space-y-2 text-sm leading-6 text-muted-foreground">{plan.pitfalls!.filter(Boolean).map((pitfall) => <li key={pitfall}>{pitfall}</li>)}</ul>}
             <ol className="mt-8 space-y-6">
-              {phases.filter((phase) => Boolean(phase?.name)).map((phase, index) => <li key={phase.name} className="animate-in fade-in slide-in-from-bottom-2 rounded-2xl border border-border p-5 duration-500">
+              {planPhases.map((phase, index) => <li key={phase.name} className="animate-in fade-in slide-in-from-bottom-2 rounded-2xl border border-border p-5 duration-500">
                 <div className="flex items-baseline gap-3">
                   <span className="grid size-7 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">{index + 1}</span>
                   <h4 className="font-serif text-xl font-semibold">{phase.name}</h4>
@@ -136,21 +185,28 @@ function CreateBook() {
                 </div>
                 {phase.summary && <p className="mt-2 text-sm leading-6 text-muted-foreground">{phase.summary}</p>}
                 <ul className="mt-4 space-y-3">
-                  {(phase.milestones ?? []).filter((milestone) => Boolean(milestone?.name)).map((milestone) => <li key={milestone.name} className="animate-in fade-in rounded-xl bg-secondary p-4 duration-500">
+                  {phase.milestones.map((milestone) => <li key={milestone.name} className="animate-in fade-in rounded-xl bg-secondary p-4 duration-500">
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                       <p className="font-semibold">{milestone.name}</p>
-                      <p className="text-xs text-muted-foreground">{milestone.requirement}{milestone.due ? `, due ${milestone.due}` : ""}{milestone.approvalRequired ? ", approval required" : ""}</p>
+                      <p className="text-xs text-muted-foreground">{milestone.requirement}</p>
                     </div>
-                    {milestone.description && <p className="mt-1 text-sm leading-6 text-muted-foreground">{milestone.description}</p>}
-                    {milestone.recommendation && <p className="mt-2 text-sm leading-6">{milestone.recommendation}</p>}
+                    {milestone.note && <p className="mt-1 text-sm leading-6 text-muted-foreground">{milestone.note}</p>}
                   </li>)}
                 </ul>
               </li>)}
             </ol>
 
-            {!isStreaming && <div className="mt-8 flex flex-wrap justify-end gap-3">
-              <Button variant="outline" onClick={backToChooser}>Change answers</Button>
-              <Button asChild><Link to="/books/$bookId" params={{ bookId: "salt-lines" }}>Create the book cycle</Link></Button>
+            {!isStreaming && <div className="mt-8 space-y-4">
+              <div className="grid gap-5 sm:grid-cols-2">
+                <label className="block text-sm font-semibold">Working title<Input className="mt-2" value={coachTitle} onChange={(event) => setCoachTitle(event.target.value)} placeholder="The working title of your book" /></label>
+                <label className="block text-sm font-semibold">Target publication date<Input className="mt-2" type="date" value={coachDate} onChange={(event) => setCoachDate(event.target.value)} /></label>
+              </div>
+              <div className="flex flex-wrap justify-end gap-3">
+                <Button variant="outline" onClick={backToChooser}>Change answers</Button>
+                <Button disabled={!coachTitle.trim() || planPhases.length === 0 || createCycle.isPending} onClick={() => create({ title: coachTitle.trim(), targetDate: coachDate, phases: planPhases })}>
+                  {createCycle.isPending && <Loader2 className="animate-spin" />}Create the book cycle
+                </Button>
+              </div>
             </div>}
           </section>}
         </div>
