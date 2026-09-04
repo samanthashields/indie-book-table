@@ -13,7 +13,7 @@ import { phaseStyle } from "@/lib/phase-style";
 import { formatRange, pacing } from "@/lib/phase-timeline";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/books/$bookId/")({
+export const Route = createFileRoute("/_authenticated/books/$bookId/")({
   head: () => ({ meta: [
     { title: "Book Overview — Book Cycles" }, { name: "description", content: "See the phases, milestones, collaborators, and next actions for your book." },
     { property: "og:title", content: "Book Overview — Book Cycles" }, { property: "og:description", content: "See the phases, milestones, collaborators, and next actions for your book." },

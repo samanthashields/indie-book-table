@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { phaseStyle } from "@/lib/phase-style";
 import { templateById } from "@/lib/template-data";
 
-export const Route = createFileRoute("/templates/$templateId")({
+export const Route = createFileRoute("/_authenticated/templates/$templateId")({
   head: () => ({ meta: [
     { title: "Template Preview — Book Cycles" },
     { name: "description", content: "Preview every phase, milestone, and requirement in this book cycle template before you use it." },

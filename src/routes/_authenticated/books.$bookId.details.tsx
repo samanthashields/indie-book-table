@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { bookById } from "@/lib/book-data";
 
-export const Route = createFileRoute("/books/$bookId/details")({ head: () => ({ meta: [
+export const Route = createFileRoute("/_authenticated/books/$bookId/details")({ head: () => ({ meta: [
   { title: "Book Details — Book Cycles" }, { name: "description", content: "Edit the publishing, audience, format, and distribution details for your book." }, { property: "og:title", content: "Book Details — Book Cycles" }, { property: "og:description", content: "Edit the publishing, audience, format, and distribution details for your book." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
 ] }), component: BookDetails });
 

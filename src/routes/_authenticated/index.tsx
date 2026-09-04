@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { books } from "@/lib/book-data";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_authenticated/")({
   head: () => ({ meta: [
     { title: "My Books — Book Cycles" },
     { name: "description", content: "Guide every book from draft to launch with a clear publishing plan." },

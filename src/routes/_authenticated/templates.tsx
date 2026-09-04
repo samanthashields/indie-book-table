@@ -6,7 +6,7 @@ import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { templates } from "@/lib/template-data";
 
-export const Route = createFileRoute("/templates")({ head: () => ({ meta: [
+export const Route = createFileRoute("/_authenticated/templates")({ head: () => ({ meta: [
   { title: "Book Cycle Templates — Book Cycles" }, { name: "description", content: "Start with a genre-aware publishing plan and tailor it to your book." }, { property: "og:title", content: "Book Cycle Templates — Book Cycles" }, { property: "og:description", content: "Start with a genre-aware publishing plan and tailor it to your book." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
 ] }), component: Templates });
 
