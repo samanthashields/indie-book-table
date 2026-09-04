@@ -56,37 +56,43 @@ function CreateBook() {
             <label className="block text-sm font-semibold">Total budget<Input className="mt-2" type="number" min="0" value={form.budget} onChange={set("budget")} /></label>
           </div>
         </div>
-        {plan.isError && <p className="mt-6 border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">{plan.error.message}</p>}
-        <div className="mt-8 flex justify-between">
-          <Button variant="outline" onClick={() => setStep(0)}>Back</Button>
-          <Button onClick={() => plan.mutate()} disabled={plan.isPending}>{plan.isPending ? <><Loader2 className="animate-spin" />Drafting your plan</> : plan.data ? "Draft it again" : "Generate my book cycle"}</Button>
+        {error && <p className="mt-6 border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">{error}</p>}
+        {canceled && <p className="mt-6 border border-border bg-secondary p-4 text-sm">You stopped the draft. Everything the coach had written so far is kept below.</p>}
+        <div className="mt-8 flex flex-wrap justify-between gap-3">
+          <Button variant="outline" onClick={() => setStep(0)} disabled={isStreaming}>Back</Button>
+          <div className="flex gap-3">
+            {isStreaming && <Button variant="outline" onClick={cancel}><X className="size-4" />Stop</Button>}
+            <Button onClick={() => void start({ ...form, budget: Number(form.budget) || 0 })} disabled={isStreaming}>{isStreaming ? <><Loader2 className="animate-spin" />Drafting your plan</> : plan ? "Draft it again" : "Generate my book cycle"}</Button>
+          </div>
         </div>
 
-        {plan.data && <div className="mt-10 border-t border-border pt-8">
+        {plan && <div className="mt-10 border-t border-border pt-8">
           <h3 className="font-serif text-2xl font-semibold">Your draft book cycle</h3>
-          <p className="mt-2 text-sm leading-6 text-muted-foreground">{plan.data.summary}</p>
-          <p className="mt-4 bg-secondary p-4 text-sm leading-6">{plan.data.budgetNote}</p>
-          {plan.data.pitfalls.length > 0 && <ul className="mt-4 space-y-2 text-sm leading-6 text-muted-foreground">{plan.data.pitfalls.map((pitfall) => <li key={pitfall}>{pitfall}</li>)}</ul>}
+          {isStreaming && <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />Your coach is writing this now. Phases appear as they arrive.</p>}
+          {plan.summary && <p className="mt-2 text-sm leading-6 text-muted-foreground">{plan.summary}</p>}
+          {plan.budgetNote && <p className="mt-4 bg-secondary p-4 text-sm leading-6">{plan.budgetNote}</p>}
+          {(plan.pitfalls?.length ?? 0) > 0 && <ul className="mt-4 space-y-2 text-sm leading-6 text-muted-foreground">{plan.pitfalls!.filter(Boolean).map((pitfall) => <li key={pitfall}>{pitfall}</li>)}</ul>}
           <ol className="mt-8 space-y-6">
-            {plan.data.phases.map((phase, index) => <li key={phase.name} className="border border-border p-5">
+            {phases.filter((phase) => Boolean(phase?.name)).map((phase, index) => <li key={phase.name} className="animate-in fade-in slide-in-from-bottom-2 border border-border p-5 duration-500">
               <div className="flex items-baseline gap-3">
                 <span className="grid size-7 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">{index + 1}</span>
                 <h4 className="font-serif text-xl font-semibold">{phase.name}</h4>
-                <span className="text-xs font-semibold text-muted-foreground">{phase.mode}</span>
+                {phase.mode && <span className="text-xs font-semibold text-muted-foreground">{phase.mode}</span>}
               </div>
-              <p className="mt-2 text-sm leading-6 text-muted-foreground">{phase.summary}</p>
+              {phase.summary && <p className="mt-2 text-sm leading-6 text-muted-foreground">{phase.summary}</p>}
               <ul className="mt-4 space-y-3">
-                {phase.milestones.map((milestone) => <li key={milestone.name} className="bg-secondary p-4">
+                {(phase.milestones ?? []).filter((milestone) => Boolean(milestone?.name)).map((milestone) => <li key={milestone.name} className="animate-in fade-in bg-secondary p-4 duration-500">
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <p className="font-semibold">{milestone.name}</p>
                     <p className="text-xs text-muted-foreground">{milestone.requirement}{milestone.due ? ` · due ${milestone.due}` : ""}{milestone.approvalRequired ? " · approval required" : ""}</p>
                   </div>
-                  <p className="mt-1 text-sm leading-6 text-muted-foreground">{milestone.description}</p>
-                  <p className="mt-2 text-sm leading-6">{milestone.recommendation}</p>
+                  {milestone.description && <p className="mt-1 text-sm leading-6 text-muted-foreground">{milestone.description}</p>}
+                  {milestone.recommendation && <p className="mt-2 text-sm leading-6">{milestone.recommendation}</p>}
                 </li>)}
               </ul>
             </li>)}
           </ol>
+
           <div className="mt-8 flex justify-end"><Button asChild><Link to="/books/$bookId" params={{ bookId: "salt-lines" }}>Start this book cycle</Link></Button></div>
         </div>}
       </section>
