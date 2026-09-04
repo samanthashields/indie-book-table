@@ -62,8 +62,6 @@ function BookDetails() {
         <section className="rounded-2xl border border-border bg-paper p-6 shadow-xs">
           <h2 className="mb-5 font-serif text-2xl font-normal">Cover image</h2>
           <CoverUploader bookId={bookId} title={form.title || book.title} coverUrl={cover} onChange={setCover} saving={updateBook.isPending} />
-
-          </div>
         </section>
         <section className="rounded-2xl border border-border bg-card p-6 shadow-xs">
           <h2 className="mb-5 font-serif text-2xl font-normal">Book identity</h2>
