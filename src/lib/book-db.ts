@@ -1,5 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
+
+type MilestoneUpdate = Database["public"]["Tables"]["milestones"]["Update"];
+type BookUpdate = Database["public"]["Tables"]["books"]["Update"];
+type TemplateRow = Database["public"]["Tables"]["templates"]["Row"];
 import type { Milestone, Phase, RequirementType } from "@/lib/book-data";
 import type { ManuscriptStatus, TimelineResult } from "@/lib/phase-timeline";
 import { suggestPhaseRanges } from "@/lib/phase-timeline";
@@ -90,8 +95,8 @@ const milestoneToUi = (row: MilestoneRow): Milestone => ({
   owner: row.owner ?? "Author",
   requirement: (row.requirement_type ?? "Attach a File") as RequirementType,
   status: (row.status as Milestone["status"]) ?? "Not started",
-  due: formatShortDate(row.due_date),
   approval: row.approval_required,
+  ...(formatShortDate(row.due_date) ? { due: formatShortDate(row.due_date)! } : {}),
 });
 
 const summarize = (book: BookRow, milestones: MilestoneRow[], authorName: string): BookSummary => {
