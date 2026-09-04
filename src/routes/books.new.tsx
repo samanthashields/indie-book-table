@@ -35,10 +35,9 @@ function CreateBook() {
     targetDate: "2026-09-18",
     budget: "3500",
   });
-  const generate = useServerFn(generateBookPlan);
-  const plan = useMutation<GeneratedPlan, Error>({
-    mutationFn: () => generate({ data: { ...form, budget: Number(form.budget) || 0 } }),
-  });
+  const { plan, isStreaming, error, canceled, start, cancel } = usePlanStream();
+  const phases = plan?.phases ?? [];
+
   const set = (key: keyof typeof form) => (event: { target: { value: string } }) =>
     setForm((current) => ({ ...current, [key]: event.target.value }));
 
