@@ -473,6 +473,7 @@ export type Database = {
           audience: string | null
           created_at: string
           description: string | null
+          details: Json
           duration: string | null
           genre: string | null
           id: string
@@ -488,6 +489,7 @@ export type Database = {
           audience?: string | null
           created_at?: string
           description?: string | null
+          details?: Json
           duration?: string | null
           genre?: string | null
           id?: string
@@ -503,6 +505,7 @@ export type Database = {
           audience?: string | null
           created_at?: string
           description?: string | null
+          details?: Json
           duration?: string | null
           genre?: string | null
           id?: string

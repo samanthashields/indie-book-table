@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { Plus, Trash2 } from "lucide-react";
+import { Loader2, Plus, Trash2 } from "lucide-react";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,8 +23,17 @@ export const blankPhases: TemplatePhase[] = [
   { id: "growth", name: "Post-Launch & Growth", mode: "Loop", summary: "Learn from the launch and build steady readership.", milestones: [] },
 ];
 
-export function CycleBuilder({ title, description, phases: initial, onBack }: { title: string; description: string; phases: TemplatePhase[]; onBack: () => void }) {
+export function CycleBuilder({ title, description, phases: initial, creating, onBack, onCreate }: {
+  title: string;
+  description: string;
+  phases: TemplatePhase[];
+  creating?: boolean;
+  onBack: () => void;
+  onCreate: (input: { title: string; targetDate: string; phases: TemplatePhase[] }) => void;
+}) {
   const [phases, setPhases] = useState<TemplatePhase[]>(initial);
+  const [bookTitle, setBookTitle] = useState("");
+  const [targetDate, setTargetDate] = useState("");
 
   const updateMilestone = (phaseId: string, index: number, patch: Partial<TemplatePhase["milestones"][number]>) =>
     setPhases((current) => current.map((phase) => phase.id === phaseId ? { ...phase, milestones: phase.milestones.map((milestone, i) => i === index ? { ...milestone, ...patch } : milestone) } : phase));
@@ -36,11 +44,17 @@ export function CycleBuilder({ title, description, phases: initial, onBack }: { 
   const removeMilestone = (phaseId: string, index: number) =>
     setPhases((current) => current.map((phase) => phase.id === phaseId ? { ...phase, milestones: phase.milestones.filter((_, i) => i !== index) } : phase));
 
+  const ready = bookTitle.trim().length > 0 && phases.some((phase) => phase.milestones.length > 0);
+
   return (
     <section className="space-y-6">
       <div className="rounded-2xl border border-border bg-paper p-6">
         <h2 className="font-serif text-3xl font-normal">{title}</h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{description}</p>
+        <div className="mt-5 grid gap-5 sm:grid-cols-2">
+          <label className="block text-sm font-semibold">Working title<Input className="mt-2" value={bookTitle} placeholder="The working title of your book" onChange={(event) => setBookTitle(event.target.value)} /></label>
+          <label className="block text-sm font-semibold">Target publication date<Input className="mt-2" type="date" value={targetDate} onChange={(event) => setTargetDate(event.target.value)} /></label>
+        </div>
       </div>
 
       <div className="space-y-4">
@@ -71,9 +85,10 @@ export function CycleBuilder({ title, description, phases: initial, onBack }: { 
         })}
       </div>
 
-      <div className="flex flex-wrap justify-end gap-3">
+      <div className="flex flex-wrap items-center justify-end gap-3">
+        {!ready && <p className="mr-auto text-sm text-muted-foreground">Add a working title and at least one milestone to continue.</p>}
         <Button variant="outline" onClick={onBack}>Back</Button>
-        <Button asChild><Link to="/books/$bookId" params={{ bookId: "salt-lines" }}>Create the book cycle</Link></Button>
+        <Button disabled={!ready || creating} onClick={() => onCreate({ title: bookTitle.trim(), targetDate, phases })}>{creating && <Loader2 className="animate-spin" />}Create the book cycle</Button>
       </div>
     </section>
   );
