@@ -1,55 +1,63 @@
-# Book Cycles — usability, pacing, and colour pass
+# Accounts, roles and admin for Book Cycles
 
-Eleven fixes across templates, creation, the book cycle page, milestones, book details, and the palette. No change to the object hierarchy (Book Cycle → Phase → Milestone → Requirement) and no new screens beyond a template preview.
+Right now everything on screen is sample content. This adds real accounts and a private admin area for you, so books, milestones and templates belong to real people and survive a refresh.
 
-## 1. Templates
+## What people get
 
-- Each template card gets two actions: **Preview** (secondary) and **Use this template** (primary).
-- Preview opens a read-only view of the template: its six phases, each phase's milestones and requirement types, and what makes the template distinct. New route `/templates/$templateId`.
-- Use this template goes straight into a new book cycle already pre-filled from that template, ready to customise — not back to the generic create page.
+**Authors (your customers)**
+- Sign up and sign in with email and password, plus Google sign-in.
+- A confirmation email on sign-up, and a working "forgot password" flow.
+- A profile: display name, pen name, photo, and a short bio.
+- Their own books only. One author never sees another author's work.
 
-## 2. Create a Book Cycle routing
+**Collaborators (editors, designers, illustrators, beta readers)**
+- Invited by email to one specific book cycle, with a role such as copyeditor or cover designer.
+- A lightweight account that only opens the book cycle they were invited to, and only the milestones assigned to them.
+- The author can change a collaborator's role or remove access at any time.
 
-Picking "Start from a template" now goes to the template chooser, and "Build from scratch" opens the scratch form (phases and milestones you edit yourself). Today both fall into the coach conversation. "Plan with Book Coach" keeps the guided AI intake.
+**You (super admin)**
+- A private admin area, hidden from everyone else.
+- People: search accounts, view a person's books, suspend or restore an account, resend a confirmation, trigger a password reset, and delete an account with its data.
+- Templates: create, edit, reorder, publish, unpublish, duplicate and archive the global genre templates every author sees — including the Children's Picture Book path — editing phases, milestones, requirement types and default guidance.
+- A simple dashboard: sign-ups over time, active book cycles, books published, template usage.
+- An activity log of admin actions, so account changes are traceable.
 
-## 3. Book Coach as a floating chat
+## Things worth deciding that weren't in your list
 
-The coach icon opens a floating chat window (bottom-right, draggable-free, dismissible, works on mobile as a sheet) instead of a docked side column. It follows the suggested prompt sequence: an opening question, suggested replies as chips, and a next suggestion after each answer, so the author always has something to tap.
+These are the gaps I'd fill in the same build:
 
-## 4. Phase pacing (suggested date ranges + chips)
+1. **Roles are stored separately from profiles.** Author, collaborator and super admin live in their own permissions record — never on the profile — so nobody can promote themselves by editing their own details.
+2. **Everything the app currently fakes becomes real data**: books, book details, phases, milestones, requirements, notes, attachments, activity, and reflections.
+3. **File storage** for cover images, manuscripts and deliverables, with private access so only the book's people can open a file.
+4. **A "my templates" layer**: an author can save their own customised cycle as a personal template, separate from your global ones.
+5. **Template versioning**: when you edit a global template, books already created from it keep the plan they started with.
+6. **Book Coach conversations are saved** per book, so advice survives a reload and the coach can refer back.
+7. **Invitations and email**: invite, reminder and confirmation emails, plus expiring invite links.
+8. **Account lifecycle**: what happens to a book when an author deletes their account or a collaborator is removed (data stays with the author; collaborator access is revoked).
+9. **Notifications**: due-date reminders, "you're behind pace", and "a collaborator delivered something".
+10. **Subscription hooks** left ready for later: a plan field on each account and a limit on active book cycles, so pricing can switch on without a rebuild.
+11. **Audit and safety**: rate limiting on sign-in, leaked-password checking, and admin actions recorded.
 
-Implement the attached timeline formula as a small utility:
+## Build order
 
-- Fixed blocks: Launch = target −14 to +21 days; Post-Launch = +22 onward.
-- Build window `B = (target − start) − 14`, split across the active build phases with weights 0.356 / 0.171 / 0.171 / 0.302, re-normalised by manuscript status, then raised to per-phase floors (21 / 21 / 30, or 90 for illustrated / 60).
-- If the floors don't fit, surface the shortfall as a coach warning with a suggested later date.
-
-Every phase on the book cycle page shows a chip with its suggested range (e.g. "Suggested 7 Jan – 8 Mar"), plus a "Behind pace" tone when today is past the phase end and the phase isn't complete.
-
-## 5. Book cycle page: collapsible phases
-
-Each phase card collapses and expands, with the current phase open by default; the header keeps the phase name, mode, pacing chip, and the milestone count so a collapsed phase still reads at a glance.
-
-## 6. Milestone and reflection in a right-side drawer
-
-Clicking a milestone (or Reflection) opens it in a drawer sliding in from the right over the book cycle page instead of navigating away. The drawer holds the full milestone content: details, the single requirement interaction, notes, attachments, and the collaborator view. The standalone pages stay reachable by direct link so nothing breaks.
-
-## 7. Edit milestone
-
-"Edit milestone" opens an edit form (name, description, owner, requirement type, due date, approval required, status) and saving updates the milestone in view.
-
-## 8. Book details cover image
-
-Adds a cover image block at the top of Book Details: current cover, replace/upload control, and a remove option, sized to the same 2:3 proportion used everywhere else.
-
-## 9. Colour
-
-Bring all six colours into regular use rather than leaning on one: amber `#e6b348`, green `#b4c85b`, teal `#67c3c0`, warm paper `#eee5db`, muted blue `#4b779a`, deep brown `#3a241f`. Each of the six phases gets its own colour identity (timeline marker, chip, hover), status pills map across the set, and the book list, priorities, and templates pick up warm paper and teal blocks. Deep brown stays the text colour; warm paper stays the page.
+1. Turn on the backend, add accounts, profiles and the roles record.
+2. Sign-up, sign-in, Google sign-in, password reset, and a session-aware header with sign-out.
+3. Move books, phases, milestones and reflections from sample data to real, per-author records.
+4. File storage for covers, manuscripts and deliverables.
+5. Collaborator invitations and per-book permissions.
+6. Super-admin area: people management, then template management, then the dashboard and activity log.
+7. Notifications and emails.
 
 ## Technical notes
 
-- New `src/lib/phase-timeline.ts` with the weights, floors, feasibility check, and `suggestPhaseRanges(start, target, manuscriptStatus, genre)`; used by the phase chips and by the Behind Pace signal.
-- New routes: `/templates/$templateId` (preview) and a scratch builder step in `/books/new`; `books.new.tsx` step 1 branches on the selected path instead of always rendering the coach conversation.
-- Drawer uses the existing shadcn Sheet primitive; milestone content moves into a shared `MilestoneBody` component reused by the drawer and the existing route.
-- Phase colours added as tokens in `src/styles.css` and referenced semantically (no hardcoded hex in components).
-- Coach floating window replaces the side column in `app-shell.tsx`; conversation state stays local demo state for now.
+- Lovable Cloud provides the database, auth, storage and server functions; no external accounts needed.
+- Row-level security on every table, scoped by author, by book-cycle membership, or by admin role through a security-definer role check.
+- Your super-admin account is granted its role directly in the database, not through any signup path.
+- Global templates are seeded from the current in-app template data so nothing is lost.
+- Admin screens live behind a protected route and re-check the admin role on the server for every read and write.
+
+## Open questions
+
+- Should collaborators be able to sign in with Google too, or invite-link only?
+- Do you want a free tier at launch, or one paid plan?
+- Should suspending an author freeze their collaborators' access as well?

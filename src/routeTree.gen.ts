@@ -14,6 +14,7 @@ import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as ApiCoachPlanRouteImport } from './routes/api/coach-plan'
 import { Route as BooksBookIdRouteImport } from './routes/books.$bookId'
 import { Route as BooksNewRouteImport } from './routes/books.new'
+import { Route as TemplatesTemplateIdRouteImport } from './routes/templates.$templateId'
 import { Route as BooksBookIdIndexRouteImport } from './routes/books.$bookId.index'
 import { Route as BooksBookIdDetailsRouteImport } from './routes/books.$bookId.details'
 import { Route as BooksBookIdReflectionRouteImport } from './routes/books.$bookId.reflection'
@@ -44,6 +45,11 @@ const BooksNewRoute = BooksNewRouteImport.update({
   path: '/books/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TemplatesTemplateIdRoute = TemplatesTemplateIdRouteImport.update({
+  id: '/$templateId',
+  path: '/$templateId',
+  getParentRoute: () => TemplatesRoute,
+} as any)
 const BooksBookIdIndexRoute = BooksBookIdIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -68,10 +74,11 @@ const BooksBookIdMilestonesMilestoneIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/templates': typeof TemplatesRoute
+  '/templates': typeof TemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/books/$bookId': typeof BooksBookIdRouteWithChildren
   '/books/new': typeof BooksNewRoute
+  '/templates/$templateId': typeof TemplatesTemplateIdRoute
   '/books/$bookId/details': typeof BooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof BooksBookIdReflectionRoute
   '/books/$bookId/': typeof BooksBookIdIndexRoute
@@ -79,9 +86,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/templates': typeof TemplatesRoute
+  '/templates': typeof TemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/books/new': typeof BooksNewRoute
+  '/templates/$templateId': typeof TemplatesTemplateIdRoute
   '/books/$bookId/details': typeof BooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof BooksBookIdReflectionRoute
   '/books/$bookId': typeof BooksBookIdIndexRoute
@@ -90,10 +98,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/templates': typeof TemplatesRoute
+  '/templates': typeof TemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/books/$bookId': typeof BooksBookIdRouteWithChildren
   '/books/new': typeof BooksNewRoute
+  '/templates/$templateId': typeof TemplatesTemplateIdRoute
   '/books/$bookId/details': typeof BooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof BooksBookIdReflectionRoute
   '/books/$bookId/': typeof BooksBookIdIndexRoute
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
     | '/api/coach-plan'
     | '/books/$bookId'
     | '/books/new'
+    | '/templates/$templateId'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
     | '/books/$bookId/'
@@ -117,6 +127,7 @@ export interface FileRouteTypes {
     | '/templates'
     | '/api/coach-plan'
     | '/books/new'
+    | '/templates/$templateId'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
     | '/books/$bookId'
@@ -128,6 +139,7 @@ export interface FileRouteTypes {
     | '/api/coach-plan'
     | '/books/$bookId'
     | '/books/new'
+    | '/templates/$templateId'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
     | '/books/$bookId/'
@@ -136,7 +148,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  TemplatesRoute: typeof TemplatesRoute
+  TemplatesRoute: typeof TemplatesRouteWithChildren
   ApiCoachPlanRoute: typeof ApiCoachPlanRoute
   BooksBookIdRoute: typeof BooksBookIdRouteWithChildren
   BooksNewRoute: typeof BooksNewRoute
@@ -179,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BooksNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/templates/$templateId': {
+      id: '/templates/$templateId'
+      path: '/$templateId'
+      fullPath: '/templates/$templateId'
+      preLoaderRoute: typeof TemplatesTemplateIdRouteImport
+      parentRoute: typeof TemplatesRoute
+    }
     '/books/$bookId/': {
       id: '/books/$bookId/'
       path: '/'
@@ -210,6 +229,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface TemplatesRouteChildren {
+  TemplatesTemplateIdRoute: typeof TemplatesTemplateIdRoute
+}
+
+const TemplatesRouteChildren: TemplatesRouteChildren = {
+  TemplatesTemplateIdRoute: TemplatesTemplateIdRoute,
+}
+
+const TemplatesRouteWithChildren = TemplatesRoute._addFileChildren(
+  TemplatesRouteChildren,
+)
+
 interface BooksBookIdRouteChildren {
   BooksBookIdDetailsRoute: typeof BooksBookIdDetailsRoute
   BooksBookIdReflectionRoute: typeof BooksBookIdReflectionRoute
@@ -230,7 +261,7 @@ const BooksBookIdRouteWithChildren = BooksBookIdRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  TemplatesRoute: TemplatesRoute,
+  TemplatesRoute: TemplatesRouteWithChildren,
   ApiCoachPlanRoute: ApiCoachPlanRoute,
   BooksBookIdRoute: BooksBookIdRouteWithChildren,
   BooksNewRoute: BooksNewRoute,
