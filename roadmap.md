@@ -9,3 +9,5 @@
 - [x] Post-Launch Reflection
 - [x] Templates
 - [x] Responsive and accessibility verification
+- [x] Streaming Book Coach intake with cancel
+- [x] Collapsible Book Coach panel + floating-book cycle logo
