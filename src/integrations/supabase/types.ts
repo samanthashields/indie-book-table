@@ -14,6 +14,373 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity: {
+        Row: {
+          actor_name: string | null
+          actor_user_id: string | null
+          book_id: string
+          created_at: string
+          id: string
+          text: string
+        }
+        Insert: {
+          actor_name?: string | null
+          actor_user_id?: string | null
+          book_id: string
+          created_at?: string
+          id?: string
+          text: string
+        }
+        Update: {
+          actor_name?: string | null
+          actor_user_id?: string | null
+          book_id?: string
+          created_at?: string
+          id?: string
+          text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      books: {
+        Row: {
+          attachments: Json
+          audience: string | null
+          author_id: string
+          budget: number | null
+          comparables: string | null
+          cover_url: string | null
+          created_at: string
+          edition: string | null
+          genre: string | null
+          goals: string | null
+          id: string
+          imprint: string | null
+          isbn: string | null
+          language: string | null
+          length_estimate: string | null
+          metadata: Json
+          pen_name: string | null
+          price: string | null
+          publishing_path: string | null
+          series: string | null
+          start_date: string | null
+          status: string
+          subtitle: string | null
+          target_publication_date: string | null
+          template_id: string | null
+          title: string
+          trim_size: string | null
+          updated_at: string
+        }
+        Insert: {
+          attachments?: Json
+          audience?: string | null
+          author_id: string
+          budget?: number | null
+          comparables?: string | null
+          cover_url?: string | null
+          created_at?: string
+          edition?: string | null
+          genre?: string | null
+          goals?: string | null
+          id?: string
+          imprint?: string | null
+          isbn?: string | null
+          language?: string | null
+          length_estimate?: string | null
+          metadata?: Json
+          pen_name?: string | null
+          price?: string | null
+          publishing_path?: string | null
+          series?: string | null
+          start_date?: string | null
+          status?: string
+          subtitle?: string | null
+          target_publication_date?: string | null
+          template_id?: string | null
+          title: string
+          trim_size?: string | null
+          updated_at?: string
+        }
+        Update: {
+          attachments?: Json
+          audience?: string | null
+          author_id?: string
+          budget?: number | null
+          comparables?: string | null
+          cover_url?: string | null
+          created_at?: string
+          edition?: string | null
+          genre?: string | null
+          goals?: string | null
+          id?: string
+          imprint?: string | null
+          isbn?: string | null
+          language?: string | null
+          length_estimate?: string | null
+          metadata?: Json
+          pen_name?: string | null
+          price?: string | null
+          publishing_path?: string | null
+          series?: string | null
+          start_date?: string | null
+          status?: string
+          subtitle?: string | null
+          target_publication_date?: string | null
+          template_id?: string | null
+          title?: string
+          trim_size?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      coach_conversations: {
+        Row: {
+          book_id: string | null
+          created_at: string
+          id: string
+          messages: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          book_id?: string | null
+          created_at?: string
+          id?: string
+          messages?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          book_id?: string | null
+          created_at?: string
+          id?: string
+          messages?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coach_conversations_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collaborators: {
+        Row: {
+          book_id: string
+          created_at: string
+          email: string
+          id: string
+          invited_at: string
+          name: string | null
+          role: string
+          status: string
+          user_id: string | null
+        }
+        Insert: {
+          book_id: string
+          created_at?: string
+          email: string
+          id?: string
+          invited_at?: string
+          name?: string | null
+          role: string
+          status?: string
+          user_id?: string | null
+        }
+        Update: {
+          book_id?: string
+          created_at?: string
+          email?: string
+          id?: string
+          invited_at?: string
+          name?: string | null
+          role?: string
+          status?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collaborators_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      milestone_notes: {
+        Row: {
+          attachment_path: string | null
+          author_user_id: string
+          body: string
+          created_at: string
+          id: string
+          milestone_id: string
+        }
+        Insert: {
+          attachment_path?: string | null
+          author_user_id: string
+          body: string
+          created_at?: string
+          id?: string
+          milestone_id: string
+        }
+        Update: {
+          attachment_path?: string | null
+          author_user_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          milestone_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "milestone_notes_milestone_id_fkey"
+            columns: ["milestone_id"]
+            isOneToOne: false
+            referencedRelation: "milestones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      milestones: {
+        Row: {
+          approval_required: boolean
+          book_id: string
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          instructions: string | null
+          name: string
+          owner: string | null
+          owner_user_id: string | null
+          phase_id: string
+          position: number
+          requirement_details: Json
+          requirement_type: string | null
+          resources: Json
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          approval_required?: boolean
+          book_id: string
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          instructions?: string | null
+          name: string
+          owner?: string | null
+          owner_user_id?: string | null
+          phase_id: string
+          position?: number
+          requirement_details?: Json
+          requirement_type?: string | null
+          resources?: Json
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          approval_required?: boolean
+          book_id?: string
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          instructions?: string | null
+          name?: string
+          owner?: string | null
+          owner_user_id?: string | null
+          phase_id?: string
+          position?: number
+          requirement_details?: Json
+          requirement_type?: string | null
+          resources?: Json
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "milestones_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "milestones_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "phases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      phases: {
+        Row: {
+          book_id: string
+          created_at: string
+          id: string
+          key: string
+          name: string
+          position: number
+          status: string
+          suggested_end: string | null
+          suggested_start: string | null
+          type: string
+        }
+        Insert: {
+          book_id: string
+          created_at?: string
+          id?: string
+          key: string
+          name: string
+          position?: number
+          status?: string
+          suggested_end?: string | null
+          suggested_start?: string | null
+          type?: string
+        }
+        Update: {
+          book_id?: string
+          created_at?: string
+          id?: string
+          key?: string
+          name?: string
+          position?: number
+          status?: string
+          suggested_end?: string | null
+          suggested_start?: string | null
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "phases_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -53,6 +420,101 @@ export type Database = {
         }
         Relationships: []
       }
+      reflections: {
+        Row: {
+          achieved_goals: boolean | null
+          book_id: string
+          completed_at: string | null
+          created_at: string
+          custom: Json
+          goals_notes: string | null
+          id: string
+          next_steps: string | null
+          published_on_time: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          achieved_goals?: boolean | null
+          book_id: string
+          completed_at?: string | null
+          created_at?: string
+          custom?: Json
+          goals_notes?: string | null
+          id?: string
+          next_steps?: string | null
+          published_on_time?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          achieved_goals?: boolean | null
+          book_id?: string
+          completed_at?: string | null
+          created_at?: string
+          custom?: Json
+          goals_notes?: string | null
+          id?: string
+          next_steps?: string | null
+          published_on_time?: boolean | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reflections_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: true
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      templates: {
+        Row: {
+          archived: boolean
+          audience: string | null
+          created_at: string
+          description: string | null
+          duration: string | null
+          genre: string | null
+          id: string
+          owner_id: string | null
+          phases: Json
+          position: number
+          published: boolean
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          archived?: boolean
+          audience?: string | null
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          genre?: string | null
+          id?: string
+          owner_id?: string | null
+          phases?: Json
+          position?: number
+          published?: boolean
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          archived?: boolean
+          audience?: string | null
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          genre?: string | null
+          id?: string
+          owner_id?: string | null
+          phases?: Json
+          position?: number
+          published?: boolean
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -83,6 +545,8 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_book_author: { Args: { _book_id: string }; Returns: boolean }
+      is_book_member: { Args: { _book_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "author" | "collaborator"
