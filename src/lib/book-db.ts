@@ -192,10 +192,10 @@ export function useTemplates() {
     queryFn: async () => {
       const { data, error } = await supabase.from("templates").select("*").order("position");
       if (error) throw error;
-      return (data ?? []) as {
-        id: string; title: string; description: string | null; genre: string | null;
-        details: { illustrated?: boolean; highlights?: string[] }; phases: TemplatePhase[]; owner_id: string | null;
-      }[];
+      return (data ?? []) as unknown as (Omit<TemplateRow, "details" | "phases"> & {
+        details: { illustrated?: boolean; highlights?: string[] };
+        phases: TemplatePhase[];
+      })[];
     },
   });
 }
@@ -287,7 +287,7 @@ export function useUpdateMilestone(bookId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, patch }: { id: string; patch: Partial<Milestone> }) => {
-      const update: Record<string, unknown> = {};
+      const update: MilestoneUpdate = {};
       if (patch.name !== undefined) update.name = patch.name;
       if (patch.description !== undefined) update.description = patch.description;
       if (patch.owner !== undefined) update.owner = patch.owner;
@@ -308,7 +308,7 @@ export function useUpdateMilestone(bookId: string) {
 export function useUpdateBook(bookId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (patch: Record<string, unknown>) => {
+    mutationFn: async (patch: BookUpdate) => {
       const { error } = await supabase.from("books").update(patch).eq("id", bookId);
       if (error) throw error;
     },
