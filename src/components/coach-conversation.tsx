@@ -24,7 +24,7 @@ export function CoachConversation({
 }: {
   onGenerate: (answers: Answers) => void;
   generating: boolean;
-  initialFork?: "Start from a template" | "Build from scratch";
+  initialFork?: "Start from a template" | "Build from scratch" | undefined;
 }) {
   const startIds = initialFork === "Start from a template" ? templateEssentials : scratchEssentials;
   const [answers, setAnswers] = useState<Answers>(initialFork ? { fork: initialFork } : {});
@@ -178,7 +178,7 @@ export function CoachConversation({
                 })}
                 {question.multi && (
                   <Button size="sm" onClick={() => submit(picked.join(", "))}>
-                    {picked.length ? `Done · ${picked.length} selected` : "None of these"}
+                    {picked.length ? `Done, ${picked.length} selected` : "None of these"}
                   </Button>
                 )}
               </div>
