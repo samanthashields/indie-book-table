@@ -58,6 +58,6 @@ These are the gaps I'd fill in the same build:
 
 ## Open questions
 
-- Should collaborators be able to sign in with Google too, or invite-link only?
-- Do you want a free tier at launch, or one paid plan?
+- Decided: collaborators must have their own plan, so they get full accounts — sign-in with email/password and Google, same as authors.
+- One open question remains: do you want a free tier at launch, or one paid plan?
 - Should suspending an author freeze their collaborators' access as well?
