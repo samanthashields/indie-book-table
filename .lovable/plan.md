@@ -59,5 +59,6 @@ These are the gaps I'd fill in the same build:
 ## Open questions
 
 - Decided: collaborators must have their own plan, so they get full accounts — sign-in with email/password and Google, same as authors.
-- One open question remains: do you want a free tier at launch, or one paid plan?
-- Should suspending an author freeze their collaborators' access as well?
+- Decided: two tiers at launch — a limited free plan (templates and build-from-scratch only) and a paid plan (adds the AI Book Coach).
+- Decided: author and collaborator accounts are fully independent — suspending one never freezes the other.
+- One open question remains: does a paid plan include a number of collaborator accounts (e.g. 3 collaborators per author), or does every collaborator pay separately?
