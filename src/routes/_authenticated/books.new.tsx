@@ -131,7 +131,7 @@ function CreateBook() {
           phases={template.phases}
           creating={createCycle.isPending}
           onBack={() => go({ path: "template" })}
-          onCreate={(input) => create({ ...input, templateId: template.id, genre: template.genre ?? undefined, illustrated: template.details.illustrated ?? false })}
+          onCreate={(input) => create({ ...input, templateId: template.id, ...(template.genre ? { genre: template.genre } : {}), illustrated: template.details.illustrated ?? false })}
         />
       </AppShell>
     );
