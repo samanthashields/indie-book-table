@@ -50,11 +50,8 @@ function Index() {
           <div className="space-y-3">
             {books.map((book) => (
               <Link key={book.id} to="/books/$bookId" params={{ bookId: book.id }} className="group grid gap-5 rounded-2xl border border-border bg-card px-5 py-5 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md sm:grid-cols-[88px_1fr_auto] sm:items-center">
-                {book.coverUrl ? (
-                  <img src={book.coverUrl} alt={`Cover artwork for ${book.title}`} width={768} height={1152} className="aspect-[2/3] w-20 rounded-lg object-cover shadow-sm" loading="lazy" />
-                ) : (
-                  <span className="grid aspect-[2/3] w-20 place-items-center rounded-lg bg-teal/15 font-serif text-3xl text-primary shadow-sm">{book.title.charAt(0)}</span>
-                )}
+                <BookCover src={book.coverUrl} title={book.title} className="w-20 shrink-0" fallbackClassName="text-3xl" />
+
                 <div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><h3 className="font-serif text-2xl font-normal group-hover:text-primary">{book.title}</h3><StatusPill tone={book.progress > 60 ? "warm" : "good"}>{book.status}</StatusPill></div><p className="mt-1 text-sm text-muted-foreground">{book.genre}, by {book.author}</p><div className="mt-4 flex max-w-xl items-center gap-3"><Progress value={book.progress} className="h-1.5" /><span className="text-xs font-semibold">{book.progress}%</span></div><p className="mt-3 text-sm"><span className="text-muted-foreground">Next:</span> {book.nextAction}</p></div>
                 <div className="text-left sm:text-right"><p className="text-xs text-muted-foreground">Target publication</p><p className="mt-1 text-sm font-semibold">{book.target}</p></div>
               </Link>

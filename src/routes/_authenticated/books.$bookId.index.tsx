@@ -44,11 +44,8 @@ function BookOverview() {
     <AppShell>
       <header className="mb-8 flex flex-col gap-6 border-b border-border/70 pb-7 md:flex-row md:items-end md:justify-between">
         <div className="flex gap-5">
-          {book.cover_url ? (
-            <img src={book.cover_url} alt={`Cover artwork for ${book.title}`} width={768} height={1152} className="aspect-[2/3] w-20 rounded-lg object-cover shadow-sm" />
-          ) : (
-            <span className="grid aspect-[2/3] w-20 shrink-0 place-items-center rounded-lg bg-teal/15 font-serif text-3xl text-primary shadow-sm">{book.title.charAt(0)}</span>
-          )}
+          <BookCover src={book.cover_url} title={book.title} className="w-20 shrink-0" fallbackClassName="text-3xl" />
+
           <div>
             <div className="mb-2 flex flex-wrap gap-2"><StatusPill tone="good">{book.status === "active" ? "In progress" : book.status}</StatusPill>{book.genre && <StatusPill tone="warm">{book.genre}</StatusPill>}</div>
             <h1 className="font-serif text-4xl font-normal md:text-5xl">{book.title}</h1>
