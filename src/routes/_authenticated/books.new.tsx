@@ -59,7 +59,14 @@ function CreateBook() {
 
   const create = (input: { title: string; targetDate: string; phases: TemplatePhase[]; templateId?: string; genre?: string; illustrated?: boolean }) => {
     createCycle.mutate(
-      { title: input.title, targetDate: input.targetDate || undefined, phases: input.phases, templateId: input.templateId, genre: input.genre, illustrated: input.illustrated },
+      {
+        title: input.title,
+        phases: input.phases,
+        ...(input.targetDate ? { targetDate: input.targetDate } : {}),
+        ...(input.templateId ? { templateId: input.templateId } : {}),
+        ...(input.genre ? { genre: input.genre } : {}),
+        ...(input.illustrated !== undefined ? { illustrated: input.illustrated } : {}),
+      },
       {
         onSuccess: (bookId) => void navigate({ to: "/books/$bookId", params: { bookId } }),
         onError: (err) => toast.error(err instanceof Error ? err.message : "Couldn’t create the book cycle"),
