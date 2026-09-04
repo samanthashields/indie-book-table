@@ -12,7 +12,7 @@ Right now everything on screen is sample content. This adds real accounts and a 
 
 **Collaborators (editors, designers, illustrators, beta readers)**
 - Invited by email to one specific book cycle, with a role such as copyeditor or cover designer.
-- A lightweight account that only opens the book cycle they were invited to, and only the milestones assigned to them.
+- A full account with its own subscription plan (decided: collaborators are required to have a plan) that opens only the book cycle they were invited to, and only the milestones assigned to them.
 - The author can change a collaborator's role or remove access at any time.
 
 **You (super admin)**
@@ -58,6 +58,6 @@ These are the gaps I'd fill in the same build:
 
 ## Open questions
 
-- Should collaborators be able to sign in with Google too, or invite-link only?
-- Do you want a free tier at launch, or one paid plan?
+- Decided: collaborators must have their own plan, so they get full accounts — sign-in with email/password and Google, same as authors.
+- One open question remains: do you want a free tier at launch, or one paid plan?
 - Should suspending an author freeze their collaborators' access as well?
