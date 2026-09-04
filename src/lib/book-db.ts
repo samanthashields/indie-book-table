@@ -97,6 +97,7 @@ const milestoneToUi = (row: MilestoneRow): Milestone => ({
   status: (row.status as Milestone["status"]) ?? "Not started",
   approval: row.approval_required,
   ...(formatShortDate(row.due_date) ? { due: formatShortDate(row.due_date)! } : {}),
+  ...(row.due_date ? { dueIso: row.due_date } : {}),
 });
 
 const summarize = (book: BookRow, milestones: MilestoneRow[], authorName: string): BookSummary => {
