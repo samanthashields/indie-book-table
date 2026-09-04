@@ -39,7 +39,8 @@ function BookDetails() {
         target_publication_date: book.target_publication_date ?? "", budget: book.budget != null ? String(book.budget) : "",
       });
     }
-  }, [data, form]);
+    if (data && !coverReady) { setCover(data.book.cover_url); setCoverReady(true); }
+  }, [data, form, coverReady]);
 
   if (isLoading || !data || !form) return <AppShell><p className="text-sm text-muted-foreground">Loading book details…</p></AppShell>;
   const book = data.book;
@@ -53,6 +54,7 @@ function BookDetails() {
         goals: form.goals || null, length_estimate: form.length_estimate || null, language: form.language || null, trim_size: form.trim_size || null,
         isbn: form.isbn || null, imprint: form.imprint || null, price: form.price || null, publishing_path: form.publishing_path || null,
         target_publication_date: form.target_publication_date || null, budget: form.budget ? Number(form.budget) : null,
+        cover_url: cover,
       },
       { onSuccess: () => toast.success("Book details saved"), onError: () => toast.error("Couldn’t save the details") },
     );
