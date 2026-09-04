@@ -43,8 +43,9 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
         </nav>
         <div className="mt-auto space-y-2">
           <div className={cn("flex items-center gap-3 border-t border-sidebar-border pt-4", collapsed && "justify-center")}>
-            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-accent font-semibold text-accent-foreground">ME</span>
-            {!collapsed && <div className="min-w-0"><p className="truncate text-sm font-medium">Mara Ellison</p><p className="text-xs text-muted-foreground">Author plan</p></div>}
+            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-accent font-semibold text-accent-foreground">{initials}</span>
+            {!collapsed && <div className="min-w-0"><p className="truncate text-sm font-medium">{displayName}</p><p className="text-xs text-muted-foreground">{accountLabel} · {planLabel}</p></div>}
+            {!collapsed && <Button variant="ghost" size="icon" className="ml-auto shrink-0" onClick={() => void handleSignOut()} aria-label="Sign out"><LogOut className="size-4" /></Button>}
           </div>
           <Button variant="ghost" size="sm" className="hidden w-full justify-start lg:flex" onClick={() => setCollapsed((value) => !value)}><PanelLeftClose className={cn(collapsed && "rotate-180")} />{!collapsed && "Collapse"}</Button>
         </div>
