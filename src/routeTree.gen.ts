@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
@@ -22,6 +23,10 @@ import { Route as AuthenticatedBooksBookIdDetailsRouteImport } from './routes/_a
 import { Route as AuthenticatedBooksBookIdReflectionRouteImport } from './routes/_authenticated/books.$bookId.reflection'
 import { Route as AuthenticatedBooksBookIdMilestonesMilestoneIdRouteImport } from './routes/_authenticated/books.$bookId.milestones.$milestoneId'
 
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -33,14 +38,14 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
-  id: '/_authenticated/',
+  id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedTemplatesRoute = AuthenticatedTemplatesRouteImport.update({
-  id: '/_authenticated/templates',
+  id: '/templates',
   path: '/templates',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const ApiCoachPlanRoute = ApiCoachPlanRouteImport.update({
   id: '/api/coach-plan',
@@ -49,14 +54,14 @@ const ApiCoachPlanRoute = ApiCoachPlanRouteImport.update({
 } as any)
 const AuthenticatedBooksBookIdRoute =
   AuthenticatedBooksBookIdRouteImport.update({
-    id: '/_authenticated/books/$bookId',
+    id: '/books/$bookId',
     path: '/books/$bookId',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedBooksNewRoute = AuthenticatedBooksNewRouteImport.update({
-  id: '/_authenticated/books/new',
+  id: '/books/new',
   path: '/books/new',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedTemplatesTemplateIdRoute =
   AuthenticatedTemplatesTemplateIdRouteImport.update({
@@ -90,11 +95,11 @@ const AuthenticatedBooksBookIdMilestonesMilestoneIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof AuthenticatedIndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
-  '/': typeof AuthenticatedIndexRoute
   '/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
   '/books/new': typeof AuthenticatedBooksNewRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
@@ -118,6 +123,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/templates': typeof AuthenticatedTemplatesRouteWithChildren
@@ -134,11 +140,11 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/auth'
     | '/reset-password'
     | '/templates'
     | '/api/coach-plan'
-    | '/'
     | '/books/$bookId'
     | '/books/new'
     | '/templates/$templateId'
@@ -161,6 +167,7 @@ export interface FileRouteTypes {
     | '/books/$bookId/milestones/$milestoneId'
   id:
     | '__root__'
+    | '/_authenticated'
     | '/auth'
     | '/reset-password'
     | '/_authenticated/templates'
@@ -176,17 +183,21 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
-  AuthenticatedTemplatesRoute: typeof AuthenticatedTemplatesRouteWithChildren
   ApiCoachPlanRoute: typeof ApiCoachPlanRoute
-  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
-  AuthenticatedBooksBookIdRoute: typeof AuthenticatedBooksBookIdRouteWithChildren
-  AuthenticatedBooksNewRoute: typeof AuthenticatedBooksNewRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -206,14 +217,14 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/templates': {
       id: '/_authenticated/templates'
       path: '/templates'
       fullPath: '/templates'
       preLoaderRoute: typeof AuthenticatedTemplatesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/api/coach-plan': {
       id: '/api/coach-plan'
@@ -227,14 +238,14 @@ declare module '@tanstack/react-router' {
       path: '/books/$bookId'
       fullPath: '/books/$bookId'
       preLoaderRoute: typeof AuthenticatedBooksBookIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/books/new': {
       id: '/_authenticated/books/new'
       path: '/books/new'
       fullPath: '/books/new'
       preLoaderRoute: typeof AuthenticatedBooksNewRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/templates/$templateId': {
       id: '/_authenticated/templates/$templateId'
@@ -311,14 +322,28 @@ const AuthenticatedBooksBookIdRouteWithChildren =
     AuthenticatedBooksBookIdRouteChildren,
   )
 
-const rootRouteChildren: RootRouteChildren = {
-  AuthRoute: AuthRoute,
-  ResetPasswordRoute: ResetPasswordRoute,
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedTemplatesRoute: typeof AuthenticatedTemplatesRouteWithChildren
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedBooksBookIdRoute: typeof AuthenticatedBooksBookIdRouteWithChildren
+  AuthenticatedBooksNewRoute: typeof AuthenticatedBooksNewRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedTemplatesRoute: AuthenticatedTemplatesRouteWithChildren,
-  ApiCoachPlanRoute: ApiCoachPlanRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedBooksBookIdRoute: AuthenticatedBooksBookIdRouteWithChildren,
   AuthenticatedBooksNewRoute: AuthenticatedBooksNewRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  ApiCoachPlanRoute: ApiCoachPlanRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
