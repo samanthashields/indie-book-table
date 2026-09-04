@@ -3,8 +3,9 @@ import { ArrowLeft, Check } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
+import { useTemplates } from "@/lib/book-db";
 import { phaseStyle } from "@/lib/phase-style";
-import { templateById } from "@/lib/template-data";
+import { templateCover } from "@/lib/template-covers";
 
 export const Route = createFileRoute("/_authenticated/templates/$templateId")({
   head: () => ({ meta: [
@@ -20,16 +21,21 @@ export const Route = createFileRoute("/_authenticated/templates/$templateId")({
 
 function TemplatePreview() {
   const { templateId } = Route.useParams();
-  const template = templateById(templateId);
+  const { data: templates = [], isLoading } = useTemplates();
+  const template = templates.find((entry) => entry.id === templateId);
+
+  if (isLoading) return <AppShell><p className="text-sm text-muted-foreground">Loading template…</p></AppShell>;
+  if (!template) return <AppShell><p className="text-sm text-muted-foreground">This template is no longer available.</p></AppShell>;
+
   return (
     <AppShell>
       <nav className="mb-6"><Link to="/templates" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"><ArrowLeft className="size-4" />All templates</Link></nav>
       <header className="mb-9 grid gap-6 rounded-2xl border border-border bg-paper p-6 md:grid-cols-[140px_minmax(0,1fr)_auto] md:items-center">
-        <img src={template.cover} alt={`Cover artwork for the ${template.name}`} width={768} height={1152} className="aspect-[2/3] w-28 rounded-lg object-cover shadow-sm" />
+        <img src={templateCover(template.details.illustrated)} alt={`Cover artwork for the ${template.title}`} width={768} height={1152} className="aspect-[2/3] w-28 rounded-lg object-cover shadow-sm" />
         <div className="min-w-0">
-          <div className="mb-3 flex flex-wrap gap-2"><StatusPill tone="warm">{template.category}</StatusPill><StatusPill>{template.phases.length} phases</StatusPill>{template.illustrated && <StatusPill tone="good">Illustrator track</StatusPill>}</div>
-          <h1 className="font-serif text-4xl font-normal md:text-5xl">{template.name}</h1>
-          <p className="mt-2 max-w-2xl text-muted-foreground">{template.tagline}</p>
+          <div className="mb-3 flex flex-wrap gap-2"><StatusPill tone="warm">{template.genre}</StatusPill><StatusPill>{template.phases.length} phases</StatusPill>{template.details.illustrated && <StatusPill tone="good">Illustrator track</StatusPill>}</div>
+          <h1 className="font-serif text-4xl font-normal md:text-5xl">{template.title}</h1>
+          <p className="mt-2 max-w-2xl text-muted-foreground">{template.description}</p>
         </div>
         <Button asChild><Link to="/books/new" search={{ path: "template", template: template.id }}>Use this template</Link></Button>
       </header>
@@ -37,7 +43,7 @@ function TemplatePreview() {
       <section className="mb-9 rounded-2xl border border-border bg-card p-6 shadow-xs">
         <h2 className="font-serif text-2xl font-normal">What makes this path different</h2>
         <ul className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
-          {template.highlights.map((highlight) => <li key={highlight} className="flex gap-2"><Check className="size-4 shrink-0 text-leaf" />{highlight}</li>)}
+          {(template.details.highlights ?? []).map((highlight) => <li key={highlight} className="flex gap-2"><Check className="size-4 shrink-0 text-leaf" />{highlight}</li>)}
         </ul>
       </section>
 
