@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
+import { CoverUploader } from "@/components/cover-uploader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,6 +25,8 @@ function BookDetails() {
   const { data, isLoading } = useBookTree(bookId);
   const updateBook = useUpdateBook(bookId);
   const [form, setForm] = useState<FormState | null>(null);
+  const [cover, setCover] = useState<string | null>(null);
+  const [coverReady, setCoverReady] = useState(false);
 
   useEffect(() => {
     if (data && !form) {
