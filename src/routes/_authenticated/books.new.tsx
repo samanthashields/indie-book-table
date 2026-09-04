@@ -170,7 +170,7 @@ function CreateBook() {
       <PageHeading title="Plan with Book Coach" description="Answer a few questions and your coach will draft the whole cycle." />
       <div className="grid gap-8 xl:grid-cols-[1fr_300px]">
         <div className="space-y-8">
-          <CoachConversation generating={isStreaming} onGenerate={(answers) => { setCoachTitle(answers.title ?? ""); void start(toPayload(answers)); }} />
+          <CoachConversation generating={isStreaming} onGenerate={(answers) => { setCoachTitle(answers["title"] ?? ""); void start(toPayload(answers)); }} />
 
           {error && <p className="rounded-xl border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">{error}</p>}
           {canceled && <p className="rounded-xl border border-border bg-secondary p-4 text-sm">You stopped the draft. Everything the coach had written so far is kept below.</p>}
