@@ -11,3 +11,5 @@
 - [x] Responsive and accessibility verification
 - [x] Streaming Book Coach intake with cancel
 - [x] Collapsible Book Coach panel + floating-book cycle logo
+- [x] Soft editorial redesign across all product screens
+- [ ] Desktop and mobile visual verification of redesigned screens
