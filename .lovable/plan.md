@@ -1,6 +1,6 @@
 # Book Cycles — adaptation plan
 
-Adapt the Coaching Cycles prototype into **Book Cycles**, a B2C guided publishing app for indie authors. Structure, navigation, and interaction model come from the coaching product; every concept is re-mapped to publishing per the spec. The Figma file itself is inaccessible from the build environment (Figma blocks automated access), so the spec's screen-by-screen mapping table is the structural source of truth; a fidelity pass against exported frames is a final step if you provide them.
+Adapt the Coaching Cycles prototype into **Book Cycles**, a B2C guided publishing app for indie authors. Structure, navigation, and interaction model come from the coaching product; every concept is re-mapped to publishing per the spec. The source screen inventory is confirmed from the shared Drive folder: coach/mentee hubs and cycle lists, scratch and AI creation, recent-cycle and activity states, follow-up and pending-action states, cycle details/end cycle, templates, and the component sheet. Per your direction, the spec's screen-by-screen mapping and those source screen names are the structural reference without a pixel-level PNG review.
 
 ## Design direction (committed)
 
@@ -45,8 +45,15 @@ Early-phase screens lean Ink/Desk; Verdigris is the constant thread of progress;
 
 Plain, encouraging, author-first: "Request a proofread", "Approve cover", "Mark complete", "Link your manuscript". Empty states invite action; errors say what to fix.
 
+## Brief check
+
+- **Not generic SaaS:** the phase arc, manuscript-to-shelf energy shift, editorial typography, book covers, publishing vocabulary, and authored empty states make the product specific to indie authorship.
+- **No prohibited visual tells:** no warm-cream/terracotta pairing, dark acid-accent theme, repetitive floating cards, tracked all-caps eyebrows, middle-dot metadata, monospace labels, decorative arrows, or page-load animation everywhere.
+- **Adaptation, not reinvention:** source roles map to Author/Collaborator states; source creation, cycle hub, follow-up, pending action, recent activity, ending, and template patterns remain; B2B admin and brand chrome are removed.
+- **Hierarchy protected:** every action remains inside one Requirement attached 1:1 to a Milestone inside a Phase; the Coach never generates loose tasks.
+
 ## Technical notes
 
 - TanStack Start routes as listed above; semantic tokens in `src/styles.css` (oklch), no hardcoded colors; fonts via `<link>` in `__root.tsx`; per-route `head()` metadata.
 - Responsive (mobile + desktop): nav collapses, coach panel becomes a bottom sheet, milestone grids stack.
-- Blocked reference: Figma denies automated access from this environment. To verify layout fidelity against the source, upload exported PNG frames (or connect Figma through the Lovable Desktop app) and I will do a structure-matching pass before polish.
+- The source's PNG filenames are used to map each app state; the detailed functionality spec governs content and behavior.
