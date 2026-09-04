@@ -9,6 +9,6 @@ const styles: Record<string, PhaseStyle> = {
   growth: { marker: "bg-cocoa text-paper border-cocoa", chip: "border-cocoa/25 bg-cocoa/10 text-foreground", dot: "text-cocoa", soft: "bg-paper" },
 };
 
-const fallback: PhaseStyle = styles.writing!;
+const fallback: PhaseStyle = styles["writing"]!;
 
 export const phaseStyle = (id: string): PhaseStyle => styles[id] ?? fallback;
