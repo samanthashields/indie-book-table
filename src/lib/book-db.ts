@@ -108,7 +108,7 @@ const summarize = (book: BookRow, milestones: MilestoneRow[], authorName: string
   return {
     id: book.id,
     title: book.title,
-    subtitle: book.subtitle ?? undefined,
+    ...(book.subtitle ? { subtitle: book.subtitle } : {}),
     author: book.pen_name || authorName,
     genre: book.genre ?? "Uncategorised",
     status: book.status === "active" ? "In progress" : book.status,
@@ -178,7 +178,7 @@ export function useBookTree(bookId: string) {
         id: phase.key,
         name: phase.name,
         mode: (phase.type === "launch-window" ? "Launch window" : phase.type === "loop" ? "Loop" : "Sprint") as Phase["mode"],
-        summary: ((typedBook.metadata as Record<string, Record<string, string> | undefined>)?.phaseSummaries?.[phase.key]) ?? "",
+        summary: ((typedBook.metadata as Record<string, Record<string, string> | undefined>)?.["phaseSummaries"]?.[phase.key]) ?? "",
         milestones: ((milestoneRows ?? []) as MilestoneRow[]).filter((m) => m.phase_id === phase.id).map(milestoneToUi),
       }));
       return { book: typedBook, phases, timeline, collaboratorCount: count ?? 0 };
