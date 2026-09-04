@@ -145,4 +145,16 @@ export const phases: Phase[] = [
 ];
 
 export const bookById = (id: string) => books.find((book) => book.id === id) ?? books[0];
-export const milestoneById = (id: string) => phases.flatMap((phase) => phase.milestones.map((milestone) => ({ ...milestone, phase: phase.name }))).find((milestone) => milestone.id === id) ?? { ...phases[1].milestones[0], phase: phases[1].name };
+const fallbackMilestone: Milestone & { phase: string } = {
+  id: "developmental-edit",
+  name: "Review developmental edit",
+  description: "Read the editor’s letter, resolve the big story questions, and agree on the revision plan.",
+  owner: "Mara Ellison",
+  requirement: "Approve a Deliverable",
+  status: "In progress",
+  due: "24 Jun",
+  approval: true,
+  phase: "Editing",
+};
+
+export const milestoneById = (id: string) => phases.flatMap((phase) => phase.milestones.map((milestone) => ({ ...milestone, phase: phase.name }))).find((milestone) => milestone.id === id) ?? fallbackMilestone;

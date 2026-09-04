@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-export function BookCoach({ context = "overview" }: { context?: string }) {
+export function BookCoach({ context = "overview" }: { context?: string | undefined }) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<string[]>([]);
   const [draft, setDraft] = useState("");
