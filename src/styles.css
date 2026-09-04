@@ -105,7 +105,15 @@
   --sidebar-accent-foreground: oklch(0.29 0.045 37);
   --sidebar-border: oklch(0.88 0.02 76);
   --sidebar-ring: oklch(0.56 0.085 238);
+  --amber: oklch(0.79 0.12 87);
+  --leaf: oklch(0.81 0.13 118);
+  --teal: oklch(0.75 0.083 190);
+  --paper: oklch(0.93 0.017 76);
+  --inkblue: oklch(0.55 0.075 240);
+  --cocoa: oklch(0.28 0.035 32);
+  --clay: oklch(0.64 0.115 45);
 }
+
 
 .dark {
   --background: oklch(0.129 0.042 264.695);
