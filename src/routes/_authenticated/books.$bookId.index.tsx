@@ -7,8 +7,8 @@ import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
-import { bookById, phases, type Milestone } from "@/lib/book-data";
-import { timelineFor } from "@/lib/book-schedule";
+import { formatDate, useBookTree } from "@/lib/book-db";
+import type { Milestone } from "@/lib/book-data";
 import { phaseStyle } from "@/lib/phase-style";
 import { formatRange, pacing } from "@/lib/phase-timeline";
 import { cn } from "@/lib/utils";
@@ -25,21 +25,34 @@ const pacingCopy = { done: "Wrapped up", current: "You’re in this phase now", 
 
 function BookOverview() {
   const { bookId } = Route.useParams();
-  const book = bookById(bookId);
-  const timeline = timelineFor(bookId);
+  const { data, isLoading } = useBookTree(bookId);
   const [open, setOpen] = useState<string[]>(["editing"]);
   const [drawer, setDrawer] = useState<{ milestone: Milestone; phaseName: string } | null>(null);
   const toggle = (id: string) => setOpen((current) => current.includes(id) ? current.filter((value) => value !== id) : [...current, id]);
+
+  if (isLoading) return <AppShell><p className="text-sm text-muted-foreground">Loading your book…</p></AppShell>;
+  if (!data) return <AppShell><p className="text-sm text-muted-foreground">This book isn’t available for your account.</p></AppShell>;
+
+  const { book, phases, timeline, collaboratorCount } = data;
+  const allMilestones = phases.flatMap((phase) => phase.milestones);
+  const doneCount = allMilestones.filter((milestone) => milestone.status === "Complete").length;
+  const progress = allMilestones.length ? Math.round((doneCount / allMilestones.length) * 100) : 0;
+  const next = allMilestones.find((milestone) => milestone.status === "In progress") ?? allMilestones.find((milestone) => milestone.status !== "Complete");
+  const target = formatDate(book.target_publication_date) || "No target date";
 
   return (
     <AppShell>
       <header className="mb-8 flex flex-col gap-6 border-b border-border/70 pb-7 md:flex-row md:items-end md:justify-between">
         <div className="flex gap-5">
-          <img src={book.cover} alt={`Cover artwork for ${book.title}`} width={768} height={1152} className="aspect-[2/3] w-20 rounded-lg object-cover shadow-sm" />
+          {book.cover_url ? (
+            <img src={book.cover_url} alt={`Cover artwork for ${book.title}`} width={768} height={1152} className="aspect-[2/3] w-20 rounded-lg object-cover shadow-sm" />
+          ) : (
+            <span className="grid aspect-[2/3] w-20 shrink-0 place-items-center rounded-lg bg-teal/15 font-serif text-3xl text-primary shadow-sm">{book.title.charAt(0)}</span>
+          )}
           <div>
-            <div className="mb-2 flex flex-wrap gap-2"><StatusPill tone="good">{book.status}</StatusPill><StatusPill tone="warm">{book.genre}</StatusPill></div>
+            <div className="mb-2 flex flex-wrap gap-2"><StatusPill tone="good">{book.status === "active" ? "In progress" : book.status}</StatusPill>{book.genre && <StatusPill tone="warm">{book.genre}</StatusPill>}</div>
             <h1 className="font-serif text-4xl font-normal md:text-5xl">{book.title}</h1>
-            <p className="mt-1 text-muted-foreground">by {book.author}</p>
+            <p className="mt-1 text-muted-foreground">by {book.pen_name || "you"}</p>
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -49,11 +62,11 @@ function BookOverview() {
       </header>
 
       <section className="mb-10 grid gap-6 rounded-2xl border border-border bg-card p-6 shadow-xs md:grid-cols-[1fr_2fr]">
-        <div><p className="text-sm text-muted-foreground">Overall progress</p><p className="mt-1 font-serif text-4xl font-normal">{book.progress}%</p><Progress value={book.progress} className="mt-3" /></div>
+        <div><p className="text-sm text-muted-foreground">Overall progress</p><p className="mt-1 font-serif text-4xl font-normal">{progress}%</p><Progress value={progress} className="mt-3" /></div>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-          <div className="rounded-xl bg-amber/15 p-4"><CalendarDays className="mb-2 size-4 text-amber" /><p className="text-xs text-muted-foreground">Target publication</p><p className="font-semibold">{book.target}</p></div>
-          <div className="rounded-xl bg-teal/15 p-4"><Clock3 className="mb-2 size-4 text-teal" /><p className="text-xs text-muted-foreground">Next action</p><p className="font-semibold">24 June</p></div>
-          <div className="rounded-xl bg-leaf/18 p-4"><Users className="mb-2 size-4 text-leaf" /><p className="text-xs text-muted-foreground">Team</p><p className="font-semibold">3 collaborators</p></div>
+          <div className="rounded-xl bg-amber/15 p-4"><CalendarDays className="mb-2 size-4 text-amber" /><p className="text-xs text-muted-foreground">Target publication</p><p className="font-semibold">{target}</p></div>
+          <div className="rounded-xl bg-teal/15 p-4"><Clock3 className="mb-2 size-4 text-teal" /><p className="text-xs text-muted-foreground">Next action</p><p className="font-semibold">{next?.name ?? "All done"}</p></div>
+          <div className="rounded-xl bg-leaf/18 p-4"><Users className="mb-2 size-4 text-leaf" /><p className="text-xs text-muted-foreground">Team</p><p className="font-semibold">{collaboratorCount === 0 ? "Just you" : `${collaboratorCount} collaborator${collaboratorCount === 1 ? "" : "s"}`}</p></div>
         </div>
       </section>
 
@@ -62,13 +75,13 @@ function BookOverview() {
       <section>
         <div className="mb-5">
           <h2 className="font-serif text-3xl font-normal">Your publishing path</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Six phases from private manuscript to published book, paced around {book.target}.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Six phases from private manuscript to published book, paced around {target}.</p>
         </div>
         <div className="relative space-y-4 before:absolute before:bottom-8 before:left-5 before:top-7 before:w-px before:bg-border">
           {phases.map((phase, index) => {
             const style = phaseStyle(phase.id);
             const range = timeline.ranges[phase.id as keyof typeof timeline.ranges];
-            const complete = phase.milestones.every((milestone) => milestone.status === "Complete");
+            const complete = phase.milestones.length > 0 && phase.milestones.every((milestone) => milestone.status === "Complete");
             const state = pacing(range, complete);
             const expanded = open.includes(phase.id);
             return (
@@ -111,7 +124,7 @@ function BookOverview() {
       <Sheet open={Boolean(drawer)} onOpenChange={(next) => { if (!next) setDrawer(null); }}>
         <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-xl">
           <SheetTitle className="sr-only">{drawer?.milestone.name ?? "Milestone"}</SheetTitle>
-          {drawer && <MilestoneBody key={drawer.milestone.id} milestone={drawer.milestone} phaseName={drawer.phaseName} compact />}
+          {drawer && <MilestoneBody key={drawer.milestone.id} bookId={bookId} milestone={drawer.milestone} phaseName={drawer.phaseName} compact />}
         </SheetContent>
       </Sheet>
     </AppShell>

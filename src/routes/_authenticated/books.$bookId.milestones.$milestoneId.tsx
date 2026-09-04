@@ -1,7 +1,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/app-shell";
 import { MilestoneBody } from "@/components/milestone-body";
-import { bookById, milestoneById } from "@/lib/book-data";
+import { useBookTree } from "@/lib/book-db";
 
 export const Route = createFileRoute("/_authenticated/books/$bookId/milestones/$milestoneId")({
   head: () => ({ meta: [
@@ -13,12 +13,14 @@ export const Route = createFileRoute("/_authenticated/books/$bookId/milestones/$
 
 function MilestoneDetail() {
   const { bookId, milestoneId } = Route.useParams();
-  const book = bookById(bookId);
-  const milestone = milestoneById(milestoneId);
+  const { data, isLoading } = useBookTree(bookId);
+  if (isLoading) return <AppShell coachContext="milestone"><p className="text-sm text-muted-foreground">Loading milestone…</p></AppShell>;
+  const found = data?.phases.flatMap((phase) => phase.milestones.map((milestone) => ({ milestone, phaseName: phase.name }))).find((entry) => entry.milestone.id === milestoneId);
+  if (!data || !found) return <AppShell coachContext="milestone"><p className="text-sm text-muted-foreground">This milestone isn’t available.</p></AppShell>;
   return (
     <AppShell coachContext="milestone">
-      <nav className="mb-6 text-sm text-muted-foreground"><Link to="/books/$bookId" params={{ bookId }} className="hover:text-primary">{book.title}</Link> / {milestone.phase}</nav>
-      <MilestoneBody milestone={milestone} phaseName={milestone.phase} />
+      <nav className="mb-6 text-sm text-muted-foreground"><Link to="/books/$bookId" params={{ bookId }} className="hover:text-primary">{data.book.title}</Link> / {found.phaseName}</nav>
+      <MilestoneBody bookId={bookId} milestone={found.milestone} phaseName={found.phaseName} />
     </AppShell>
   );
 }
