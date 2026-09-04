@@ -56,7 +56,7 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
           <header className="flex h-16 items-center justify-between border-b border-border/60 bg-card/80 px-4 backdrop-blur lg:hidden">
             <Button variant="ghost" size="icon" onClick={() => setNavOpen(true)} aria-label="Open navigation"><Menu /></Button>
             <span className="font-serif text-lg font-semibold">Book Cycles</span>
-            <Button variant="ghost" size="icon" aria-label="Settings"><Settings2 /></Button>
+            <Button variant="ghost" size="icon" onClick={() => void handleSignOut()} aria-label="Sign out"><LogOut /></Button>
           </header>
           <main className="mx-auto w-full max-w-[1120px] px-5 py-8 md:px-8 lg:px-8 lg:py-10">{children}</main>
         </div>
