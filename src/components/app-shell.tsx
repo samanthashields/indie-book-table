@@ -15,19 +15,19 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
   const [collapsed, setCollapsed] = useState(false);
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   return (
-    <div className="min-h-screen bg-background text-foreground lg:flex lg:p-4">
-      <aside className={cn("fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-sidebar-border bg-sidebar p-4 transition-transform lg:static lg:z-auto lg:h-[calc(100vh-2rem)] lg:shrink-0 lg:translate-x-0 lg:border", !navOpen && "-translate-x-full", collapsed && "lg:w-[76px]")}>
+    <div className="min-h-screen bg-background text-foreground lg:flex lg:gap-4 lg:p-4">
+      <aside className={cn("fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-sidebar-border bg-sidebar p-4 shadow-lg transition-all duration-200 lg:sticky lg:top-4 lg:z-auto lg:h-[calc(100vh-2rem)] lg:shrink-0 lg:translate-x-0 lg:rounded-2xl lg:border lg:shadow-xs", !navOpen && "-translate-x-full", collapsed && "lg:w-[76px]")}>
         <div className="mb-8 flex h-11 items-center justify-between">
           <Link to="/" className="flex items-center gap-3 overflow-hidden">
-            <span className="grid size-10 shrink-0 place-items-center bg-primary text-primary-foreground"><BookOpen className="size-5" /></span>
-            {!collapsed && <span className="font-serif text-xl font-semibold">Book Cycles</span>}
+            <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground"><BookOpen className="size-5" /></span>
+            {!collapsed && <span className="font-serif text-xl font-normal">Book Cycles</span>}
           </Link>
           <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setNavOpen(false)} aria-label="Close navigation"><X /></Button>
         </div>
         <nav className="space-y-1">
           {nav.map(({ label, to, icon: Icon }) => {
             const active = to === "/" ? pathname === "/" : pathname.startsWith(to);
-            return <Link key={label} to={to} onClick={() => setNavOpen(false)} className={cn("flex h-11 items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors", active ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground")}><Icon className="size-5 shrink-0" />{!collapsed && label}</Link>;
+            return <Link key={label} to={to} onClick={() => setNavOpen(false)} className={cn("flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition-colors", active ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-muted-foreground hover:bg-card/70 hover:text-sidebar-accent-foreground")}><Icon className="size-5 shrink-0" />{!collapsed && label}</Link>;
           })}
         </nav>
         <div className="mt-auto space-y-2">
@@ -41,12 +41,12 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
       {navOpen && <div className="fixed inset-0 z-40 bg-foreground/30 lg:hidden" onClick={() => setNavOpen(false)} />}
       <div className="min-w-0 flex-1 lg:flex">
         <div className="min-w-0 flex-1">
-          <header className="flex h-16 items-center justify-between border-b border-border bg-background px-4 lg:hidden">
+          <header className="flex h-16 items-center justify-between border-b border-border/60 bg-card/80 px-4 backdrop-blur lg:hidden">
             <Button variant="ghost" size="icon" onClick={() => setNavOpen(true)} aria-label="Open navigation"><Menu /></Button>
             <span className="font-serif text-lg font-semibold">Book Cycles</span>
             <Button variant="ghost" size="icon" aria-label="Settings"><Settings2 /></Button>
           </header>
-          <main className="mx-auto w-full max-w-[1120px] px-5 py-8 md:px-8 lg:px-10 lg:py-10">{children}</main>
+          <main className="mx-auto w-full max-w-[1120px] px-5 py-8 md:px-8 lg:px-8 lg:py-10">{children}</main>
         </div>
         <BookCoach context={coachContext} />
       </div>

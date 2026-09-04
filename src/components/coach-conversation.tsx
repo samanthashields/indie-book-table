@@ -123,7 +123,7 @@ export function CoachConversation({
   const remainingEnrichment = enrichment.filter((item) => answers[item.id] === undefined);
 
   return (
-    <section className="border bg-card">
+    <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-xs">
       <header className="flex items-center gap-4 border-b border-border p-6">
         <span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground"><CoachMark className="size-5" /></span>
         <div className="flex-1">
@@ -145,7 +145,7 @@ export function CoachConversation({
             </div>
           ) : (
             <div key={turn.key} className="flex justify-end duration-500 animate-in fade-in slide-in-from-bottom-2">
-              <p className="max-w-prose bg-primary px-4 py-2 text-sm leading-6 text-primary-foreground">{turn.text}</p>
+              <p className="max-w-prose rounded-2xl rounded-br-md bg-primary px-4 py-2 text-sm leading-6 text-primary-foreground">{turn.text}</p>
             </div>
           ),
         )}
@@ -167,7 +167,7 @@ export function CoachConversation({
                           : submit(chip)
                       }
                       className={cn(
-                        "border px-3 py-1.5 text-sm transition-colors",
+                        "rounded-full border px-3 py-1.5 text-sm transition-colors",
                         active ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-primary",
                       )}
                     >
@@ -212,7 +212,7 @@ export function CoachConversation({
           <div className="flex flex-wrap gap-2 border-t border-border pt-6">
             <Button onClick={generate} disabled={generating}>Generate preview</Button>
             {remainingEnrichment.map((item) => (
-              <button key={item.id} type="button" onClick={() => openEnrichment(item.id)} className="border border-border px-3 py-1.5 text-sm transition-colors hover:border-primary">
+              <button key={item.id} type="button" onClick={() => openEnrichment(item.id)} className="rounded-full border border-border px-3 py-1.5 text-sm transition-colors hover:border-primary hover:bg-secondary">
                 {item.label}
               </button>
             ))}
