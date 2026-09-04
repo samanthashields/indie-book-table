@@ -1,30 +1,24 @@
-import { useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { CalendarDays, Check, Download, FileText, Link2, MessageSquare, Paperclip, UserRound } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { StatusPill } from "@/components/status-pill";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { bookById, milestoneById, type RequirementType } from "@/lib/book-data";
+import { MilestoneBody } from "@/components/milestone-body";
+import { bookById, milestoneById } from "@/lib/book-data";
 
-export const Route = createFileRoute("/books/$bookId/milestones/$milestoneId")({ head: () => ({ meta: [
-  { title: "Milestone — Book Cycles" }, { name: "description", content: "Complete a book milestone and its single linked requirement." }, { property: "og:title", content: "Milestone — Book Cycles" }, { property: "og:description", content: "Complete a book milestone and its single linked requirement." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
-] }), component: MilestoneDetail });
+export const Route = createFileRoute("/books/$bookId/milestones/$milestoneId")({
+  head: () => ({ meta: [
+    { title: "Milestone — Book Cycles" }, { name: "description", content: "Complete a book milestone and its single linked requirement." },
+    { property: "og:title", content: "Milestone — Book Cycles" }, { property: "og:description", content: "Complete a book milestone and its single linked requirement." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
+  ] }), component: MilestoneDetail,
+});
 
-function RequirementAction({ type }: { type: RequirementType }) {
-  const [done, setDone] = useState(false);
-  const copy = {
-    "Approve a Deliverable": { title: "Editor’s letter and revision map", body: "Sofia Chen shared 2 files for your approval.", action: "Approve deliverable", icon: Check },
-    "Attach a File": { title: "Add the finished file or a share link", body: "PDF, DOCX, EPUB, or a link to your working document.", action: "Choose file", icon: Paperclip },
-    "Request a Service": { title: "Invite a specialist to this milestone", body: "They’ll only see this book cycle and the work assigned to them.", action: "Send request", icon: UserRound },
-    "Complete an Activity Outside the Platform": { title: "Finish this work in your usual tools", body: "Mark it complete here when the outside work is done.", action: "Mark complete", icon: Check },
-  }[type]; const Icon = copy.icon;
-  return <div className="rounded-2xl border border-primary/20 bg-secondary p-5"><div className="flex items-start gap-4"><span className="grid size-10 shrink-0 place-items-center rounded-xl bg-card text-primary shadow-xs"><Icon className="size-5" /></span><div className="min-w-0 flex-1"><p className="font-semibold">{copy.title}</p><p className="mt-1 text-sm text-muted-foreground">{copy.body}</p>{type === "Approve a Deliverable" && <div className="mt-4 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-xl bg-card p-3"><FileText className="size-5"/><div className="min-w-0"><p className="truncate text-sm font-medium">The Salt Lines — developmental letter.pdf</p><p className="text-xs text-muted-foreground">1.8 MB, shared 18 June</p></div><Button variant="ghost" size="icon" aria-label="Download deliverable"><Download /></Button></div>}<Button className="mt-4" variant={done ? "secondary" : "default"} onClick={() => setDone(true)}>{done && <Check />}{done ? "Completed" : copy.action}</Button></div></div></div>;
+function MilestoneDetail() {
+  const { bookId, milestoneId } = Route.useParams();
+  const book = bookById(bookId);
+  const milestone = milestoneById(milestoneId);
+  return (
+    <AppShell coachContext="milestone">
+      <nav className="mb-6 text-sm text-muted-foreground"><Link to="/books/$bookId" params={{ bookId }} className="hover:text-primary">{book.title}</Link> / {milestone.phase}</nav>
+      <MilestoneBody milestone={milestone} phaseName={milestone.phase} />
+    </AppShell>
+  );
 }
-
-function MilestoneDetail() { const { bookId, milestoneId } = Route.useParams(); const book = bookById(bookId); const milestone = milestoneById(milestoneId); return <AppShell coachContext="milestone">
-  <nav className="mb-6 text-sm text-muted-foreground"><Link to="/books/$bookId" params={{ bookId }} className="hover:text-primary">{book.title}</Link> / {milestone.phase}</nav>
-  <div className="mb-7 flex flex-col gap-4 border-b border-border/70 pb-7 sm:flex-row sm:items-end sm:justify-between"><div className="min-w-0"><div className="mb-3 flex flex-wrap gap-2"><StatusPill>{milestone.phase}</StatusPill><StatusPill tone="warm">{milestone.status}</StatusPill></div><h1 className="font-serif text-4xl font-normal md:text-5xl">{milestone.name}</h1></div><Button variant="outline">Edit milestone</Button></div>
-  <div className="grid gap-8 xl:grid-cols-[1fr_280px]"><div className="space-y-8"><section><h2 className="font-serif text-2xl font-semibold">About this milestone</h2><p className="mt-3 max-w-2xl leading-7 text-muted-foreground">{milestone.description}</p><div className="mt-5 grid gap-4 sm:grid-cols-3"><div><UserRound className="mb-2 size-4 text-primary"/><p className="text-xs text-muted-foreground">Owner</p><p className="text-sm font-semibold">{milestone.owner}</p></div><div><CalendarDays className="mb-2 size-4 text-primary"/><p className="text-xs text-muted-foreground">Due date</p><p className="text-sm font-semibold">{milestone.due ?? "Not set"}</p></div><div><Check className="mb-2 size-4 text-primary"/><p className="text-xs text-muted-foreground">Approval</p><p className="text-sm font-semibold">{milestone.approval ? "Required" : "Not required"}</p></div></div></section><section><h2 className="mb-3 font-serif text-2xl font-semibold">Requirement</h2><RequirementAction type={milestone.requirement} /></section><section><h2 className="font-serif text-2xl font-semibold">Notes and attachments</h2><Textarea className="mt-3 min-h-28" placeholder="Add a note for yourself or your collaborator"/><div className="mt-3 flex gap-2"><Button variant="outline"><Paperclip />Attach file</Button><Button variant="outline"><Link2 />Add link</Button><Button>Save note</Button></div></section></div>
-  <aside className="space-y-6"><div className="rounded-2xl border border-border bg-card p-5 shadow-xs"><h2 className="font-serif text-xl font-normal">Collaborator view</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">Sofia sees the description, files, due date, and notes for this milestone—not your full book cycle.</p><div className="mt-4 flex items-center gap-3"><span className="grid size-9 place-items-center rounded-full bg-accent font-semibold">SC</span><div><p className="text-sm font-semibold">Sofia Chen</p><p className="text-xs text-muted-foreground">Developmental editor</p></div></div></div><div className="rounded-2xl border border-border bg-card p-5 shadow-xs"><div className="flex items-center gap-2"><MessageSquare className="size-4 text-primary"/><h2 className="font-semibold">Recent activity</h2></div><p className="mt-4 text-sm">Sofia uploaded the editor’s letter.</p><p className="mt-1 text-xs text-muted-foreground">18 June at 10:42</p></div></aside></div>
-  </AppShell>; }
