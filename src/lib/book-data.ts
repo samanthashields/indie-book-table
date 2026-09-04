@@ -16,6 +16,7 @@ export type Milestone = {
   requirement: RequirementType;
   status: "Complete" | "In progress" | "Not started" | "Blocked" | "On hold";
   due?: string;
+  dueIso?: string;
   approval?: boolean;
 };
 

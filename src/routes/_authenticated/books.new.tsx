@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 type PathId = "coach" | "template" | "scratch";
 type Search = { path?: PathId; template?: string };
 
-export const Route = createFileRoute("/books/new")({
+export const Route = createFileRoute("/_authenticated/books/new")({
   validateSearch: (search: Record<string, unknown>): Search => {
     const path = search["path"];
     const template = search["template"];

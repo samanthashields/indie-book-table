@@ -1,8 +1,9 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Library, Menu, PanelLeftClose, Settings2, X } from "lucide-react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { BookOpen, Library, LogOut, Menu, PanelLeftClose, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { BookCoach } from "@/components/book-coach";
+import { signOut, useCurrentUser } from "@/lib/use-current-user";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -14,6 +15,16 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
   const [navOpen, setNavOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const navigate = useNavigate();
+  const user = useCurrentUser();
+  const displayName = user.data?.profile?.display_name || user.data?.email || "Reader";
+  const initials = displayName.trim().split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase() || "?";
+  const planLabel = user.data?.profile?.plan === "paid" ? "Paid plan" : "Free plan";
+  const accountLabel = user.data?.roles.includes("collaborator") && !user.data.roles.includes("author") ? "Collaborator" : "Author";
+  const handleSignOut = async () => {
+    await signOut();
+    void navigate({ to: "/auth" });
+  };
   return (
     <div className="min-h-screen bg-background text-foreground lg:flex lg:gap-4 lg:p-4">
       <aside className={cn("fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-sidebar-border bg-sidebar p-4 shadow-lg transition-all duration-200 lg:sticky lg:top-4 lg:z-auto lg:h-[calc(100vh-2rem)] lg:shrink-0 lg:translate-x-0 lg:rounded-2xl lg:border lg:shadow-xs", !navOpen && "-translate-x-full", collapsed && "lg:w-[76px]")}>
@@ -32,8 +43,9 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
         </nav>
         <div className="mt-auto space-y-2">
           <div className={cn("flex items-center gap-3 border-t border-sidebar-border pt-4", collapsed && "justify-center")}>
-            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-accent font-semibold text-accent-foreground">ME</span>
-            {!collapsed && <div className="min-w-0"><p className="truncate text-sm font-medium">Mara Ellison</p><p className="text-xs text-muted-foreground">Author plan</p></div>}
+            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-accent font-semibold text-accent-foreground">{initials}</span>
+            {!collapsed && <div className="min-w-0"><p className="truncate text-sm font-medium">{displayName}</p><p className="text-xs text-muted-foreground">{accountLabel} · {planLabel}</p></div>}
+            {!collapsed && <Button variant="ghost" size="icon" className="ml-auto shrink-0" onClick={() => void handleSignOut()} aria-label="Sign out"><LogOut className="size-4" /></Button>}
           </div>
           <Button variant="ghost" size="sm" className="hidden w-full justify-start lg:flex" onClick={() => setCollapsed((value) => !value)}><PanelLeftClose className={cn(collapsed && "rotate-180")} />{!collapsed && "Collapse"}</Button>
         </div>
@@ -44,7 +56,7 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
           <header className="flex h-16 items-center justify-between border-b border-border/60 bg-card/80 px-4 backdrop-blur lg:hidden">
             <Button variant="ghost" size="icon" onClick={() => setNavOpen(true)} aria-label="Open navigation"><Menu /></Button>
             <span className="font-serif text-lg font-semibold">Book Cycles</span>
-            <Button variant="ghost" size="icon" aria-label="Settings"><Settings2 /></Button>
+            <Button variant="ghost" size="icon" onClick={() => void handleSignOut()} aria-label="Sign out"><LogOut /></Button>
           </header>
           <main className="mx-auto w-full max-w-[1120px] px-5 py-8 md:px-8 lg:px-8 lg:py-10">{children}</main>
         </div>
