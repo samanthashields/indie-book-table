@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Library, Menu, PanelLeftClose, Settings2, Sparkles, X } from "lucide-react";
+import { BookOpen, Library, Menu, PanelLeftClose, Settings2, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { BookCoach } from "@/components/book-coach";

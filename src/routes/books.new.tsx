@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { BookOpen, Check, Loader2, MessageSquareText, Sparkles, X } from "lucide-react";
+import { BookOpen, Check, Loader2, MessageSquareText, X } from "lucide-react";
+import { CoachMark } from "@/components/coach-mark";
 import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/books/new")({
 });
 
 const paths = [
-  { id: "coach", title: "Plan with Book Coach", copy: "Talk through your book, budget, and timing. Your coach will draft the cycle.", icon: Sparkles },
+  { id: "coach", title: "Plan with Book Coach", copy: "Talk through your book, budget, and timing. Your coach will draft the cycle.", icon: CoachMark },
   { id: "template", title: "Start from a template", copy: "Choose a genre-specific path and tailor every milestone.", icon: BookOpen },
   { id: "scratch", title: "Build from scratch", copy: "Create each phase and milestone yourself.", icon: MessageSquareText },
 ];
@@ -45,7 +46,7 @@ function CreateBook() {
     {step === 0 ? <><div className="grid gap-4 md:grid-cols-3">{paths.map(({ id, title, copy, icon: Icon }) => <button key={id} onClick={() => setSelected(id)} className={cn("relative min-h-52 border bg-card p-6 text-left transition-colors hover:border-primary", selected === id ? "border-2 border-primary" : "border-border")}><Icon className="mb-8 size-7 text-primary" /><h2 className="font-serif text-2xl font-semibold">{title}</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">{copy}</p>{selected === id && <span className="absolute right-4 top-4 grid size-6 place-items-center rounded-full bg-primary text-primary-foreground"><Check className="size-4" /></span>}</button>)}</div><div className="mt-6 flex justify-end"><Button onClick={() => setStep(1)}>Continue</Button></div></> :
     <div className="grid gap-8 xl:grid-cols-[1fr_300px]">
       <section className="border bg-card p-6 md:p-8">
-        <div className="mb-7 flex gap-4"><span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground"><Sparkles className="size-5" /></span><div><h2 className="font-serif text-2xl font-semibold">Let’s shape the path for your book</h2><p className="mt-1 text-sm text-muted-foreground">A few honest answers are enough to start.</p></div></div>
+        <div className="mb-7 flex gap-4"><span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground"><CoachMark className="size-5" /></span><div><h2 className="font-serif text-2xl font-semibold">Let’s shape the path for your book</h2><p className="mt-1 text-sm text-muted-foreground">A few honest answers are enough to start.</p></div></div>
         <div className="space-y-5">
           <label className="block text-sm font-semibold">What are you writing?<Input className="mt-2" value={form.premise} onChange={set("premise")} /></label>
           <label className="block text-sm font-semibold">Genre or category<Input className="mt-2" value={form.genre} onChange={set("genre")} /></label>
