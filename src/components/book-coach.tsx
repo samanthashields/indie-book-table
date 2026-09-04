@@ -26,7 +26,7 @@ export function BookCoach({ context = "overview" }: { context?: string | undefin
   return (
     <>
       {!expanded && (
-        <div className="hidden lg:ml-4 lg:flex lg:h-[calc(100vh-2rem)] lg:w-14 lg:shrink-0 lg:flex-col lg:items-center lg:gap-3 lg:border lg:border-border lg:bg-card lg:py-4">
+        <div className="hidden lg:sticky lg:top-4 lg:flex lg:h-[calc(100vh-2rem)] lg:w-14 lg:shrink-0 lg:flex-col lg:items-center lg:gap-3 lg:rounded-2xl lg:border lg:border-border lg:bg-card lg:py-4 lg:shadow-xs">
           <button
             onClick={() => setExpanded(true)}
             aria-label="Show Book Coach"
@@ -40,7 +40,7 @@ export function BookCoach({ context = "overview" }: { context?: string | undefin
 
       <aside
         className={cn(
-          "fixed inset-x-3 bottom-3 z-40 hidden max-h-[72vh] flex-col overflow-hidden border border-border bg-card shadow-xl lg:static lg:ml-4 lg:h-[calc(100vh-2rem)] lg:max-h-none lg:w-[320px] lg:shrink-0 lg:shadow-none",
+          "fixed inset-x-3 bottom-3 z-40 hidden max-h-[72vh] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-xl lg:sticky lg:top-4 lg:h-[calc(100vh-2rem)] lg:max-h-none lg:w-[300px] lg:shrink-0 lg:shadow-xs",
           open && "flex",
           expanded ? "lg:flex" : "lg:hidden",
         )}
@@ -54,9 +54,9 @@ export function BookCoach({ context = "overview" }: { context?: string | undefin
           <Button variant="ghost" size="icon" className="hidden lg:inline-flex" onClick={() => setExpanded(false)} aria-label="Hide Book Coach"><PanelRightClose /></Button>
         </div>
         <div className="flex-1 space-y-4 overflow-y-auto p-5">
-          <div className="rounded-md bg-secondary p-4 text-sm leading-6">{guidance}</div>
-          {messages.map((message, index) => <div key={`${message}-${index}`} className="ml-8 rounded-md bg-primary p-3 text-sm text-primary-foreground">{message}</div>)}
-          {messages.length > 0 && <div className="rounded-md bg-secondary p-4 text-sm leading-6">That’s a good question. I’d keep this step small: choose one decision you can finish today, then let the next milestone wait.</div>}
+           <div className="rounded-xl bg-secondary p-4 text-sm leading-6">{guidance}</div>
+           {messages.map((message, index) => <div key={`${message}-${index}`} className="ml-8 rounded-xl bg-primary p-3 text-sm text-primary-foreground">{message}</div>)}
+           {messages.length > 0 && <div className="rounded-xl bg-secondary p-4 text-sm leading-6">That’s a good question. I’d keep this step small: choose one decision you can finish today, then let the next milestone wait.</div>}
           <div className="border-t border-border pt-4">
             <p className="mb-2 text-xs font-semibold text-muted-foreground">Suggested</p>
             <button className="w-full text-left text-sm text-primary hover:underline" onClick={() => setDraft("What should I focus on this week?")}>What should I focus on this week?</button>
