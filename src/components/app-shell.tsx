@@ -1,8 +1,9 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Library, Menu, PanelLeftClose, Settings2, X } from "lucide-react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { BookOpen, Library, LogOut, Menu, PanelLeftClose, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { BookCoach } from "@/components/book-coach";
+import { signOut, useCurrentUser } from "@/lib/use-current-user";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -14,6 +15,16 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
   const [navOpen, setNavOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const navigate = useNavigate();
+  const user = useCurrentUser();
+  const displayName = user.data?.profile?.display_name || user.data?.email || "Reader";
+  const initials = displayName.trim().split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase() || "?";
+  const planLabel = user.data?.profile?.plan === "paid" ? "Paid plan" : "Free plan";
+  const accountLabel = user.data?.roles.includes("collaborator") && !user.data.roles.includes("author") ? "Collaborator" : "Author";
+  const handleSignOut = async () => {
+    await signOut();
+    void navigate({ to: "/auth" });
+  };
   return (
     <div className="min-h-screen bg-background text-foreground lg:flex lg:gap-4 lg:p-4">
       <aside className={cn("fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-sidebar-border bg-sidebar p-4 shadow-lg transition-all duration-200 lg:sticky lg:top-4 lg:z-auto lg:h-[calc(100vh-2rem)] lg:shrink-0 lg:translate-x-0 lg:rounded-2xl lg:border lg:shadow-xs", !navOpen && "-translate-x-full", collapsed && "lg:w-[76px]")}>
