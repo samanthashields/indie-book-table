@@ -76,7 +76,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
 
   const save = () => {
     updateMilestone.mutate(
-      { id: milestone.id, patch: { name: milestone.name, description: milestone.description, owner: milestone.owner, requirement: milestone.requirement, status: milestone.status, dueIso: milestone.dueIso ?? "", approval: milestone.approval } },
+      { id: milestone.id, patch: { name: milestone.name, description: milestone.description, owner: milestone.owner, requirement: milestone.requirement, status: milestone.status, dueIso: milestone.dueIso ?? "", approval: Boolean(milestone.approval) } },
       { onSuccess: () => { setEditing(false); toast.success("Milestone saved"); }, onError: () => toast.error("Couldn’t save the milestone") },
     );
   };
