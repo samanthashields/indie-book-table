@@ -61,13 +61,8 @@ function BookDetails() {
       <form className="space-y-6" onSubmit={(event) => { event.preventDefault(); save(); }}>
         <section className="rounded-2xl border border-border bg-paper p-6 shadow-xs">
           <h2 className="mb-5 font-serif text-2xl font-normal">Cover image</h2>
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
-            {book.cover_url ? (
-              <img src={book.cover_url} alt={`Current cover artwork for ${book.title}`} width={768} height={1152} className="aspect-[2/3] w-32 rounded-xl object-cover shadow-sm" />
-            ) : (
-              <span className="grid aspect-[2/3] w-32 place-items-center rounded-xl bg-teal/15 font-serif text-5xl text-primary shadow-sm">{book.title.charAt(0)}</span>
-            )}
-            <div className="min-w-0"><p className="text-sm leading-6 text-muted-foreground">Upload the cover you want to show across your book cycle. A working sketch is fine — you can replace it any time.</p><div className="mt-4 flex flex-wrap gap-3"><label className="inline-flex h-11 cursor-pointer items-center rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground"><input type="file" accept="image/*" className="sr-only" />Upload cover</label><Button type="button" variant="outline">Remove</Button></div><p className="mt-3 text-xs text-muted-foreground">JPG or PNG, portrait, at least 1600 px tall.</p></div>
+          <CoverUploader bookId={bookId} title={form.title || book.title} coverUrl={cover} onChange={setCover} saving={updateBook.isPending} />
+
           </div>
         </section>
         <section className="rounded-2xl border border-border bg-card p-6 shadow-xs">
