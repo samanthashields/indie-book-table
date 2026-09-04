@@ -297,7 +297,7 @@ export function useUpdateMilestone(bookId: string) {
         update.status = statusToDb[patch.status];
         update.completed_at = patch.status === "Complete" ? new Date().toISOString() : null;
       }
-      if (patch.due !== undefined) update.due_date = patch.due || null;
+      if (patch.dueIso !== undefined) update.due_date = patch.dueIso || null;
       if (patch.approval !== undefined) update.approval_required = patch.approval;
       const { error } = await supabase.from("milestones").update(update).eq("id", id);
       if (error) throw error;
