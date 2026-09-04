@@ -61,7 +61,7 @@ function CreateBook() {
                 {(phase.milestones ?? []).filter((milestone) => Boolean(milestone?.name)).map((milestone) => <li key={milestone.name} className="animate-in fade-in bg-secondary p-4 duration-500">
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <p className="font-semibold">{milestone.name}</p>
-                    <p className="text-xs text-muted-foreground">{milestone.requirement}{milestone.due ? ` · due ${milestone.due}` : ""}{milestone.approvalRequired ? " · approval required" : ""}</p>
+                    <p className="text-xs text-muted-foreground">{milestone.requirement}{milestone.due ? `, due ${milestone.due}` : ""}{milestone.approvalRequired ? ", approval required" : ""}</p>
                   </div>
                   {milestone.description && <p className="mt-1 text-sm leading-6 text-muted-foreground">{milestone.description}</p>}
                   {milestone.recommendation && <p className="mt-2 text-sm leading-6">{milestone.recommendation}</p>}
@@ -70,9 +70,12 @@ function CreateBook() {
             </li>)}
           </ol>
 
-          <div className="mt-8 flex justify-end"><Button asChild><Link to="/books/$bookId" params={{ bookId: "salt-lines" }}>Start this book cycle</Link></Button></div>
-        </div>}
-      </section>
+          {!isStreaming && <div className="mt-8 flex flex-wrap justify-end gap-3">
+            <Button variant="outline" onClick={() => setStep(0)}>Change answers</Button>
+            <Button asChild><Link to="/books/$bookId" params={{ bookId: "salt-lines" }}>Create the book cycle</Link></Button>
+          </div>}
+        </section>}
+      </div>
       <aside className="bg-secondary p-6"><p className="text-sm font-semibold">What your coach will do</p><ul className="mt-4 space-y-4 text-sm leading-6 text-muted-foreground"><li>Build six publishing phases around your target date.</li><li>Recommend where to do it yourself and where specialist help matters.</li><li>Keep one clear requirement for every milestone.</li></ul></aside>
     </div>}
   </AppShell>;
