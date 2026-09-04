@@ -17,14 +17,30 @@ import {
 
 type Turn = { key: string; role: "coach" | "author"; text: string };
 
-export function CoachConversation({ onGenerate, generating }: { onGenerate: (answers: Answers) => void; generating: boolean }) {
-  const [answers, setAnswers] = useState<Answers>({});
-  const [turns, setTurns] = useState<Turn[]>([
-    { key: "intro", role: "coach", text: "Hello — I'm your Book Coach. I'll ask a few things about your book, then draft a full cycle across the six publishing phases. You can change anything afterwards." },
-    { key: "q-fork", role: "coach", text: questions["fork"]!.prompt({}) },
-  ]);
-  const [queue, setQueue] = useState<string[]>([]);
-  const [current, setCurrent] = useState<string | null>("fork");
+export function CoachConversation({
+  onGenerate,
+  generating,
+  initialFork,
+}: {
+  onGenerate: (answers: Answers) => void;
+  generating: boolean;
+  initialFork?: "Start from a template" | "Build from scratch";
+}) {
+  const startIds = initialFork === "Start from a template" ? templateEssentials : scratchEssentials;
+  const [answers, setAnswers] = useState<Answers>(initialFork ? { fork: initialFork } : {});
+  const [turns, setTurns] = useState<Turn[]>(
+    initialFork
+      ? [
+          { key: "intro", role: "coach", text: "Hello — I'm your Book Coach. I'll ask a few things about your book, then draft a full cycle across the six publishing phases. You can change anything afterwards." },
+          { key: "q-first", role: "coach", text: questions[startIds[0]!]!.prompt({}) },
+        ]
+      : [
+          { key: "intro", role: "coach", text: "Hello — I'm your Book Coach. I'll ask a few things about your book, then draft a full cycle across the six publishing phases. You can change anything afterwards." },
+          { key: "q-fork", role: "coach", text: questions["fork"]!.prompt({}) },
+        ],
+  );
+  const [queue, setQueue] = useState<string[]>(initialFork ? startIds.slice(1) : []);
+  const [current, setCurrent] = useState<string | null>(initialFork ? startIds[0]! : "fork");
   const [atGate, setAtGate] = useState(false);
   const [picked, setPicked] = useState<string[]>([]);
   const [draft, setDraft] = useState("");
