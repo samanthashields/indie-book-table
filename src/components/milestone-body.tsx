@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { CalendarDays, Check, FileText, Link2, MessageSquare, Paperclip, Pencil, UserRound } from "lucide-react";
 import { toast } from "sonner";
 import { StatusPill } from "@/components/status-pill";
@@ -8,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useUpdateMilestone } from "@/lib/book-db";
+import { uploadBookFile, useFileUrl } from "@/lib/book-files";
 import type { Milestone, RequirementType } from "@/lib/book-data";
 
 const requirementTypes: RequirementType[] = [
@@ -19,14 +21,45 @@ const requirementTypes: RequirementType[] = [
 
 const statuses: Milestone["status"][] = ["Not started", "In progress", "Blocked", "On hold", "Complete"];
 
-export function RequirementAction({ type, complete, onComplete }: { type: RequirementType; complete: boolean; onComplete: () => void }) {
+export function RequirementAction({
+  bookId,
+  type,
+  complete,
+  onComplete,
+  onAttach,
+}: {
+  bookId: string;
+  type: RequirementType;
+  complete: boolean;
+  onComplete: () => void;
+  onAttach: (path: string, name: string) => void;
+}) {
+  const input = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
   const copy = {
     "Approve a Deliverable": { title: "Review and approve the shared deliverable", body: "Your collaborator’s files appear here for approval.", action: "Approve deliverable", icon: Check },
     "Attach a File": { title: "Add the finished file or a share link", body: "PDF, DOCX, EPUB, or a link to your working document.", action: "Choose file", icon: Paperclip },
-    "Request a Service": { title: "Invite a specialist to this milestone", body: "They’ll only see this book cycle and the work assigned to them.", action: "Send request", icon: UserRound },
+    "Request a Service": { title: "Invite a specialist to this milestone", body: "They’ll only see this book cycle and the work assigned to them.", action: "Invite a collaborator", icon: UserRound },
     "Complete an Activity Outside the Platform": { title: "Finish this work in your usual tools", body: "Mark it complete here when the outside work is done.", action: "Mark complete", icon: Check },
   }[type];
   const Icon = copy.icon;
+
+  const upload = async (file: File | undefined) => {
+    if (!file) return;
+    setBusy(true);
+    try {
+      const path = await uploadBookFile(bookId, "deliverables", file);
+      onAttach(path, file.name);
+      onComplete();
+      toast.success("File attached");
+    } catch {
+      toast.error("Couldn’t upload that file");
+    } finally {
+      setBusy(false);
+      if (input.current) input.current.value = "";
+    }
+  };
+
   return (
     <div className="rounded-2xl border border-teal/40 bg-teal/10 p-5">
       <div className="flex items-start gap-4">
@@ -34,45 +67,86 @@ export function RequirementAction({ type, complete, onComplete }: { type: Requir
         <div className="min-w-0 flex-1">
           <p className="font-semibold">{copy.title}</p>
           <p className="mt-1 text-sm text-muted-foreground">{copy.body}</p>
-          <Button className="mt-4" variant={complete ? "secondary" : "default"} onClick={onComplete} disabled={complete}>{complete && <Check />}{complete ? "Completed" : copy.action}</Button>
+          {type === "Request a Service" ? (
+            <Button className="mt-4" asChild><Link to="/books/$bookId/team" params={{ bookId }}><UserRound />{copy.action}</Link></Button>
+          ) : type === "Attach a File" ? (
+            <>
+              <Button className="mt-4" variant={complete ? "secondary" : "default"} disabled={busy} onClick={() => input.current?.click()}>{complete && <Check />}{busy ? "Uploading…" : complete ? "Replace file" : copy.action}</Button>
+              <input ref={input} type="file" className="sr-only" onChange={(event) => void upload(event.target.files?.[0])} />
+            </>
+          ) : (
+            <Button className="mt-4" variant={complete ? "secondary" : "default"} onClick={onComplete} disabled={complete}>{complete && <Check />}{complete ? "Completed" : copy.action}</Button>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
+type NoteRow = { id: string; body: string; created_at: string; attachment_path: string | null };
+
 function useNotes(milestoneId: string) {
   return useQuery({
     queryKey: ["notes", milestoneId],
     queryFn: async () => {
-      const { data, error } = await supabase.from("milestone_notes").select("id, body, created_at").eq("milestone_id", milestoneId).order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("milestone_notes").select("id, body, created_at, attachment_path").eq("milestone_id", milestoneId).order("created_at", { ascending: false });
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as NoteRow[];
     },
   });
+}
+
+function NoteAttachment({ path }: { path: string }) {
+  const url = useFileUrl(path);
+  const name = path.split("/").pop() ?? "attachment";
+  if (!url.data) return <p className="mt-2 text-xs text-muted-foreground">Preparing attachment…</p>;
+  return <a href={url.data} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-2 text-xs font-semibold text-primary underline-offset-2 hover:underline"><Paperclip className="size-3" />{name.replace(/^\d+-/, "")}</a>;
 }
 
 export function MilestoneBody({ bookId, milestone: initial, phaseName, compact = false }: { bookId: string; milestone: Milestone; phaseName: string; compact?: boolean }) {
   const [milestone, setMilestone] = useState<Milestone>(initial);
   const [editing, setEditing] = useState(false);
   const [note, setNote] = useState("");
+  const [attachment, setAttachment] = useState<{ path: string; name: string } | null>(null);
+  const noteFile = useRef<HTMLInputElement>(null);
   const updateMilestone = useUpdateMilestone(bookId);
   const queryClient = useQueryClient();
   const notes = useNotes(milestone.id);
   const update = (patch: Partial<Milestone>) => setMilestone((current) => ({ ...current, ...patch }));
 
   const saveNote = useMutation({
-    mutationFn: async (body: string) => {
+    mutationFn: async ({ body, path }: { body: string; path: string | null }) => {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData.user) throw new Error("Not signed in");
-      const { error } = await supabase.from("milestone_notes").insert({ milestone_id: milestone.id, author_user_id: userData.user.id, body });
+      const { error } = await supabase.from("milestone_notes").insert({ milestone_id: milestone.id, author_user_id: userData.user.id, body, attachment_path: path });
       if (error) throw error;
     },
     onSuccess: () => {
       setNote("");
+      setAttachment(null);
       void queryClient.invalidateQueries({ queryKey: ["notes", milestone.id] });
     },
+    onError: () => toast.error("Couldn’t save that note"),
   });
+
+  const pickNoteFile = async (file: File | undefined) => {
+    if (!file) return;
+    try {
+      const path = await uploadBookFile(bookId, "notes", file);
+      setAttachment({ path, name: file.name });
+      toast.success("File ready to save with your note");
+    } catch {
+      toast.error("Couldn’t upload that file");
+    } finally {
+      if (noteFile.current) noteFile.current.value = "";
+    }
+  };
+
+  const addLink = () => {
+    const url = window.prompt("Paste a link to add to this milestone");
+    if (!url) return;
+    setNote((current) => (current ? `${current}\n${url}` : url));
+  };
 
   const save = () => {
     updateMilestone.mutate(
@@ -136,7 +210,13 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
           </section>
           <section>
             <h3 className="mb-3 font-serif text-2xl font-semibold">Requirement</h3>
-            <RequirementAction type={milestone.requirement} complete={milestone.status === "Complete"} onComplete={markComplete} />
+            <RequirementAction
+              bookId={bookId}
+              type={milestone.requirement}
+              complete={milestone.status === "Complete"}
+              onComplete={markComplete}
+              onAttach={(path, name) => saveNote.mutate({ body: `Attached ${name}`, path })}
+            />
           </section>
           <section>
             <h3 className="font-serif text-2xl font-semibold">Notes and attachments</h3>
@@ -144,23 +224,31 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
               <ul className="mt-3 space-y-2">
                 {(notes.data ?? []).map((entry) => (
                   <li key={entry.id} className="rounded-xl bg-secondary p-3 text-sm">
-                    <p>{entry.body}</p>
+                    <p className="whitespace-pre-line">{entry.body}</p>
+                    {entry.attachment_path && <NoteAttachment path={entry.attachment_path} />}
                     <p className="mt-1 text-xs text-muted-foreground">{new Date(entry.created_at).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</p>
                   </li>
                 ))}
               </ul>
             )}
             <Textarea className="mt-3 min-h-28" placeholder="Add a note for yourself or your collaborator" value={note} onChange={(event) => setNote(event.target.value)} />
-            <div className="mt-3 flex flex-wrap gap-2"><Button variant="outline" type="button"><Paperclip />Attach file</Button><Button variant="outline" type="button"><Link2 />Add link</Button><Button type="button" disabled={!note.trim() || saveNote.isPending} onClick={() => saveNote.mutate(note.trim())}>Save note</Button></div>
+            {attachment && <p className="mt-2 flex items-center gap-2 text-xs font-semibold text-primary"><Paperclip className="size-3" />{attachment.name} will be saved with this note</p>}
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Button variant="outline" type="button" onClick={() => noteFile.current?.click()}><Paperclip />Attach file</Button>
+              <input ref={noteFile} type="file" className="sr-only" onChange={(event) => void pickNoteFile(event.target.files?.[0])} />
+              <Button variant="outline" type="button" onClick={addLink}><Link2 />Add link</Button>
+              <Button type="button" disabled={(!note.trim() && !attachment) || saveNote.isPending} onClick={() => saveNote.mutate({ body: note.trim() || attachment?.name || "Attachment", path: attachment?.path ?? null })}>Save note</Button>
+            </div>
           </section>
           <section className="grid gap-5 sm:grid-cols-2">
             <div className="rounded-2xl border border-border bg-card p-5 shadow-xs">
               <h3 className="font-serif text-xl font-normal">Collaborator view</h3>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">Collaborators you invite see the description, files, due date, and notes for the milestones assigned to them — not your full book cycle.</p>
+              <Button className="mt-4" variant="outline" asChild><Link to="/books/$bookId/team" params={{ bookId }}><UserRound />Manage collaborators</Link></Button>
             </div>
             <div className="rounded-2xl border border-border bg-paper p-5">
               <div className="flex items-center gap-2"><MessageSquare className="size-4 text-inkblue" /><h3 className="font-semibold">Recent activity</h3></div>
-              <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground"><FileText className="size-4" />Activity on this milestone will appear here.</p>
+              <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground"><FileText className="size-4" />{(notes.data ?? []).length > 0 ? `${(notes.data ?? []).length} note${(notes.data ?? []).length === 1 ? "" : "s"} on this milestone.` : "Activity on this milestone will appear here."}</p>
             </div>
           </section>
         </>
