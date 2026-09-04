@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as BooksBookIdRouteImport } from './routes/books.$bookId'
 import { Route as BooksNewRouteImport } from './routes/books.new'
+import { Route as BooksBookIdIndexRouteImport } from './routes/books.$bookId.index'
 import { Route as BooksBookIdDetailsRouteImport } from './routes/books.$bookId.details'
 import { Route as BooksBookIdReflectionRouteImport } from './routes/books.$bookId.reflection'
 import { Route as BooksBookIdMilestonesMilestoneIdRouteImport } from './routes/books.$bookId.milestones.$milestoneId'
@@ -36,6 +37,11 @@ const BooksNewRoute = BooksNewRouteImport.update({
   id: '/books/new',
   path: '/books/new',
   getParentRoute: () => rootRouteImport,
+} as any)
+const BooksBookIdIndexRoute = BooksBookIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BooksBookIdRoute,
 } as any)
 const BooksBookIdDetailsRoute = BooksBookIdDetailsRouteImport.update({
   id: '/details',
@@ -61,15 +67,16 @@ export interface FileRoutesByFullPath {
   '/books/new': typeof BooksNewRoute
   '/books/$bookId/details': typeof BooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof BooksBookIdReflectionRoute
+  '/books/$bookId/': typeof BooksBookIdIndexRoute
   '/books/$bookId/milestones/$milestoneId': typeof BooksBookIdMilestonesMilestoneIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/templates': typeof TemplatesRoute
-  '/books/$bookId': typeof BooksBookIdRouteWithChildren
   '/books/new': typeof BooksNewRoute
   '/books/$bookId/details': typeof BooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof BooksBookIdReflectionRoute
+  '/books/$bookId': typeof BooksBookIdIndexRoute
   '/books/$bookId/milestones/$milestoneId': typeof BooksBookIdMilestonesMilestoneIdRoute
 }
 export interface FileRoutesById {
@@ -80,6 +87,7 @@ export interface FileRoutesById {
   '/books/new': typeof BooksNewRoute
   '/books/$bookId/details': typeof BooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof BooksBookIdReflectionRoute
+  '/books/$bookId/': typeof BooksBookIdIndexRoute
   '/books/$bookId/milestones/$milestoneId': typeof BooksBookIdMilestonesMilestoneIdRoute
 }
 export interface FileRouteTypes {
@@ -91,15 +99,16 @@ export interface FileRouteTypes {
     | '/books/new'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
+    | '/books/$bookId/'
     | '/books/$bookId/milestones/$milestoneId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/templates'
-    | '/books/$bookId'
     | '/books/new'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
+    | '/books/$bookId'
     | '/books/$bookId/milestones/$milestoneId'
   id:
     | '__root__'
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/books/new'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
+    | '/books/$bookId/'
     | '/books/$bookId/milestones/$milestoneId'
   fileRoutesById: FileRoutesById
 }
@@ -149,6 +159,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BooksNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/books/$bookId/': {
+      id: '/books/$bookId/'
+      path: '/'
+      fullPath: '/books/$bookId/'
+      preLoaderRoute: typeof BooksBookIdIndexRouteImport
+      parentRoute: typeof BooksBookIdRoute
+    }
     '/books/$bookId/details': {
       id: '/books/$bookId/details'
       path: '/details'
@@ -176,12 +193,14 @@ declare module '@tanstack/react-router' {
 interface BooksBookIdRouteChildren {
   BooksBookIdDetailsRoute: typeof BooksBookIdDetailsRoute
   BooksBookIdReflectionRoute: typeof BooksBookIdReflectionRoute
+  BooksBookIdIndexRoute: typeof BooksBookIdIndexRoute
   BooksBookIdMilestonesMilestoneIdRoute: typeof BooksBookIdMilestonesMilestoneIdRoute
 }
 
 const BooksBookIdRouteChildren: BooksBookIdRouteChildren = {
   BooksBookIdDetailsRoute: BooksBookIdDetailsRoute,
   BooksBookIdReflectionRoute: BooksBookIdReflectionRoute,
+  BooksBookIdIndexRoute: BooksBookIdIndexRoute,
   BooksBookIdMilestonesMilestoneIdRoute: BooksBookIdMilestonesMilestoneIdRoute,
 }
 
