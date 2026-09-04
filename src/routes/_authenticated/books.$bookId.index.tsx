@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { CalendarDays, CheckCircle2, ChevronDown, Circle, Clock3, FileText, Settings2, Users } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { BookCover } from "@/components/book-cover";
 import { MilestoneBody } from "@/components/milestone-body";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";

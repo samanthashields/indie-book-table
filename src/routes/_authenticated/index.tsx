@@ -1,6 +1,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { BookOpen, CalendarDays, CircleAlert, Clock3, Plus } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { BookCover } from "@/components/book-cover";
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
