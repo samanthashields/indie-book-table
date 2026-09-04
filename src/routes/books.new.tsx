@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
-import { useMutation } from "@tanstack/react-query";
-import { BookOpen, Check, Loader2, MessageSquareText, Sparkles } from "lucide-react";
+import { BookOpen, Check, Loader2, MessageSquareText, Sparkles, X } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { generateBookPlan, type GeneratedPlan } from "@/lib/book-plan.functions";
+import { usePlanStream } from "@/lib/use-plan-stream";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/books/new")({
   head: () => ({ meta: [
