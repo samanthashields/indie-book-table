@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Library, LogOut, Menu, Newspaper, PanelLeftClose, Shield, Utensils, X } from "lucide-react";
+import { BookOpen, Library, LogOut, Menu, Newspaper, PanelLeftClose, Send, Shield, Utensils, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -12,9 +12,11 @@ import { cn } from "@/lib/utils";
 const nav = [
   { label: "My Books", to: "/" as const, icon: Library },
   { label: "Templates", to: "/templates" as const, icon: BookOpen },
+  { label: "My Submissions", to: "/submissions" as const, icon: Send },
   { label: "The Table", to: "/table" as const, icon: Utensils },
   { label: "Journal", to: "/journal" as const, icon: Newspaper },
 ];
+
 
 
 export function AppShell({ children, coachContext }: { children: ReactNode; coachContext?: string }) {

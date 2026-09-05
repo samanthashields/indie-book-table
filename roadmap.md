@@ -46,6 +46,7 @@
 - [x] Public shell + routing: The Table and Journal alongside the Author's Workshop
 - [x] The Table: issue archive, issue pages by category, book detail, author shelf
 - [x] Journal: post list and post page
-- [ ] Submission wizard (author submits a book to The Table)
-- [ ] Admin curation: issues, selections, quotas, themes, posts, site copy
+- [x] Submission wizard (author submits a book to The Table)
+- [x] Admin curation: issues, selections, quotas, cover words, journal posts, site copy
+
 - [ ] Phase 5: One author identity + publish → listing → Table handoff

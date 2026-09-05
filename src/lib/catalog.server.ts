@@ -91,6 +91,29 @@ function toBook(
   };
 }
 
+/** Turns private cover storage paths into temporary public links. */
+async function attachCoverUrls(
+  supabase: ReturnType<typeof createPublicClient>,
+  books: CatalogBook[],
+) {
+  const paths = [
+    ...new Set(
+      books
+        .map((book) => book.cover_image_url)
+        .filter((value): value is string => Boolean(value) && !/^https?:\/\//.test(value!)),
+    ),
+  ];
+  if (paths.length === 0) return books;
+  const { data } = await supabase.storage.from("catalog-covers").createSignedUrls(paths, 60 * 60);
+  const signed = new Map((data ?? []).map((row) => [row.path ?? "", row.signedUrl]));
+  for (const book of books) {
+    if (book.cover_image_url && signed.get(book.cover_image_url)) {
+      book.cover_image_url = signed.get(book.cover_image_url)!;
+    }
+  }
+  return books;
+}
+
 /** Loads one published issue (the newest when no id is given) with its grouped books. */
 export async function loadIssueCatalog(issueId?: string): Promise<CatalogIssue> {
   const supabase = createPublicClient();
@@ -133,6 +156,7 @@ export async function loadIssueCatalog(issueId?: string): Promise<CatalogIssue> 
     );
     grouped.set(selection.category, list);
   }
+  await attachCoverUrls(supabase, [...grouped.values()].flat());
 
   return {
     issue: {
@@ -145,6 +169,7 @@ export async function loadIssueCatalog(issueId?: string): Promise<CatalogIssue> 
     },
     categories: [...grouped.entries()].map(([category, books]) => ({ category, books })),
   };
+
 }
 
 export async function loadPublishedIssues(): Promise<IssueSummary[]> {
@@ -174,10 +199,12 @@ export async function loadCatalogBook(bookId: string): Promise<CatalogBook | nul
     .maybeSingle();
   if (error) throw new Error(error.message);
   if (!data) return null;
-  return toBook(data as unknown as NonNullable<SelectionRow["catalog_books"]>, {
+  const book = toBook(data as unknown as NonNullable<SelectionRow["catalog_books"]>, {
     is_spotlight: false,
     spotlight_blurb: null,
   });
+  await attachCoverUrls(supabase, [book]);
+  return book;
 }
 
 export async function loadAuthorShelf(authorId: string) {
@@ -196,16 +223,17 @@ export async function loadAuthorShelf(authorId: string) {
     .eq("catalog_author_id", authorId);
   if (error) throw new Error(error.message);
 
-  return {
-    author,
-    books: (books ?? []).map((row) =>
-      toBook(row as unknown as NonNullable<SelectionRow["catalog_books"]>, {
-        is_spotlight: false,
-        spotlight_blurb: null,
-      }),
-    ),
-  };
+  const shelf = (books ?? []).map((row) =>
+    toBook(row as unknown as NonNullable<SelectionRow["catalog_books"]>, {
+      is_spotlight: false,
+      spotlight_blurb: null,
+    }),
+  );
+  await attachCoverUrls(supabase, shelf);
+
+  return { author, books: shelf };
 }
+
 
 export async function loadPublishedPosts(): Promise<JournalPostSummary[]> {
   const supabase = createPublicClient();
