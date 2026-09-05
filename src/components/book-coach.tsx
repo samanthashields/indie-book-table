@@ -3,6 +3,8 @@ import { Minus, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CoachMark } from "@/components/coach-mark";
+import { useCurrentUser } from "@/lib/use-current-user";
+
 
 type Message = { id: string; role: "coach" | "author"; text: string };
 
