@@ -27,7 +27,7 @@ export function CatalogCoverArt({ book, className }: { book: CatalogBook; classN
   return (
     <span
       className={cn(
-        "grid aspect-[2/3] w-full place-items-center rounded-xl bg-teal/15 p-3 text-center font-serif text-lg leading-tight text-cocoa shadow-sm",
+        "grid aspect-[2/3] w-full place-items-center overflow-hidden hyphens-auto break-words rounded-xl bg-teal/15 p-2 text-center font-serif text-sm leading-tight text-cocoa shadow-sm",
         className,
       )}
       aria-hidden="true"

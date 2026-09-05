@@ -42,8 +42,10 @@
 - [x] Plan gating: coach is paid-only
 
 ## The Indie Table merge (uploaded brief)
-- [ ] Phase 1: Freeze design system into a reference doc
-- [ ] Phase 2: Unified shell + routing (Author's Workshop / The Table / Blog; rebrand; coach named Pen)
-- [ ] Phase 3: Port The Table (catalog, book detail, author profile, submission) — needs the other project's screens pasted in
-- [ ] Phase 4: Port the Blog — needs the other project's posts/components
+- [x] Catalog schema recreated in this backend (catalog_* tables, roles-based admin, seed issue)
+- [x] Public shell + routing: The Table and Journal alongside the Author's Workshop
+- [x] The Table: issue archive, issue pages by category, book detail, author shelf
+- [x] Journal: post list and post page
+- [ ] Submission wizard (author submits a book to The Table)
+- [ ] Admin curation: issues, selections, quotas, themes, posts, site copy
 - [ ] Phase 5: One author identity + publish → listing → Table handoff
