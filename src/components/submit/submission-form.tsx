@@ -209,11 +209,11 @@ export function SubmissionForm({
               type="button"
               onClick={() => setStepIndex(index)}
               className={cn(
-                "rounded-full px-3 py-1.5 text-xs font-bold uppercase tracking-wide transition-colors",
+                "rounded-full px-3 py-1.5 text-xs font-semibold transition-colors",
                 index === stepIndex
-                  ? "bg-cocoa text-paper"
+                  ? "bg-primary text-primary-foreground"
                   : index < stepIndex
-                    ? "bg-leaf/30 text-cocoa"
+                    ? "bg-secondary text-foreground"
                     : "bg-secondary text-muted-foreground",
               )}
             >
@@ -386,7 +386,7 @@ export function SubmissionForm({
               <div className="min-w-0">
                 <h3 className="font-serif text-lg">{values.title || "Untitled"}</h3>
                 <p className="text-sm text-muted-foreground">by {values.pen_name || values.author_name || "you"}</p>
-                <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-inkblue">
+                <p className="mt-2 text-sm font-semibold text-inkblue">
                   {values.genre || "Indie"} · {AUDIENCE_OPTIONS.find((a) => a.value === values.target_audience)?.label}
                 </p>
                 <p className="mt-2 text-sm">{values.hook}</p>
