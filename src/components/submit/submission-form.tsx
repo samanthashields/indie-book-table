@@ -26,10 +26,11 @@ function Field({
   children,
 }: {
   label: string;
-  hint?: string;
-  error?: string;
+  hint?: string | undefined;
+  error?: string | undefined;
   children: React.ReactNode;
 }) {
+
   return (
     <label className="block">
       <span className="text-sm font-semibold">{label}</span>
