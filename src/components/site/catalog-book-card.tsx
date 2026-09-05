@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 
+import { CircleToggle } from "@/components/site/circle-toggle";
+import type { WishlistEntry } from "@/lib/wishlist";
 import { AUDIENCE_LABELS, TAG_LABELS, type CatalogBook } from "@/lib/catalog-types";
 import { cn } from "@/lib/utils";
 
@@ -37,7 +39,15 @@ export function CatalogCoverArt({ book, className }: { book: CatalogBook; classN
   );
 }
 
-export function CatalogBookCard({ book }: { book: CatalogBook }) {
+export function CatalogBookCard({
+  book,
+  circled = false,
+  onCircle,
+}: {
+  book: CatalogBook;
+  circled?: boolean;
+  onCircle?: (entry: WishlistEntry) => void;
+}) {
   return (
     <article
       className={cn(
@@ -46,14 +56,17 @@ export function CatalogBookCard({ book }: { book: CatalogBook }) {
       )}
     >
       <div className="flex gap-4">
-        <Link
-          to="/table/books/$bookId"
-          params={{ bookId: book.id }}
-          className="w-24 shrink-0"
-          aria-label={`Open ${book.title}`}
-        >
-          <CatalogCoverArt book={book} />
-        </Link>
+        <div className="relative w-24 shrink-0">
+          <Link
+            to="/table/books/$bookId"
+            params={{ bookId: book.id }}
+            className="block"
+            aria-label={`Open ${book.title}`}
+          >
+            <CatalogCoverArt book={book} />
+          </Link>
+          {onCircle && <CircleToggle book={book} circled={circled} onToggle={onCircle} />}
+        </div>
         <div className="min-w-0">
           {book.is_spotlight && (
             <span className="mb-1 inline-block rounded-full bg-amber px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-cocoa">
