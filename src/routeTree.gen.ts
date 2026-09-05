@@ -16,6 +16,8 @@ import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedTemplatesRouteImport } from './routes/_authenticated/templates'
 import { Route as ApiCoachPlanRouteImport } from './routes/api/coach-plan'
+import { Route as JournalIndexRouteImport } from './routes/journal.index'
+import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
 import { Route as TableIndexRouteImport } from './routes/table.index'
 import { Route as TableIssueIdRouteImport } from './routes/table.$issueId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
@@ -65,6 +67,16 @@ const AuthenticatedTemplatesRoute = AuthenticatedTemplatesRouteImport.update({
 const ApiCoachPlanRoute = ApiCoachPlanRouteImport.update({
   id: '/api/coach-plan',
   path: '/api/coach-plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalIndexRoute = JournalIndexRouteImport.update({
+  id: '/journal/',
+  path: '/journal/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalSlugRoute = JournalSlugRouteImport.update({
+  id: '/journal/$slug',
+  path: '/journal/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TableIndexRoute = TableIndexRouteImport.update({
@@ -165,7 +177,9 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
+  '/journal/$slug': typeof JournalSlugRoute
   '/table/$issueId': typeof TableIssueIdRoute
+  '/journal/': typeof JournalIndexRoute
   '/table/': typeof TableIndexRoute
   '/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
@@ -187,8 +201,10 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
+  '/journal/$slug': typeof JournalSlugRoute
   '/table/$issueId': typeof TableIssueIdRoute
   '/': typeof AuthenticatedIndexRoute
+  '/journal': typeof JournalIndexRoute
   '/table': typeof TableIndexRoute
   '/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
@@ -212,8 +228,10 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
+  '/journal/$slug': typeof JournalSlugRoute
   '/table/$issueId': typeof TableIssueIdRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/journal/': typeof JournalIndexRoute
   '/table/': typeof TableIndexRoute
   '/_authenticated/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/_authenticated/admin/people': typeof AuthenticatedAdminPeopleRoute
@@ -239,7 +257,9 @@ export interface FileRouteTypes {
     | '/admin'
     | '/templates'
     | '/api/coach-plan'
+    | '/journal/$slug'
     | '/table/$issueId'
+    | '/journal/'
     | '/table/'
     | '/admin/activity'
     | '/admin/people'
@@ -261,8 +281,10 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/templates'
     | '/api/coach-plan'
+    | '/journal/$slug'
     | '/table/$issueId'
     | '/'
+    | '/journal'
     | '/table'
     | '/admin/activity'
     | '/admin/people'
@@ -285,8 +307,10 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/templates'
     | '/api/coach-plan'
+    | '/journal/$slug'
     | '/table/$issueId'
     | '/_authenticated/'
+    | '/journal/'
     | '/table/'
     | '/_authenticated/admin/activity'
     | '/_authenticated/admin/people'
@@ -309,7 +333,9 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ApiCoachPlanRoute: typeof ApiCoachPlanRoute
+  JournalSlugRoute: typeof JournalSlugRoute
   TableIssueIdRoute: typeof TableIssueIdRoute
+  JournalIndexRoute: typeof JournalIndexRoute
   TableIndexRoute: typeof TableIndexRoute
   TableAuthorsAuthorIdRoute: typeof TableAuthorsAuthorIdRoute
   TableBooksBookIdRoute: typeof TableBooksBookIdRoute
@@ -364,6 +390,20 @@ declare module '@tanstack/react-router' {
       path: '/api/coach-plan'
       fullPath: '/api/coach-plan'
       preLoaderRoute: typeof ApiCoachPlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal/': {
+      id: '/journal/'
+      path: '/journal'
+      fullPath: '/journal/'
+      preLoaderRoute: typeof JournalIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal/$slug': {
+      id: '/journal/$slug'
+      path: '/journal/$slug'
+      fullPath: '/journal/$slug'
+      preLoaderRoute: typeof JournalSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/table/': {
@@ -561,7 +601,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ApiCoachPlanRoute: ApiCoachPlanRoute,
+  JournalSlugRoute: JournalSlugRoute,
   TableIssueIdRoute: TableIssueIdRoute,
+  JournalIndexRoute: JournalIndexRoute,
   TableIndexRoute: TableIndexRoute,
   TableAuthorsAuthorIdRoute: TableAuthorsAuthorIdRoute,
   TableBooksBookIdRoute: TableBooksBookIdRoute,
