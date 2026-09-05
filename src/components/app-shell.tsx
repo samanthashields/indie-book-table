@@ -1,8 +1,11 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Library, LogOut, Menu, PanelLeftClose, X } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { BookOpen, Library, LogOut, Menu, PanelLeftClose, Shield, X } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { BookCoach } from "@/components/book-coach";
+import { NotificationBell } from "@/components/notification-bell";
+import { claimInvitations } from "@/lib/collaborators";
 import { signOut, useCurrentUser } from "@/lib/use-current-user";
 import { cn } from "@/lib/utils";
 
@@ -16,15 +19,32 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
   const [collapsed, setCollapsed] = useState(false);
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const user = useCurrentUser();
   const displayName = user.data?.profile?.display_name || user.data?.email || "Reader";
   const initials = displayName.trim().split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase() || "?";
   const planLabel = user.data?.profile?.plan === "paid" ? "Paid plan" : "Free plan";
+  const isAdmin = Boolean(user.data?.roles.includes("admin"));
   const accountLabel = user.data?.roles.includes("collaborator") && !user.data.roles.includes("author") ? "Collaborator" : "Author";
+  const userId = user.data?.id;
+
+  useEffect(() => {
+    if (!userId) return;
+    void claimInvitations().then((count) => {
+      if (count > 0) {
+        void queryClient.invalidateQueries({ queryKey: ["books"] });
+        void queryClient.invalidateQueries({ queryKey: ["notifications"] });
+      }
+    });
+  }, [userId, queryClient]);
+
   const handleSignOut = async () => {
+    await queryClient.cancelQueries();
+    queryClient.clear();
     await signOut();
-    void navigate({ to: "/auth" });
+    void navigate({ to: "/auth", replace: true });
   };
+
   return (
     <div className="min-h-screen bg-background text-foreground lg:flex lg:gap-4 lg:p-4">
       <aside className={cn("fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-sidebar-border bg-sidebar p-4 shadow-lg transition-all duration-200 lg:sticky lg:top-4 lg:z-auto lg:h-[calc(100vh-2rem)] lg:shrink-0 lg:translate-x-0 lg:rounded-2xl lg:border lg:shadow-xs", !navOpen && "-translate-x-full", collapsed && "lg:w-[76px]")}>
