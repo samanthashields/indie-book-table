@@ -7,10 +7,14 @@ export const Route = createFileRoute("/_authenticated/admin")({ component: Admin
 
 const tabs = [
   { label: "Dashboard", to: "/admin" as const, exact: true },
+  { label: "Submissions", to: "/admin/submissions" as const },
+  { label: "Issues", to: "/admin/issues" as const },
+  { label: "Journal & copy", to: "/admin/journal" as const },
   { label: "People", to: "/admin/people" as const },
   { label: "Templates", to: "/admin/templates" as const },
   { label: "Activity log", to: "/admin/activity" as const },
 ];
+
 
 function AdminLayout() {
   const user = useCurrentUser();
