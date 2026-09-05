@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
+import { Button } from "@/components/ui/button";
 import { PublicShell } from "@/components/site/public-shell";
 import { CatalogBookCard } from "@/components/site/catalog-book-card";
 import { WishlistBar } from "@/components/site/wishlist-bar";
@@ -81,19 +82,17 @@ function IssuePage() {
       </nav>
 
       <header className="mt-4 rounded-3xl border border-border/70 bg-amber/15 p-8 md:p-10">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-inkblue">Issue</p>
+        <p className="text-sm font-semibold text-inkblue">Issue</p>
         <h1 className="mt-2 font-serif text-4xl">{issue?.cover_headline ?? issue?.display_label}</h1>
         {issue?.cover_tagline && (
           <p className="mt-3 max-w-2xl text-lg text-cocoa/80">{issue.cover_tagline}</p>
         )}
         {issue && (
-          <Link
-            to="/table/$issueId/flyer"
-            params={{ issueId: issue.id }}
-            className="mt-5 inline-flex items-center gap-2 rounded-full border-2 border-cocoa bg-amber px-5 py-2 text-xs font-bold uppercase tracking-[0.12em] text-cocoa shadow-[3px_3px_0_0_var(--cocoa)] transition-transform hover:-translate-y-0.5"
-          >
-            Read the flyer <span aria-hidden="true">→</span>
-          </Link>
+          <Button asChild className="mt-5">
+            <Link to="/table/$issueId/flyer" params={{ issueId: issue.id }}>
+              Read the flyer <span aria-hidden="true">→</span>
+            </Link>
+          </Button>
         )}
       </header>
 

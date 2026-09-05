@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
+import { Button } from "@/components/ui/button";
 import { PublicShell } from "@/components/site/public-shell";
 import { CatalogBookCard } from "@/components/site/catalog-book-card";
 import { getCurrentIssue, getSiteCopy, listPublishedIssues } from "@/lib/catalog.functions";
@@ -59,7 +60,7 @@ function TablePage() {
   return (
     <PublicShell>
       <section className="rounded-3xl border border-border/70 bg-paper p-8 md:p-12">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-inkblue">
+        <p className="text-sm font-semibold text-inkblue">
           {current.issue ? current.issue.display_label : "Coming soon"}
         </p>
         <h1 className="mt-3 max-w-2xl font-serif text-4xl leading-tight md:text-5xl">
@@ -70,13 +71,11 @@ function TablePage() {
             "Every month we lay out a new issue of independent titles — read the flyer, meet the authors, buy the book."}
         </p>
         {current.issue && (
-          <Link
-            to="/table/$issueId"
-            params={{ issueId: current.issue.id }}
-            className="mt-6 inline-flex items-center rounded-full bg-cocoa px-5 py-3 text-sm font-semibold text-paper transition-colors hover:bg-cocoa/90"
-          >
-            Read the {current.issue.display_label} issue
-          </Link>
+          <Button asChild size="lg" className="mt-6">
+            <Link to="/table/$issueId" params={{ issueId: current.issue.id }}>
+              Read the {current.issue.display_label} issue
+            </Link>
+          </Button>
         )}
       </section>
 

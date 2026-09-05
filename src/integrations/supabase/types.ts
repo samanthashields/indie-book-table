@@ -1100,6 +1100,7 @@ export type Database = {
         Args: { _issue_id: string }
         Returns: boolean
       }
+      current_user_email: { Args: never; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

@@ -1,5 +1,7 @@
 import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
+
 import type { WishlistEntry } from "@/lib/wishlist";
 
 function priceLine(entry: WishlistEntry) {
@@ -60,41 +62,33 @@ export function WishlistBar({
   const titles = entries.map((entry) => entry.title);
 
   return (
-    <div className="sticky bottom-0 z-30 -mx-3 mt-14 border-t-4 border-dashed border-cocoa bg-amber px-4 py-3 sm:mx-0">
+    <div className="sticky bottom-0 z-30 -mx-3 mt-14 rounded-t-2xl border border-border/70 bg-card px-4 py-3 shadow-md sm:mx-0">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3">
-        <p className="min-w-0 text-[0.9rem] text-cocoa">
-          <span className="font-bold uppercase tracking-[0.08em]">
+        <p className="min-w-0 text-sm text-foreground">
+          <span className="font-semibold">
             {entries.length} circled {entries.length === 1 ? "book" : "books"}
           </span>{" "}
-          <span className="opacity-80">— {titles.join(", ")}</span>
+          <span className="text-muted-foreground">— {titles.join(", ")}</span>
         </p>
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
+          <Button
+            variant="secondary"
+            size="sm"
             onClick={() => {
               void navigator.clipboard
                 .writeText(asText(entries))
                 .then(() => toast.success("List copied."))
                 .catch(() => toast.error("Couldn't copy the list."));
             }}
-            className="panel-outline-thin bg-card px-3 py-1 text-[0.62rem] font-bold uppercase tracking-[0.1em] text-cocoa"
           >
             Copy list
-          </button>
-          <button
-            type="button"
-            onClick={() => printSlip(entries)}
-            className="panel-outline-thin bg-leaf px-3 py-1 text-[0.62rem] font-bold uppercase tracking-[0.1em] text-cocoa"
-          >
+          </Button>
+          <Button size="sm" onClick={() => printSlip(entries)}>
             Print slip
-          </button>
-          <button
-            type="button"
-            onClick={onClear}
-            className="panel-outline-thin bg-paper px-3 py-1 text-[0.62rem] font-bold uppercase tracking-[0.1em] text-cocoa"
-          >
+          </Button>
+          <Button variant="ghost" size="sm" onClick={onClear}>
             Clear list
-          </button>
+          </Button>
         </div>
       </div>
     </div>

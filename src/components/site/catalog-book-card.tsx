@@ -69,7 +69,7 @@ export function CatalogBookCard({
         </div>
         <div className="min-w-0">
           {book.is_spotlight && (
-            <span className="mb-1 inline-block rounded-full bg-amber px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-cocoa">
+            <span className="mb-1 inline-block rounded-full bg-amber px-2 py-0.5 text-[11px] font-semibold text-cocoa">
               Spotlight
             </span>
           )}
@@ -88,7 +88,7 @@ export function CatalogBookCard({
               {book.author_name}
             </Link>
           </p>
-          <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-inkblue">
+          <p className="mt-2 text-sm font-semibold text-inkblue">
             {book.genre ?? "Indie"} · {AUDIENCE_LABELS[book.target_audience] ?? book.target_audience}
           </p>
         </div>

@@ -80,7 +80,7 @@ function BookPage() {
               {book.author_name}
             </Link>
           </p>
-          <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-inkblue">
+          <p className="mt-3 text-sm font-semibold text-inkblue">
             {book.genre ?? "Indie"} · {AUDIENCE_LABELS[book.target_audience] ?? book.target_audience}
             {book.explicit_content ? " · Mature content" : ""}
           </p>
