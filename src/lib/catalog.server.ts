@@ -156,6 +156,7 @@ export async function loadIssueCatalog(issueId?: string): Promise<CatalogIssue> 
     );
     grouped.set(selection.category, list);
   }
+  await attachCoverUrls(supabase, [...grouped.values()].flat());
 
   return {
     issue: {
@@ -168,6 +169,7 @@ export async function loadIssueCatalog(issueId?: string): Promise<CatalogIssue> 
     },
     categories: [...grouped.entries()].map(([category, books]) => ({ category, books })),
   };
+
 }
 
 export async function loadPublishedIssues(): Promise<IssueSummary[]> {
