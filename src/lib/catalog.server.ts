@@ -91,6 +91,29 @@ function toBook(
   };
 }
 
+/** Turns private cover storage paths into temporary public links. */
+async function attachCoverUrls(
+  supabase: ReturnType<typeof createPublicClient>,
+  books: CatalogBook[],
+) {
+  const paths = [
+    ...new Set(
+      books
+        .map((book) => book.cover_image_url)
+        .filter((value): value is string => Boolean(value) && !/^https?:\/\//.test(value!)),
+    ),
+  ];
+  if (paths.length === 0) return books;
+  const { data } = await supabase.storage.from("catalog-covers").createSignedUrls(paths, 60 * 60);
+  const signed = new Map((data ?? []).map((row) => [row.path ?? "", row.signedUrl]));
+  for (const book of books) {
+    if (book.cover_image_url && signed.get(book.cover_image_url)) {
+      book.cover_image_url = signed.get(book.cover_image_url)!;
+    }
+  }
+  return books;
+}
+
 /** Loads one published issue (the newest when no id is given) with its grouped books. */
 export async function loadIssueCatalog(issueId?: string): Promise<CatalogIssue> {
   const supabase = createPublicClient();
