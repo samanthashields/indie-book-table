@@ -84,25 +84,28 @@ export function BookCoach({ context = "overview" }: { context?: string | undefin
             <Button variant="ghost" size="icon" onClick={() => setOpen(false)} aria-label="Minimise Book Coach"><Minus /></Button>
           </div>
 
-          <div ref={scroller} className="flex-1 space-y-3 overflow-y-auto p-5">
-            {messages.map((message) => (
-              <div key={message.id} className={message.role === "coach" ? "rounded-2xl rounded-bl-md bg-paper p-4 text-sm leading-6" : "ml-8 rounded-2xl rounded-br-md bg-primary p-3 text-sm text-primary-foreground"}>{message.text}</div>
-            ))}
-            {suggestions.length > 0 && (
-              <div className="pt-1">
-                <p className="mb-2 text-xs font-semibold text-muted-foreground">Suggested</p>
-                <div className="flex flex-wrap gap-2">
-                  {suggestions.map((suggestion) => (
-                    <button key={suggestion} onClick={() => send(suggestion)} className="rounded-full border border-teal/45 bg-teal/12 px-3 py-1.5 text-left text-xs font-semibold transition-colors hover:bg-teal/25">{suggestion}</button>
-                  ))}
-                </div>
+          {paid ? (
+            <>
+              <div ref={scroller} className="flex-1 space-y-3 overflow-y-auto p-5">
+                {messages.map((message) => (
+                  <div key={message.id} className={message.role === "coach" ? "rounded-2xl rounded-bl-md bg-paper p-4 text-sm leading-6" : "ml-8 rounded-2xl rounded-br-md bg-primary p-3 text-sm text-primary-foreground"}>{message.text}</div>
+                ))}
+                {suggestions.length > 0 && (
+                  <div className="pt-1">
+                    <p className="mb-2 text-xs font-semibold text-muted-foreground">Suggested</p>
+                    <div className="flex flex-wrap gap-2">
+                      {suggestions.map((suggestion) => (
+                        <button key={suggestion} onClick={() => send(suggestion)} className="rounded-full border border-teal/45 bg-teal/12 px-3 py-1.5 text-left text-xs font-semibold transition-colors hover:bg-teal/25">{suggestion}</button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          <div className="flex gap-2 border-t border-border p-4">
-            <Input value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") send(draft); }} placeholder="Ask your Book Coach" aria-label="Message Book Coach" />
-            <Button size="icon" onClick={() => send(draft)} aria-label="Send message"><Send /></Button>
+              <div className="flex gap-2 border-t border-border p-4">
+                <Input value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") send(draft); }} placeholder="Ask your Book Coach" aria-label="Message Book Coach" />
+                <Button size="icon" onClick={() => send(draft)} aria-label="Send message"><Send /></Button>
+
           </div>
         </div>
       )}
