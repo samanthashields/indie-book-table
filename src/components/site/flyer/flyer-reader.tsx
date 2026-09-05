@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { CatalogBook, CatalogIssue } from "@/lib/catalog-types";
-import { DEFAULT_ISSUE_THEME, resolvePage } from "@/lib/flyer-theme";
+import { normalizeIssueTheme, resolvePage } from "@/lib/flyer-theme";
 import { FlyerPage } from "./flyer-page";
 import { PageTurner } from "./page-turner";
 import { PageNav, CornerTurn } from "./page-nav";

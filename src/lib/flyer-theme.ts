@@ -49,6 +49,32 @@ export const DEFAULT_ISSUE_THEME: FlyerIssueTheme = {
   cover_tagline: null,
 };
 
+/** Casts loose DB strings to a valid theme, falling back to the default. */
+export function normalizeIssueTheme(
+  theme:
+    | (Partial<Pick<FlyerIssueTheme, "preset" | "border_pattern" | "cover_image_url" | "cover_headline" | "cover_tagline">>)
+    | null
+    | undefined,
+): FlyerIssueTheme {
+  if (!theme) return DEFAULT_ISSUE_THEME;
+  const preset: ThemePreset = (Object.keys(PRESETS) as ThemePreset[]).includes(
+    theme.preset as ThemePreset,
+  )
+    ? (theme.preset as ThemePreset)
+    : DEFAULT_ISSUE_THEME.preset;
+  const patterns: BorderPattern[] = ["hearts", "stars", "dots", "pencils", "plain"];
+  const border_pattern: BorderPattern = patterns.includes(theme.border_pattern as BorderPattern)
+    ? (theme.border_pattern as BorderPattern)
+    : DEFAULT_ISSUE_THEME.border_pattern;
+  return {
+    preset,
+    border_pattern,
+    cover_image_url: theme.cover_image_url ?? null,
+    cover_headline: theme.cover_headline ?? null,
+    cover_tagline: theme.cover_tagline ?? null,
+  };
+}
+
 const PRESETS: Record<
   ThemePreset,
   {
