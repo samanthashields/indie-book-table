@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedSubmissionsRouteImport } from './routes/_authenticated/submissions'
 import { Route as AuthenticatedSubmitRouteImport } from './routes/_authenticated/submit'
 import { Route as AuthenticatedTemplatesRouteImport } from './routes/_authenticated/templates'
 import { Route as ApiCoachPlanRouteImport } from './routes/api/coach-plan'
@@ -60,6 +61,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSubmissionsRoute =
+  AuthenticatedSubmissionsRouteImport.update({
+    id: '/submissions',
+    path: '/submissions',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSubmitRoute = AuthenticatedSubmitRouteImport.update({
   id: '/submit',
   path: '/submit',
@@ -181,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/submissions': typeof AuthenticatedSubmissionsRoute
   '/submit': typeof AuthenticatedSubmitRoute
   '/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
@@ -206,6 +214,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/submissions': typeof AuthenticatedSubmissionsRoute
   '/submit': typeof AuthenticatedSubmitRoute
   '/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
@@ -234,6 +243,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/submissions': typeof AuthenticatedSubmissionsRoute
   '/_authenticated/submit': typeof AuthenticatedSubmitRoute
   '/_authenticated/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
@@ -264,6 +274,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/admin'
+    | '/submissions'
     | '/submit'
     | '/templates'
     | '/api/coach-plan'
@@ -289,6 +300,7 @@ export interface FileRouteTypes {
   to:
     | '/auth'
     | '/reset-password'
+    | '/submissions'
     | '/submit'
     | '/templates'
     | '/api/coach-plan'
@@ -316,6 +328,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/_authenticated/admin'
+    | '/_authenticated/submissions'
     | '/_authenticated/submit'
     | '/_authenticated/templates'
     | '/api/coach-plan'
@@ -388,6 +401,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/submissions': {
+      id: '/_authenticated/submissions'
+      path: '/submissions'
+      fullPath: '/submissions'
+      preLoaderRoute: typeof AuthenticatedSubmissionsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/submit': {
@@ -598,6 +618,7 @@ const AuthenticatedBooksBookIdRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+  AuthenticatedSubmissionsRoute: typeof AuthenticatedSubmissionsRoute
   AuthenticatedSubmitRoute: typeof AuthenticatedSubmitRoute
   AuthenticatedTemplatesRoute: typeof AuthenticatedTemplatesRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
@@ -607,6 +628,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+  AuthenticatedSubmissionsRoute: AuthenticatedSubmissionsRoute,
   AuthenticatedSubmitRoute: AuthenticatedSubmitRoute,
   AuthenticatedTemplatesRoute: AuthenticatedTemplatesRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
