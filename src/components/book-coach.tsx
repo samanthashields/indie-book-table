@@ -44,6 +44,8 @@ const answers: Step[] = [
 
 export function BookCoach({ context = "overview" }: { context?: string | undefined }) {
   const start = opening[context] ?? opening["overview"]!;
+  const user = useCurrentUser();
+  const paid = user.data?.profile?.plan === "paid";
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState("");
   const [turn, setTurn] = useState(0);
@@ -52,6 +54,7 @@ export function BookCoach({ context = "overview" }: { context?: string | undefin
   const scroller = useRef<HTMLDivElement>(null);
 
   useEffect(() => { scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: "smooth" }); }, [messages, open]);
+
 
   const send = (value: string) => {
     const text = value.trim();
