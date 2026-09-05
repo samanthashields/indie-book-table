@@ -12,9 +12,11 @@ import { cn } from "@/lib/utils";
 const nav = [
   { label: "My Books", to: "/" as const, icon: Library },
   { label: "Templates", to: "/templates" as const, icon: BookOpen },
+  { label: "My Submissions", to: "/submissions" as const, icon: Send },
   { label: "The Table", to: "/table" as const, icon: Utensils },
   { label: "Journal", to: "/journal" as const, icon: Newspaper },
 ];
+
 
 
 export function AppShell({ children, coachContext }: { children: ReactNode; coachContext?: string }) {
