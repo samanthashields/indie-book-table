@@ -73,7 +73,7 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [goNext, goPrev]);
 
-  const theme = data.theme ?? DEFAULT_ISSUE_THEME;
+  const theme = normalizeIssueTheme(data.theme);
   const pageThemes = data.pageThemes ?? [];
 
   const renderPage = (index: number) => {
