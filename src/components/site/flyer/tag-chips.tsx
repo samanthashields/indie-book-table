@@ -36,6 +36,9 @@ export function IconLegend() {
       <h2 className="text-center text-[0.85rem] font-bold uppercase tracking-[0.08em] text-cocoa sm:text-base">
         Let&rsquo;s go treasure hunting!
       </h2>
+      <p className="mt-1 text-center text-[0.68rem] text-cocoa/70">
+        Tap the ring on any cover to circle a book — your list collects at the bottom of the page.
+      </p>
       <ul className="mt-3 grid grid-cols-3 gap-x-3 gap-y-3 sm:grid-cols-5 lg:grid-cols-9">
         {entries.map((entry) => (
           <li key={entry.key} className="flex flex-col items-center gap-1 text-center">

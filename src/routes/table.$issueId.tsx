@@ -1,8 +1,12 @@
+import { useRef, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
 import { PublicShell } from "@/components/site/public-shell";
 import { CatalogBookCard } from "@/components/site/catalog-book-card";
+import { WishlistBar } from "@/components/site/wishlist-bar";
+import { SubscribeGateModal } from "@/components/site/subscribe-gate-modal";
+import { useWishlist, useWishlistGate, type WishlistEntry } from "@/lib/wishlist";
 import { getIssueCatalog } from "@/lib/catalog.functions";
 
 const issueCatalogQuery = (issueId: string) =>
@@ -48,6 +52,20 @@ export const Route = createFileRoute("/table/$issueId")({
 });
 
 function IssuePage() {
+  const { entries, toggle, clear, isCircled } = useWishlist();
+  const { unlocked, unlock } = useWishlistGate();
+  const [gateOpen, setGateOpen] = useState(false);
+  const pendingCircle = useRef<WishlistEntry | null>(null);
+
+  const handleCircle = (entry: WishlistEntry) => {
+    if (!unlocked) {
+      pendingCircle.current = entry;
+      setGateOpen(true);
+      return;
+    }
+    toggle(entry);
+  };
+
   const { issueId } = Route.useParams();
   const { data } = useSuspenseQuery(issueCatalogQuery(issueId));
   const issue = data.issue;
@@ -87,11 +105,30 @@ function IssuePage() {
           </div>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             {category.books.map((book) => (
-              <CatalogBookCard key={book.id} book={book} />
+              <CatalogBookCard
+                key={book.id}
+                book={book}
+                circled={isCircled(book.id)}
+                onCircle={handleCircle}
+              />
             ))}
           </div>
         </section>
       ))}
+      <WishlistBar entries={entries} onClear={clear} />
+
+      <SubscribeGateModal
+        open={gateOpen}
+        onOpenChange={setGateOpen}
+        onSubscribed={() => {
+          unlock();
+          setGateOpen(false);
+          if (pendingCircle.current) {
+            toggle(pendingCircle.current);
+            pendingCircle.current = null;
+          }
+        }}
+      />
     </PublicShell>
   );
 }

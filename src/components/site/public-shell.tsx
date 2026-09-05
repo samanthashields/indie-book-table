@@ -7,6 +7,7 @@ import { useCurrentUser } from "@/lib/use-current-user";
 const links = [
   { label: "The Table", to: "/table" as const },
   { label: "Journal", to: "/journal" as const },
+  { label: "Mission", to: "/mission" as const },
 ];
 
 export function PublicShell({ children }: { children: ReactNode }) {
@@ -52,6 +53,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
           <div className="flex gap-4">
             <Link to="/table" className="hover:text-foreground">The Table</Link>
             <Link to="/journal" className="hover:text-foreground">Journal</Link>
+            <Link to="/mission" className="hover:text-foreground">Our mission</Link>
             <Link to="/auth" className="hover:text-foreground">Author sign in</Link>
           </div>
         </div>

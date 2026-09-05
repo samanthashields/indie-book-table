@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as MissionRouteImport } from './routes/mission'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -48,6 +49,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MissionRoute = MissionRouteImport.update({
+  id: '/mission',
+  path: '/mission',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -213,6 +219,7 @@ const AuthenticatedBooksBookIdMilestonesMilestoneIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/auth': typeof AuthRoute
+  '/mission': typeof MissionRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/submissions': typeof AuthenticatedSubmissionsRoute
@@ -244,6 +251,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
+  '/mission': typeof MissionRoute
   '/reset-password': typeof ResetPasswordRoute
   '/submissions': typeof AuthenticatedSubmissionsRoute
   '/submit': typeof AuthenticatedSubmitRoute
@@ -276,6 +284,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/mission': typeof MissionRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/submissions': typeof AuthenticatedSubmissionsRoute
@@ -311,6 +320,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/mission'
     | '/reset-password'
     | '/admin'
     | '/submissions'
@@ -342,6 +352,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
+    | '/mission'
     | '/reset-password'
     | '/submissions'
     | '/submit'
@@ -373,6 +384,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_authenticated'
     | '/auth'
+    | '/mission'
     | '/reset-password'
     | '/_authenticated/admin'
     | '/_authenticated/submissions'
@@ -407,6 +419,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  MissionRoute: typeof MissionRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ApiCoachPlanRoute: typeof ApiCoachPlanRoute
   JournalSlugRoute: typeof JournalSlugRoute
@@ -432,6 +445,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mission': {
+      id: '/mission'
+      path: '/mission'
+      fullPath: '/mission'
+      preLoaderRoute: typeof MissionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -728,6 +748,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  MissionRoute: MissionRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ApiCoachPlanRoute: ApiCoachPlanRoute,
   JournalSlugRoute: JournalSlugRoute,

@@ -4,14 +4,20 @@ import type { CatalogBook } from "@/lib/catalog-types";
 import { categoryRibbonColor, panelClass } from "@/lib/flyer-theme";
 import { PricePill, formatPrice } from "./price-pill";
 import { TagChips } from "./tag-chips";
+import { CircleToggle } from "@/components/site/circle-toggle";
+import type { WishlistEntry } from "@/lib/wishlist";
 
 /** Full-page spotlight: the issue's featured book, set like a fair poster. */
 export function SpotlightFeature({
   book,
   category,
+  circled = false,
+  onCircle,
 }: {
   book: CatalogBook;
   category: string;
+  circled?: boolean;
+  onCircle?: (entry: WishlistEntry) => void;
 }) {
   const panel = panelClass(categoryRibbonColor(category));
   const ebook = formatPrice(book.ebook_price);
@@ -38,10 +44,11 @@ export function SpotlightFeature({
           miss!
         </span>
 
+        <div className="relative w-full rotate-[-2deg]">
         <Link
           to="/table/books/$bookId"
           params={{ bookId: book.id }}
-          className="group relative block w-full rotate-[-2deg] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cocoa"
+          className="group relative block w-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cocoa"
         >
           {book.cover_image_url ? (
             <img
@@ -58,6 +65,8 @@ export function SpotlightFeature({
             </span>
           )}
         </Link>
+        {onCircle && <CircleToggle book={book} circled={circled} onToggle={onCircle} />}
+        </div>
 
         <div>
           <h3 className="font-serif text-3xl leading-tight text-cocoa sm:text-4xl">
