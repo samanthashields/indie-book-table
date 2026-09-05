@@ -68,6 +68,15 @@ function IssuePage() {
         {issue?.cover_tagline && (
           <p className="mt-3 max-w-2xl text-lg text-cocoa/80">{issue.cover_tagline}</p>
         )}
+        {issue && (
+          <Link
+            to="/table/$issueId/flyer"
+            params={{ issueId: issue.id }}
+            className="mt-5 inline-flex items-center gap-2 rounded-full border-2 border-cocoa bg-amber px-5 py-2 text-xs font-bold uppercase tracking-[0.12em] text-cocoa shadow-[3px_3px_0_0_var(--cocoa)] transition-transform hover:-translate-y-0.5"
+          >
+            Read the flyer <span aria-hidden="true">→</span>
+          </Link>
+        )}
       </header>
 
       {data.categories.map((category) => (
