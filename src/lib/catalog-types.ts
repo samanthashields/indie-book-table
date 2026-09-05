@@ -35,9 +35,26 @@ export type CatalogIssueMeta = {
   cover_image_url: string | null;
 };
 
+export type CatalogIssueTheme = {
+  preset: string;
+  border_pattern: string;
+};
+
+export type CatalogPageTheme = {
+  category: string;
+  ground_color: string | null;
+  background_image_url: string | null;
+};
+
 export type CatalogIssue = {
   issue: CatalogIssueMeta | null;
   categories: CatalogCategory[];
+  theme?: CatalogIssueTheme & {
+    cover_headline: string | null;
+    cover_tagline: string | null;
+    cover_image_url: string | null;
+  };
+  pageThemes?: CatalogPageTheme[];
 };
 
 export type IssueSummary = {
