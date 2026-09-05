@@ -170,3 +170,93 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ---------- Flyer reader (flip-book) ---------- */
+:root {
+  --shadow-page: 10px 12px 0 0 color-mix(in oklch, var(--cocoa) 22%, transparent);
+}
+
+.paper-grain {
+  background-image: radial-gradient(color-mix(in oklch, var(--cocoa) 6%, transparent) 0.8px, transparent 0.9px);
+  background-size: 9px 9px;
+}
+
+.flyer-stage {
+  perspective: 2200px;
+  perspective-origin: left center;
+}
+
+.flyer-sheet {
+  transform-origin: left center;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+@keyframes page-turn-forward {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(-168deg); }
+}
+@keyframes page-turn-back {
+  from { transform: rotateY(-168deg); }
+  to { transform: rotateY(0deg); }
+}
+@keyframes page-shade-forward {
+  0% { opacity: 0; }
+  55% { opacity: 0.55; }
+  100% { opacity: 0.05; }
+}
+@keyframes page-shade-back {
+  0% { opacity: 0.05; }
+  55% { opacity: 0.55; }
+  100% { opacity: 0; }
+}
+
+.turn-forward { animation: page-turn-forward 700ms cubic-bezier(0.5, 0, 0.25, 1) forwards; }
+.turn-back { animation: page-turn-back 700ms cubic-bezier(0.5, 0, 0.25, 1) forwards; }
+.turn-shade-forward { animation: page-shade-forward 700ms ease forwards; }
+.turn-shade-back { animation: page-shade-back 700ms ease forwards; }
+
+.panel-outline {
+  border: 3px solid var(--cocoa);
+  box-shadow: 4px 4px 0 0 var(--cocoa);
+}
+.panel-outline-thin {
+  border: 2px solid var(--cocoa);
+  box-shadow: 3px 3px 0 0 var(--cocoa);
+}
+
+.banner-wide {
+  clip-path: polygon(0 0, 100% 0, calc(100% - 1.6rem) 50%, 100% 100%, 0 100%, 1.6rem 50%);
+}
+
+.speech-bubble {
+  border: 3px solid var(--cocoa);
+  box-shadow: 3px 3px 0 0 var(--cocoa);
+  position: relative;
+}
+.speech-bubble::after {
+  content: "";
+  position: absolute;
+  left: 2rem;
+  bottom: -14px;
+  width: 18px;
+  height: 18px;
+  background: inherit;
+  border-right: 3px solid var(--cocoa);
+  border-bottom: 3px solid var(--cocoa);
+  transform: rotate(45deg);
+}
+
+/* Border motifs printed around each flyer page. */
+.fly-hearts { border-image: none; }
+.fly-hearts > .paper-grain { box-shadow: inset 0 0 0 4px color-mix(in oklch, var(--clay) 45%, transparent); }
+.fly-stars > .paper-grain { box-shadow: inset 0 0 0 4px color-mix(in oklch, var(--amber) 60%, transparent); }
+.fly-dots > .paper-grain { box-shadow: inset 0 0 0 4px color-mix(in oklch, var(--teal) 55%, transparent); }
+.fly-pencils > .paper-grain { box-shadow: inset 0 0 0 4px color-mix(in oklch, var(--amber) 45%, transparent), inset 0 0 0 8px color-mix(in oklch, var(--teal) 30%, transparent); }
+.fly-plain > .paper-grain { box-shadow: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .turn-forward, .turn-back, .turn-shade-forward, .turn-shade-back {
+    animation-duration: 1ms;
+  }
+}

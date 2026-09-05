@@ -114,13 +114,24 @@ async function attachCoverUrls(
   return books;
 }
 
+/** Signs a private `catalog-covers` storage path, leaving http(s) URLs alone. */
+async function signCoverPath(
+  supabase: ReturnType<typeof createPublicClient>,
+  path: string | null | undefined,
+): Promise<string | null> {
+  if (!path) return null;
+  if (/^https?:\/\//.test(path)) return path;
+  const { data } = await supabase.storage.from("catalog-covers").createSignedUrl(path, 60 * 60);
+  return data?.signedUrl ?? null;
+}
+
 /** Loads one published issue (the newest when no id is given) with its grouped books. */
 export async function loadIssueCatalog(issueId?: string): Promise<CatalogIssue> {
   const supabase = createPublicClient();
 
   let query = supabase
     .from("catalog_issues")
-    .select("id, display_label, issue_month, catalog_issue_themes ( cover_headline, cover_tagline, cover_image_url )")
+    .select("id, display_label, issue_month, catalog_issue_themes ( preset, border_pattern, cover_headline, cover_tagline, cover_image_url )")
     .eq("status", "published");
 
   query = issueId
@@ -135,14 +146,22 @@ export async function loadIssueCatalog(issueId?: string): Promise<CatalogIssue> 
     ? issue.catalog_issue_themes[0]
     : issue.catalog_issue_themes;
 
-  const { data: selections, error } = await supabase
-    .from("catalog_issue_selections")
-    .select(
-      `category, is_spotlight, spotlight_blurb, order_index, catalog_books!inner ( ${BOOK_SELECT} )`,
-    )
-    .eq("issue_id", issue.id)
-    .order("order_index", { ascending: true });
+  const [{ data: selections, error }, { data: pageThemes, error: pageThemesError }] =
+    await Promise.all([
+      supabase
+        .from("catalog_issue_selections")
+        .select(
+          `category, is_spotlight, spotlight_blurb, order_index, catalog_books!inner ( ${BOOK_SELECT} )`,
+        )
+        .eq("issue_id", issue.id)
+        .order("order_index", { ascending: true }),
+      supabase
+        .from("catalog_issue_page_themes")
+        .select("category, ground_color, background_image_url")
+        .eq("issue_id", issue.id),
+    ]);
   if (error) throw new Error(error.message);
+  if (pageThemesError) throw new Error(pageThemesError.message);
 
   const grouped = new Map<string, CatalogBook[]>();
   for (const selection of (selections ?? []) as unknown as SelectionRow[]) {
@@ -168,6 +187,20 @@ export async function loadIssueCatalog(issueId?: string): Promise<CatalogIssue> 
       cover_image_url: theme?.cover_image_url ?? null,
     },
     categories: [...grouped.entries()].map(([category, books]) => ({ category, books })),
+    theme: {
+      preset: theme?.preset ?? "default",
+      border_pattern: theme?.border_pattern ?? "hearts",
+      cover_headline: theme?.cover_headline ?? null,
+      cover_tagline: theme?.cover_tagline ?? null,
+      cover_image_url: await signCoverPath(supabase, theme?.cover_image_url),
+    },
+    pageThemes: await Promise.all(
+      (pageThemes ?? []).map(async (row) => ({
+        category: row.category,
+        ground_color: row.ground_color,
+        background_image_url: await signCoverPath(supabase, row.background_image_url),
+      })),
+    ),
   };
 
 }

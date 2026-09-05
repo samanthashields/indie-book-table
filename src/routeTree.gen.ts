@@ -32,6 +32,7 @@ import { Route as AuthenticatedAdminTemplatesRouteImport } from './routes/_authe
 import { Route as AuthenticatedBooksBookIdRouteImport } from './routes/_authenticated/books.$bookId'
 import { Route as AuthenticatedBooksNewRouteImport } from './routes/_authenticated/books.new'
 import { Route as AuthenticatedTemplatesTemplateIdRouteImport } from './routes/_authenticated/templates.$templateId'
+import { Route as TableIssueIdFlyerRouteImport } from './routes/table.$issueId_.flyer'
 import { Route as TableAuthorsAuthorIdRouteImport } from './routes/table.authors.$authorId'
 import { Route as TableBooksBookIdRouteImport } from './routes/table.books.$bookId'
 import { Route as AuthenticatedBooksBookIdIndexRouteImport } from './routes/_authenticated/books.$bookId.index'
@@ -163,6 +164,11 @@ const AuthenticatedTemplatesTemplateIdRoute =
     path: '/$templateId',
     getParentRoute: () => AuthenticatedTemplatesRoute,
   } as any)
+const TableIssueIdFlyerRoute = TableIssueIdFlyerRouteImport.update({
+  id: '/table/$issueId_/flyer',
+  path: '/table/$issueId/flyer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TableAuthorsAuthorIdRoute = TableAuthorsAuthorIdRouteImport.update({
   id: '/table/authors/$authorId',
   path: '/table/authors/$authorId',
@@ -226,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
   '/books/new': typeof AuthenticatedBooksNewRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
+  '/table/$issueId/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -255,6 +262,7 @@ export interface FileRoutesByTo {
   '/admin/templates': typeof AuthenticatedAdminTemplatesRoute
   '/books/new': typeof AuthenticatedBooksNewRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
+  '/table/$issueId/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -288,6 +296,7 @@ export interface FileRoutesById {
   '/_authenticated/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
   '/_authenticated/books/new': typeof AuthenticatedBooksNewRoute
   '/_authenticated/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
+  '/table/$issueId_/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -321,6 +330,7 @@ export interface FileRouteTypes {
     | '/books/$bookId'
     | '/books/new'
     | '/templates/$templateId'
+    | '/table/$issueId/flyer'
     | '/table/authors/$authorId'
     | '/table/books/$bookId'
     | '/admin/'
@@ -350,6 +360,7 @@ export interface FileRouteTypes {
     | '/admin/templates'
     | '/books/new'
     | '/templates/$templateId'
+    | '/table/$issueId/flyer'
     | '/table/authors/$authorId'
     | '/table/books/$bookId'
     | '/admin'
@@ -382,6 +393,7 @@ export interface FileRouteTypes {
     | '/_authenticated/books/$bookId'
     | '/_authenticated/books/new'
     | '/_authenticated/templates/$templateId'
+    | '/table/$issueId_/flyer'
     | '/table/authors/$authorId'
     | '/table/books/$bookId'
     | '/_authenticated/admin/'
@@ -401,6 +413,7 @@ export interface RootRouteChildren {
   TableIssueIdRoute: typeof TableIssueIdRoute
   JournalIndexRoute: typeof JournalIndexRoute
   TableIndexRoute: typeof TableIndexRoute
+  TableIssueIdFlyerRoute: typeof TableIssueIdFlyerRoute
   TableAuthorsAuthorIdRoute: typeof TableAuthorsAuthorIdRoute
   TableBooksBookIdRoute: typeof TableBooksBookIdRoute
 }
@@ -568,6 +581,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTemplatesTemplateIdRouteImport
       parentRoute: typeof AuthenticatedTemplatesRoute
     }
+    '/table/$issueId_/flyer': {
+      id: '/table/$issueId_/flyer'
+      path: '/table/$issueId/flyer'
+      fullPath: '/table/$issueId/flyer'
+      preLoaderRoute: typeof TableIssueIdFlyerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/table/authors/$authorId': {
       id: '/table/authors/$authorId'
       path: '/table/authors/$authorId'
@@ -714,6 +734,7 @@ const rootRouteChildren: RootRouteChildren = {
   TableIssueIdRoute: TableIssueIdRoute,
   JournalIndexRoute: JournalIndexRoute,
   TableIndexRoute: TableIndexRoute,
+  TableIssueIdFlyerRoute: TableIssueIdFlyerRoute,
   TableAuthorsAuthorIdRoute: TableAuthorsAuthorIdRoute,
   TableBooksBookIdRoute: TableBooksBookIdRoute,
 }

@@ -49,4 +49,5 @@
 - [x] Submission wizard (author submits a book to The Table)
 - [x] Admin curation: issues, selections, quotas, cover words, journal posts, site copy
 
+- [x] Flip-book flyer reader for The Table (adapted from the showcase)
 - [ ] Phase 5: One author identity + publish → listing → Table handoff
