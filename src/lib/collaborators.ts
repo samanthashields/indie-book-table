@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { notify } from "@/lib/notifications";
 
 export const collaboratorRoles = [
   "Co-author",
@@ -94,7 +95,21 @@ export async function claimInvitations() {
     .update({ user_id: user.id, status: "active", accepted_at: new Date().toISOString() })
     .eq("email", user.email.toLowerCase())
     .eq("status", "invited")
-    .select("id");
+    .select("id, book_id, role");
   if (error) return 0;
-  return (data ?? []).length;
+  const claimed = data ?? [];
+  for (const row of claimed) {
+    const { data: book } = await supabase.from("books").select("author_id, title").eq("id", row.book_id).maybeSingle();
+    if (book?.author_id) {
+      await notify({
+        userId: book.author_id,
+        bookId: row.book_id,
+        kind: "collaborator-joined",
+        title: `${user.email} joined ${book.title}`,
+        body: `They accepted your invitation as ${String(row.role).toLowerCase()}.`,
+      });
+    }
+  }
+  return claimed.length;
 }
+
