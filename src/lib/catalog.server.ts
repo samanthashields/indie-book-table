@@ -199,10 +199,12 @@ export async function loadCatalogBook(bookId: string): Promise<CatalogBook | nul
     .maybeSingle();
   if (error) throw new Error(error.message);
   if (!data) return null;
-  return toBook(data as unknown as NonNullable<SelectionRow["catalog_books"]>, {
+  const book = toBook(data as unknown as NonNullable<SelectionRow["catalog_books"]>, {
     is_spotlight: false,
     spotlight_blurb: null,
   });
+  await attachCoverUrls(supabase, [book]);
+  return book;
 }
 
 export async function loadAuthorShelf(authorId: string) {
@@ -221,16 +223,17 @@ export async function loadAuthorShelf(authorId: string) {
     .eq("catalog_author_id", authorId);
   if (error) throw new Error(error.message);
 
-  return {
-    author,
-    books: (books ?? []).map((row) =>
-      toBook(row as unknown as NonNullable<SelectionRow["catalog_books"]>, {
-        is_spotlight: false,
-        spotlight_blurb: null,
-      }),
-    ),
-  };
+  const shelf = (books ?? []).map((row) =>
+    toBook(row as unknown as NonNullable<SelectionRow["catalog_books"]>, {
+      is_spotlight: false,
+      spotlight_blurb: null,
+    }),
+  );
+  await attachCoverUrls(supabase, shelf);
+
+  return { author, books: shelf };
 }
+
 
 export async function loadPublishedPosts(): Promise<JournalPostSummary[]> {
   const supabase = createPublicClient();
