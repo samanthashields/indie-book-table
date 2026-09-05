@@ -1,0 +1,85 @@
+import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+
+export type {
+  CatalogBook,
+  CatalogCategory,
+  CatalogIssue,
+  CatalogIssueMeta,
+  IssueSummary,
+  JournalPost,
+  JournalPostSummary,
+  PurchaseLink,
+} from "./catalog-types";
+
+export const getCurrentIssue = createServerFn({ method: "GET" }).handler(async () => {
+  const { loadIssueCatalog } = await import("./catalog.server");
+  return loadIssueCatalog();
+});
+
+export const getIssueCatalog = createServerFn({ method: "GET" })
+  .inputValidator((data: { issueId: string }) =>
+    z.object({ issueId: z.string().uuid() }).parse(data),
+  )
+  .handler(async ({ data }) => {
+    const { loadIssueCatalog } = await import("./catalog.server");
+    return loadIssueCatalog(data.issueId);
+  });
+
+export const listPublishedIssues = createServerFn({ method: "GET" }).handler(async () => {
+  const { loadPublishedIssues } = await import("./catalog.server");
+  return { issues: await loadPublishedIssues() };
+});
+
+export const getCatalogBook = createServerFn({ method: "GET" })
+  .inputValidator((data: { bookId: string }) =>
+    z.object({ bookId: z.string().uuid() }).parse(data),
+  )
+  .handler(async ({ data }) => {
+    const { loadCatalogBook } = await import("./catalog.server");
+    return { book: await loadCatalogBook(data.bookId) };
+  });
+
+export const getAuthorShelf = createServerFn({ method: "GET" })
+  .inputValidator((data: { authorId: string }) =>
+    z.object({ authorId: z.string().uuid() }).parse(data),
+  )
+  .handler(async ({ data }) => {
+    const { loadAuthorShelf } = await import("./catalog.server");
+    return { shelf: await loadAuthorShelf(data.authorId) };
+  });
+
+export const listJournalPosts = createServerFn({ method: "GET" }).handler(async () => {
+  const { loadPublishedPosts } = await import("./catalog.server");
+  return { posts: await loadPublishedPosts() };
+});
+
+export const getJournalPost = createServerFn({ method: "GET" })
+  .inputValidator((data: { slug: string }) => z.object({ slug: z.string().min(1).max(200) }).parse(data))
+  .handler(async ({ data }) => {
+    const { loadPublishedPost } = await import("./catalog.server");
+    return { post: await loadPublishedPost(data.slug) };
+  });
+
+export const getSiteCopy = createServerFn({ method: "GET" }).handler(async () => {
+  const { loadSiteCopy } = await import("./catalog.server");
+  return { copy: await loadSiteCopy() };
+});
+
+const subscribeSchema = z
+  .object({
+    email: z.string().trim().email("Enter a valid email address").max(200),
+    catalog: z.boolean(),
+    blog: z.boolean(),
+  })
+  .refine((value) => value.catalog || value.blog, {
+    message: "Pick at least one list to join",
+  });
+
+export const subscribeEmail = createServerFn({ method: "POST" })
+  .inputValidator((data: unknown) => subscribeSchema.parse(data))
+  .handler(async ({ data }) => {
+    const { upsertSubscriber } = await import("./catalog.server");
+    await upsertSubscriber(data);
+    return { ok: true as const };
+  });

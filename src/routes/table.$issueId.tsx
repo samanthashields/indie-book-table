@@ -1,0 +1,88 @@
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+
+import { PublicShell } from "@/components/site/public-shell";
+import { CatalogBookCard } from "@/components/site/catalog-book-card";
+import { getIssueCatalog } from "@/lib/catalog.functions";
+
+const issueCatalogQuery = (issueId: string) =>
+  queryOptions({
+    queryKey: ["catalog", "issue", issueId],
+    queryFn: () => getIssueCatalog({ data: { issueId } }),
+  });
+
+export const Route = createFileRoute("/table/$issueId")({
+  loader: async ({ context, params }) => {
+    const data = await context.queryClient.ensureQueryData(issueCatalogQuery(params.issueId));
+    if (!data.issue) throw notFound();
+    return data;
+  },
+  head: ({ loaderData }) => {
+    if (!loaderData?.issue) {
+      return { meta: [{ title: "Issue unavailable" }, { name: "robots", content: "noindex" }] };
+    }
+    const label = loaderData.issue.display_label;
+    const title = `${label} issue — The Table`;
+    const description = `Flip through the ${label} issue of The Table: curated indie books, hooks, prices and where to buy them.`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
+  },
+  notFoundComponent: () => (
+    <PublicShell>
+      <h1 className="font-serif text-3xl">No such issue</h1>
+      <p className="mt-3 text-muted-foreground">This issue isn't published — or never existed.</p>
+      <Link to="/table" className="mt-4 inline-block underline">
+        Browse published issues
+      </Link>
+    </PublicShell>
+  ),
+  component: IssuePage,
+});
+
+function IssuePage() {
+  const { issueId } = Route.useParams();
+  const { data } = useSuspenseQuery(issueCatalogQuery(issueId));
+  const issue = data.issue;
+
+  return (
+    <PublicShell>
+      <nav className="text-sm text-muted-foreground">
+        <Link to="/table" className="hover:text-foreground">
+          The Table
+        </Link>
+        <span className="px-2">/</span>
+        <span>{issue?.display_label}</span>
+      </nav>
+
+      <header className="mt-4 rounded-3xl border border-border/70 bg-amber/15 p-8 md:p-10">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-inkblue">Issue</p>
+        <h1 className="mt-2 font-serif text-4xl">{issue?.cover_headline ?? issue?.display_label}</h1>
+        {issue?.cover_tagline && (
+          <p className="mt-3 max-w-2xl text-lg text-cocoa/80">{issue.cover_tagline}</p>
+        )}
+      </header>
+
+      {data.categories.map((category) => (
+        <section key={category.category} className="mt-10">
+          <div className="flex items-baseline gap-3">
+            <h2 className="font-serif text-2xl">{category.category}</h2>
+            <span className="text-sm text-muted-foreground">{category.books.length} books</span>
+          </div>
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            {category.books.map((book) => (
+              <CatalogBookCard key={book.id} book={book} />
+            ))}
+          </div>
+        </section>
+      ))}
+    </PublicShell>
+  );
+}

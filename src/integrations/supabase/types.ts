@@ -142,6 +142,499 @@ export type Database = {
         }
         Relationships: []
       }
+      catalog_authors: {
+        Row: {
+          bio: string | null
+          created_at: string
+          email: string
+          id: string
+          instagram_handle: string | null
+          name: string
+          updated_at: string
+          user_id: string | null
+          website: string | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          instagram_handle?: string | null
+          name: string
+          updated_at?: string
+          user_id?: string | null
+          website?: string | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          instagram_handle?: string | null
+          name?: string
+          updated_at?: string
+          user_id?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
+      catalog_books: {
+        Row: {
+          ai_art_contribution: Database["public"]["Enums"]["ai_contribution"]
+          ai_writing_contribution: Database["public"]["Enums"]["ai_contribution"]
+          awards_reviews_text: string | null
+          book_cycle_id: string | null
+          catalog_author_id: string
+          cover_designer: string | null
+          cover_image_url: string | null
+          ebook_price: number | null
+          editors: string | null
+          explicit_content: boolean
+          genre: string | null
+          hook: string | null
+          id: string
+          illustrators: string | null
+          pen_name: string | null
+          print_price: number | null
+          removal_reason: string | null
+          status: Database["public"]["Enums"]["catalog_book_status"]
+          submitted_at: string
+          tags: string[]
+          target_audience: Database["public"]["Enums"]["target_audience"]
+          times_featured_count: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          ai_art_contribution?: Database["public"]["Enums"]["ai_contribution"]
+          ai_writing_contribution?: Database["public"]["Enums"]["ai_contribution"]
+          awards_reviews_text?: string | null
+          book_cycle_id?: string | null
+          catalog_author_id: string
+          cover_designer?: string | null
+          cover_image_url?: string | null
+          ebook_price?: number | null
+          editors?: string | null
+          explicit_content?: boolean
+          genre?: string | null
+          hook?: string | null
+          id?: string
+          illustrators?: string | null
+          pen_name?: string | null
+          print_price?: number | null
+          removal_reason?: string | null
+          status?: Database["public"]["Enums"]["catalog_book_status"]
+          submitted_at?: string
+          tags?: string[]
+          target_audience?: Database["public"]["Enums"]["target_audience"]
+          times_featured_count?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          ai_art_contribution?: Database["public"]["Enums"]["ai_contribution"]
+          ai_writing_contribution?: Database["public"]["Enums"]["ai_contribution"]
+          awards_reviews_text?: string | null
+          book_cycle_id?: string | null
+          catalog_author_id?: string
+          cover_designer?: string | null
+          cover_image_url?: string | null
+          ebook_price?: number | null
+          editors?: string | null
+          explicit_content?: boolean
+          genre?: string | null
+          hook?: string | null
+          id?: string
+          illustrators?: string | null
+          pen_name?: string | null
+          print_price?: number | null
+          removal_reason?: string | null
+          status?: Database["public"]["Enums"]["catalog_book_status"]
+          submitted_at?: string
+          tags?: string[]
+          target_audience?: Database["public"]["Enums"]["target_audience"]
+          times_featured_count?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_books_book_cycle_id_fkey"
+            columns: ["book_cycle_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "catalog_books_catalog_author_id_fkey"
+            columns: ["catalog_author_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_authors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_editorial_settings: {
+        Row: {
+          active_issue_id: string | null
+          id: boolean
+          updated_at: string
+        }
+        Insert: {
+          active_issue_id?: string | null
+          id?: boolean
+          updated_at?: string
+        }
+        Update: {
+          active_issue_id?: string | null
+          id?: boolean
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_editorial_settings_active_issue_id_fkey"
+            columns: ["active_issue_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_issues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_issue_page_themes: {
+        Row: {
+          background_image_url: string | null
+          category: string
+          created_at: string
+          ground_color: string | null
+          id: string
+          issue_id: string
+          updated_at: string
+        }
+        Insert: {
+          background_image_url?: string | null
+          category: string
+          created_at?: string
+          ground_color?: string | null
+          id?: string
+          issue_id: string
+          updated_at?: string
+        }
+        Update: {
+          background_image_url?: string | null
+          category?: string
+          created_at?: string
+          ground_color?: string | null
+          id?: string
+          issue_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_issue_page_themes_issue_id_fkey"
+            columns: ["issue_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_issues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_issue_quotas: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          issue_id: string
+          quota: number
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          issue_id: string
+          quota?: number
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          issue_id?: string
+          quota?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_issue_quotas_issue_id_fkey"
+            columns: ["issue_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_issues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_issue_selections: {
+        Row: {
+          catalog_book_id: string
+          category: string
+          created_at: string
+          id: string
+          is_spotlight: boolean
+          issue_id: string
+          notified_at: string | null
+          order_index: number
+          published_at: string | null
+          spotlight_blurb: string | null
+          spotlight_post_id: string | null
+        }
+        Insert: {
+          catalog_book_id: string
+          category: string
+          created_at?: string
+          id?: string
+          is_spotlight?: boolean
+          issue_id: string
+          notified_at?: string | null
+          order_index?: number
+          published_at?: string | null
+          spotlight_blurb?: string | null
+          spotlight_post_id?: string | null
+        }
+        Update: {
+          catalog_book_id?: string
+          category?: string
+          created_at?: string
+          id?: string
+          is_spotlight?: boolean
+          issue_id?: string
+          notified_at?: string | null
+          order_index?: number
+          published_at?: string | null
+          spotlight_blurb?: string | null
+          spotlight_post_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_issue_selections_catalog_book_id_fkey"
+            columns: ["catalog_book_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_books"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "catalog_issue_selections_issue_id_fkey"
+            columns: ["issue_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_issues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_issue_themes: {
+        Row: {
+          border_pattern: string
+          cover_headline: string | null
+          cover_image_url: string | null
+          cover_tagline: string | null
+          created_at: string
+          issue_id: string
+          preset: string
+          updated_at: string
+        }
+        Insert: {
+          border_pattern?: string
+          cover_headline?: string | null
+          cover_image_url?: string | null
+          cover_tagline?: string | null
+          created_at?: string
+          issue_id: string
+          preset?: string
+          updated_at?: string
+        }
+        Update: {
+          border_pattern?: string
+          cover_headline?: string | null
+          cover_image_url?: string | null
+          cover_tagline?: string | null
+          created_at?: string
+          issue_id?: string
+          preset?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_issue_themes_issue_id_fkey"
+            columns: ["issue_id"]
+            isOneToOne: true
+            referencedRelation: "catalog_issues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_issues: {
+        Row: {
+          created_at: string
+          display_label: string
+          id: string
+          issue_month: string
+          published_at: string | null
+          status: Database["public"]["Enums"]["issue_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_label: string
+          id?: string
+          issue_month: string
+          published_at?: string | null
+          status?: Database["public"]["Enums"]["issue_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_label?: string
+          id?: string
+          issue_month?: string
+          published_at?: string | null
+          status?: Database["public"]["Enums"]["issue_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      catalog_posts: {
+        Row: {
+          author_user_id: string | null
+          body: string
+          cover_image_url: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          published_at: string | null
+          slug: string
+          status: Database["public"]["Enums"]["post_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_user_id?: string | null
+          body?: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published_at?: string | null
+          slug: string
+          status?: Database["public"]["Enums"]["post_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_user_id?: string | null
+          body?: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published_at?: string | null
+          slug?: string
+          status?: Database["public"]["Enums"]["post_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      catalog_purchase_links: {
+        Row: {
+          catalog_book_id: string
+          created_at: string
+          id: string
+          platform_label: string
+          url: string
+        }
+        Insert: {
+          catalog_book_id: string
+          created_at?: string
+          id?: string
+          platform_label: string
+          url: string
+        }
+        Update: {
+          catalog_book_id?: string
+          created_at?: string
+          id?: string
+          platform_label?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_purchase_links_catalog_book_id_fkey"
+            columns: ["catalog_book_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_site_content: {
+        Row: {
+          key: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: string
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
+      catalog_subscribers: {
+        Row: {
+          blog_opt_in: boolean
+          catalog_opt_in: boolean
+          email: string
+          id: string
+          subscribed_at: string
+        }
+        Insert: {
+          blog_opt_in?: boolean
+          catalog_opt_in?: boolean
+          email: string
+          id?: string
+          subscribed_at?: string
+        }
+        Update: {
+          blog_opt_in?: boolean
+          catalog_opt_in?: boolean
+          email?: string
+          id?: string
+          subscribed_at?: string
+        }
+        Relationships: []
+      }
+      catalog_wishlist_send_log: {
+        Row: {
+          email: string
+          id: string
+          sent_at: string
+        }
+        Insert: {
+          email: string
+          id?: string
+          sent_at?: string
+        }
+        Update: {
+          email?: string
+          id?: string
+          sent_at?: string
+        }
+        Relationships: []
+      }
       coach_conversations: {
         Row: {
           book_id: string | null
@@ -591,6 +1084,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      catalog_author_is_published: {
+        Args: { _author_id: string }
+        Returns: boolean
+      }
+      catalog_book_is_published: {
+        Args: { _book_id: string }
+        Returns: boolean
+      }
+      catalog_issue_contains_my_book: {
+        Args: { _issue_id: string }
+        Returns: boolean
+      }
+      catalog_issue_is_published: {
+        Args: { _issue_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -600,9 +1109,26 @@ export type Database = {
       }
       is_book_author: { Args: { _book_id: string }; Returns: boolean }
       is_book_member: { Args: { _book_id: string }; Returns: boolean }
+      is_catalog_admin: { Args: never; Returns: boolean }
+      is_my_catalog_author: { Args: { _author_id: string }; Returns: boolean }
+      owns_catalog_book: { Args: { _book_id: string }; Returns: boolean }
     }
     Enums: {
+      ai_contribution: "none" | "some" | "significant"
       app_role: "admin" | "author" | "collaborator"
+      catalog_book_status:
+        | "submitted"
+        | "under_review"
+        | "added_to_database"
+        | "removed"
+      issue_status: "draft" | "published"
+      post_status: "draft" | "published"
+      target_audience:
+        | "adult"
+        | "new_adult"
+        | "young_adult"
+        | "middle_grade"
+        | "picture_book"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -730,7 +1256,23 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      ai_contribution: ["none", "some", "significant"],
       app_role: ["admin", "author", "collaborator"],
+      catalog_book_status: [
+        "submitted",
+        "under_review",
+        "added_to_database",
+        "removed",
+      ],
+      issue_status: ["draft", "published"],
+      post_status: ["draft", "published"],
+      target_audience: [
+        "adult",
+        "new_adult",
+        "young_adult",
+        "middle_grade",
+        "picture_book",
+      ],
     },
   },
 } as const
