@@ -25,6 +25,7 @@ import { Route as TableIssueIdRouteImport } from './routes/table.$issueId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminActivityRouteImport } from './routes/_authenticated/admin.activity'
 import { Route as AuthenticatedAdminPeopleRouteImport } from './routes/_authenticated/admin.people'
+import { Route as AuthenticatedAdminSubmissionsRouteImport } from './routes/_authenticated/admin.submissions'
 import { Route as AuthenticatedAdminTemplatesRouteImport } from './routes/_authenticated/admin.templates'
 import { Route as AuthenticatedBooksBookIdRouteImport } from './routes/_authenticated/books.$bookId'
 import { Route as AuthenticatedBooksNewRouteImport } from './routes/_authenticated/books.new'
@@ -119,6 +120,12 @@ const AuthenticatedAdminPeopleRoute =
     path: '/people',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminSubmissionsRoute =
+  AuthenticatedAdminSubmissionsRouteImport.update({
+    id: '/submissions',
+    path: '/submissions',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminTemplatesRoute =
   AuthenticatedAdminTemplatesRouteImport.update({
     id: '/templates',
@@ -198,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/table/': typeof TableIndexRoute
   '/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/templates': typeof AuthenticatedAdminTemplatesRoute
   '/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
   '/books/new': typeof AuthenticatedBooksNewRoute
@@ -225,6 +233,7 @@ export interface FileRoutesByTo {
   '/table': typeof TableIndexRoute
   '/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/templates': typeof AuthenticatedAdminTemplatesRoute
   '/books/new': typeof AuthenticatedBooksNewRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
@@ -254,6 +263,7 @@ export interface FileRoutesById {
   '/table/': typeof TableIndexRoute
   '/_authenticated/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/_authenticated/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/_authenticated/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/_authenticated/admin/templates': typeof AuthenticatedAdminTemplatesRoute
   '/_authenticated/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
   '/_authenticated/books/new': typeof AuthenticatedBooksNewRoute
@@ -284,6 +294,7 @@ export interface FileRouteTypes {
     | '/table/'
     | '/admin/activity'
     | '/admin/people'
+    | '/admin/submissions'
     | '/admin/templates'
     | '/books/$bookId'
     | '/books/new'
@@ -311,6 +322,7 @@ export interface FileRouteTypes {
     | '/table'
     | '/admin/activity'
     | '/admin/people'
+    | '/admin/submissions'
     | '/admin/templates'
     | '/books/new'
     | '/templates/$templateId'
@@ -339,6 +351,7 @@ export interface FileRouteTypes {
     | '/table/'
     | '/_authenticated/admin/activity'
     | '/_authenticated/admin/people'
+    | '/_authenticated/admin/submissions'
     | '/_authenticated/admin/templates'
     | '/_authenticated/books/$bookId'
     | '/_authenticated/books/new'
@@ -480,6 +493,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPeopleRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/submissions': {
+      id: '/_authenticated/admin/submissions'
+      path: '/submissions'
+      fullPath: '/admin/submissions'
+      preLoaderRoute: typeof AuthenticatedAdminSubmissionsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/templates': {
       id: '/_authenticated/admin/templates'
       path: '/templates'
@@ -563,6 +583,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminActivityRoute: typeof AuthenticatedAdminActivityRoute
   AuthenticatedAdminPeopleRoute: typeof AuthenticatedAdminPeopleRoute
+  AuthenticatedAdminSubmissionsRoute: typeof AuthenticatedAdminSubmissionsRoute
   AuthenticatedAdminTemplatesRoute: typeof AuthenticatedAdminTemplatesRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
@@ -570,6 +591,7 @@ interface AuthenticatedAdminRouteChildren {
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminActivityRoute: AuthenticatedAdminActivityRoute,
   AuthenticatedAdminPeopleRoute: AuthenticatedAdminPeopleRoute,
+  AuthenticatedAdminSubmissionsRoute: AuthenticatedAdminSubmissionsRoute,
   AuthenticatedAdminTemplatesRoute: AuthenticatedAdminTemplatesRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
