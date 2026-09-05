@@ -52,7 +52,13 @@ export const DEFAULT_ISSUE_THEME: FlyerIssueTheme = {
 /** Casts loose DB strings to a valid theme, falling back to the default. */
 export function normalizeIssueTheme(
   theme:
-    | (Partial<Pick<FlyerIssueTheme, "preset" | "border_pattern" | "cover_image_url" | "cover_headline" | "cover_tagline">>)
+    | {
+        preset?: string | null;
+        border_pattern?: string | null;
+        cover_image_url?: string | null;
+        cover_headline?: string | null;
+        cover_tagline?: string | null;
+      }
     | null
     | undefined,
 ): FlyerIssueTheme {
