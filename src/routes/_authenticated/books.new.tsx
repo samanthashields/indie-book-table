@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { usePlanStream } from "@/lib/use-plan-stream";
 import { toPayload } from "@/lib/coach-intake";
+import { useCurrentUser } from "@/lib/use-current-user";
 import { useCreateBookCycle, useTemplates } from "@/lib/book-db";
 import type { TemplatePhase } from "@/lib/template-data";
 import { cn } from "@/lib/utils";
