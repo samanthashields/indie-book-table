@@ -11,6 +11,9 @@ import { ListingRow } from "./listing-row";
 import { SpotlightFeature } from "./spotlight-feature";
 import { IconLegend } from "./tag-chips";
 import { Doodles } from "./doodles";
+import { WishlistBar } from "@/components/site/wishlist-bar";
+import { SubscribeGateModal } from "@/components/site/subscribe-gate-modal";
+import { useWishlist, useWishlistGate, type WishlistEntry } from "@/lib/wishlist";
 
 type FlyerPageSpec =
   | { kind: "cover"; label: string }
@@ -21,6 +24,23 @@ type FlyerPageSpec =
 export function FlyerReader({ data }: { data: CatalogIssue }) {
   const [pageIndex, setPageIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
+  const { entries, toggle, clear, isCircled } = useWishlist();
+  const { unlocked, unlock } = useWishlistGate();
+  const [gateOpen, setGateOpen] = useState(false);
+  const pendingCircle = useRef<WishlistEntry | null>(null);
+
+  /** Circling is a subscriber perk: the first tap opens the sign-up coupon. */
+  const handleCircle = useCallback(
+    (entry: WishlistEntry) => {
+      if (!unlocked) {
+        pendingCircle.current = entry;
+        setGateOpen(true);
+        return;
+      }
+      toggle(entry);
+    },
+    [toggle, unlocked],
+  );
 
   const allBooks = useMemo(
     () => data.categories.flatMap((category) => category.books),
@@ -135,6 +155,8 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
                     key={book.id}
                     book={book}
                     listingNumber={listingNumbers.get(book.id)}
+                    circled={isCircled(book.id)}
+                    onCircle={handleCircle}
                   />
                 ))}
               </div>
@@ -143,7 +165,12 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
         )}
 
         {page.kind === "spotlight" && (
-          <SpotlightFeature book={page.book} category={page.category} />
+          <SpotlightFeature
+            book={page.book}
+            category={page.category}
+            circled={isCircled(page.book.id)}
+            onCircle={handleCircle}
+          />
         )}
 
         <CornerTurn onNext={goNext} disabled={index >= total - 1} />
@@ -206,7 +233,22 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
             />
           </>
         )}
+
+        <WishlistBar entries={entries} onClear={clear} />
       </div>
+
+      <SubscribeGateModal
+        open={gateOpen}
+        onOpenChange={setGateOpen}
+        onSubscribed={() => {
+          unlock();
+          setGateOpen(false);
+          if (pendingCircle.current) {
+            toggle(pendingCircle.current);
+            pendingCircle.current = null;
+          }
+        }}
+      />
     </div>
   );
 }
