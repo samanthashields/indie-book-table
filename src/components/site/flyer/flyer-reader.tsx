@@ -153,7 +153,7 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
 
   return (
     <div className="paper-grain min-h-screen bg-paper/60">
-      <main
+      <div
         className="mx-auto max-w-5xl px-3 pb-10 pt-6 sm:px-6 sm:pt-10"
         onTouchStart={(event) => {
           touchStartX.current = event.touches[0]?.clientX ?? null;
@@ -206,7 +206,7 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
             />
           </>
         )}
-      </main>
+      </div>
     </div>
   );
 }
