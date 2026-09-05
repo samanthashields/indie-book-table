@@ -32,7 +32,7 @@ import { Route as AuthenticatedAdminTemplatesRouteImport } from './routes/_authe
 import { Route as AuthenticatedBooksBookIdRouteImport } from './routes/_authenticated/books.$bookId'
 import { Route as AuthenticatedBooksNewRouteImport } from './routes/_authenticated/books.new'
 import { Route as AuthenticatedTemplatesTemplateIdRouteImport } from './routes/_authenticated/templates.$templateId'
-import { Route as TableIssueIdFlyerRouteImport } from './routes/table.$issueId.flyer'
+import { Route as TableIssueIdFlyerRouteImport } from './routes/table.$issueId_.flyer'
 import { Route as TableAuthorsAuthorIdRouteImport } from './routes/table.authors.$authorId'
 import { Route as TableBooksBookIdRouteImport } from './routes/table.books.$bookId'
 import { Route as AuthenticatedBooksBookIdIndexRouteImport } from './routes/_authenticated/books.$bookId.index'
@@ -165,9 +165,9 @@ const AuthenticatedTemplatesTemplateIdRoute =
     getParentRoute: () => AuthenticatedTemplatesRoute,
   } as any)
 const TableIssueIdFlyerRoute = TableIssueIdFlyerRouteImport.update({
-  id: '/flyer',
-  path: '/flyer',
-  getParentRoute: () => TableIssueIdRoute,
+  id: '/table/$issueId_/flyer',
+  path: '/table/$issueId/flyer',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const TableAuthorsAuthorIdRoute = TableAuthorsAuthorIdRouteImport.update({
   id: '/table/authors/$authorId',
@@ -220,7 +220,7 @@ export interface FileRoutesByFullPath {
   '/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/journal/$slug': typeof JournalSlugRoute
-  '/table/$issueId': typeof TableIssueIdRouteWithChildren
+  '/table/$issueId': typeof TableIssueIdRoute
   '/journal/': typeof JournalIndexRoute
   '/table/': typeof TableIndexRoute
   '/admin/activity': typeof AuthenticatedAdminActivityRoute
@@ -250,7 +250,7 @@ export interface FileRoutesByTo {
   '/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/journal/$slug': typeof JournalSlugRoute
-  '/table/$issueId': typeof TableIssueIdRouteWithChildren
+  '/table/$issueId': typeof TableIssueIdRoute
   '/': typeof AuthenticatedIndexRoute
   '/journal': typeof JournalIndexRoute
   '/table': typeof TableIndexRoute
@@ -283,7 +283,7 @@ export interface FileRoutesById {
   '/_authenticated/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/journal/$slug': typeof JournalSlugRoute
-  '/table/$issueId': typeof TableIssueIdRouteWithChildren
+  '/table/$issueId': typeof TableIssueIdRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/journal/': typeof JournalIndexRoute
   '/table/': typeof TableIndexRoute
@@ -296,7 +296,7 @@ export interface FileRoutesById {
   '/_authenticated/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
   '/_authenticated/books/new': typeof AuthenticatedBooksNewRoute
   '/_authenticated/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
-  '/table/$issueId/flyer': typeof TableIssueIdFlyerRoute
+  '/table/$issueId_/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -393,7 +393,7 @@ export interface FileRouteTypes {
     | '/_authenticated/books/$bookId'
     | '/_authenticated/books/new'
     | '/_authenticated/templates/$templateId'
-    | '/table/$issueId/flyer'
+    | '/table/$issueId_/flyer'
     | '/table/authors/$authorId'
     | '/table/books/$bookId'
     | '/_authenticated/admin/'
@@ -410,9 +410,10 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   ApiCoachPlanRoute: typeof ApiCoachPlanRoute
   JournalSlugRoute: typeof JournalSlugRoute
-  TableIssueIdRoute: typeof TableIssueIdRouteWithChildren
+  TableIssueIdRoute: typeof TableIssueIdRoute
   JournalIndexRoute: typeof JournalIndexRoute
   TableIndexRoute: typeof TableIndexRoute
+  TableIssueIdFlyerRoute: typeof TableIssueIdFlyerRoute
   TableAuthorsAuthorIdRoute: typeof TableAuthorsAuthorIdRoute
   TableBooksBookIdRoute: typeof TableBooksBookIdRoute
 }
@@ -580,12 +581,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTemplatesTemplateIdRouteImport
       parentRoute: typeof AuthenticatedTemplatesRoute
     }
-    '/table/$issueId/flyer': {
-      id: '/table/$issueId/flyer'
-      path: '/flyer'
+    '/table/$issueId_/flyer': {
+      id: '/table/$issueId_/flyer'
+      path: '/table/$issueId/flyer'
       fullPath: '/table/$issueId/flyer'
       preLoaderRoute: typeof TableIssueIdFlyerRouteImport
-      parentRoute: typeof TableIssueIdRoute
+      parentRoute: typeof rootRouteImport
     }
     '/table/authors/$authorId': {
       id: '/table/authors/$authorId'
@@ -724,27 +725,16 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
-interface TableIssueIdRouteChildren {
-  TableIssueIdFlyerRoute: typeof TableIssueIdFlyerRoute
-}
-
-const TableIssueIdRouteChildren: TableIssueIdRouteChildren = {
-  TableIssueIdFlyerRoute: TableIssueIdFlyerRoute,
-}
-
-const TableIssueIdRouteWithChildren = TableIssueIdRoute._addFileChildren(
-  TableIssueIdRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ApiCoachPlanRoute: ApiCoachPlanRoute,
   JournalSlugRoute: JournalSlugRoute,
-  TableIssueIdRoute: TableIssueIdRouteWithChildren,
+  TableIssueIdRoute: TableIssueIdRoute,
   JournalIndexRoute: JournalIndexRoute,
   TableIndexRoute: TableIndexRoute,
+  TableIssueIdFlyerRoute: TableIssueIdFlyerRoute,
   TableAuthorsAuthorIdRoute: TableAuthorsAuthorIdRoute,
   TableBooksBookIdRoute: TableBooksBookIdRoute,
 }

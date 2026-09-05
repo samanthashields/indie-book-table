@@ -4,7 +4,7 @@ import { FlyerReader } from "@/components/site/flyer/flyer-reader";
 import { PublicShell } from "@/components/site/public-shell";
 import { getIssueCatalog } from "@/lib/catalog.functions";
 
-export const Route = createFileRoute("/table/$issueId/flyer")({
+export const Route = createFileRoute("/table/$issueId_/flyer")({
   loader: ({ params }) => getIssueCatalog({ data: { issueId: params.issueId } }),
   head: ({ loaderData }) => {
     const label = loaderData?.issue?.display_label ?? "Issue";
