@@ -179,9 +179,11 @@ export type Database = {
       }
       collaborators: {
         Row: {
+          accepted_at: string | null
           book_id: string
           created_at: string
           email: string
+          expires_at: string
           id: string
           invited_at: string
           name: string | null
@@ -190,9 +192,11 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          accepted_at?: string | null
           book_id: string
           created_at?: string
           email: string
+          expires_at?: string
           id?: string
           invited_at?: string
           name?: string | null
@@ -201,9 +205,11 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          accepted_at?: string | null
           book_id?: string
           created_at?: string
           email?: string
+          expires_at?: string
           id?: string
           invited_at?: string
           name?: string | null
@@ -330,6 +336,50 @@ export type Database = {
             columns: ["phase_id"]
             isOneToOne: false
             referencedRelation: "phases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          book_id: string | null
+          created_at: string
+          id: string
+          kind: string
+          link: string | null
+          read_at: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          book_id?: string | null
+          created_at?: string
+          id?: string
+          kind: string
+          link?: string | null
+          read_at?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          book_id?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          link?: string | null
+          read_at?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
             referencedColumns: ["id"]
           },
         ]

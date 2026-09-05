@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { usePlanStream } from "@/lib/use-plan-stream";
 import { toPayload } from "@/lib/coach-intake";
+import { useCurrentUser } from "@/lib/use-current-user";
 import { useCreateBookCycle, useTemplates } from "@/lib/book-db";
 import type { TemplatePhase } from "@/lib/template-data";
 import { cn } from "@/lib/utils";
@@ -53,6 +54,9 @@ function CreateBook() {
   const createCycle = useCreateBookCycle();
   const [coachTitle, setCoachTitle] = useState("");
   const [coachDate, setCoachDate] = useState("");
+  const currentUser = useCurrentUser();
+  const isPaid = currentUser.data?.profile?.plan === "paid";
+
 
   const go = (next: Search) => void navigate({ to: "/books/new", search: next });
   const backToChooser = () => void navigate({ to: "/books/new", search: {} });
@@ -165,9 +169,25 @@ function CreateBook() {
     })),
   }));
 
+  if (!isPaid) {
+    return (
+      <AppShell coachContext="create">
+        <PageHeading title="Plan with Book Coach" description="Planning with the coach is part of the paid plan." />
+        <div className="max-w-2xl rounded-2xl border border-border bg-paper p-8">
+          <p className="text-sm leading-7 text-muted-foreground">Your account is on the free plan, which includes every template and building a book cycle from scratch. Upgrade whenever you’d like the coach to shape the plan around your genre, budget and launch date.</p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button onClick={() => go({ path: "template" })}>Start from a template</Button>
+            <Button variant="outline" onClick={() => go({ path: "scratch" })}>Build from scratch</Button>
+          </div>
+        </div>
+      </AppShell>
+    );
+  }
+
   return (
     <AppShell coachContext="create">
       <PageHeading title="Plan with Book Coach" description="Answer a few questions and your coach will draft the whole cycle." />
+
       <div className="grid gap-8 xl:grid-cols-[1fr_300px]">
         <div className="space-y-8">
           <CoachConversation generating={isStreaming} onGenerate={(answers) => { setCoachTitle(answers["title"] ?? ""); void start(toPayload(answers)); }} />

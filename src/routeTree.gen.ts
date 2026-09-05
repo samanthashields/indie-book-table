@@ -13,14 +13,20 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedTemplatesRouteImport } from './routes/_authenticated/templates'
 import { Route as ApiCoachPlanRouteImport } from './routes/api/coach-plan'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminActivityRouteImport } from './routes/_authenticated/admin.activity'
+import { Route as AuthenticatedAdminPeopleRouteImport } from './routes/_authenticated/admin.people'
+import { Route as AuthenticatedAdminTemplatesRouteImport } from './routes/_authenticated/admin.templates'
 import { Route as AuthenticatedBooksBookIdRouteImport } from './routes/_authenticated/books.$bookId'
 import { Route as AuthenticatedBooksNewRouteImport } from './routes/_authenticated/books.new'
 import { Route as AuthenticatedTemplatesTemplateIdRouteImport } from './routes/_authenticated/templates.$templateId'
 import { Route as AuthenticatedBooksBookIdIndexRouteImport } from './routes/_authenticated/books.$bookId.index'
 import { Route as AuthenticatedBooksBookIdDetailsRouteImport } from './routes/_authenticated/books.$bookId.details'
 import { Route as AuthenticatedBooksBookIdReflectionRouteImport } from './routes/_authenticated/books.$bookId.reflection'
+import { Route as AuthenticatedBooksBookIdTeamRouteImport } from './routes/_authenticated/books.$bookId.team'
 import { Route as AuthenticatedBooksBookIdMilestonesMilestoneIdRouteImport } from './routes/_authenticated/books.$bookId.milestones.$milestoneId'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -42,6 +48,11 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTemplatesRoute = AuthenticatedTemplatesRouteImport.update({
   id: '/templates',
   path: '/templates',
@@ -52,6 +63,29 @@ const ApiCoachPlanRoute = ApiCoachPlanRouteImport.update({
   path: '/api/coach-plan',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminActivityRoute =
+  AuthenticatedAdminActivityRouteImport.update({
+    id: '/activity',
+    path: '/activity',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminPeopleRoute =
+  AuthenticatedAdminPeopleRouteImport.update({
+    id: '/people',
+    path: '/people',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminTemplatesRoute =
+  AuthenticatedAdminTemplatesRouteImport.update({
+    id: '/templates',
+    path: '/templates',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedBooksBookIdRoute =
   AuthenticatedBooksBookIdRouteImport.update({
     id: '/books/$bookId',
@@ -87,6 +121,12 @@ const AuthenticatedBooksBookIdReflectionRoute =
     path: '/reflection',
     getParentRoute: () => AuthenticatedBooksBookIdRoute,
   } as any)
+const AuthenticatedBooksBookIdTeamRoute =
+  AuthenticatedBooksBookIdTeamRouteImport.update({
+    id: '/team',
+    path: '/team',
+    getParentRoute: () => AuthenticatedBooksBookIdRoute,
+  } as any)
 const AuthenticatedBooksBookIdMilestonesMilestoneIdRoute =
   AuthenticatedBooksBookIdMilestonesMilestoneIdRouteImport.update({
     id: '/milestones/$milestoneId',
@@ -98,13 +138,19 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
+  '/admin/activity': typeof AuthenticatedAdminActivityRoute
+  '/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/admin/templates': typeof AuthenticatedAdminTemplatesRoute
   '/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
   '/books/new': typeof AuthenticatedBooksNewRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
   '/books/$bookId/details': typeof AuthenticatedBooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof AuthenticatedBooksBookIdReflectionRoute
+  '/books/$bookId/team': typeof AuthenticatedBooksBookIdTeamRoute
   '/books/$bookId/': typeof AuthenticatedBooksBookIdIndexRoute
   '/books/$bookId/milestones/$milestoneId': typeof AuthenticatedBooksBookIdMilestonesMilestoneIdRoute
 }
@@ -114,10 +160,15 @@ export interface FileRoutesByTo {
   '/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/': typeof AuthenticatedIndexRoute
+  '/admin/activity': typeof AuthenticatedAdminActivityRoute
+  '/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/admin/templates': typeof AuthenticatedAdminTemplatesRoute
   '/books/new': typeof AuthenticatedBooksNewRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
   '/books/$bookId/details': typeof AuthenticatedBooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof AuthenticatedBooksBookIdReflectionRoute
+  '/books/$bookId/team': typeof AuthenticatedBooksBookIdTeamRoute
   '/books/$bookId': typeof AuthenticatedBooksBookIdIndexRoute
   '/books/$bookId/milestones/$milestoneId': typeof AuthenticatedBooksBookIdMilestonesMilestoneIdRoute
 }
@@ -126,14 +177,20 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/admin/activity': typeof AuthenticatedAdminActivityRoute
+  '/_authenticated/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/_authenticated/admin/templates': typeof AuthenticatedAdminTemplatesRoute
   '/_authenticated/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
   '/_authenticated/books/new': typeof AuthenticatedBooksNewRoute
   '/_authenticated/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/books/$bookId/details': typeof AuthenticatedBooksBookIdDetailsRoute
   '/_authenticated/books/$bookId/reflection': typeof AuthenticatedBooksBookIdReflectionRoute
+  '/_authenticated/books/$bookId/team': typeof AuthenticatedBooksBookIdTeamRoute
   '/_authenticated/books/$bookId/': typeof AuthenticatedBooksBookIdIndexRoute
   '/_authenticated/books/$bookId/milestones/$milestoneId': typeof AuthenticatedBooksBookIdMilestonesMilestoneIdRoute
 }
@@ -143,13 +200,19 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/reset-password'
+    | '/admin'
     | '/templates'
     | '/api/coach-plan'
+    | '/admin/activity'
+    | '/admin/people'
+    | '/admin/templates'
     | '/books/$bookId'
     | '/books/new'
     | '/templates/$templateId'
+    | '/admin/'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
+    | '/books/$bookId/team'
     | '/books/$bookId/'
     | '/books/$bookId/milestones/$milestoneId'
   fileRoutesByTo: FileRoutesByTo
@@ -159,10 +222,15 @@ export interface FileRouteTypes {
     | '/templates'
     | '/api/coach-plan'
     | '/'
+    | '/admin/activity'
+    | '/admin/people'
+    | '/admin/templates'
     | '/books/new'
     | '/templates/$templateId'
+    | '/admin'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
+    | '/books/$bookId/team'
     | '/books/$bookId'
     | '/books/$bookId/milestones/$milestoneId'
   id:
@@ -170,14 +238,20 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/reset-password'
+    | '/_authenticated/admin'
     | '/_authenticated/templates'
     | '/api/coach-plan'
     | '/_authenticated/'
+    | '/_authenticated/admin/activity'
+    | '/_authenticated/admin/people'
+    | '/_authenticated/admin/templates'
     | '/_authenticated/books/$bookId'
     | '/_authenticated/books/new'
     | '/_authenticated/templates/$templateId'
+    | '/_authenticated/admin/'
     | '/_authenticated/books/$bookId/details'
     | '/_authenticated/books/$bookId/reflection'
+    | '/_authenticated/books/$bookId/team'
     | '/_authenticated/books/$bookId/'
     | '/_authenticated/books/$bookId/milestones/$milestoneId'
   fileRoutesById: FileRoutesById
@@ -219,6 +293,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/templates': {
       id: '/_authenticated/templates'
       path: '/templates'
@@ -232,6 +313,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/coach-plan'
       preLoaderRoute: typeof ApiCoachPlanRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/activity': {
+      id: '/_authenticated/admin/activity'
+      path: '/activity'
+      fullPath: '/admin/activity'
+      preLoaderRoute: typeof AuthenticatedAdminActivityRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/people': {
+      id: '/_authenticated/admin/people'
+      path: '/people'
+      fullPath: '/admin/people'
+      preLoaderRoute: typeof AuthenticatedAdminPeopleRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/templates': {
+      id: '/_authenticated/admin/templates'
+      path: '/templates'
+      fullPath: '/admin/templates'
+      preLoaderRoute: typeof AuthenticatedAdminTemplatesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/books/$bookId': {
       id: '/_authenticated/books/$bookId'
@@ -275,6 +384,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBooksBookIdReflectionRouteImport
       parentRoute: typeof AuthenticatedBooksBookIdRoute
     }
+    '/_authenticated/books/$bookId/team': {
+      id: '/_authenticated/books/$bookId/team'
+      path: '/team'
+      fullPath: '/books/$bookId/team'
+      preLoaderRoute: typeof AuthenticatedBooksBookIdTeamRouteImport
+      parentRoute: typeof AuthenticatedBooksBookIdRoute
+    }
     '/_authenticated/books/$bookId/milestones/$milestoneId': {
       id: '/_authenticated/books/$bookId/milestones/$milestoneId'
       path: '/milestones/$milestoneId'
@@ -284,6 +400,23 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminActivityRoute: typeof AuthenticatedAdminActivityRoute
+  AuthenticatedAdminPeopleRoute: typeof AuthenticatedAdminPeopleRoute
+  AuthenticatedAdminTemplatesRoute: typeof AuthenticatedAdminTemplatesRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminActivityRoute: AuthenticatedAdminActivityRoute,
+  AuthenticatedAdminPeopleRoute: AuthenticatedAdminPeopleRoute,
+  AuthenticatedAdminTemplatesRoute: AuthenticatedAdminTemplatesRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
 
 interface AuthenticatedTemplatesRouteChildren {
   AuthenticatedTemplatesTemplateIdRoute: typeof AuthenticatedTemplatesTemplateIdRoute
@@ -303,6 +436,7 @@ const AuthenticatedTemplatesRouteWithChildren =
 interface AuthenticatedBooksBookIdRouteChildren {
   AuthenticatedBooksBookIdDetailsRoute: typeof AuthenticatedBooksBookIdDetailsRoute
   AuthenticatedBooksBookIdReflectionRoute: typeof AuthenticatedBooksBookIdReflectionRoute
+  AuthenticatedBooksBookIdTeamRoute: typeof AuthenticatedBooksBookIdTeamRoute
   AuthenticatedBooksBookIdIndexRoute: typeof AuthenticatedBooksBookIdIndexRoute
   AuthenticatedBooksBookIdMilestonesMilestoneIdRoute: typeof AuthenticatedBooksBookIdMilestonesMilestoneIdRoute
 }
@@ -312,6 +446,7 @@ const AuthenticatedBooksBookIdRouteChildren: AuthenticatedBooksBookIdRouteChildr
     AuthenticatedBooksBookIdDetailsRoute: AuthenticatedBooksBookIdDetailsRoute,
     AuthenticatedBooksBookIdReflectionRoute:
       AuthenticatedBooksBookIdReflectionRoute,
+    AuthenticatedBooksBookIdTeamRoute: AuthenticatedBooksBookIdTeamRoute,
     AuthenticatedBooksBookIdIndexRoute: AuthenticatedBooksBookIdIndexRoute,
     AuthenticatedBooksBookIdMilestonesMilestoneIdRoute:
       AuthenticatedBooksBookIdMilestonesMilestoneIdRoute,
@@ -323,6 +458,7 @@ const AuthenticatedBooksBookIdRouteWithChildren =
   )
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedTemplatesRoute: typeof AuthenticatedTemplatesRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedBooksBookIdRoute: typeof AuthenticatedBooksBookIdRouteWithChildren
@@ -330,6 +466,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedTemplatesRoute: AuthenticatedTemplatesRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedBooksBookIdRoute: AuthenticatedBooksBookIdRouteWithChildren,

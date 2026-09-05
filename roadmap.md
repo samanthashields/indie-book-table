@@ -26,19 +26,20 @@
 - [x] Full palette usage across the app
 
 ## Backend planning (next)
-- [ ] Plan accounts, sign-up, roles, super admin user management, global genre templates
+- [x] Plan accounts, sign-up, roles, super admin user management, global genre templates
 
 ## Accounts, roles and admin (approved plan)
 - [x] Decided: collaborators require their own plan (full accounts, email + Google sign-in)
 - [x] Decided: free plan (templates + scratch) and paid plan (adds AI coach)
 - [x] Decided: author/collaborator accounts independent
-- [ ] Enable backend, accounts, profiles, roles
-- [ ] Sign-up, sign-in, Google, password reset, session-aware header
-- [ ] Books/phases/milestones/reflections as real per-author records
-- [ ] File storage for covers and deliverables
-- [ ] Collaborator invites and per-book permissions
-- [ ] Super-admin area: people, templates, dashboard, activity log
-- [ ] Notifications and emails
+- [x] Enable backend, accounts, profiles, roles
+- [x] Sign-up, sign-in, Google, password reset, session-aware header
+- [x] Books/phases/milestones/reflections as real per-author records
+- [x] File storage for covers and deliverables
+- [x] Collaborator invites and per-book permissions
+- [x] Super-admin area: people, templates, dashboard, activity log
+- [x] In-app notifications (email sending still to come)
+- [x] Plan gating: coach is paid-only
 
 ## The Indie Table merge (uploaded brief)
 - [ ] Phase 1: Freeze design system into a reference doc
