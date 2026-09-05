@@ -55,7 +55,9 @@ function BookOverview() {
         </div>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" asChild><Link to="/books/$bookId/details" params={{ bookId }}><Settings2 />Book details</Link></Button>
+          <Button variant="outline" asChild><Link to="/books/$bookId/team" params={{ bookId }}><Users />Collaborators</Link></Button>
           <Button variant="outline" asChild><Link to="/books/$bookId/reflection" params={{ bookId }}><FileText />Reflection</Link></Button>
+
         </div>
       </header>
 
