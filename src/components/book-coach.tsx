@@ -105,9 +105,24 @@ export function BookCoach({ context = "overview" }: { context?: string | undefin
               <div className="flex gap-2 border-t border-border p-4">
                 <Input value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") send(draft); }} placeholder="Ask your Book Coach" aria-label="Message Book Coach" />
                 <Button size="icon" onClick={() => send(draft)} aria-label="Send message"><Send /></Button>
-
-          </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 space-y-4 overflow-y-auto p-5">
+              <div className="rounded-2xl bg-paper p-4 text-sm leading-6">
+                <p className="font-semibold">The Book Coach comes with the paid plan.</p>
+                <p className="mt-2 text-muted-foreground">On the free plan you can still build a book cycle from a template or from scratch, and everything you plan stays yours. Upgrade whenever you’d like guidance on what to do next, what to do yourself, and where your budget is best spent.</p>
+              </div>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="rounded-xl bg-teal/12 px-4 py-3">Weekly focus, phase by phase</li>
+                <li className="rounded-xl bg-amber/18 px-4 py-3">Honest pacing against your launch date</li>
+                <li className="rounded-xl bg-leaf/20 px-4 py-3">Do it yourself or hire, based on your budget</li>
+              </ul>
+              <Button className="w-full" onClick={() => toast.info("Plans are coming soon — your account is on the free plan for now.")}>Upgrade to the paid plan</Button>
+            </div>
+          )}
         </div>
+
       )}
 
       {!open && (
