@@ -3,6 +3,8 @@ import { Link } from "@tanstack/react-router";
 import type { CatalogBook } from "@/lib/catalog-types";
 import { PricePill, formatPrice } from "./price-pill";
 import { TagChips } from "./tag-chips";
+import { CircleToggle } from "@/components/site/circle-toggle";
+import type { WishlistEntry } from "@/lib/wishlist";
 
 /**
  * A dense flyer listing: small cover on the left, title / author / hook and
@@ -11,9 +13,13 @@ import { TagChips } from "./tag-chips";
 export function ListingRow({
   book,
   listingNumber,
+  circled = false,
+  onCircle,
 }: {
   book: CatalogBook;
   listingNumber?: number | undefined;
+  circled?: boolean;
+  onCircle?: (entry: WishlistEntry) => void;
 }) {
   const ebook = formatPrice(book.ebook_price);
   const print = formatPrice(book.print_price);
@@ -21,11 +27,12 @@ export function ListingRow({
 
   return (
     <article className="flex items-start gap-3">
+      <div className="relative w-[5.5rem] shrink-0 sm:w-[6.5rem]">
       <Link
         to="/table/books/$bookId"
         params={{ bookId: book.id }}
         aria-label={`View ${book.title} by ${book.author_name}`}
-        className="group relative block w-[5.5rem] shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cocoa sm:w-[6.5rem]"
+        className="group relative block w-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cocoa sm:w-[6.5rem]"
       >
         {book.cover_image_url ? (
           <img
@@ -42,6 +49,10 @@ export function ListingRow({
           </span>
         )}
       </Link>
+      {onCircle && (
+        <CircleToggle book={book} circled={circled} onToggle={onCircle} />
+      )}
+      </div>
 
       <div className="min-w-0 flex-1">
         <h3 className="text-[0.82rem] font-bold uppercase leading-[1.12] text-cocoa">
