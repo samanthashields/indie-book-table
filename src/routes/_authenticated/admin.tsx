@@ -22,7 +22,7 @@ function AdminLayout() {
   const user = useCurrentUser();
   const pathname = useRouterState({ select: (state) => state.location.pathname });
 
-  if (user.isLoading || user.isFetching) {
+  if (user.isLoading || (user.isFetching && !user.data)) {
     return (
       <AppShell>
         <p className="text-sm text-muted-foreground">Checking your access…</p>
