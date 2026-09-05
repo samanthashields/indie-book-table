@@ -50,8 +50,9 @@ function AdminTemplates() {
   const refresh = () => void queryClient.invalidateQueries({ queryKey: ["admin-templates"] });
 
   const update = useMutation({
-    mutationFn: async ({ id, patch }: { id: string; patch: Partial<TemplateRow> }) => {
+    mutationFn: async ({ id, patch }: { id: string; patch: { published?: boolean; archived?: boolean; position?: number; title?: string; description?: string | null } }) => {
       const { error } = await supabase.from("templates").update(patch).eq("id", id);
+
       if (error) throw error;
     },
     onSuccess: () => { refresh(); toast.success("Template updated"); },
