@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   { label: "My Books", to: "/" as const, icon: Library },
+  { label: "My Cycles", to: "/cycles" as const, icon: Sparkles },
   { label: "Collaborations", to: "/collaborations" as const, icon: Users },
   { label: "Templates", to: "/templates" as const, icon: BookOpen },
   { label: "My Submissions", to: "/submissions" as const, icon: Send },
