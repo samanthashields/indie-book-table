@@ -23,9 +23,8 @@ const issuePreviewQuery = (issueId: string) =>
   });
 
 export const Route = createFileRoute("/table/$issueId")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    preview: search["preview"] === "1" || search["preview"] === true ? true : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { preview?: boolean } =>
+    search["preview"] === "1" || search["preview"] === true ? { preview: true } : {},
   loaderDeps: ({ search }) => ({ preview: search.preview }),
   loader: async ({ context, params, deps }) => {
     if (deps.preview) return null;

@@ -135,7 +135,7 @@ function AdminIssues() {
               <Link
                 to="/table/$issueId"
                 params={{ issueId: issue.id }}
-                search={issue.status === "published" ? {} : { preview: true }}
+                search={{ preview: true }}
                 target="_blank"
                 rel="noreferrer"
               >
