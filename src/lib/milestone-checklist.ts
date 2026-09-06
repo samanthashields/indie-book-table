@@ -106,10 +106,10 @@ export function useUpdateChecklistItem(milestoneId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (input: { id: string; label?: string; done?: boolean; position?: number }) => {
-      const patch: Record<string, unknown> = {};
-      if (input.label !== undefined) patch["label"] = input.label.trim();
-      if (input.done !== undefined) patch["done"] = input.done;
-      if (input.position !== undefined) patch["position"] = input.position;
+      const patch: { label?: string; done?: boolean; position?: number } = {};
+      if (input.label !== undefined) patch.label = input.label.trim();
+      if (input.done !== undefined) patch.done = input.done;
+      if (input.position !== undefined) patch.position = input.position;
       const { error } = await supabase.from("milestone_checklist_items").update(patch).eq("id", input.id);
       if (error) throw error;
     },
