@@ -121,6 +121,7 @@ const summarize = (book: BookRow, milestones: MilestoneRow[], authorName: string
     hasCycle: Boolean(book.has_cycle),
     genre: book.genre ?? "Uncategorised",
     status: book.status === "active" ? "In progress" : book.status,
+    shelfStatus: book.shelf_status ?? "idea",
     progress,
     nextAction: next?.name ?? "All milestones complete",
     target: formatDate(book.target_publication_date) || "No target date",
