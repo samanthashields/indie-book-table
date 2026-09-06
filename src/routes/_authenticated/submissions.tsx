@@ -31,9 +31,46 @@ const TONE: Record<string, "good" | "warm" | "neutral"> = {
   removed: "warm",
 };
 
+const STEPS = ["Submitted", "Under review", "In the database", "Featured in an issue"] as const;
+
+function currentStep(book: SubmissionRow, hasPublished: boolean) {
+  if (hasPublished) return 3;
+  if (book.status === "added_to_database") return 2;
+  if (book.status === "under_review") return 1;
+  return 0;
+}
+
+function Timeline({ step }: { step: number }) {
+  return (
+    <ol className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-2" aria-label="Submission progress">
+      {STEPS.map((label, index) => (
+        <li key={label} className="flex items-center gap-2">
+          <span
+            className={cn(
+              "flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold",
+              index < step && "bg-teal/15 text-primary",
+              index === step && "bg-primary text-primary-foreground",
+              index > step && "bg-muted text-muted-foreground",
+            )}
+          >
+            {index < step && <Check className="size-3" />}
+            {label}
+          </span>
+          {index < STEPS.length - 1 && <span className="h-px w-4 bg-border" aria-hidden="true" />}
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+const submittedOn = (value: string) =>
+  new Date(value).toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" });
+
 function SubmissionCard({ book }: { book: SubmissionRow }) {
   const cover = useCatalogCoverUrl(book.cover_image_url);
   const published = book.catalog_issue_selections.filter((s) => s.catalog_issues?.status === "published");
+  const upcoming = book.catalog_issue_selections.filter((s) => s.catalog_issues?.status !== "published");
+  const step = currentStep(book, published.length > 0);
 
   return (
     <article className="flex gap-5 rounded-2xl border border-border bg-card p-5 shadow-xs">
@@ -49,16 +86,25 @@ function SubmissionCard({ book }: { book: SubmissionRow }) {
         </div>
         <h2 className="mt-2 font-serif text-2xl font-normal">{book.title}</h2>
         {book.hook && <p className="mt-1 text-sm leading-6 text-muted-foreground">{book.hook}</p>}
+        <p className="mt-2 text-xs text-muted-foreground">Sent on {submittedOn(book.submitted_at)}</p>
         {book.removal_reason && <p className="mt-2 text-sm text-destructive">{book.removal_reason}</p>}
+        {book.status !== "removed" && <Timeline step={step} />}
         <p className="mt-3 text-sm text-muted-foreground">
           {published.length > 0
             ? `Featured in ${published.map((s) => s.catalog_issues?.display_label).join(", ")}`
-            : "Not in an issue yet — the editors will let you know."}
+            : upcoming.length > 0
+              ? `Picked for an upcoming issue — ${upcoming.map((s) => s.catalog_issues?.display_label).filter(Boolean).join(", ")}`
+              : "Not in an issue yet — the editors will let you know."}
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
           <Button variant="outline" asChild>
             <Link to="/submit" search={{ edit: book.id }}><Pencil />Edit details</Link>
           </Button>
+          {book.book_cycle_id && (
+            <Button variant="ghost" asChild>
+              <Link to="/books/$bookId/details" params={{ bookId: book.book_cycle_id }}><BookOpen />Open in My Books</Link>
+            </Button>
+          )}
           {published.length > 0 && (
             <Button variant="ghost" asChild>
               <Link to="/table/books/$bookId" params={{ bookId: book.id }}>View at The Table</Link>
