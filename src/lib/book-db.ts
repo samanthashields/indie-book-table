@@ -216,6 +216,8 @@ export type CreateCycleInput = {
   templateId?: string;
   phases: TemplatePhase[];
   summaryNote?: string;
+  /** When set, the cycle is attached to an existing book in the library. */
+  bookId?: string;
 };
 
 export function useCreateBookCycle() {
@@ -224,23 +226,34 @@ export function useCreateBookCycle() {
     mutationFn: async (input: CreateCycleInput) => {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData.user) throw new Error("You need to be signed in.");
-      const { data: book, error } = await supabase
-        .from("books")
-        .insert({
-          author_id: userData.user.id,
-          title: input.title,
-          genre: input.genre ?? null,
-          target_publication_date: input.targetDate ?? null,
-          template_id: input.templateId ?? null,
-          metadata: {
-            manuscriptStatus: input.manuscriptStatus ?? "drafting",
-            illustrated: input.illustrated ?? false,
-            phaseSummaries: Object.fromEntries(input.phases.map((phase) => [phase.id, phase.summary])),
-          },
-        })
-        .select("id")
-        .single();
-      if (error) throw error;
+      const payload = {
+        title: input.title,
+        genre: input.genre ?? null,
+        target_publication_date: input.targetDate ?? null,
+        template_id: input.templateId ?? null,
+        status: "active",
+        has_cycle: true,
+        metadata: {
+          manuscriptStatus: input.manuscriptStatus ?? "drafting",
+          illustrated: input.illustrated ?? false,
+          phaseSummaries: Object.fromEntries(input.phases.map((phase) => [phase.id, phase.summary])),
+        },
+      };
+      let book: { id: string };
+      if (input.bookId) {
+        const { data, error } = await supabase.from("books").update(payload).eq("id", input.bookId).select("id").single();
+        if (error) throw error;
+        book = data as { id: string };
+      } else {
+        const { data, error } = await supabase
+          .from("books")
+          .insert({ author_id: userData.user.id, ...payload })
+          .select("id")
+          .single();
+        if (error) throw error;
+        book = data as { id: string };
+      }
+
 
       const target = input.targetDate ? new Date(`${input.targetDate}T00:00:00`) : new Date(Date.now() + 365 * 86400000);
       const timeline = suggestPhaseRanges(new Date(), target, input.manuscriptStatus ?? "drafting", input.illustrated ?? false);
