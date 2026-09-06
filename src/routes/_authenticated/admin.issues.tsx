@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -88,6 +88,22 @@ function AdminIssues() {
             Create issue
           </Button>
         </div>
+        <div className="rounded-2xl border border-border bg-card p-4">
+          <label className="block text-sm font-semibold">
+            Jump to an issue
+            <select
+              className="mt-2 h-9 w-full rounded-xl border border-input bg-paper px-3 text-sm"
+              value={activeId ?? ""}
+              onChange={(event) => setSelectedId(event.target.value)}
+            >
+              {(issues.data ?? []).map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.display_label} — {item.status === "published" ? "Published" : "Draft"}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
         <nav className="space-y-2">
           {(issues.data ?? []).map((item) => (
             <button
@@ -115,6 +131,17 @@ function AdminIssues() {
               <h2 className="font-serif text-3xl font-normal">{issue.display_label}</h2>
               <StatusPill tone={issue.status === "published" ? "good" : "warm"}>{issue.status === "published" ? "Published" : "Draft"}</StatusPill>
             </div>
+            <Button asChild variant="outline">
+              <Link
+                to="/table/$issueId"
+                params={{ issueId: issue.id }}
+                search={issue.status === "published" ? {} : { preview: true }}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Preview as a reader
+              </Link>
+            </Button>
             <Button
               variant={issue.status === "published" ? "outline" : "default"}
               onClick={() =>
