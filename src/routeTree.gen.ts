@@ -15,6 +15,7 @@ import { Route as MissionRouteImport } from './routes/mission'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedCollaborationsRouteImport } from './routes/_authenticated/collaborations'
 import { Route as AuthenticatedSubmissionsRouteImport } from './routes/_authenticated/submissions'
 import { Route as AuthenticatedSubmitRouteImport } from './routes/_authenticated/submit'
 import { Route as AuthenticatedTemplatesRouteImport } from './routes/_authenticated/templates'
@@ -31,6 +32,7 @@ import { Route as AuthenticatedAdminPeopleRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminSubmissionsRouteImport } from './routes/_authenticated/admin.submissions'
 import { Route as AuthenticatedAdminTemplatesRouteImport } from './routes/_authenticated/admin.templates'
 import { Route as AuthenticatedBooksBookIdRouteImport } from './routes/_authenticated/books.$bookId'
+import { Route as AuthenticatedBooksAddRouteImport } from './routes/_authenticated/books.add'
 import { Route as AuthenticatedBooksNewRouteImport } from './routes/_authenticated/books.new'
 import { Route as AuthenticatedTemplatesTemplateIdRouteImport } from './routes/_authenticated/templates.$templateId'
 import { Route as TableIssueIdFlyerRouteImport } from './routes/table.$issueId_.flyer'
@@ -71,6 +73,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCollaborationsRoute =
+  AuthenticatedCollaborationsRouteImport.update({
+    id: '/collaborations',
+    path: '/collaborations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSubmissionsRoute =
   AuthenticatedSubmissionsRouteImport.update({
     id: '/submissions',
@@ -159,6 +167,11 @@ const AuthenticatedBooksBookIdRoute =
     path: '/books/$bookId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedBooksAddRoute = AuthenticatedBooksAddRouteImport.update({
+  id: '/books/add',
+  path: '/books/add',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedBooksNewRoute = AuthenticatedBooksNewRouteImport.update({
   id: '/books/new',
   path: '/books/new',
@@ -222,6 +235,7 @@ export interface FileRoutesByFullPath {
   '/mission': typeof MissionRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/collaborations': typeof AuthenticatedCollaborationsRoute
   '/submissions': typeof AuthenticatedSubmissionsRoute
   '/submit': typeof AuthenticatedSubmitRoute
   '/templates': typeof AuthenticatedTemplatesRouteWithChildren
@@ -237,6 +251,7 @@ export interface FileRoutesByFullPath {
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/templates': typeof AuthenticatedAdminTemplatesRoute
   '/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
+  '/books/add': typeof AuthenticatedBooksAddRoute
   '/books/new': typeof AuthenticatedBooksNewRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
   '/table/$issueId/flyer': typeof TableIssueIdFlyerRoute
@@ -253,6 +268,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/mission': typeof MissionRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/collaborations': typeof AuthenticatedCollaborationsRoute
   '/submissions': typeof AuthenticatedSubmissionsRoute
   '/submit': typeof AuthenticatedSubmitRoute
   '/templates': typeof AuthenticatedTemplatesRouteWithChildren
@@ -268,6 +284,7 @@ export interface FileRoutesByTo {
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/templates': typeof AuthenticatedAdminTemplatesRoute
+  '/books/add': typeof AuthenticatedBooksAddRoute
   '/books/new': typeof AuthenticatedBooksNewRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
   '/table/$issueId/flyer': typeof TableIssueIdFlyerRoute
@@ -287,6 +304,7 @@ export interface FileRoutesById {
   '/mission': typeof MissionRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/collaborations': typeof AuthenticatedCollaborationsRoute
   '/_authenticated/submissions': typeof AuthenticatedSubmissionsRoute
   '/_authenticated/submit': typeof AuthenticatedSubmitRoute
   '/_authenticated/templates': typeof AuthenticatedTemplatesRouteWithChildren
@@ -303,6 +321,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/_authenticated/admin/templates': typeof AuthenticatedAdminTemplatesRoute
   '/_authenticated/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
+  '/_authenticated/books/add': typeof AuthenticatedBooksAddRoute
   '/_authenticated/books/new': typeof AuthenticatedBooksNewRoute
   '/_authenticated/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
   '/table/$issueId_/flyer': typeof TableIssueIdFlyerRoute
@@ -323,6 +342,7 @@ export interface FileRouteTypes {
     | '/mission'
     | '/reset-password'
     | '/admin'
+    | '/collaborations'
     | '/submissions'
     | '/submit'
     | '/templates'
@@ -338,6 +358,7 @@ export interface FileRouteTypes {
     | '/admin/submissions'
     | '/admin/templates'
     | '/books/$bookId'
+    | '/books/add'
     | '/books/new'
     | '/templates/$templateId'
     | '/table/$issueId/flyer'
@@ -354,6 +375,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/mission'
     | '/reset-password'
+    | '/collaborations'
     | '/submissions'
     | '/submit'
     | '/templates'
@@ -369,6 +391,7 @@ export interface FileRouteTypes {
     | '/admin/people'
     | '/admin/submissions'
     | '/admin/templates'
+    | '/books/add'
     | '/books/new'
     | '/templates/$templateId'
     | '/table/$issueId/flyer'
@@ -387,6 +410,7 @@ export interface FileRouteTypes {
     | '/mission'
     | '/reset-password'
     | '/_authenticated/admin'
+    | '/_authenticated/collaborations'
     | '/_authenticated/submissions'
     | '/_authenticated/submit'
     | '/_authenticated/templates'
@@ -403,6 +427,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/submissions'
     | '/_authenticated/admin/templates'
     | '/_authenticated/books/$bookId'
+    | '/_authenticated/books/add'
     | '/_authenticated/books/new'
     | '/_authenticated/templates/$templateId'
     | '/table/$issueId_/flyer'
@@ -473,6 +498,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/collaborations': {
+      id: '/_authenticated/collaborations'
+      path: '/collaborations'
+      fullPath: '/collaborations'
+      preLoaderRoute: typeof AuthenticatedCollaborationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/submissions': {
@@ -585,6 +617,13 @@ declare module '@tanstack/react-router' {
       path: '/books/$bookId'
       fullPath: '/books/$bookId'
       preLoaderRoute: typeof AuthenticatedBooksBookIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/books/add': {
+      id: '/_authenticated/books/add'
+      path: '/books/add'
+      fullPath: '/books/add'
+      preLoaderRoute: typeof AuthenticatedBooksAddRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/books/new': {
@@ -724,21 +763,25 @@ const AuthenticatedBooksBookIdRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+  AuthenticatedCollaborationsRoute: typeof AuthenticatedCollaborationsRoute
   AuthenticatedSubmissionsRoute: typeof AuthenticatedSubmissionsRoute
   AuthenticatedSubmitRoute: typeof AuthenticatedSubmitRoute
   AuthenticatedTemplatesRoute: typeof AuthenticatedTemplatesRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedBooksBookIdRoute: typeof AuthenticatedBooksBookIdRouteWithChildren
+  AuthenticatedBooksAddRoute: typeof AuthenticatedBooksAddRoute
   AuthenticatedBooksNewRoute: typeof AuthenticatedBooksNewRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+  AuthenticatedCollaborationsRoute: AuthenticatedCollaborationsRoute,
   AuthenticatedSubmissionsRoute: AuthenticatedSubmissionsRoute,
   AuthenticatedSubmitRoute: AuthenticatedSubmitRoute,
   AuthenticatedTemplatesRoute: AuthenticatedTemplatesRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedBooksBookIdRoute: AuthenticatedBooksBookIdRouteWithChildren,
+  AuthenticatedBooksAddRoute: AuthenticatedBooksAddRoute,
   AuthenticatedBooksNewRoute: AuthenticatedBooksNewRoute,
 }
 
