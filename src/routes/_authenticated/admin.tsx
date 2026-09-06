@@ -12,6 +12,8 @@ const tabs = [
   { label: "Submissions", to: "/admin/submissions" as const },
   { label: "Issues", to: "/admin/issues" as const },
   { label: "Journal", to: "/admin/journal" as const },
+  { label: "Table homepage", to: "/admin/tablehome" as const },
+  { label: "Mission page", to: "/admin/missionpage" as const },
   { label: "Site words", to: "/admin/sitewords" as const },
   { label: "People", to: "/admin/people" as const },
   { label: "Templates", to: "/admin/templates" as const },

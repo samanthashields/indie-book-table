@@ -126,13 +126,20 @@ async function signCoverPath(
 }
 
 /** Loads one published issue (the newest when no id is given) with its grouped books. */
-export async function loadIssueCatalog(issueId?: string): Promise<CatalogIssue> {
-  const supabase = createPublicClient();
+export async function loadIssueCatalog(
+  issueId?: string,
+  options?: { includeDrafts?: boolean },
+): Promise<CatalogIssue> {
+  let supabase = createPublicClient();
+  if (options?.includeDrafts) {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    supabase = supabaseAdmin as unknown as ReturnType<typeof createPublicClient>;
+  }
 
   let query = supabase
     .from("catalog_issues")
-    .select("id, display_label, issue_month, catalog_issue_themes ( preset, border_pattern, cover_headline, cover_tagline, cover_image_url )")
-    .eq("status", "published");
+    .select("id, display_label, issue_month, catalog_issue_themes ( preset, border_pattern, cover_headline, cover_tagline, cover_image_url )");
+  if (!options?.includeDrafts) query = query.eq("status", "published");
 
   query = issueId
     ? query.eq("id", issueId)
@@ -295,7 +302,16 @@ export async function loadSiteCopy(): Promise<Record<string, string>> {
   const supabase = createPublicClient();
   const { data, error } = await supabase.from("catalog_site_content").select("key, value");
   if (error) throw new Error(error.message);
-  return Object.fromEntries((data ?? []).map((row) => [row.key, row.value]));
+  const copy = Object.fromEntries((data ?? []).map((row) => [row.key, row.value]));
+  // Image fields hold a private storage path; sign them so public visitors can load them.
+  await Promise.all(
+    Object.entries(copy).map(async ([key, value]) => {
+      if (!key.includes("image") || !value) return;
+      const signed = await signCoverPath(supabase, value);
+      if (signed) copy[key] = signed;
+    }),
+  );
+  return copy;
 }
 
 export async function upsertSubscriber(input: {

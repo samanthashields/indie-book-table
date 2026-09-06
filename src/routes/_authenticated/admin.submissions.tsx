@@ -136,11 +136,23 @@ function Row({ book, onChanged }: { book: AdminSubmission; onChanged: () => void
         {book.hook && <p className="mt-2 text-sm leading-6">{book.hook}</p>}
 
         {book.status === "under_review" ? (
-          <FeaturePicker book={book} onChanged={onChanged} />
+          <>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <Button size="sm" disabled={busy} onClick={() => void act("added_to_database")}>
+                Add to the database
+              </Button>
+              <span className="text-xs text-muted-foreground">
+                Or pick an issue below — that adds it to the database too.
+              </span>
+            </div>
+            <FeaturePicker book={book} onChanged={onChanged} />
+          </>
         ) : book.status === "submitted" ? (
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <Button size="sm" disabled={busy} onClick={() => void act("under_review")}>Start review</Button>
           </div>
+        ) : book.status === "added_to_database" ? (
+          <FeaturePicker book={book} onChanged={onChanged} />
         ) : null}
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
