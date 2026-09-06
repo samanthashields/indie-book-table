@@ -36,6 +36,8 @@ export function RequirementAction({
 }) {
   const input = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
+  const [driveOpen, setDriveOpen] = useState(false);
+  const [driveLink, setDriveLink] = useState("");
   const copy = {
     "Approve a Deliverable": { title: "Review and approve the shared deliverable", body: "Your collaborator’s files appear here for approval.", action: "Approve deliverable", icon: Check },
     "Attach a File": { title: "Add the finished file or a share link", body: "PDF, DOCX, EPUB, or a link to your working document.", action: "Choose file", icon: Paperclip },
