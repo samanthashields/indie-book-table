@@ -28,6 +28,7 @@ import { Route as AuthenticatedAdminActivityRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminIssuesRouteImport } from './routes/_authenticated/admin.issues'
 import { Route as AuthenticatedAdminJournalRouteImport } from './routes/_authenticated/admin.journal'
 import { Route as AuthenticatedAdminPeopleRouteImport } from './routes/_authenticated/admin.people'
+import { Route as AuthenticatedAdminSitewordsRouteImport } from './routes/_authenticated/admin.sitewords'
 import { Route as AuthenticatedAdminSubmissionsRouteImport } from './routes/_authenticated/admin.submissions'
 import { Route as AuthenticatedAdminTemplatesRouteImport } from './routes/_authenticated/admin.templates'
 import { Route as AuthenticatedBooksBookIdRouteImport } from './routes/_authenticated/books.$bookId'
@@ -145,6 +146,12 @@ const AuthenticatedAdminPeopleRoute =
     path: '/people',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminSitewordsRoute =
+  AuthenticatedAdminSitewordsRouteImport.update({
+    id: '/sitewords',
+    path: '/sitewords',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminSubmissionsRoute =
   AuthenticatedAdminSubmissionsRouteImport.update({
     id: '/submissions',
@@ -255,6 +262,7 @@ export interface FileRoutesByFullPath {
   '/admin/issues': typeof AuthenticatedAdminIssuesRoute
   '/admin/journal': typeof AuthenticatedAdminJournalRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/admin/sitewords': typeof AuthenticatedAdminSitewordsRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/templates': typeof AuthenticatedAdminTemplatesRoute
   '/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
@@ -290,6 +298,7 @@ export interface FileRoutesByTo {
   '/admin/issues': typeof AuthenticatedAdminIssuesRoute
   '/admin/journal': typeof AuthenticatedAdminJournalRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/admin/sitewords': typeof AuthenticatedAdminSitewordsRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/templates': typeof AuthenticatedAdminTemplatesRoute
   '/books/add': typeof AuthenticatedBooksAddRoute
@@ -327,6 +336,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/issues': typeof AuthenticatedAdminIssuesRoute
   '/_authenticated/admin/journal': typeof AuthenticatedAdminJournalRoute
   '/_authenticated/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/_authenticated/admin/sitewords': typeof AuthenticatedAdminSitewordsRoute
   '/_authenticated/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/_authenticated/admin/templates': typeof AuthenticatedAdminTemplatesRoute
   '/_authenticated/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
@@ -365,6 +375,7 @@ export interface FileRouteTypes {
     | '/admin/issues'
     | '/admin/journal'
     | '/admin/people'
+    | '/admin/sitewords'
     | '/admin/submissions'
     | '/admin/templates'
     | '/books/$bookId'
@@ -400,6 +411,7 @@ export interface FileRouteTypes {
     | '/admin/issues'
     | '/admin/journal'
     | '/admin/people'
+    | '/admin/sitewords'
     | '/admin/submissions'
     | '/admin/templates'
     | '/books/add'
@@ -436,6 +448,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/issues'
     | '/_authenticated/admin/journal'
     | '/_authenticated/admin/people'
+    | '/_authenticated/admin/sitewords'
     | '/_authenticated/admin/submissions'
     | '/_authenticated/admin/templates'
     | '/_authenticated/books/$bookId'
@@ -605,6 +618,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPeopleRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/sitewords': {
+      id: '/_authenticated/admin/sitewords'
+      path: '/sitewords'
+      fullPath: '/admin/sitewords'
+      preLoaderRoute: typeof AuthenticatedAdminSitewordsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/submissions': {
       id: '/_authenticated/admin/submissions'
       path: '/submissions'
@@ -725,6 +745,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminIssuesRoute: typeof AuthenticatedAdminIssuesRoute
   AuthenticatedAdminJournalRoute: typeof AuthenticatedAdminJournalRoute
   AuthenticatedAdminPeopleRoute: typeof AuthenticatedAdminPeopleRoute
+  AuthenticatedAdminSitewordsRoute: typeof AuthenticatedAdminSitewordsRoute
   AuthenticatedAdminSubmissionsRoute: typeof AuthenticatedAdminSubmissionsRoute
   AuthenticatedAdminTemplatesRoute: typeof AuthenticatedAdminTemplatesRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
@@ -735,6 +756,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminIssuesRoute: AuthenticatedAdminIssuesRoute,
   AuthenticatedAdminJournalRoute: AuthenticatedAdminJournalRoute,
   AuthenticatedAdminPeopleRoute: AuthenticatedAdminPeopleRoute,
+  AuthenticatedAdminSitewordsRoute: AuthenticatedAdminSitewordsRoute,
   AuthenticatedAdminSubmissionsRoute: AuthenticatedAdminSubmissionsRoute,
   AuthenticatedAdminTemplatesRoute: AuthenticatedAdminTemplatesRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
