@@ -61,6 +61,7 @@ export type Database = {
           edition: string | null
           genre: string | null
           goals: string | null
+          has_cycle: boolean
           id: string
           imprint: string | null
           isbn: string | null
@@ -91,6 +92,7 @@ export type Database = {
           edition?: string | null
           genre?: string | null
           goals?: string | null
+          has_cycle?: boolean
           id?: string
           imprint?: string | null
           isbn?: string | null
@@ -121,6 +123,7 @@ export type Database = {
           edition?: string | null
           genre?: string | null
           goals?: string | null
+          has_cycle?: boolean
           id?: string
           imprint?: string | null
           isbn?: string | null
