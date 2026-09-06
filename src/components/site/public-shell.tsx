@@ -14,6 +14,8 @@ const links = [
 export function PublicShell({ children }: { children: ReactNode }) {
   const user = useCurrentUser();
   const signedIn = Boolean(user.data?.id);
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const siteTitle = pathname.startsWith("/table") ? "The Indie Book Table" : "Book Cycles";
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
