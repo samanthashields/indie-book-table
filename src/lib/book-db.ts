@@ -74,6 +74,9 @@ export type BookSummary = {
   title: string;
   subtitle?: string;
   author: string;
+  authorId: string;
+  isMine: boolean;
+  hasCycle: boolean;
   genre: string;
   status: string;
   progress: number;
