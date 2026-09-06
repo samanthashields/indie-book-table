@@ -32,6 +32,7 @@ import { Route as AuthenticatedAdminIssuesRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminMissionpageRouteImport } from './routes/_authenticated/admin.missionpage'
 import { Route as AuthenticatedAdminPeopleRouteImport } from './routes/_authenticated/admin.people'
 import { Route as AuthenticatedAdminReleasesRouteImport } from './routes/_authenticated/admin.releases'
+import { Route as AuthenticatedAdminRequestsRouteImport } from './routes/_authenticated/admin.requests'
 import { Route as AuthenticatedAdminSitewordsRouteImport } from './routes/_authenticated/admin.sitewords'
 import { Route as AuthenticatedAdminSubmissionsRouteImport } from './routes/_authenticated/admin.submissions'
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
@@ -184,6 +185,12 @@ const AuthenticatedAdminReleasesRoute =
   AuthenticatedAdminReleasesRouteImport.update({
     id: '/releases',
     path: '/releases',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminRequestsRoute =
+  AuthenticatedAdminRequestsRouteImport.update({
+    id: '/requests',
+    path: '/requests',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminSitewordsRoute =
@@ -394,6 +401,7 @@ export interface FileRoutesByFullPath {
   '/admin/missionpage': typeof AuthenticatedAdminMissionpageRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
   '/admin/releases': typeof AuthenticatedAdminReleasesRoute
+  '/admin/requests': typeof AuthenticatedAdminRequestsRoute
   '/admin/sitewords': typeof AuthenticatedAdminSitewordsRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -449,6 +457,7 @@ export interface FileRoutesByTo {
   '/admin/missionpage': typeof AuthenticatedAdminMissionpageRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
   '/admin/releases': typeof AuthenticatedAdminReleasesRoute
+  '/admin/requests': typeof AuthenticatedAdminRequestsRoute
   '/admin/sitewords': typeof AuthenticatedAdminSitewordsRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -506,6 +515,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/missionpage': typeof AuthenticatedAdminMissionpageRoute
   '/_authenticated/admin/people': typeof AuthenticatedAdminPeopleRoute
   '/_authenticated/admin/releases': typeof AuthenticatedAdminReleasesRoute
+  '/_authenticated/admin/requests': typeof AuthenticatedAdminRequestsRoute
   '/_authenticated/admin/sitewords': typeof AuthenticatedAdminSitewordsRoute
   '/_authenticated/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
@@ -564,6 +574,7 @@ export interface FileRouteTypes {
     | '/admin/missionpage'
     | '/admin/people'
     | '/admin/releases'
+    | '/admin/requests'
     | '/admin/sitewords'
     | '/admin/submissions'
     | '/admin/support'
@@ -619,6 +630,7 @@ export interface FileRouteTypes {
     | '/admin/missionpage'
     | '/admin/people'
     | '/admin/releases'
+    | '/admin/requests'
     | '/admin/sitewords'
     | '/admin/submissions'
     | '/admin/support'
@@ -675,6 +687,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/missionpage'
     | '/_authenticated/admin/people'
     | '/_authenticated/admin/releases'
+    | '/_authenticated/admin/requests'
     | '/_authenticated/admin/sitewords'
     | '/_authenticated/admin/submissions'
     | '/_authenticated/admin/support'
@@ -888,6 +901,13 @@ declare module '@tanstack/react-router' {
       path: '/releases'
       fullPath: '/admin/releases'
       preLoaderRoute: typeof AuthenticatedAdminReleasesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/requests': {
+      id: '/_authenticated/admin/requests'
+      path: '/requests'
+      fullPath: '/admin/requests'
+      preLoaderRoute: typeof AuthenticatedAdminRequestsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/sitewords': {
@@ -1123,6 +1143,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminMissionpageRoute: typeof AuthenticatedAdminMissionpageRoute
   AuthenticatedAdminPeopleRoute: typeof AuthenticatedAdminPeopleRoute
   AuthenticatedAdminReleasesRoute: typeof AuthenticatedAdminReleasesRoute
+  AuthenticatedAdminRequestsRoute: typeof AuthenticatedAdminRequestsRoute
   AuthenticatedAdminSitewordsRoute: typeof AuthenticatedAdminSitewordsRoute
   AuthenticatedAdminSubmissionsRoute: typeof AuthenticatedAdminSubmissionsRoute
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
@@ -1141,6 +1162,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminMissionpageRoute: AuthenticatedAdminMissionpageRoute,
   AuthenticatedAdminPeopleRoute: AuthenticatedAdminPeopleRoute,
   AuthenticatedAdminReleasesRoute: AuthenticatedAdminReleasesRoute,
+  AuthenticatedAdminRequestsRoute: AuthenticatedAdminRequestsRoute,
   AuthenticatedAdminSitewordsRoute: AuthenticatedAdminSitewordsRoute,
   AuthenticatedAdminSubmissionsRoute: AuthenticatedAdminSubmissionsRoute,
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,

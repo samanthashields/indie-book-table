@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { LifeBuoy, Search, Sparkles } from "lucide-react";
+import { LifeBuoy, Lightbulb, Search, Sparkles } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
@@ -44,9 +44,14 @@ function HelpCenter() {
         title="Help Center"
         description="Guides for every corner of the workshop, what’s new, and a way to reach us."
         action={
-          <Button asChild>
-            <Link to="/help/support"><LifeBuoy />Contact support</Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="secondary">
+              <Link to="/help/requests"><Lightbulb />Request a feature</Link>
+            </Button>
+            <Button asChild>
+              <Link to="/help/support"><LifeBuoy />Contact support</Link>
+            </Button>
+          </div>
         }
       />
 

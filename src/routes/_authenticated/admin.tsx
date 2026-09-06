@@ -19,6 +19,7 @@ const tabs = [
   { label: "Templates", to: "/admin/templates" as const },
   { label: "Help articles", to: "/admin/help" as const },
   { label: "Support", to: "/admin/support" as const },
+  { label: "Feature requests", to: "/admin/requests" as const },
   { label: "Release notes", to: "/admin/releases" as const },
   { label: "Activity log", to: "/admin/activity" as const },
 ];
