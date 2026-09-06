@@ -372,3 +372,96 @@ export function useSaveReflection(bookId: string) {
     onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["reflection", bookId] }),
   });
 }
+
+/** Saves a book idea to the library, without starting a cycle yet. */
+export function useCreateBookIdea() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: { title: string; subtitle?: string; pen_name?: string; genre?: string; audience?: string; goals?: string; target_publication_date?: string }) => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error("You need to be signed in.");
+      const { data, error } = await supabase
+        .from("books")
+        .insert({
+          author_id: userData.user.id,
+          title: input.title,
+          subtitle: input.subtitle || null,
+          pen_name: input.pen_name || null,
+          genre: input.genre || null,
+          audience: input.audience || null,
+          goals: input.goals || null,
+          target_publication_date: input.target_publication_date || null,
+          status: "idea",
+          has_cycle: false,
+        })
+        .select("id")
+        .single();
+      if (error) throw error;
+      return data.id as string;
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["books"] }),
+  });
+}
+
+export function useDeleteBook() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (bookId: string) => {
+      const { error } = await supabase.from("books").delete().eq("id", bookId);
+      if (error) throw error;
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["books"] }),
+  });
+}
+
+export type AuthorTemplateInput = {
+  title: string;
+  description?: string;
+  genre?: string;
+  audience?: string;
+  duration?: string;
+  phases: TemplatePhase[];
+  details?: { illustrated?: boolean; highlights?: string[] };
+};
+
+export function useSaveAuthorTemplate() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, input }: { id?: string; input: AuthorTemplateInput }) => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error("You need to be signed in.");
+      const payload = {
+        owner_id: userData.user.id,
+        title: input.title,
+        description: input.description ?? null,
+        genre: input.genre ?? null,
+        audience: input.audience ?? null,
+        duration: input.duration ?? null,
+        phases: input.phases as unknown as never,
+        details: (input.details ?? {}) as unknown as never,
+        published: false,
+        archived: false,
+      };
+      if (id) {
+        const { error } = await supabase.from("templates").update(payload).eq("id", id);
+        if (error) throw error;
+        return id;
+      }
+      const { data, error } = await supabase.from("templates").insert(payload).select("id").single();
+      if (error) throw error;
+      return data.id as string;
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["templates"] }),
+  });
+}
+
+export function useDeleteAuthorTemplate() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("templates").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["templates"] }),
+  });
+}
