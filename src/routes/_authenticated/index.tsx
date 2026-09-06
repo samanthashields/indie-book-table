@@ -26,7 +26,7 @@ export const Route = createFileRoute("/_authenticated/")({
   component: Index,
 });
 
-function BookMenu({ book, onDelete }: { book: BookSummary; onDelete: (id: string) => void }) {
+function BookMenu({ book, submission, onDelete }: { book: BookSummary; submission?: BookSubmission; onDelete: (id: string) => void }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -39,14 +39,18 @@ function BookMenu({ book, onDelete }: { book: BookSummary; onDelete: (id: string
           <DropdownMenuItem asChild><Link to="/books/new" search={{ book: book.id }}><Sparkles />Create book cycle</Link></DropdownMenuItem>
         )}
         <DropdownMenuItem asChild><Link to="/books/$bookId/details" params={{ bookId: book.id }}><SquarePen />Edit book details</Link></DropdownMenuItem>
-        <DropdownMenuItem asChild><Link to="/submit" search={{ bookId: book.id }}><Send />Submit to The Table</Link></DropdownMenuItem>
+        {submission ? (
+          <DropdownMenuItem asChild><Link to="/submissions"><Send />View submission</Link></DropdownMenuItem>
+        ) : (
+          <DropdownMenuItem asChild><Link to="/submit" search={{ bookId: book.id }}><Send />Submit to The Table</Link></DropdownMenuItem>
+        )}
         <DropdownMenuItem className="text-destructive focus:text-destructive" onSelect={() => onDelete(book.id)}><Trash2 />Delete this book</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
 
-function BookRow({ book, onDelete }: { book: BookSummary; onDelete: (id: string) => void }) {
+function BookRow({ book, submission, onDelete }: { book: BookSummary; submission?: BookSubmission; onDelete: (id: string) => void }) {
   const to = book.hasCycle ? "/books/$bookId" : "/books/$bookId/details";
   return (
     <div className="group grid gap-5 rounded-2xl border border-border bg-card px-5 py-5 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md sm:grid-cols-[88px_1fr_auto_auto] sm:items-center">
@@ -69,13 +73,25 @@ function BookRow({ book, onDelete }: { book: BookSummary; onDelete: (id: string)
         </div>
         <div className="text-left sm:text-right"><p className="text-xs text-muted-foreground">Target publication</p><p className="mt-1 text-sm font-semibold">{book.target}</p></div>
       </Link>
-      <BookMenu book={book} onDelete={onDelete} />
+      <div className="flex items-center gap-2">
+        {submission && (
+          <Link to="/submissions" className="hidden sm:block" onClick={(event) => event.stopPropagation()}>
+            <StatusPill tone="good">At The Table · {SUBMISSION_STATUS_LABELS[submission.status] ?? submission.status}</StatusPill>
+          </Link>
+        )}
+        <BookMenu book={book} submission={submission} onDelete={onDelete} />
+      </div>
     </div>
   );
 }
 
 function Index() {
   const { data: books = [], isLoading } = useBooks();
+  const { data: submissions = [] } = useMySubmissions();
+  const submissionByBook = new Map<string, BookSubmission>();
+  for (const row of submissions) {
+    if (row.book_cycle_id) submissionByBook.set(row.book_cycle_id, { id: row.id, status: row.status });
+  }
   const deleteBook = useDeleteBook();
   const navigate = useNavigate();
   const mine = books.filter((book) => book.isMine);
