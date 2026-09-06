@@ -938,6 +938,72 @@ export type Database = {
         }
         Relationships: []
       }
+      milestone_checklist_items: {
+        Row: {
+          book_id: string
+          created_at: string
+          created_by: string | null
+          done: boolean
+          id: string
+          label: string
+          milestone_id: string
+          position: number
+          ref_book_id: string | null
+          ref_kind: string | null
+          ref_label: string | null
+          ref_milestone_id: string | null
+          ref_slug: string | null
+          updated_at: string
+        }
+        Insert: {
+          book_id: string
+          created_at?: string
+          created_by?: string | null
+          done?: boolean
+          id?: string
+          label: string
+          milestone_id: string
+          position?: number
+          ref_book_id?: string | null
+          ref_kind?: string | null
+          ref_label?: string | null
+          ref_milestone_id?: string | null
+          ref_slug?: string | null
+          updated_at?: string
+        }
+        Update: {
+          book_id?: string
+          created_at?: string
+          created_by?: string | null
+          done?: boolean
+          id?: string
+          label?: string
+          milestone_id?: string
+          position?: number
+          ref_book_id?: string | null
+          ref_kind?: string | null
+          ref_label?: string | null
+          ref_milestone_id?: string | null
+          ref_slug?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "milestone_checklist_items_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "milestone_checklist_items_milestone_id_fkey"
+            columns: ["milestone_id"]
+            isOneToOne: false
+            referencedRelation: "milestones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       milestone_notes: {
         Row: {
           attachment_path: string | null
@@ -1126,6 +1192,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      pen_quick_actions: {
+        Row: {
+          created_at: string
+          hidden: boolean
+          id: string
+          label: string
+          position: number
+          prompt: string
+          section: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          hidden?: boolean
+          id?: string
+          label: string
+          position?: number
+          prompt: string
+          section: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          hidden?: boolean
+          id?: string
+          label?: string
+          position?: number
+          prompt?: string
+          section?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       pen_threads: {
         Row: {
