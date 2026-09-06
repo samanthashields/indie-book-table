@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Loader2, Plus, Trash2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
-import { StatusPill } from "@/components/status-pill";
-import { blankPhases } from "@/components/cycle-builder";
+import { PhaseEditor, standardPhases } from "@/components/phase-editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useSaveAuthorTemplate, useTemplates } from "@/lib/book-db";
-import { phaseStyle } from "@/lib/phase-style";
-import type { RequirementType } from "@/lib/book-data";
 import type { TemplatePhase } from "@/lib/template-data";
 
 export const Route = createFileRoute("/_authenticated/templates/mine/$templateId")({
@@ -26,13 +23,6 @@ export const Route = createFileRoute("/_authenticated/templates/mine/$templateId
   component: TemplateEditor,
 });
 
-const requirementTypes: RequirementType[] = [
-  "Request a Service",
-  "Attach a File",
-  "Complete an Activity Outside the Platform",
-  "Approve a Deliverable",
-];
-
 function TemplateEditor() {
   const { templateId } = Route.useParams();
   const isNew = templateId === "new";
@@ -45,7 +35,7 @@ function TemplateEditor() {
   const [title, setTitle] = useState("My book cycle template");
   const [description, setDescription] = useState("");
   const [genre, setGenre] = useState("");
-  const [phases, setPhases] = useState<TemplatePhase[]>(blankPhases);
+  const [phases, setPhases] = useState<TemplatePhase[]>(standardPhases);
 
   useEffect(() => {
     if (!loaded && existing) {
