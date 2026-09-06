@@ -34,6 +34,7 @@ export type BookRow = {
   edition: string | null;
   cover_url: string | null;
   status: string;
+  has_cycle: boolean;
   template_id: string | null;
   metadata: Record<string, unknown>;
   created_at: string;
