@@ -49,7 +49,7 @@ function JournalPostPage() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(postQuery(slug));
   const post = data.post!;
-  const paragraphs = post.body.split(/\n{2,}/).filter(Boolean);
+  
 
   return (
     <PublicShell>
