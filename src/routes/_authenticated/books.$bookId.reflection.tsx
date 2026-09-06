@@ -64,7 +64,7 @@ function Reflection() {
       <PageHeading title="Post-Launch Reflection" description="Your answers stay with this book cycle." />
       {endAnswers.length > 0 && (
         <section className="mb-6 max-w-3xl rounded-2xl border border-teal/40 bg-teal/10 p-6">
-          <h2 className="font-serif text-2xl font-normal">How this cycle ended</h2>
+          <h2 className="font-serif text-2xl font-normal">End of Cycle Details</h2>
           <dl className="mt-4 space-y-3">
             {endAnswers.map((entry) => (
               <div key={entry.prompt}>

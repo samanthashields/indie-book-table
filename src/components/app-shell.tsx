@@ -1,9 +1,9 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Library, LifeBuoy, LogOut, Menu, Newspaper, PanelLeftClose, Send, Shield, Sparkles, Users, Utensils, X } from "lucide-react";
+import { MessageCircle, BookOpen, Library, LifeBuoy, LogOut, Menu, Newspaper, PanelLeftClose, Send, Shield, Sparkles, Users, Utensils, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { BookCoach } from "@/components/book-coach";
+import { PenLauncher } from "@/components/pen/pen-launcher";
 import { NotificationBell } from "@/components/notification-bell";
 import { claimInvitations } from "@/lib/collaborators";
 import { signOut, useCurrentUser } from "@/lib/use-current-user";
@@ -15,6 +15,7 @@ const nav = [
   { label: "Collaborations", to: "/collaborations" as const, icon: Users },
   { label: "Templates", to: "/templates" as const, icon: BookOpen },
   { label: "My Submissions", to: "/submissions" as const, icon: Send },
+  { label: "Pen", to: "/pen" as const, icon: MessageCircle },
   { label: "The Table", to: "/table" as const, icon: Utensils },
   { label: "Journal", to: "/journal" as const, icon: Newspaper },
 ];
@@ -93,7 +94,7 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
           </header>
           <main className="mx-auto w-full max-w-[1120px] px-5 py-8 md:px-8 lg:px-8 lg:py-10">{children}</main>
         </div>
-        <BookCoach context={coachContext} />
+        <PenLauncher context={coachContext} />
       </div>
     </div>
   );

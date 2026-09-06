@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { PublicShell } from "@/components/site/public-shell";
 import { CatalogBookCard } from "@/components/site/catalog-book-card";
 import { getCurrentIssue, listPublishedIssues } from "@/lib/catalog.functions";
+import issuesHero from "@/assets/issues-hero.jpg";
+import issuesArchive from "@/assets/issues-archive.jpg";
 
 const currentIssueQuery = queryOptions({
   queryKey: ["catalog", "current-issue"],
@@ -53,24 +55,33 @@ function IssuesPage() {
 
   return (
     <PublicShell>
-      <section className="rounded-3xl border border-border/70 bg-paper p-8 md:p-12">
-        <p className="text-sm font-semibold text-inkblue">
-          {current.issue ? current.issue.display_label : "Coming soon"}
-        </p>
-        <h1 className="mt-3 max-w-2xl font-serif text-4xl leading-tight md:text-5xl">
-          The issues
-        </h1>
-        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-          Every month we lay out a new issue of independent titles — read the flyer, meet the
-          authors, buy the book.
-        </p>
-        {current.issue && (
-          <Button asChild size="lg" className="mt-6">
-            <Link to="/table/$issueId" params={{ issueId: current.issue.id }}>
-              Read the {current.issue.display_label} issue
-            </Link>
-          </Button>
-        )}
+      <section className="overflow-hidden rounded-3xl border border-border/70 bg-paper">
+        <div className="grid items-stretch gap-0 md:grid-cols-[1.05fr_0.95fr]">
+          <div className="p-8 md:p-12">
+            <p className="text-sm font-semibold text-inkblue">
+              {current.issue ? current.issue.display_label : "Coming soon"}
+            </p>
+            <h1 className="mt-3 font-serif text-4xl leading-tight md:text-5xl">The issues</h1>
+            <p className="mt-4 text-lg text-muted-foreground">
+              Every month we lay out a new issue of independent titles — read the flyer, meet the
+              authors, buy the book.
+            </p>
+            {current.issue && (
+              <Button asChild size="lg" className="mt-6">
+                <Link to="/table/$issueId" params={{ issueId: current.issue.id }}>
+                  Read the {current.issue.display_label} issue
+                </Link>
+              </Button>
+            )}
+          </div>
+          <img
+            src={issuesHero}
+            alt="A cosy reading nook stacked with independently published paperbacks"
+            width={1600}
+            height={900}
+            className="h-56 w-full object-cover md:h-full"
+          />
+        </div>
       </section>
 
       {spotlight && (
@@ -88,7 +99,15 @@ function IssuesPage() {
       )}
 
       <section className="mt-12">
-        <h2 className="font-serif text-2xl">All issues</h2>
+        <img
+          src={issuesArchive}
+          alt="A wooden crate holding past issues of The Table"
+          loading="lazy"
+          width={1200}
+          height={600}
+          className="h-40 w-full rounded-3xl object-cover md:h-52"
+        />
+        <h2 className="mt-8 font-serif text-2xl">All issues</h2>
         <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {archive.issues.map((issue) => (
             <li key={issue.id}>

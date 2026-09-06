@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { queryOptions, useQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { PublicShell } from "@/components/site/public-shell";
@@ -62,7 +62,39 @@ export const Route = createFileRoute("/table/$issueId")({
   component: IssuePage,
 });
 
+type IssueData = NonNullable<Awaited<ReturnType<typeof getIssueCatalog>>>;
+
 function IssuePage() {
+  const { preview } = Route.useSearch();
+  return preview ? <PreviewIssue /> : <PublicIssue />;
+}
+
+function PublicIssue() {
+  const { issueId } = Route.useParams();
+  const { data } = useSuspenseQuery(issueCatalogQuery(issueId));
+  return <IssueBody data={data as IssueData} />;
+}
+
+function PreviewIssue() {
+  const { issueId } = Route.useParams();
+  // Preview reads drafts through an admin-only server fn, which needs the
+  // browser session's bearer token — so it can only run after hydration.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+  const { data, error } = useQuery({ ...issuePreviewQuery(issueId), enabled: hydrated });
+  if (!data) {
+    return (
+      <PublicShell>
+        <p className="text-muted-foreground">
+          {error ? "This issue could not be loaded." : "Loading the issue…"}
+        </p>
+      </PublicShell>
+    );
+  }
+  return <IssueBody data={data as IssueData} />;
+}
+
+function IssueBody({ data }: { data: IssueData }) {
   const { entries, toggle, clear, isCircled } = useWishlist();
   const { unlocked, unlock } = useWishlistGate();
   const [gateOpen, setGateOpen] = useState(false);
@@ -76,26 +108,6 @@ function IssuePage() {
     }
     toggle(entry);
   };
-
-  const { issueId } = Route.useParams();
-  const { preview } = Route.useSearch();
-  // Preview reads drafts through an admin-only server fn, which needs the
-  // browser session's bearer token — so it can only run after hydration.
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => setHydrated(true), []);
-  const previewResult = useQuery({ ...issuePreviewQuery(issueId), enabled: Boolean(preview) && hydrated });
-  const publicResult = useQuery({ ...issueCatalogQuery(issueId), enabled: !preview });
-  const data = preview ? previewResult.data : publicResult.data;
-
-  if (!data) {
-    return (
-      <PublicShell>
-        <p className="text-muted-foreground">
-          {previewResult.error || publicResult.error ? "This issue could not be loaded." : "Loading the issue…"}
-        </p>
-      </PublicShell>
-    );
-  }
 
   const issue = data.issue;
 
