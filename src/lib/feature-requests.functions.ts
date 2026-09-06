@@ -79,7 +79,13 @@ export const updateFeatureRequest = createServerFn({ method: "POST" })
       );
     }
 
-    await sendStatusEmails(supabaseAdmin, recipients, title, body, link);
+    await sendStatusEmails(supabaseAdmin, recipients, {
+      requestId: data.requestId,
+      requestTitle: before.title,
+      statusLabel: label,
+      publicNote: data.publicNote,
+      link,
+    });
 
     return { ok: true, notified: recipients.length };
   });
@@ -87,13 +93,15 @@ export const updateFeatureRequest = createServerFn({ method: "POST" })
 async function sendStatusEmails(
   admin: Awaited<typeof import("@/integrations/supabase/client.server")>["supabaseAdmin"],
   recipients: string[],
-  title: string,
-  note: string | null,
-  link: string,
+  update: {
+    requestId: string;
+    requestTitle: string;
+    statusLabel: string;
+    publicNote: string | null;
+    link: string;
+  },
 ) {
-  const apiKey = process.env["LOVABLE_API_KEY"];
-  const from = process.env["EMAIL_FROM"];
-  if (!apiKey || !from || recipients.length === 0) return;
+  if (!process.env["LOVABLE_API_KEY"] || recipients.length === 0) return;
 
   const { data: profiles } = await admin
     .from("profiles")
@@ -101,7 +109,7 @@ async function sendStatusEmails(
     .in("user_id", recipients);
   const optedOut = new Set((profiles ?? []).filter((row) => row.feature_email_opt_out).map((row) => row.user_id));
 
-  const { sendLovableEmail } = await import("@lovable.dev/email-js");
+  const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
   const siteUrl = process.env["SITE_URL"] ?? "";
 
   for (const userId of recipients) {
@@ -109,27 +117,19 @@ async function sendStatusEmails(
     const { data: userRow } = await admin.auth.admin.getUserById(userId);
     const email = userRow?.user?.email;
     if (!email) continue;
-    const url = `${siteUrl}${link}`;
     try {
-      await sendLovableEmail(
-        {
-          to: email,
-          from,
-          subject: title,
-          text: `${title}\n\n${note ?? ""}\n\n${url}`.trim(),
-          html: `<p>${escapeHtml(title)}</p>${note ? `<p>${escapeHtml(note)}</p>` : ""}<p><a href="${url}">See the request</a></p>`,
-          purpose: "feature-request-update",
+      await sendTemplateEmail("feature-request-update", email, {
+        templateData: {
+          siteName: "Author's Workshop",
+          requestTitle: update.requestTitle,
+          statusLabel: update.statusLabel,
+          publicNote: update.publicNote,
+          requestUrl: `${siteUrl}${update.link}`,
         },
-        { apiKey },
-      );
+        idempotencyKey: `feature-request-${update.requestId}-${update.statusLabel}-${userId}`,
+      });
     } catch {
       // Delivery problems must never block the status change.
     }
   }
-}
-
-function escapeHtml(value: string) {
-  return value.replace(/[&<>"']/g, (char) =>
-    char === "&" ? "&amp;" : char === "<" ? "&lt;" : char === ">" ? "&gt;" : char === '"' ? "&quot;" : "&#39;",
-  );
 }
