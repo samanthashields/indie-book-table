@@ -37,7 +37,7 @@ export const TICKET_STATUS_LABELS: Record<TicketStatus, string> = {
   resolved: "Resolved",
 };
 
-export type SupportTicket = { id: string; user_id: string; subject: string; status: TicketStatus; created_at: string; updated_at: string };
+export type SupportTicket = { id: string; user_id: string; subject: string; status: TicketStatus; feature_request_id: string | null; created_at: string; updated_at: string };
 export type SupportMessage = { id: string; ticket_id: string; sender_user_id: string; from_admin: boolean; body: string; attachment_path: string | null; created_at: string };
 
 const ARTICLE_FIELDS = "id, slug, title, summary, category_id, body, cover_image_url, status, related_ids, position, published_at, updated_at";
@@ -158,7 +158,7 @@ export function useSupportTickets() {
     queryFn: async (): Promise<SupportTicket[]> => {
       const { data, error } = await supabase
         .from("support_tickets")
-        .select("id, user_id, subject, status, created_at, updated_at")
+        .select("id, user_id, subject, status, feature_request_id, created_at, updated_at")
         .order("updated_at", { ascending: false });
       if (error) throw error;
       return (data ?? []) as SupportTicket[];
@@ -185,13 +185,13 @@ export function useTicketMessages(ticketId: string | null) {
 export function useOpenTicket() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (input: { subject: string; body: string; attachment_path?: string | null }) => {
+    mutationFn: async (input: { subject: string; body: string; attachment_path?: string | null; featureRequestId?: string | null }) => {
       const { data: userData } = await supabase.auth.getUser();
       const userId = userData.user?.id;
       if (!userId) throw new Error("Sign in again to contact support.");
       const { data, error } = await supabase
         .from("support_tickets")
-        .insert({ user_id: userId, subject: input.subject, status: "new" })
+        .insert({ user_id: userId, subject: input.subject, status: "new", feature_request_id: input.featureRequestId ?? null })
         .select("id")
         .single();
       if (error) throw error;
@@ -234,6 +234,21 @@ export function useReplyToTicket() {
           link: "/help/support",
         });
       }
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["help"] }),
+  });
+}
+
+/** Point a support request at the idea that tracks it (admin or the ticket owner). */
+export function useSetTicketFeatureRequest() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: { ticketId: string; featureRequestId: string | null }) => {
+      const { error } = await supabase
+        .from("support_tickets")
+        .update({ feature_request_id: input.featureRequestId })
+        .eq("id", input.ticketId);
+      if (error) throw error;
     },
     onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["help"] }),
   });
