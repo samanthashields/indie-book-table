@@ -726,6 +726,88 @@ export type Database = {
           },
         ]
       }
+      feature_request_votes: {
+        Row: {
+          created_at: string
+          id: string
+          request_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          request_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          request_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feature_request_votes_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "feature_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feature_requests: {
+        Row: {
+          approved: boolean
+          area: string | null
+          body: string
+          created_at: string
+          id: string
+          merged_into: string | null
+          public_note: string | null
+          status: string
+          submitted_by: string
+          title: string
+          updated_at: string
+          vote_count: number
+        }
+        Insert: {
+          approved?: boolean
+          area?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          merged_into?: string | null
+          public_note?: string | null
+          status?: string
+          submitted_by: string
+          title: string
+          updated_at?: string
+          vote_count?: number
+        }
+        Update: {
+          approved?: boolean
+          area?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          merged_into?: string | null
+          public_note?: string | null
+          status?: string
+          submitted_by?: string
+          title?: string
+          updated_at?: string
+          vote_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feature_requests_merged_into_fkey"
+            columns: ["merged_into"]
+            isOneToOne: false
+            referencedRelation: "feature_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       help_articles: {
         Row: {
           body: string
@@ -1089,6 +1171,7 @@ export type Database = {
           bio: string | null
           created_at: string
           display_name: string | null
+          feature_email_opt_out: boolean
           id: string
           pen_name: string | null
           plan: string
@@ -1101,6 +1184,7 @@ export type Database = {
           bio?: string | null
           created_at?: string
           display_name?: string | null
+          feature_email_opt_out?: boolean
           id?: string
           pen_name?: string | null
           plan?: string
@@ -1113,6 +1197,7 @@ export type Database = {
           bio?: string | null
           created_at?: string
           display_name?: string | null
+          feature_email_opt_out?: boolean
           id?: string
           pen_name?: string | null
           plan?: string
