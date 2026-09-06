@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { CalendarDays, Check, FileText, HardDrive, Link2, MessageSquare, Paperclip, Pencil, UserRound } from "lucide-react";
 import { toast } from "sonner";
 import { StatusPill } from "@/components/status-pill";
+import { MilestoneChecklistPanel } from "@/components/milestone-checklist-panel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -252,6 +253,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
               onAttach={(path, name) => saveNote.mutate({ body: `Attached ${name}`, path })}
             />
           </section>
+          <MilestoneChecklistPanel bookId={bookId} milestoneId={milestone.id} />
           <section>
             <h3 className="font-serif text-2xl font-semibold">Notes and attachments</h3>
             {(notes.data ?? []).length > 0 && (
