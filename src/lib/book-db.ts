@@ -34,6 +34,7 @@ export type BookRow = {
   edition: string | null;
   cover_url: string | null;
   status: string;
+  shelf_status: string;
   has_cycle: boolean;
   template_id: string | null;
   metadata: Record<string, unknown>;
@@ -79,6 +80,7 @@ export type BookSummary = {
   hasCycle: boolean;
   genre: string;
   status: string;
+  shelfStatus: string;
   progress: number;
   nextAction: string;
   target: string;
