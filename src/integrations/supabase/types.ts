@@ -72,6 +72,7 @@ export type Database = {
           price: string | null
           publishing_path: string | null
           series: string | null
+          shelf_status: string
           start_date: string | null
           status: string
           subtitle: string | null
@@ -103,6 +104,7 @@ export type Database = {
           price?: string | null
           publishing_path?: string | null
           series?: string | null
+          shelf_status?: string
           start_date?: string | null
           status?: string
           subtitle?: string | null
@@ -134,6 +136,7 @@ export type Database = {
           price?: string | null
           publishing_path?: string | null
           series?: string | null
+          shelf_status?: string
           start_date?: string | null
           status?: string
           subtitle?: string | null
