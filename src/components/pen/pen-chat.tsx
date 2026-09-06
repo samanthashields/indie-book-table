@@ -16,8 +16,11 @@ import {
   PromptInputFooter,
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
+import { PenQuickActions } from "@/components/pen/pen-quick-actions";
+import { PenReferenceChips, parsePenMessage } from "@/components/pen/pen-references";
 import { penAuthHeaders } from "@/lib/pen-db";
 import penMark from "@/assets/pen-mark.png";
+
 
 export const PEN_OPENERS: Record<string, { greeting: string; suggestions: string[] }> = {
   overview: {
