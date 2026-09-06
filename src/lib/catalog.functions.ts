@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export type {
   CatalogBook,
@@ -24,6 +25,22 @@ export const getIssueCatalog = createServerFn({ method: "GET" })
   .handler(async ({ data }) => {
     const { loadIssueCatalog } = await import("./catalog.server");
     return loadIssueCatalog(data.issueId);
+  });
+
+export const getIssuePreview = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { issueId: string }) =>
+    z.object({ issueId: z.string().uuid() }).parse(data),
+  )
+  .handler(async ({ context, data }) => {
+    const { data: isAdmin, error } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (error) throw new Error(error.message);
+    if (!isAdmin) throw new Error("Editors only");
+    const { loadIssueCatalog } = await import("./catalog.server");
+    return loadIssueCatalog(data.issueId, { includeDrafts: true });
   });
 
 export const listPublishedIssues = createServerFn({ method: "GET" }).handler(async () => {
