@@ -26,7 +26,7 @@ export const Route = createFileRoute("/_authenticated/")({
   component: Index,
 });
 
-function BookMenu({ book, submission, onDelete }: { book: BookSummary; submission?: BookSubmission; onDelete: (id: string) => void }) {
+function BookMenu({ book, submission, onDelete }: { book: BookSummary; submission?: BookSubmission | undefined; onDelete: (id: string) => void }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -50,7 +50,7 @@ function BookMenu({ book, submission, onDelete }: { book: BookSummary; submissio
   );
 }
 
-function BookRow({ book, submission, onDelete }: { book: BookSummary; submission?: BookSubmission; onDelete: (id: string) => void }) {
+function BookRow({ book, submission, onDelete }: { book: BookSummary; submission?: BookSubmission | undefined; onDelete: (id: string) => void }) {
   const to = book.hasCycle ? "/books/$bookId" : "/books/$bookId/details";
   return (
     <div className="group grid gap-5 rounded-2xl border border-border bg-card px-5 py-5 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md sm:grid-cols-[88px_1fr_auto_auto] sm:items-center">
