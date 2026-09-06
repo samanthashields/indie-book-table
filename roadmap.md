@@ -52,3 +52,23 @@
 - [x] Flip-book flyer reader for The Table (adapted from the showcase)
 - [x] Circling books, tear-off list (copy/print) and the Mission page
 - [ ] Phase 5: One author identity + publish → listing → Table handoff
+
+## Workshop polish (approved plan)
+- [x] Templates index/preview/editor routing
+- [x] Book status dropdown (add book + cycle details)
+- [x] Back button on every page
+- [x] Sidebar renamed to Author's Workshop
+- [x] My Books grid view
+- [x] Admin submissions: select to feature in issue
+- [x] Site words as its own admin section
+- [x] Journal admin: all posts first, post editor page, image upload, formatting
+- [ ] Admin People: edit details + reset password
+- [ ] Magazine-style flyer with pinned corner turn
+
+## New requests (Sep 6)
+- [ ] Homepage main heading renamed to Author's Workshop
+- [ ] Connect Google Drive when adding a file to a milestone
+- [ ] Milestone drawer opens without darkening the background
+- [ ] Start Date in book cycle details
+- [ ] End Book Cycle CTA with conditional questions, shown in Reflections
+- [ ] My Cycles page under My Books grouped by Not started / In progress / Complete
