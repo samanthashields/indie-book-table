@@ -3,7 +3,15 @@ import riverCover from "@/assets/river-map-cover.jpg";
 import type { RequirementType } from "@/lib/book-data";
 
 export type TemplateMilestone = { name: string; requirement: RequirementType; note: string };
-export type TemplatePhase = { id: string; name: string; mode: "Loop" | "Sprint" | "Launch window"; summary: string; milestones: TemplateMilestone[] };
+export type TemplatePhase = {
+  id: string;
+  name: string;
+  mode: "Loop" | "Sprint" | "Launch window";
+  summary: string;
+  milestones: TemplateMilestone[];
+  /** Optional share of the whole cycle, in percent. Left out, the workshop spaces the phase automatically. */
+  ratio?: number | undefined;
+};
 
 export type BookTemplate = {
   id: string;

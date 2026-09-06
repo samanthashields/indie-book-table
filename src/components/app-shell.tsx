@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Library, LogOut, Menu, Newspaper, PanelLeftClose, Send, Shield, Sparkles, Users, Utensils, X } from "lucide-react";
+import { BookOpen, Library, LifeBuoy, LogOut, Menu, Newspaper, PanelLeftClose, Send, Shield, Sparkles, Users, Utensils, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -67,6 +67,7 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
             const active = to === "/" ? pathname === "/" : pathname.startsWith(to);
             return <Link key={label} to={to} onClick={() => setNavOpen(false)} className={cn("flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition-colors", active ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-muted-foreground hover:bg-card/70 hover:text-sidebar-accent-foreground")}><Icon className="size-5 shrink-0" />{!collapsed && label}</Link>;
           })}
+          <Link to="/help" onClick={() => setNavOpen(false)} className={cn("flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition-colors", pathname.startsWith("/help") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-muted-foreground hover:bg-card/70 hover:text-sidebar-accent-foreground")}><LifeBuoy className="size-5 shrink-0" />{!collapsed && "Help Center"}</Link>
           {isAdmin && (
             <Link to="/admin" onClick={() => setNavOpen(false)} className={cn("flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition-colors", pathname.startsWith("/admin") ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-muted-foreground hover:bg-card/70 hover:text-sidebar-accent-foreground")}><Shield className="size-5 shrink-0" />{!collapsed && "Admin"}</Link>
           )}
