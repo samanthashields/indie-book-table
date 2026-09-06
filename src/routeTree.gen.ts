@@ -39,6 +39,7 @@ import { Route as TableIssueIdFlyerRouteImport } from './routes/table.$issueId_.
 import { Route as TableAuthorsAuthorIdRouteImport } from './routes/table.authors.$authorId'
 import { Route as TableBooksBookIdRouteImport } from './routes/table.books.$bookId'
 import { Route as AuthenticatedAdminJournalIndexRouteImport } from './routes/_authenticated/admin.journal.index'
+import { Route as AuthenticatedAdminJournalPostIdRouteImport } from './routes/_authenticated/admin.journal.$postId'
 import { Route as AuthenticatedBooksBookIdIndexRouteImport } from './routes/_authenticated/books.$bookId.index'
 import { Route as AuthenticatedBooksBookIdDetailsRouteImport } from './routes/_authenticated/books.$bookId.details'
 import { Route as AuthenticatedBooksBookIdReflectionRouteImport } from './routes/_authenticated/books.$bookId.reflection'
@@ -207,6 +208,12 @@ const AuthenticatedAdminJournalIndexRoute =
     path: '/journal/',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminJournalPostIdRoute =
+  AuthenticatedAdminJournalPostIdRouteImport.update({
+    id: '/journal/$postId',
+    path: '/journal/$postId',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedBooksBookIdIndexRoute =
   AuthenticatedBooksBookIdIndexRouteImport.update({
     id: '/',
@@ -273,6 +280,7 @@ export interface FileRoutesByFullPath {
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/templates/': typeof AuthenticatedTemplatesIndexRoute
+  '/admin/journal/$postId': typeof AuthenticatedAdminJournalPostIdRoute
   '/books/$bookId/details': typeof AuthenticatedBooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof AuthenticatedBooksBookIdReflectionRoute
   '/books/$bookId/team': typeof AuthenticatedBooksBookIdTeamRoute
@@ -308,6 +316,7 @@ export interface FileRoutesByTo {
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/templates': typeof AuthenticatedTemplatesIndexRoute
+  '/admin/journal/$postId': typeof AuthenticatedAdminJournalPostIdRoute
   '/books/$bookId/details': typeof AuthenticatedBooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof AuthenticatedBooksBookIdReflectionRoute
   '/books/$bookId/team': typeof AuthenticatedBooksBookIdTeamRoute
@@ -347,6 +356,7 @@ export interface FileRoutesById {
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/templates/': typeof AuthenticatedTemplatesIndexRoute
+  '/_authenticated/admin/journal/$postId': typeof AuthenticatedAdminJournalPostIdRoute
   '/_authenticated/books/$bookId/details': typeof AuthenticatedBooksBookIdDetailsRoute
   '/_authenticated/books/$bookId/reflection': typeof AuthenticatedBooksBookIdReflectionRoute
   '/_authenticated/books/$bookId/team': typeof AuthenticatedBooksBookIdTeamRoute
@@ -386,6 +396,7 @@ export interface FileRouteTypes {
     | '/table/books/$bookId'
     | '/admin/'
     | '/templates/'
+    | '/admin/journal/$postId'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
     | '/books/$bookId/team'
@@ -421,6 +432,7 @@ export interface FileRouteTypes {
     | '/table/books/$bookId'
     | '/admin'
     | '/templates'
+    | '/admin/journal/$postId'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
     | '/books/$bookId/team'
@@ -459,6 +471,7 @@ export interface FileRouteTypes {
     | '/table/books/$bookId'
     | '/_authenticated/admin/'
     | '/_authenticated/templates/'
+    | '/_authenticated/admin/journal/$postId'
     | '/_authenticated/books/$bookId/details'
     | '/_authenticated/books/$bookId/reflection'
     | '/_authenticated/books/$bookId/team'
@@ -695,6 +708,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminJournalIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/journal/$postId': {
+      id: '/_authenticated/admin/journal/$postId'
+      path: '/journal/$postId'
+      fullPath: '/admin/journal/$postId'
+      preLoaderRoute: typeof AuthenticatedAdminJournalPostIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/books/$bookId/': {
       id: '/_authenticated/books/$bookId/'
       path: '/'
@@ -748,6 +768,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminSubmissionsRoute: typeof AuthenticatedAdminSubmissionsRoute
   AuthenticatedAdminTemplatesRoute: typeof AuthenticatedAdminTemplatesRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminJournalPostIdRoute: typeof AuthenticatedAdminJournalPostIdRoute
   AuthenticatedAdminJournalIndexRoute: typeof AuthenticatedAdminJournalIndexRoute
 }
 
@@ -759,6 +780,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminSubmissionsRoute: AuthenticatedAdminSubmissionsRoute,
   AuthenticatedAdminTemplatesRoute: AuthenticatedAdminTemplatesRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminJournalPostIdRoute: AuthenticatedAdminJournalPostIdRoute,
   AuthenticatedAdminJournalIndexRoute: AuthenticatedAdminJournalIndexRoute,
 }
 
