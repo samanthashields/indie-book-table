@@ -162,7 +162,7 @@ function TableHomePage() {
             {value("table.home.submit.body")}
           </p>
           <Button asChild className="mt-5">
-            <Link to="/submit">Submit a book</Link>
+            <Link to="/submissions">Submit a book</Link>
           </Button>
         </div>
         <div className="rounded-3xl border border-border/70 bg-card p-8">
