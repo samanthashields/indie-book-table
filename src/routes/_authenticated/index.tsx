@@ -36,7 +36,7 @@ function BookMenu({ book, onDelete }: { book: BookSummary; onDelete: (id: string
         )}
         <DropdownMenuItem asChild><Link to="/books/$bookId/details" params={{ bookId: book.id }}><SquarePen />Edit book details</Link></DropdownMenuItem>
         <DropdownMenuItem asChild><Link to="/submit" search={{ bookId: book.id }}><Send />Submit to The Table</Link></DropdownMenuItem>
-        <DropdownMenuItem variant="destructive" onSelect={() => onDelete(book.id)}><Trash2 />Delete this book</DropdownMenuItem>
+        <DropdownMenuItem className="text-destructive focus:text-destructive" onSelect={() => onDelete(book.id)}><Trash2 />Delete this book</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
