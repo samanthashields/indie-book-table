@@ -6,6 +6,7 @@ import { useCurrentUser } from "@/lib/use-current-user";
 
 const links = [
   { label: "The Table", to: "/table" as const },
+  { label: "Issues", to: "/issues" as const },
   { label: "Journal", to: "/journal" as const },
   { label: "Mission", to: "/mission" as const },
 ];
