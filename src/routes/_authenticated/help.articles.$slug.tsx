@@ -34,7 +34,7 @@ function HelpArticlePage() {
 
   return (
     <AppShell>
-      <PageHeading title={article.title} description={article.summary ?? undefined} backLabel="Help Center" />
+      <PageHeading title={article.title} {...(article.summary ? { description: article.summary } : {})} backLabel="Help Center" />
       {category && (
         <p className="-mt-4 mb-6 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
           <Link to="/help/categories/$categorySlug" params={{ categorySlug: category.slug }} className="hover:text-foreground">{category.name}</Link>
@@ -42,7 +42,7 @@ function HelpArticlePage() {
       )}
 
       <article className="max-w-3xl rounded-2xl border border-border bg-card p-7 shadow-xs">
-        <MarkdownText text={article.body} />
+        <MarkdownText body={article.body} />
       </article>
 
       {related.length > 0 && (

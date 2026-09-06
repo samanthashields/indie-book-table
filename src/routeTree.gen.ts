@@ -36,6 +36,7 @@ import { Route as AuthenticatedBooksAddRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedBooksNewRouteImport } from './routes/_authenticated/books.new'
 import { Route as AuthenticatedHelpIndexRouteImport } from './routes/_authenticated/help.index'
 import { Route as AuthenticatedHelpReleasesRouteImport } from './routes/_authenticated/help.releases'
+import { Route as AuthenticatedHelpSupportRouteImport } from './routes/_authenticated/help.support'
 import { Route as AuthenticatedTemplatesIndexRouteImport } from './routes/_authenticated/templates.index'
 import { Route as AuthenticatedTemplatesTemplateIdRouteImport } from './routes/_authenticated/templates.$templateId'
 import { Route as TableIssueIdFlyerRouteImport } from './routes/table.$issueId_.flyer'
@@ -196,6 +197,12 @@ const AuthenticatedHelpReleasesRoute =
     path: '/help/releases',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedHelpSupportRoute =
+  AuthenticatedHelpSupportRouteImport.update({
+    id: '/help/support',
+    path: '/help/support',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTemplatesIndexRoute =
   AuthenticatedTemplatesIndexRouteImport.update({
     id: '/templates/',
@@ -309,6 +316,7 @@ export interface FileRoutesByFullPath {
   '/books/add': typeof AuthenticatedBooksAddRoute
   '/books/new': typeof AuthenticatedBooksNewRoute
   '/help/releases': typeof AuthenticatedHelpReleasesRoute
+  '/help/support': typeof AuthenticatedHelpSupportRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
   '/table/$issueId/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
@@ -350,6 +358,7 @@ export interface FileRoutesByTo {
   '/books/add': typeof AuthenticatedBooksAddRoute
   '/books/new': typeof AuthenticatedBooksNewRoute
   '/help/releases': typeof AuthenticatedHelpReleasesRoute
+  '/help/support': typeof AuthenticatedHelpSupportRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
   '/table/$issueId/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
@@ -395,6 +404,7 @@ export interface FileRoutesById {
   '/_authenticated/books/add': typeof AuthenticatedBooksAddRoute
   '/_authenticated/books/new': typeof AuthenticatedBooksNewRoute
   '/_authenticated/help/releases': typeof AuthenticatedHelpReleasesRoute
+  '/_authenticated/help/support': typeof AuthenticatedHelpSupportRoute
   '/_authenticated/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
   '/table/$issueId_/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
@@ -440,6 +450,7 @@ export interface FileRouteTypes {
     | '/books/add'
     | '/books/new'
     | '/help/releases'
+    | '/help/support'
     | '/templates/$templateId'
     | '/table/$issueId/flyer'
     | '/table/authors/$authorId'
@@ -481,6 +492,7 @@ export interface FileRouteTypes {
     | '/books/add'
     | '/books/new'
     | '/help/releases'
+    | '/help/support'
     | '/templates/$templateId'
     | '/table/$issueId/flyer'
     | '/table/authors/$authorId'
@@ -525,6 +537,7 @@ export interface FileRouteTypes {
     | '/_authenticated/books/add'
     | '/_authenticated/books/new'
     | '/_authenticated/help/releases'
+    | '/_authenticated/help/support'
     | '/_authenticated/templates/$templateId'
     | '/table/$issueId_/flyer'
     | '/table/authors/$authorId'
@@ -750,6 +763,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHelpReleasesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/help/support': {
+      id: '/_authenticated/help/support'
+      path: '/help/support'
+      fullPath: '/help/support'
+      preLoaderRoute: typeof AuthenticatedHelpSupportRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/templates/': {
       id: '/_authenticated/templates/'
       path: '/templates'
@@ -920,6 +940,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBooksAddRoute: typeof AuthenticatedBooksAddRoute
   AuthenticatedBooksNewRoute: typeof AuthenticatedBooksNewRoute
   AuthenticatedHelpReleasesRoute: typeof AuthenticatedHelpReleasesRoute
+  AuthenticatedHelpSupportRoute: typeof AuthenticatedHelpSupportRoute
   AuthenticatedTemplatesTemplateIdRoute: typeof AuthenticatedTemplatesTemplateIdRoute
   AuthenticatedHelpIndexRoute: typeof AuthenticatedHelpIndexRoute
   AuthenticatedTemplatesIndexRoute: typeof AuthenticatedTemplatesIndexRoute
@@ -939,6 +960,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBooksAddRoute: AuthenticatedBooksAddRoute,
   AuthenticatedBooksNewRoute: AuthenticatedBooksNewRoute,
   AuthenticatedHelpReleasesRoute: AuthenticatedHelpReleasesRoute,
+  AuthenticatedHelpSupportRoute: AuthenticatedHelpSupportRoute,
   AuthenticatedTemplatesTemplateIdRoute: AuthenticatedTemplatesTemplateIdRoute,
   AuthenticatedHelpIndexRoute: AuthenticatedHelpIndexRoute,
   AuthenticatedTemplatesIndexRoute: AuthenticatedTemplatesIndexRoute,

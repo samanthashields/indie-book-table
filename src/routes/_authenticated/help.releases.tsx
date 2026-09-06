@@ -36,7 +36,7 @@ function ReleaseNotesPage() {
               <span className="text-xs text-muted-foreground">{new Date(note.released_on).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</span>
             </div>
             <h2 className="mt-2 font-serif text-2xl font-normal">{note.title}</h2>
-            <div className="mt-3"><MarkdownText text={note.body} /></div>
+            <div className="mt-3"><MarkdownText body={note.body} /></div>
           </li>
         ))}
         {!releases.isLoading && notes.length === 0 && (

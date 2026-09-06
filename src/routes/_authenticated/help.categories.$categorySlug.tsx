@@ -31,7 +31,7 @@ function HelpCategoryPage() {
 
   return (
     <AppShell>
-      <PageHeading title={category.name} description={category.description ?? undefined} backLabel="Help Center" />
+      <PageHeading title={category.name} {...(category.description ? { description: category.description } : {})} backLabel="Help Center" />
       <ul className="max-w-3xl space-y-3">
         {list.map((article) => (
           <li key={article.id}>
