@@ -25,7 +25,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
             <span className="grid size-9 place-items-center rounded-xl bg-cocoa text-paper">
               <BookOpen className="size-5" />
             </span>
-            <span className="font-serif text-xl">Book Cycles</span>
+            <span className="font-serif text-xl">{siteTitle}</span>
           </Link>
           <nav className="ml-auto flex items-center gap-1 text-sm font-semibold">
             {links.map((link) => (
