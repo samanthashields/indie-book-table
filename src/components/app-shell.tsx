@@ -57,7 +57,7 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
         <div className="mb-8 flex h-11 items-center justify-between">
           <Link to="/" className="flex items-center gap-3 overflow-hidden">
             <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground"><BookOpen className="size-5" /></span>
-            {!collapsed && <span className="font-serif text-xl font-normal">Book Cycles</span>}
+            {!collapsed && <span className="font-serif text-xl font-normal">Author’s Workshop</span>}
           </Link>
           <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setNavOpen(false)} aria-label="Close navigation"><X /></Button>
         </div>
@@ -86,7 +86,7 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
         <div className="min-w-0 flex-1">
           <header className="flex h-16 items-center justify-between border-b border-border/60 bg-card/80 px-4 backdrop-blur lg:hidden">
             <Button variant="ghost" size="icon" onClick={() => setNavOpen(true)} aria-label="Open navigation"><Menu /></Button>
-            <span className="font-serif text-lg font-semibold">Book Cycles</span>
+            <span className="font-serif text-lg font-semibold">Author’s Workshop</span>
             <div className="flex items-center gap-1"><NotificationBell /><Button variant="ghost" size="icon" onClick={() => void handleSignOut()} aria-label="Sign out"><LogOut /></Button></div>
           </header>
           <main className="mx-auto w-full max-w-[1120px] px-5 py-8 md:px-8 lg:px-8 lg:py-10">{children}</main>
