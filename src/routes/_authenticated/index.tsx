@@ -144,7 +144,7 @@ function Index() {
             {cycles.length === 0 ? (
               <p className="rounded-2xl border border-dashed border-border bg-paper p-6 text-sm text-muted-foreground">No cycles running yet. Open a book below and choose “Create book cycle” when you’re ready.</p>
             ) : (
-              <div className="space-y-3">{cycles.map((book) => <BookRow key={book.id} book={book} onDelete={remove} />)}</div>
+              <div className="space-y-3">{cycles.map((book) => <BookRow key={book.id} book={book} submission={submissionByBook.get(book.id)} onDelete={remove} />)}</div>
             )}
           </section>
 
@@ -153,7 +153,7 @@ function Index() {
             {ideas.length === 0 ? (
               <p className="rounded-2xl border border-dashed border-border bg-paper p-6 text-sm text-muted-foreground">Nothing waiting in the wings. Add a book to keep an idea safe until it’s ready.</p>
             ) : (
-              <div className="space-y-3">{ideas.map((book) => <BookRow key={book.id} book={book} onDelete={remove} />)}</div>
+              <div className="space-y-3">{ideas.map((book) => <BookRow key={book.id} book={book} submission={submissionByBook.get(book.id)} onDelete={remove} />)}</div>
             )}
           </section>
         </div>
