@@ -9,6 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useBooks, useDeleteBook, type BookSummary } from "@/lib/book-db";
+import { useMySubmissions } from "@/lib/catalog-submit";
+import { SUBMISSION_STATUS_LABELS } from "@/lib/submission-schema";
+
+type BookSubmission = { id: string; status: string };
 
 export const Route = createFileRoute("/_authenticated/")({
   head: () => ({ meta: [
