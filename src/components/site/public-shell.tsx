@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { BookOpen } from "lucide-react";
 import type { ReactNode } from "react";
 
