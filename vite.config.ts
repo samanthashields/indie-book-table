@@ -25,13 +25,20 @@ export default defineConfig({
   },
   vite: {
     resolve: {
-      alias: {
+      alias: [
         // Pin React Email's entities dependency to the hoisted v4.5.0 copy —
-        // nested v7 copies removed these deep paths and break SSR.
-        "entities/lib/decode.js": path.resolve(__dirname, "node_modules/entities/lib/decode.js"),
-        "entities/lib/encode.js": path.resolve(__dirname, "node_modules/entities/lib/encode.js"),
-        entities: path.resolve(__dirname, "node_modules/entities"),
-      },
+        // nested v7 copies removed these deep paths and break SSR. Match exact
+        // specifiers only, so parse5's "entities/decode" keeps resolving normally.
+        {
+          find: /^entities\/lib\/decode\.js$/,
+          replacement: path.resolve(__dirname, "node_modules/entities/lib/decode.js"),
+        },
+        {
+          find: /^entities\/lib\/encode\.js$/,
+          replacement: path.resolve(__dirname, "node_modules/entities/lib/encode.js"),
+        },
+        { find: /^entities$/, replacement: path.resolve(__dirname, "node_modules/entities") },
+      ],
     },
   },
 });
