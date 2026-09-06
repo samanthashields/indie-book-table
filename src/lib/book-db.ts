@@ -104,17 +104,19 @@ const milestoneToUi = (row: MilestoneRow): Milestone => ({
   ...(row.due_date ? { dueIso: row.due_date } : {}),
 });
 
-const summarize = (book: BookRow, milestones: MilestoneRow[], authorName: string): BookSummary => {
+const summarize = (book: BookRow, milestones: MilestoneRow[], authorName: string, currentUserId: string | undefined): BookSummary => {
   const sorted = [...milestones].sort((a, b) => a.position - b.position);
   const done = sorted.filter((m) => m.status === "Complete").length;
   const progress = sorted.length ? Math.round((done / sorted.length) * 100) : 0;
   const next = sorted.find((m) => m.status === "In progress") ?? sorted.find((m) => m.status !== "Complete");
-  const activePhase = next?.phase_id;
   return {
     id: book.id,
     title: book.title,
     ...(book.subtitle ? { subtitle: book.subtitle } : {}),
     author: book.pen_name || authorName,
+    authorId: book.author_id,
+    isMine: book.author_id === currentUserId,
+    hasCycle: Boolean(book.has_cycle),
     genre: book.genre ?? "Uncategorised",
     status: book.status === "active" ? "In progress" : book.status,
     progress,
