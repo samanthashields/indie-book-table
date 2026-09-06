@@ -1,6 +1,8 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
-import { useEffect, useMemo, useRef, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useRouterState } from "@tanstack/react-router";
+import { ListChecks } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -19,6 +21,7 @@ import { Shimmer } from "@/components/ai-elements/shimmer";
 import { PenQuickActions } from "@/components/pen/pen-quick-actions";
 import { PenReferenceChips, parsePenMessage } from "@/components/pen/pen-references";
 import { penAuthHeaders } from "@/lib/pen-db";
+import { useAddChecklistItems } from "@/lib/milestone-checklist";
 import penMark from "@/assets/pen-mark.png";
 
 
@@ -78,6 +81,52 @@ export const PEN_OPENERS: Record<string, { greeting: string; suggestions: string
   },
 };
 
+/** Reads the book and milestone out of the page the author is standing on. */
+function useMilestoneTarget() {
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const match = /^\/books\/([^/]+)\/milestones\/([^/]+)/.exec(pathname);
+  if (!match?.[1] || !match[2]) return null;
+  return { bookId: match[1], milestoneId: match[2] };
+}
+
+/** Turns a reply's numbered steps into checklist items on the open milestone. */
+function SaveStepsButton({
+  steps,
+  target,
+}: {
+  steps: string[];
+  target: { bookId: string; milestoneId: string };
+}) {
+  const add = useAddChecklistItems();
+  const [saved, setSaved] = useState(false);
+
+  const save = async () => {
+    try {
+      await add.mutateAsync({
+        milestoneId: target.milestoneId,
+        bookId: target.bookId,
+        items: steps.slice(0, 12).map((label) => ({ label })),
+      });
+      setSaved(true);
+      toast.success("Saved to this milestone's checklist");
+    } catch {
+      toast.error("Couldn't save those steps.");
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={() => void save()}
+      disabled={add.isPending || saved}
+      className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-leaf/50 bg-leaf/20 px-3 py-1.5 text-xs font-semibold transition-colors hover:bg-leaf/35 disabled:opacity-60"
+    >
+      <ListChecks className="size-3.5" />
+      {saved ? "Saved to your checklist" : `Save ${steps.length} steps to this milestone`}
+    </button>
+  );
+}
+
 export function penOpener(section: string | undefined) {
   return PEN_OPENERS[section ?? "overview"] ?? PEN_OPENERS["overview"]!;
 }
@@ -102,6 +151,7 @@ export function PenChat({
   className?: string | undefined;
 }) {
   const opener = penOpener(section);
+  const milestoneTarget = useMilestoneTarget();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const transport = useMemo(
@@ -170,7 +220,7 @@ export function PenChat({
             const parsed =
               message.role === "assistant"
                 ? parsePenMessage(raw)
-                : { text: raw, references: [] as never[] };
+                : { text: raw, references: [], followUps: [], steps: [] };
 
             return (
               <Message key={message.id} from={message.role}>
@@ -183,7 +233,26 @@ export function PenChat({
                 >
                   <MessageResponse>{parsed.text}</MessageResponse>
                   {message.role === "assistant" && (
-                    <PenReferenceChips references={parsed.references} />
+                    <>
+                      <PenReferenceChips references={parsed.references} />
+                      {milestoneTarget && parsed.steps.length > 1 && !busy && (
+                        <SaveStepsButton steps={parsed.steps} target={milestoneTarget} />
+                      )}
+                      {parsed.followUps.length > 0 && !busy && (
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {parsed.followUps.map((question) => (
+                            <button
+                              key={question}
+                              type="button"
+                              onClick={() => send(question)}
+                              className="rounded-full border border-amber/60 bg-amber/20 px-3 py-1.5 text-left text-xs font-semibold transition-colors hover:bg-amber/35"
+                            >
+                              {question}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </>
                   )}
                 </MessageContent>
               </Message>

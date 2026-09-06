@@ -7,12 +7,21 @@ export type PenReference =
   | { kind: "article"; slug: string; label: string };
 
 const TOKEN = /\[\[ref\|([a-z]+)\|([^|\]]*)\|([^|\]]*)\|([^\]]*)\]\]/g;
+const ASK = /\[\[ask\|([^\]]*)\]\]/g;
+const STEP_LINE = /^\s*(?:[-*\u2022]|\d+[.)])\s+(.*\S)\s*$/;
 
 /**
- * Splits an assistant reply into the text the author reads and the references
- * Pen leaned on. Tokens still mid-stream are hidden rather than shown raw.
+ * Splits an assistant reply into the text the author reads, the references Pen
+ * leaned on, the follow-up questions it offered, and any numbered next steps
+ * that can become a milestone checklist. Tokens still mid-stream are hidden
+ * rather than shown raw.
  */
-export function parsePenMessage(raw: string): { text: string; references: PenReference[] } {
+export function parsePenMessage(raw: string): {
+  text: string;
+  references: PenReference[];
+  followUps: string[];
+  steps: string[];
+} {
   const references: PenReference[] = [];
 
   for (const match of raw.matchAll(TOKEN)) {
@@ -28,11 +37,25 @@ export function parsePenMessage(raw: string): { text: string; references: PenRef
     }
   }
 
-  let text = raw.replace(TOKEN, "");
-  // Drop a trailing "References:" heading, plus any half-streamed token.
-  text = text.replace(/\[\[ref[^\]]*$/i, "");
-  text = text.replace(/\n?\s*(?:\*\*)?references(?:\*\*)?\s*:?\s*$/i, "");
-  return { text: text.trimEnd(), references };
+  const followUps: string[] = [];
+  for (const match of raw.matchAll(ASK)) {
+    const question = (match[1] ?? "").trim();
+    if (question) followUps.push(question);
+  }
+
+  let text = raw.replace(TOKEN, "").replace(ASK, "");
+  // Drop trailing "References:" / "Follow-ups:" headings, plus any half-streamed token.
+  text = text.replace(/\[\[(?:ref|ask)[^\]]*$/i, "");
+  text = text.replace(/\n?\s*(?:\*\*)?(?:references|follow-?ups)(?:\*\*)?\s*:?\s*$/i, "");
+  text = text.replace(/\n?\s*(?:\*\*)?(?:references|follow-?ups)(?:\*\*)?\s*:?\s*$/i, "");
+  text = text.trimEnd();
+
+  const steps = text
+    .split("\n")
+    .map((line) => STEP_LINE.exec(line)?.[1]?.replace(/\*\*/g, "").trim() ?? "")
+    .filter((line) => line.length > 2);
+
+  return { text, references, followUps: followUps.slice(0, 3), steps };
 }
 
 export function PenReferenceChips({ references }: { references: PenReference[] }) {

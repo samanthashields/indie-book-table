@@ -46,6 +46,7 @@ import { Route as AuthenticatedHelpReleasesRouteImport } from './routes/_authent
 import { Route as AuthenticatedHelpSupportRouteImport } from './routes/_authenticated/help.support'
 import { Route as AuthenticatedPenIndexRouteImport } from './routes/_authenticated/pen.index'
 import { Route as AuthenticatedPenThreadIdRouteImport } from './routes/_authenticated/pen.$threadId'
+import { Route as AuthenticatedPenButtonsRouteImport } from './routes/_authenticated/pen.buttons'
 import { Route as AuthenticatedTemplatesIndexRouteImport } from './routes/_authenticated/templates.index'
 import { Route as AuthenticatedTemplatesTemplateIdRouteImport } from './routes/_authenticated/templates.$templateId'
 import { Route as TableIssueIdFlyerRouteImport } from './routes/table.$issueId_.flyer'
@@ -270,6 +271,11 @@ const AuthenticatedPenThreadIdRoute =
     path: '/pen/$threadId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPenButtonsRoute = AuthenticatedPenButtonsRouteImport.update({
+  id: '/pen/buttons',
+  path: '/pen/buttons',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTemplatesIndexRoute =
   AuthenticatedTemplatesIndexRouteImport.update({
     id: '/templates/',
@@ -432,6 +438,7 @@ export interface FileRoutesByFullPath {
   '/help/releases': typeof AuthenticatedHelpReleasesRoute
   '/help/support': typeof AuthenticatedHelpSupportRoute
   '/pen/$threadId': typeof AuthenticatedPenThreadIdRoute
+  '/pen/buttons': typeof AuthenticatedPenButtonsRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
   '/table/$issueId/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
@@ -490,6 +497,7 @@ export interface FileRoutesByTo {
   '/help/releases': typeof AuthenticatedHelpReleasesRoute
   '/help/support': typeof AuthenticatedHelpSupportRoute
   '/pen/$threadId': typeof AuthenticatedPenThreadIdRoute
+  '/pen/buttons': typeof AuthenticatedPenButtonsRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
   '/table/$issueId/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
@@ -552,6 +560,7 @@ export interface FileRoutesById {
   '/_authenticated/help/releases': typeof AuthenticatedHelpReleasesRoute
   '/_authenticated/help/support': typeof AuthenticatedHelpSupportRoute
   '/_authenticated/pen/$threadId': typeof AuthenticatedPenThreadIdRoute
+  '/_authenticated/pen/buttons': typeof AuthenticatedPenButtonsRoute
   '/_authenticated/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
   '/table/$issueId_/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
@@ -614,6 +623,7 @@ export interface FileRouteTypes {
     | '/help/releases'
     | '/help/support'
     | '/pen/$threadId'
+    | '/pen/buttons'
     | '/templates/$templateId'
     | '/table/$issueId/flyer'
     | '/table/authors/$authorId'
@@ -672,6 +682,7 @@ export interface FileRouteTypes {
     | '/help/releases'
     | '/help/support'
     | '/pen/$threadId'
+    | '/pen/buttons'
     | '/templates/$templateId'
     | '/table/$issueId/flyer'
     | '/table/authors/$authorId'
@@ -733,6 +744,7 @@ export interface FileRouteTypes {
     | '/_authenticated/help/releases'
     | '/_authenticated/help/support'
     | '/_authenticated/pen/$threadId'
+    | '/_authenticated/pen/buttons'
     | '/_authenticated/templates/$templateId'
     | '/table/$issueId_/flyer'
     | '/table/authors/$authorId'
@@ -1041,6 +1053,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPenThreadIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/pen/buttons': {
+      id: '/_authenticated/pen/buttons'
+      path: '/pen/buttons'
+      fullPath: '/pen/buttons'
+      preLoaderRoute: typeof AuthenticatedPenButtonsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/templates/': {
       id: '/_authenticated/templates/'
       path: '/templates'
@@ -1276,6 +1295,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHelpReleasesRoute: typeof AuthenticatedHelpReleasesRoute
   AuthenticatedHelpSupportRoute: typeof AuthenticatedHelpSupportRoute
   AuthenticatedPenThreadIdRoute: typeof AuthenticatedPenThreadIdRoute
+  AuthenticatedPenButtonsRoute: typeof AuthenticatedPenButtonsRoute
   AuthenticatedTemplatesTemplateIdRoute: typeof AuthenticatedTemplatesTemplateIdRoute
   AuthenticatedHelpIndexRoute: typeof AuthenticatedHelpIndexRoute
   AuthenticatedPenIndexRoute: typeof AuthenticatedPenIndexRoute
@@ -1300,6 +1320,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHelpReleasesRoute: AuthenticatedHelpReleasesRoute,
   AuthenticatedHelpSupportRoute: AuthenticatedHelpSupportRoute,
   AuthenticatedPenThreadIdRoute: AuthenticatedPenThreadIdRoute,
+  AuthenticatedPenButtonsRoute: AuthenticatedPenButtonsRoute,
   AuthenticatedTemplatesTemplateIdRoute: AuthenticatedTemplatesTemplateIdRoute,
   AuthenticatedHelpIndexRoute: AuthenticatedHelpIndexRoute,
   AuthenticatedPenIndexRoute: AuthenticatedPenIndexRoute,

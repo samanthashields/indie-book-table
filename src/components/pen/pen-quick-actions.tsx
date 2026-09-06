@@ -1,39 +1,7 @@
-type QuickAction = { label: string; prompt: string };
+import { Link } from "@tanstack/react-router";
+import { Settings2 } from "lucide-react";
 
-const NEXT: Record<string, string> = {
-  overview:
-    "Looking at my shelf, my open milestones and their due dates, what is the single next thing I should do? Say why.",
-  books: "Across the books on my shelf, what is the single next step I should take, and on which book?",
-  cycle:
-    "For the book cycle I'm looking at, what should I do next? Use my current phase, my open milestones and their due dates, and tell me if I'm behind.",
-  milestone:
-    "For the milestone I'm looking at, what should I do next to finish it, and how does its due date look?",
-  submissions:
-    "Based on my published books and submissions to The Table, what should I do next to get a book in front of readers?",
-  create: "Given what I've told you about this new book, what should I decide or do next?",
-};
-
-const WHERE: Record<string, string> = {
-  overview: "Where in Author's Workshop do I do that? Point me to the exact page and link it.",
-  books: "Where in Author's Workshop do I do that for this book? Point me to the exact page and link it.",
-  cycle: "Which page of this book cycle do I work in for that? Link me to the milestone or the cycle page.",
-  milestone: "Where exactly do I record my work on this milestone? Link me to it.",
-  submissions: "Where do I submit or update a book for The Table? Link me to the page.",
-  create: "Where do I set this up in Author's Workshop? Link me to the page.",
-};
-
-export function penQuickActions(section: string | undefined): QuickAction[] {
-  const key = section && NEXT[section] ? section : "overview";
-  return [
-    { label: "What should I do next?", prompt: NEXT[key]! },
-    {
-      label: "Show me a help article",
-      prompt:
-        "Which Help Center article fits what we've been talking about? Recommend one by title and tell me what I'll get from it.",
-    },
-    { label: "Where do I do this?", prompt: WHERE[key]! },
-  ];
-}
+import { usePenQuickActions } from "@/lib/pen-quick-actions";
 
 export function PenQuickActions({
   section,
@@ -44,9 +12,12 @@ export function PenQuickActions({
   disabled?: boolean | undefined;
   onPick: (prompt: string) => void;
 }) {
+  const actions = usePenQuickActions(section);
+  const visible = (actions.data ?? []).filter((action) => !action.hidden);
+
   return (
-    <div className="mt-3 flex flex-wrap gap-2">
-      {penQuickActions(section).map((action) => (
+    <div className="mt-3 flex flex-wrap items-center gap-2">
+      {visible.map((action) => (
         <button
           key={action.label}
           type="button"
@@ -57,6 +28,14 @@ export function PenQuickActions({
           {action.label}
         </button>
       ))}
+      <Link
+        to="/pen/buttons"
+        className="inline-flex items-center gap-1.5 rounded-full px-2 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground"
+        title="Choose your own quick buttons"
+      >
+        <Settings2 className="size-3.5" />
+        Edit buttons
+      </Link>
     </div>
   );
 }
