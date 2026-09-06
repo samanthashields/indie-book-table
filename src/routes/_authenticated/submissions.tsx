@@ -1,5 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Pencil, Plus } from "lucide-react";
+import { BookOpen, Check, Pencil, Plus } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useCatalogCoverUrl } from "@/lib/catalog-covers";
 import { useMySubmissions, type SubmissionRow } from "@/lib/catalog-submit";
 import { SUBMISSION_STATUS_LABELS } from "@/lib/submission-schema";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/submissions")({
   head: () => ({
