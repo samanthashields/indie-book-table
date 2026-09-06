@@ -295,7 +295,16 @@ export async function loadSiteCopy(): Promise<Record<string, string>> {
   const supabase = createPublicClient();
   const { data, error } = await supabase.from("catalog_site_content").select("key, value");
   if (error) throw new Error(error.message);
-  return Object.fromEntries((data ?? []).map((row) => [row.key, row.value]));
+  const copy = Object.fromEntries((data ?? []).map((row) => [row.key, row.value]));
+  // Image fields hold a private storage path; sign them so public visitors can load them.
+  await Promise.all(
+    Object.entries(copy).map(async ([key, value]) => {
+      if (!key.includes("image") || !value) return;
+      const signed = await signCoverPath(supabase, value);
+      if (signed) copy[key] = signed;
+    }),
+  );
+  return copy;
 }
 
 export async function upsertSubscriber(input: {
