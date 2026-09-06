@@ -1,13 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCatalogCoverUrl } from "@/lib/catalog-covers";
-import { setSubmissionStatus, useAdminSubmissions, type AdminSubmission } from "@/lib/catalog-admin";
+import {
+  addSelection,
+  setSubmissionStatus,
+  useAdminIssues,
+  useAdminSubmissions,
+  useIssueDetail,
+  type AdminSubmission,
+} from "@/lib/catalog-admin";
 import { SUBMISSION_STATUS_LABELS } from "@/lib/submission-schema";
 import { AUDIENCE_LABELS } from "@/lib/catalog-types";
 import { cn } from "@/lib/utils";
@@ -21,6 +28,72 @@ const FILTERS = [
   { key: "removed", label: "Removed" },
   { key: "all", label: "Everything" },
 ] as const;
+
+/** Turns an under-review submission into an issue selection in one step. */
+function FeaturePicker({ book, onChanged }: { book: AdminSubmission; onChanged: () => void }) {
+  const issues = useAdminIssues();
+  const [issueId, setIssueId] = useState<string | undefined>(undefined);
+  const activeId = issueId ?? issues.data?.[0]?.id;
+  const detail = useIssueDetail(activeId);
+  const [category, setCategory] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const categories = [
+    ...new Set([
+      ...(detail.data?.quotas ?? []).map((quota) => quota.category),
+      ...(detail.data?.selections ?? []).map((selection) => selection.category),
+    ]),
+  ].sort();
+
+  useEffect(() => {
+    if (!category && categories.length > 0) setCategory(categories[0]!);
+  }, [categories, category]);
+
+  const feature = async () => {
+    if (!activeId || !category.trim()) {
+      toast.error("Pick an issue and a section first");
+      return;
+    }
+    setBusy(true);
+    try {
+      await setSubmissionStatus(book.id, "added_to_database");
+      await addSelection(activeId, book.id, category.trim(), (detail.data?.selections ?? []).length);
+      toast.success(`Added to ${issues.data?.find((issue) => issue.id === activeId)?.display_label ?? "the issue"}`);
+      onChanged();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Couldn’t add that to the issue");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-border bg-paper px-4 py-3">
+      <select
+        className="h-9 rounded-xl border border-input bg-card px-3 text-sm"
+        value={activeId ?? ""}
+        aria-label="Issue"
+        onChange={(event) => setIssueId(event.target.value)}
+      >
+        {(issues.data ?? []).map((issue) => (
+          <option key={issue.id} value={issue.id}>{issue.display_label}{issue.status === "published" ? " (published)" : ""}</option>
+        ))}
+      </select>
+      <Input
+        className="h-9 max-w-48"
+        list={`sections-${book.id}`}
+        placeholder="Section"
+        aria-label="Section"
+        value={category}
+        onChange={(event) => setCategory(event.target.value)}
+      />
+      <datalist id={`sections-${book.id}`}>
+        {categories.map((name) => <option key={name} value={name} />)}
+      </datalist>
+      <Button size="sm" disabled={busy || !activeId} onClick={() => void feature()}>Select to feature in issue</Button>
+    </div>
+  );
+}
 
 function Row({ book, onChanged }: { book: AdminSubmission; onChanged: () => void }) {
   const cover = useCatalogCoverUrl(book.cover_image_url);
@@ -61,9 +134,19 @@ function Row({ book, onChanged }: { book: AdminSubmission; onChanged: () => void
           {book.pen_name || book.catalog_authors?.name} · {book.catalog_authors?.email} · {book.genre || "No genre given"}
         </p>
         {book.hook && <p className="mt-2 text-sm leading-6">{book.hook}</p>}
+
+        {book.status === "under_review" ? (
+          <FeaturePicker book={book} onChanged={onChanged} />
+        ) : book.status === "submitted" ? (
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <Button size="sm" disabled={busy} onClick={() => void act("under_review")}>Start review</Button>
+          </div>
+        ) : null}
+
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          <Button size="sm" variant="outline" disabled={busy} onClick={() => void act("under_review")}>Mark under review</Button>
-          <Button size="sm" disabled={busy} onClick={() => void act("added_to_database")}>Add to the database</Button>
+          {book.status !== "submitted" && book.status !== "under_review" && (
+            <Button size="sm" variant="outline" disabled={busy} onClick={() => void act("under_review")}>Send back to review</Button>
+          )}
           <Input className="h-9 max-w-56" placeholder="Reason (if removing)" value={reason} onChange={(e) => setReason(e.target.value)} />
           <Button size="sm" variant="ghost" disabled={busy} onClick={() => void act("removed", reason || null)}>Remove</Button>
         </div>

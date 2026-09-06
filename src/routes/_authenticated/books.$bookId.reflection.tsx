@@ -6,6 +6,7 @@ import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { END_CYCLE_PROMPTS } from "@/components/end-cycle-dialog";
 import { useReflection, useSaveReflection } from "@/lib/book-db";
 import { cn } from "@/lib/utils";
 
@@ -31,7 +32,7 @@ function Reflection() {
         setGoalsNotes(reflection.data.goals_notes ?? "");
         setOnTime(reflection.data.published_on_time);
         setNextSteps(reflection.data.next_steps ?? "");
-        setMemory(reflection.data.custom?.[0]?.answer ?? "");
+        setMemory(reflection.data.custom?.find((entry) => entry.prompt.startsWith("What do you want to remember"))?.answer ?? "");
       }
       setLoaded(true);
     }
@@ -44,18 +45,36 @@ function Reflection() {
         goals_notes: goalsNotes || null,
         published_on_time: achieved === false ? onTime : null,
         next_steps: nextSteps || null,
-        custom: memory ? [{ prompt: "What do you want to remember for your next book?", answer: memory }] : [],
+        custom: [
+          ...(memory ? [{ prompt: "What do you want to remember for your next book?", answer: memory }] : []),
+          ...(reflection.data?.custom ?? []).filter((entry) => !entry.prompt.startsWith("What do you want to remember")),
+        ],
       },
       { onSuccess: () => toast.success("Reflection saved"), onError: () => toast.error("Couldn’t save the reflection") },
     );
   };
 
   const saved = Boolean(reflection.data?.completed_at);
+  const endPrompts = Object.values(END_CYCLE_PROMPTS) as string[];
+  const endAnswers = (reflection.data?.custom ?? []).filter((entry) => endPrompts.includes(entry.prompt));
 
   return (
     <AppShell>
       <div className="mb-8 rounded-2xl border border-accent/50 bg-accent/20 p-6 shadow-xs md:p-8"><PartyPopper className="mb-4 size-7 text-chart-1" /><p className="font-serif text-3xl font-normal">You made a book.</p><p className="mt-2 max-w-2xl text-muted-foreground">Take a quiet moment to mark what happened before you decide what comes next.</p></div>
       <PageHeading title="Post-Launch Reflection" description="Your answers stay with this book cycle." />
+      {endAnswers.length > 0 && (
+        <section className="mb-6 max-w-3xl rounded-2xl border border-teal/40 bg-teal/10 p-6">
+          <h2 className="font-serif text-2xl font-normal">How this cycle ended</h2>
+          <dl className="mt-4 space-y-3">
+            {endAnswers.map((entry) => (
+              <div key={entry.prompt}>
+                <dt className="text-sm font-semibold">{entry.prompt}</dt>
+                <dd className="text-sm text-muted-foreground">{entry.answer}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
       <div className="max-w-3xl space-y-5">
         <section className="rounded-2xl border border-border bg-card p-6 shadow-xs">
           <h2 className="text-lg font-semibold">Did this book achieve its goals?</h2>

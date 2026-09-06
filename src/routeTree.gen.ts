@@ -16,9 +16,9 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedCollaborationsRouteImport } from './routes/_authenticated/collaborations'
+import { Route as AuthenticatedCyclesRouteImport } from './routes/_authenticated/cycles'
 import { Route as AuthenticatedSubmissionsRouteImport } from './routes/_authenticated/submissions'
 import { Route as AuthenticatedSubmitRouteImport } from './routes/_authenticated/submit'
-import { Route as AuthenticatedTemplatesRouteImport } from './routes/_authenticated/templates'
 import { Route as ApiCoachPlanRouteImport } from './routes/api/coach-plan'
 import { Route as JournalIndexRouteImport } from './routes/journal.index'
 import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
@@ -27,17 +27,20 @@ import { Route as TableIssueIdRouteImport } from './routes/table.$issueId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminActivityRouteImport } from './routes/_authenticated/admin.activity'
 import { Route as AuthenticatedAdminIssuesRouteImport } from './routes/_authenticated/admin.issues'
-import { Route as AuthenticatedAdminJournalRouteImport } from './routes/_authenticated/admin.journal'
 import { Route as AuthenticatedAdminPeopleRouteImport } from './routes/_authenticated/admin.people'
+import { Route as AuthenticatedAdminSitewordsRouteImport } from './routes/_authenticated/admin.sitewords'
 import { Route as AuthenticatedAdminSubmissionsRouteImport } from './routes/_authenticated/admin.submissions'
 import { Route as AuthenticatedAdminTemplatesRouteImport } from './routes/_authenticated/admin.templates'
 import { Route as AuthenticatedBooksBookIdRouteImport } from './routes/_authenticated/books.$bookId'
 import { Route as AuthenticatedBooksAddRouteImport } from './routes/_authenticated/books.add'
 import { Route as AuthenticatedBooksNewRouteImport } from './routes/_authenticated/books.new'
+import { Route as AuthenticatedTemplatesIndexRouteImport } from './routes/_authenticated/templates.index'
 import { Route as AuthenticatedTemplatesTemplateIdRouteImport } from './routes/_authenticated/templates.$templateId'
 import { Route as TableIssueIdFlyerRouteImport } from './routes/table.$issueId_.flyer'
 import { Route as TableAuthorsAuthorIdRouteImport } from './routes/table.authors.$authorId'
 import { Route as TableBooksBookIdRouteImport } from './routes/table.books.$bookId'
+import { Route as AuthenticatedAdminJournalIndexRouteImport } from './routes/_authenticated/admin.journal.index'
+import { Route as AuthenticatedAdminJournalPostIdRouteImport } from './routes/_authenticated/admin.journal.$postId'
 import { Route as AuthenticatedBooksBookIdIndexRouteImport } from './routes/_authenticated/books.$bookId.index'
 import { Route as AuthenticatedBooksBookIdDetailsRouteImport } from './routes/_authenticated/books.$bookId.details'
 import { Route as AuthenticatedBooksBookIdReflectionRouteImport } from './routes/_authenticated/books.$bookId.reflection'
@@ -80,6 +83,11 @@ const AuthenticatedCollaborationsRoute =
     path: '/collaborations',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedCyclesRoute = AuthenticatedCyclesRouteImport.update({
+  id: '/cycles',
+  path: '/cycles',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedSubmissionsRoute =
   AuthenticatedSubmissionsRouteImport.update({
     id: '/submissions',
@@ -89,11 +97,6 @@ const AuthenticatedSubmissionsRoute =
 const AuthenticatedSubmitRoute = AuthenticatedSubmitRouteImport.update({
   id: '/submit',
   path: '/submit',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedTemplatesRoute = AuthenticatedTemplatesRouteImport.update({
-  id: '/templates',
-  path: '/templates',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const ApiCoachPlanRoute = ApiCoachPlanRouteImport.update({
@@ -138,16 +141,16 @@ const AuthenticatedAdminIssuesRoute =
     path: '/issues',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
-const AuthenticatedAdminJournalRoute =
-  AuthenticatedAdminJournalRouteImport.update({
-    id: '/journal',
-    path: '/journal',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
 const AuthenticatedAdminPeopleRoute =
   AuthenticatedAdminPeopleRouteImport.update({
     id: '/people',
     path: '/people',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminSitewordsRoute =
+  AuthenticatedAdminSitewordsRouteImport.update({
+    id: '/sitewords',
+    path: '/sitewords',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminSubmissionsRoute =
@@ -178,11 +181,17 @@ const AuthenticatedBooksNewRoute = AuthenticatedBooksNewRouteImport.update({
   path: '/books/new',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedTemplatesIndexRoute =
+  AuthenticatedTemplatesIndexRouteImport.update({
+    id: '/templates/',
+    path: '/templates/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTemplatesTemplateIdRoute =
   AuthenticatedTemplatesTemplateIdRouteImport.update({
-    id: '/$templateId',
-    path: '/$templateId',
-    getParentRoute: () => AuthenticatedTemplatesRoute,
+    id: '/templates/$templateId',
+    path: '/templates/$templateId',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const TableIssueIdFlyerRoute = TableIssueIdFlyerRouteImport.update({
   id: '/table/$issueId_/flyer',
@@ -199,6 +208,18 @@ const TableBooksBookIdRoute = TableBooksBookIdRouteImport.update({
   path: '/table/books/$bookId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminJournalIndexRoute =
+  AuthenticatedAdminJournalIndexRouteImport.update({
+    id: '/journal/',
+    path: '/journal/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminJournalPostIdRoute =
+  AuthenticatedAdminJournalPostIdRouteImport.update({
+    id: '/journal/$postId',
+    path: '/journal/$postId',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedBooksBookIdIndexRoute =
   AuthenticatedBooksBookIdIndexRouteImport.update({
     id: '/',
@@ -225,9 +246,9 @@ const AuthenticatedBooksBookIdTeamRoute =
   } as any)
 const AuthenticatedTemplatesMineTemplateIdRoute =
   AuthenticatedTemplatesMineTemplateIdRouteImport.update({
-    id: '/mine/$templateId',
-    path: '/mine/$templateId',
-    getParentRoute: () => AuthenticatedTemplatesRoute,
+    id: '/templates/mine/$templateId',
+    path: '/templates/mine/$templateId',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedBooksBookIdMilestonesMilestoneIdRoute =
   AuthenticatedBooksBookIdMilestonesMilestoneIdRouteImport.update({
@@ -243,9 +264,9 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/collaborations': typeof AuthenticatedCollaborationsRoute
+  '/cycles': typeof AuthenticatedCyclesRoute
   '/submissions': typeof AuthenticatedSubmissionsRoute
   '/submit': typeof AuthenticatedSubmitRoute
-  '/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/table/$issueId': typeof TableIssueIdRoute
@@ -253,8 +274,8 @@ export interface FileRoutesByFullPath {
   '/table/': typeof TableIndexRoute
   '/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/admin/issues': typeof AuthenticatedAdminIssuesRoute
-  '/admin/journal': typeof AuthenticatedAdminJournalRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/admin/sitewords': typeof AuthenticatedAdminSitewordsRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/templates': typeof AuthenticatedAdminTemplatesRoute
   '/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
@@ -265,10 +286,13 @@ export interface FileRoutesByFullPath {
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/templates/': typeof AuthenticatedTemplatesIndexRoute
+  '/admin/journal/$postId': typeof AuthenticatedAdminJournalPostIdRoute
   '/books/$bookId/details': typeof AuthenticatedBooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof AuthenticatedBooksBookIdReflectionRoute
   '/books/$bookId/team': typeof AuthenticatedBooksBookIdTeamRoute
   '/templates/mine/$templateId': typeof AuthenticatedTemplatesMineTemplateIdRoute
+  '/admin/journal/': typeof AuthenticatedAdminJournalIndexRoute
   '/books/$bookId/': typeof AuthenticatedBooksBookIdIndexRoute
   '/books/$bookId/milestones/$milestoneId': typeof AuthenticatedBooksBookIdMilestonesMilestoneIdRoute
 }
@@ -277,9 +301,9 @@ export interface FileRoutesByTo {
   '/mission': typeof MissionRoute
   '/reset-password': typeof ResetPasswordRoute
   '/collaborations': typeof AuthenticatedCollaborationsRoute
+  '/cycles': typeof AuthenticatedCyclesRoute
   '/submissions': typeof AuthenticatedSubmissionsRoute
   '/submit': typeof AuthenticatedSubmitRoute
-  '/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/table/$issueId': typeof TableIssueIdRoute
@@ -288,8 +312,8 @@ export interface FileRoutesByTo {
   '/table': typeof TableIndexRoute
   '/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/admin/issues': typeof AuthenticatedAdminIssuesRoute
-  '/admin/journal': typeof AuthenticatedAdminJournalRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/admin/sitewords': typeof AuthenticatedAdminSitewordsRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/templates': typeof AuthenticatedAdminTemplatesRoute
   '/books/add': typeof AuthenticatedBooksAddRoute
@@ -299,10 +323,13 @@ export interface FileRoutesByTo {
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/templates': typeof AuthenticatedTemplatesIndexRoute
+  '/admin/journal/$postId': typeof AuthenticatedAdminJournalPostIdRoute
   '/books/$bookId/details': typeof AuthenticatedBooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof AuthenticatedBooksBookIdReflectionRoute
   '/books/$bookId/team': typeof AuthenticatedBooksBookIdTeamRoute
   '/templates/mine/$templateId': typeof AuthenticatedTemplatesMineTemplateIdRoute
+  '/admin/journal': typeof AuthenticatedAdminJournalIndexRoute
   '/books/$bookId': typeof AuthenticatedBooksBookIdIndexRoute
   '/books/$bookId/milestones/$milestoneId': typeof AuthenticatedBooksBookIdMilestonesMilestoneIdRoute
 }
@@ -314,9 +341,9 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/collaborations': typeof AuthenticatedCollaborationsRoute
+  '/_authenticated/cycles': typeof AuthenticatedCyclesRoute
   '/_authenticated/submissions': typeof AuthenticatedSubmissionsRoute
   '/_authenticated/submit': typeof AuthenticatedSubmitRoute
-  '/_authenticated/templates': typeof AuthenticatedTemplatesRouteWithChildren
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/table/$issueId': typeof TableIssueIdRoute
@@ -325,8 +352,8 @@ export interface FileRoutesById {
   '/table/': typeof TableIndexRoute
   '/_authenticated/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/_authenticated/admin/issues': typeof AuthenticatedAdminIssuesRoute
-  '/_authenticated/admin/journal': typeof AuthenticatedAdminJournalRoute
   '/_authenticated/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/_authenticated/admin/sitewords': typeof AuthenticatedAdminSitewordsRoute
   '/_authenticated/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/_authenticated/admin/templates': typeof AuthenticatedAdminTemplatesRoute
   '/_authenticated/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
@@ -337,10 +364,13 @@ export interface FileRoutesById {
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/templates/': typeof AuthenticatedTemplatesIndexRoute
+  '/_authenticated/admin/journal/$postId': typeof AuthenticatedAdminJournalPostIdRoute
   '/_authenticated/books/$bookId/details': typeof AuthenticatedBooksBookIdDetailsRoute
   '/_authenticated/books/$bookId/reflection': typeof AuthenticatedBooksBookIdReflectionRoute
   '/_authenticated/books/$bookId/team': typeof AuthenticatedBooksBookIdTeamRoute
   '/_authenticated/templates/mine/$templateId': typeof AuthenticatedTemplatesMineTemplateIdRoute
+  '/_authenticated/admin/journal/': typeof AuthenticatedAdminJournalIndexRoute
   '/_authenticated/books/$bookId/': typeof AuthenticatedBooksBookIdIndexRoute
   '/_authenticated/books/$bookId/milestones/$milestoneId': typeof AuthenticatedBooksBookIdMilestonesMilestoneIdRoute
 }
@@ -353,9 +383,9 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/admin'
     | '/collaborations'
+    | '/cycles'
     | '/submissions'
     | '/submit'
-    | '/templates'
     | '/api/coach-plan'
     | '/journal/$slug'
     | '/table/$issueId'
@@ -363,8 +393,8 @@ export interface FileRouteTypes {
     | '/table/'
     | '/admin/activity'
     | '/admin/issues'
-    | '/admin/journal'
     | '/admin/people'
+    | '/admin/sitewords'
     | '/admin/submissions'
     | '/admin/templates'
     | '/books/$bookId'
@@ -375,10 +405,13 @@ export interface FileRouteTypes {
     | '/table/authors/$authorId'
     | '/table/books/$bookId'
     | '/admin/'
+    | '/templates/'
+    | '/admin/journal/$postId'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
     | '/books/$bookId/team'
     | '/templates/mine/$templateId'
+    | '/admin/journal/'
     | '/books/$bookId/'
     | '/books/$bookId/milestones/$milestoneId'
   fileRoutesByTo: FileRoutesByTo
@@ -387,9 +420,9 @@ export interface FileRouteTypes {
     | '/mission'
     | '/reset-password'
     | '/collaborations'
+    | '/cycles'
     | '/submissions'
     | '/submit'
-    | '/templates'
     | '/api/coach-plan'
     | '/journal/$slug'
     | '/table/$issueId'
@@ -398,8 +431,8 @@ export interface FileRouteTypes {
     | '/table'
     | '/admin/activity'
     | '/admin/issues'
-    | '/admin/journal'
     | '/admin/people'
+    | '/admin/sitewords'
     | '/admin/submissions'
     | '/admin/templates'
     | '/books/add'
@@ -409,10 +442,13 @@ export interface FileRouteTypes {
     | '/table/authors/$authorId'
     | '/table/books/$bookId'
     | '/admin'
+    | '/templates'
+    | '/admin/journal/$postId'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
     | '/books/$bookId/team'
     | '/templates/mine/$templateId'
+    | '/admin/journal'
     | '/books/$bookId'
     | '/books/$bookId/milestones/$milestoneId'
   id:
@@ -423,9 +459,9 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/admin'
     | '/_authenticated/collaborations'
+    | '/_authenticated/cycles'
     | '/_authenticated/submissions'
     | '/_authenticated/submit'
-    | '/_authenticated/templates'
     | '/api/coach-plan'
     | '/journal/$slug'
     | '/table/$issueId'
@@ -434,8 +470,8 @@ export interface FileRouteTypes {
     | '/table/'
     | '/_authenticated/admin/activity'
     | '/_authenticated/admin/issues'
-    | '/_authenticated/admin/journal'
     | '/_authenticated/admin/people'
+    | '/_authenticated/admin/sitewords'
     | '/_authenticated/admin/submissions'
     | '/_authenticated/admin/templates'
     | '/_authenticated/books/$bookId'
@@ -446,10 +482,13 @@ export interface FileRouteTypes {
     | '/table/authors/$authorId'
     | '/table/books/$bookId'
     | '/_authenticated/admin/'
+    | '/_authenticated/templates/'
+    | '/_authenticated/admin/journal/$postId'
     | '/_authenticated/books/$bookId/details'
     | '/_authenticated/books/$bookId/reflection'
     | '/_authenticated/books/$bookId/team'
     | '/_authenticated/templates/mine/$templateId'
+    | '/_authenticated/admin/journal/'
     | '/_authenticated/books/$bookId/'
     | '/_authenticated/books/$bookId/milestones/$milestoneId'
   fileRoutesById: FileRoutesById
@@ -520,6 +559,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCollaborationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/cycles': {
+      id: '/_authenticated/cycles'
+      path: '/cycles'
+      fullPath: '/cycles'
+      preLoaderRoute: typeof AuthenticatedCyclesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/submissions': {
       id: '/_authenticated/submissions'
       path: '/submissions'
@@ -532,13 +578,6 @@ declare module '@tanstack/react-router' {
       path: '/submit'
       fullPath: '/submit'
       preLoaderRoute: typeof AuthenticatedSubmitRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/templates': {
-      id: '/_authenticated/templates'
-      path: '/templates'
-      fullPath: '/templates'
-      preLoaderRoute: typeof AuthenticatedTemplatesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/api/coach-plan': {
@@ -597,18 +636,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIssuesRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
-    '/_authenticated/admin/journal': {
-      id: '/_authenticated/admin/journal'
-      path: '/journal'
-      fullPath: '/admin/journal'
-      preLoaderRoute: typeof AuthenticatedAdminJournalRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
     '/_authenticated/admin/people': {
       id: '/_authenticated/admin/people'
       path: '/people'
       fullPath: '/admin/people'
       preLoaderRoute: typeof AuthenticatedAdminPeopleRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/sitewords': {
+      id: '/_authenticated/admin/sitewords'
+      path: '/sitewords'
+      fullPath: '/admin/sitewords'
+      preLoaderRoute: typeof AuthenticatedAdminSitewordsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/submissions': {
@@ -646,12 +685,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBooksNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/templates/': {
+      id: '/_authenticated/templates/'
+      path: '/templates'
+      fullPath: '/templates/'
+      preLoaderRoute: typeof AuthenticatedTemplatesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/templates/$templateId': {
       id: '/_authenticated/templates/$templateId'
-      path: '/$templateId'
+      path: '/templates/$templateId'
       fullPath: '/templates/$templateId'
       preLoaderRoute: typeof AuthenticatedTemplatesTemplateIdRouteImport
-      parentRoute: typeof AuthenticatedTemplatesRoute
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/table/$issueId_/flyer': {
       id: '/table/$issueId_/flyer'
@@ -673,6 +719,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/table/books/$bookId'
       preLoaderRoute: typeof TableBooksBookIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/journal/': {
+      id: '/_authenticated/admin/journal/'
+      path: '/journal'
+      fullPath: '/admin/journal/'
+      preLoaderRoute: typeof AuthenticatedAdminJournalIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/journal/$postId': {
+      id: '/_authenticated/admin/journal/$postId'
+      path: '/journal/$postId'
+      fullPath: '/admin/journal/$postId'
+      preLoaderRoute: typeof AuthenticatedAdminJournalPostIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/books/$bookId/': {
       id: '/_authenticated/books/$bookId/'
@@ -704,10 +764,10 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/templates/mine/$templateId': {
       id: '/_authenticated/templates/mine/$templateId'
-      path: '/mine/$templateId'
+      path: '/templates/mine/$templateId'
       fullPath: '/templates/mine/$templateId'
       preLoaderRoute: typeof AuthenticatedTemplatesMineTemplateIdRouteImport
-      parentRoute: typeof AuthenticatedTemplatesRoute
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/books/$bookId/milestones/$milestoneId': {
       id: '/_authenticated/books/$bookId/milestones/$milestoneId'
@@ -722,43 +782,29 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminActivityRoute: typeof AuthenticatedAdminActivityRoute
   AuthenticatedAdminIssuesRoute: typeof AuthenticatedAdminIssuesRoute
-  AuthenticatedAdminJournalRoute: typeof AuthenticatedAdminJournalRoute
   AuthenticatedAdminPeopleRoute: typeof AuthenticatedAdminPeopleRoute
+  AuthenticatedAdminSitewordsRoute: typeof AuthenticatedAdminSitewordsRoute
   AuthenticatedAdminSubmissionsRoute: typeof AuthenticatedAdminSubmissionsRoute
   AuthenticatedAdminTemplatesRoute: typeof AuthenticatedAdminTemplatesRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminJournalPostIdRoute: typeof AuthenticatedAdminJournalPostIdRoute
+  AuthenticatedAdminJournalIndexRoute: typeof AuthenticatedAdminJournalIndexRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminActivityRoute: AuthenticatedAdminActivityRoute,
   AuthenticatedAdminIssuesRoute: AuthenticatedAdminIssuesRoute,
-  AuthenticatedAdminJournalRoute: AuthenticatedAdminJournalRoute,
   AuthenticatedAdminPeopleRoute: AuthenticatedAdminPeopleRoute,
+  AuthenticatedAdminSitewordsRoute: AuthenticatedAdminSitewordsRoute,
   AuthenticatedAdminSubmissionsRoute: AuthenticatedAdminSubmissionsRoute,
   AuthenticatedAdminTemplatesRoute: AuthenticatedAdminTemplatesRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminJournalPostIdRoute: AuthenticatedAdminJournalPostIdRoute,
+  AuthenticatedAdminJournalIndexRoute: AuthenticatedAdminJournalIndexRoute,
 }
 
 const AuthenticatedAdminRouteWithChildren =
   AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
-
-interface AuthenticatedTemplatesRouteChildren {
-  AuthenticatedTemplatesTemplateIdRoute: typeof AuthenticatedTemplatesTemplateIdRoute
-  AuthenticatedTemplatesMineTemplateIdRoute: typeof AuthenticatedTemplatesMineTemplateIdRoute
-}
-
-const AuthenticatedTemplatesRouteChildren: AuthenticatedTemplatesRouteChildren =
-  {
-    AuthenticatedTemplatesTemplateIdRoute:
-      AuthenticatedTemplatesTemplateIdRoute,
-    AuthenticatedTemplatesMineTemplateIdRoute:
-      AuthenticatedTemplatesMineTemplateIdRoute,
-  }
-
-const AuthenticatedTemplatesRouteWithChildren =
-  AuthenticatedTemplatesRoute._addFileChildren(
-    AuthenticatedTemplatesRouteChildren,
-  )
 
 interface AuthenticatedBooksBookIdRouteChildren {
   AuthenticatedBooksBookIdDetailsRoute: typeof AuthenticatedBooksBookIdDetailsRoute
@@ -787,25 +833,32 @@ const AuthenticatedBooksBookIdRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedCollaborationsRoute: typeof AuthenticatedCollaborationsRoute
+  AuthenticatedCyclesRoute: typeof AuthenticatedCyclesRoute
   AuthenticatedSubmissionsRoute: typeof AuthenticatedSubmissionsRoute
   AuthenticatedSubmitRoute: typeof AuthenticatedSubmitRoute
-  AuthenticatedTemplatesRoute: typeof AuthenticatedTemplatesRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedBooksBookIdRoute: typeof AuthenticatedBooksBookIdRouteWithChildren
   AuthenticatedBooksAddRoute: typeof AuthenticatedBooksAddRoute
   AuthenticatedBooksNewRoute: typeof AuthenticatedBooksNewRoute
+  AuthenticatedTemplatesTemplateIdRoute: typeof AuthenticatedTemplatesTemplateIdRoute
+  AuthenticatedTemplatesIndexRoute: typeof AuthenticatedTemplatesIndexRoute
+  AuthenticatedTemplatesMineTemplateIdRoute: typeof AuthenticatedTemplatesMineTemplateIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedCollaborationsRoute: AuthenticatedCollaborationsRoute,
+  AuthenticatedCyclesRoute: AuthenticatedCyclesRoute,
   AuthenticatedSubmissionsRoute: AuthenticatedSubmissionsRoute,
   AuthenticatedSubmitRoute: AuthenticatedSubmitRoute,
-  AuthenticatedTemplatesRoute: AuthenticatedTemplatesRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedBooksBookIdRoute: AuthenticatedBooksBookIdRouteWithChildren,
   AuthenticatedBooksAddRoute: AuthenticatedBooksAddRoute,
   AuthenticatedBooksNewRoute: AuthenticatedBooksNewRoute,
+  AuthenticatedTemplatesTemplateIdRoute: AuthenticatedTemplatesTemplateIdRoute,
+  AuthenticatedTemplatesIndexRoute: AuthenticatedTemplatesIndexRoute,
+  AuthenticatedTemplatesMineTemplateIdRoute:
+    AuthenticatedTemplatesMineTemplateIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

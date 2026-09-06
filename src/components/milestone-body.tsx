@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { CalendarDays, Check, FileText, Link2, MessageSquare, Paperclip, Pencil, UserRound } from "lucide-react";
+import { CalendarDays, Check, FileText, HardDrive, Link2, MessageSquare, Paperclip, Pencil, UserRound } from "lucide-react";
 import { toast } from "sonner";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
@@ -36,6 +36,8 @@ export function RequirementAction({
 }) {
   const input = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
+  const [driveOpen, setDriveOpen] = useState(false);
+  const [driveLink, setDriveLink] = useState("");
   const copy = {
     "Approve a Deliverable": { title: "Review and approve the shared deliverable", body: "Your collaborator’s files appear here for approval.", action: "Approve deliverable", icon: Check },
     "Attach a File": { title: "Add the finished file or a share link", body: "PDF, DOCX, EPUB, or a link to your working document.", action: "Choose file", icon: Paperclip },
@@ -71,8 +73,40 @@ export function RequirementAction({
             <Button className="mt-4" asChild><Link to="/books/$bookId/team" params={{ bookId }}><UserRound />{copy.action}</Link></Button>
           ) : type === "Attach a File" ? (
             <>
-              <Button className="mt-4" variant={complete ? "secondary" : "default"} disabled={busy} onClick={() => input.current?.click()}>{complete && <Check />}{busy ? "Uploading…" : complete ? "Replace file" : copy.action}</Button>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Button variant={complete ? "secondary" : "default"} disabled={busy} onClick={() => input.current?.click()}>{complete && <Check />}{busy ? "Uploading…" : complete ? "Replace file" : copy.action}</Button>
+                <Button variant="outline" onClick={() => setDriveOpen((value) => !value)}><HardDrive />Add from Google Drive</Button>
+              </div>
               <input ref={input} type="file" className="sr-only" onChange={(event) => void upload(event.target.files?.[0])} />
+              {driveOpen && (
+                <div className="mt-3 flex flex-wrap items-center gap-3 rounded-xl border border-border bg-card p-3">
+                  <Input
+                    className="h-9 max-w-md flex-1"
+                    placeholder="https://drive.google.com/file/d/…"
+                    aria-label="Google Drive link"
+                    value={driveLink}
+                    onChange={(event) => setDriveLink(event.target.value)}
+                  />
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      const url = driveLink.trim();
+                      if (!/^https:\/\/(drive|docs)\.google\.com\//.test(url)) {
+                        toast.error("Paste a link that starts with drive.google.com or docs.google.com");
+                        return;
+                      }
+                      onAttach(url, "Google Drive file");
+                      onComplete();
+                      setDriveLink("");
+                      setDriveOpen(false);
+                      toast.success("Google Drive file linked");
+                    }}
+                  >
+                    Attach link
+                  </Button>
+                  <p className="w-full text-xs text-muted-foreground">Make sure the file is shared with anyone who needs to open it.</p>
+                </div>
+              )}
             </>
           ) : (
             <Button className="mt-4" variant={complete ? "secondary" : "default"} onClick={onComplete} disabled={complete}>{complete && <Check />}{complete ? "Completed" : copy.action}</Button>

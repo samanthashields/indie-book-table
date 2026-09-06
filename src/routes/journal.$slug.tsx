@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
+import { MarkdownText } from "@/components/markdown-text";
 import { PublicShell } from "@/components/site/public-shell";
 import { getJournalPost } from "@/lib/catalog.functions";
 
@@ -49,7 +50,7 @@ function JournalPostPage() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(postQuery(slug));
   const post = data.post!;
-  const paragraphs = post.body.split(/\n{2,}/).filter(Boolean);
+  
 
   return (
     <PublicShell>
@@ -69,11 +70,7 @@ function JournalPostPage() {
             })}
           </p>
         )}
-        <div className="mt-8 space-y-5 text-lg leading-relaxed text-foreground/85">
-          {paragraphs.map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
-          ))}
-        </div>
+        <MarkdownText body={post.body} className="mt-8 text-lg leading-relaxed text-foreground/85" />
       </article>
     </PublicShell>
   );

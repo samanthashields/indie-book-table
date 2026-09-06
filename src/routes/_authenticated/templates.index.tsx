@@ -9,7 +9,7 @@ import { useCurrentUser } from "@/lib/use-current-user";
 import { useDeleteAuthorTemplate, useSaveAuthorTemplate, useTemplates } from "@/lib/book-db";
 import { templateCover } from "@/lib/template-covers";
 
-export const Route = createFileRoute("/_authenticated/templates")({ head: () => ({ meta: [
+export const Route = createFileRoute("/_authenticated/templates/")({ head: () => ({ meta: [
   { title: "Book Cycle Templates — Book Cycles" }, { name: "description", content: "Start with a genre-aware publishing plan, or build and save your own." }, { property: "og:title", content: "Book Cycle Templates — Book Cycles" }, { property: "og:description", content: "Start with a genre-aware publishing plan, or build and save your own." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
 ] }), component: Templates });
 

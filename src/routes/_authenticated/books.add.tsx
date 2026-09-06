@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateBookIdea } from "@/lib/book-db";
+import { BOOK_STATUSES } from "@/lib/book-status";
 
 export const Route = createFileRoute("/_authenticated/books/add")({
   head: () => ({ meta: [
@@ -23,7 +24,7 @@ export const Route = createFileRoute("/_authenticated/books/add")({
 function AddBook() {
   const navigate = useNavigate();
   const create = useCreateBookIdea();
-  const [form, setForm] = useState({ title: "", subtitle: "", pen_name: "", genre: "", audience: "", goals: "", target_publication_date: "" });
+  const [form, setForm] = useState({ title: "", subtitle: "", pen_name: "", genre: "", audience: "", goals: "", target_publication_date: "", shelf_status: "idea" });
   const set = (key: keyof typeof form, value: string) => setForm((current) => ({ ...current, [key]: value }));
 
   const save = (then: "shelf" | "cycle") => {
@@ -54,6 +55,15 @@ function AddBook() {
             <label className="block text-sm font-semibold">Genre or category<Input className="mt-2" value={form.genre} onChange={(event) => set("genre", event.target.value)} /></label>
             <label className="block text-sm font-semibold">Audience<Input className="mt-2" value={form.audience} onChange={(event) => set("audience", event.target.value)} placeholder="Adult, young adult, middle grade…" /></label>
             <label className="block text-sm font-semibold">Hoped-for publication date<Input className="mt-2" type="date" value={form.target_publication_date} onChange={(event) => set("target_publication_date", event.target.value)} /></label>
+            <label className="block text-sm font-semibold md:col-span-2">Where is this book right now?
+              <select
+                className="mt-2 h-10 w-full rounded-xl border border-input bg-paper px-3 text-sm"
+                value={form.shelf_status}
+                onChange={(event) => set("shelf_status", event.target.value)}
+              >
+                {BOOK_STATUSES.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              </select>
+            </label>
             <label className="block text-sm font-semibold md:col-span-2">What you want this book to do<Textarea className="mt-2" value={form.goals} onChange={(event) => set("goals", event.target.value)} /></label>
           </div>
         </section>
