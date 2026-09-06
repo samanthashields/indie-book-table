@@ -64,6 +64,9 @@ import { Route as AuthenticatedHelpCategoriesCategorySlugRouteImport } from './r
 import { Route as AuthenticatedHelpRequestsIndexRouteImport } from './routes/_authenticated/help.requests.index'
 import { Route as AuthenticatedHelpRequestsRequestIdRouteImport } from './routes/_authenticated/help.requests.$requestId'
 import { Route as AuthenticatedTemplatesMineTemplateIdRouteImport } from './routes/_authenticated/templates.mine.$templateId'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as AuthenticatedBooksBookIdMilestonesMilestoneIdRouteImport } from './routes/_authenticated/books.$bookId.milestones.$milestoneId'
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -372,6 +375,22 @@ const AuthenticatedTemplatesMineTemplateIdRoute =
     path: '/templates/mine/$templateId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedBooksBookIdMilestonesMilestoneIdRoute =
   AuthenticatedBooksBookIdMilestonesMilestoneIdRouteImport.update({
     id: '/milestones/$milestoneId',
@@ -430,6 +449,9 @@ export interface FileRoutesByFullPath {
   '/help/categories/$categorySlug': typeof AuthenticatedHelpCategoriesCategorySlugRoute
   '/help/requests/$requestId': typeof AuthenticatedHelpRequestsRequestIdRoute
   '/templates/mine/$templateId': typeof AuthenticatedTemplatesMineTemplateIdRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/admin/help/': typeof AuthenticatedAdminHelpIndexRoute
   '/admin/journal/': typeof AuthenticatedAdminJournalIndexRoute
   '/books/$bookId/': typeof AuthenticatedBooksBookIdIndexRoute
@@ -485,6 +507,9 @@ export interface FileRoutesByTo {
   '/help/categories/$categorySlug': typeof AuthenticatedHelpCategoriesCategorySlugRoute
   '/help/requests/$requestId': typeof AuthenticatedHelpRequestsRequestIdRoute
   '/templates/mine/$templateId': typeof AuthenticatedTemplatesMineTemplateIdRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/admin/help': typeof AuthenticatedAdminHelpIndexRoute
   '/admin/journal': typeof AuthenticatedAdminJournalIndexRoute
   '/books/$bookId': typeof AuthenticatedBooksBookIdIndexRoute
@@ -544,6 +569,9 @@ export interface FileRoutesById {
   '/_authenticated/help/categories/$categorySlug': typeof AuthenticatedHelpCategoriesCategorySlugRoute
   '/_authenticated/help/requests/$requestId': typeof AuthenticatedHelpRequestsRequestIdRoute
   '/_authenticated/templates/mine/$templateId': typeof AuthenticatedTemplatesMineTemplateIdRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/_authenticated/admin/help/': typeof AuthenticatedAdminHelpIndexRoute
   '/_authenticated/admin/journal/': typeof AuthenticatedAdminJournalIndexRoute
   '/_authenticated/books/$bookId/': typeof AuthenticatedBooksBookIdIndexRoute
@@ -603,6 +631,9 @@ export interface FileRouteTypes {
     | '/help/categories/$categorySlug'
     | '/help/requests/$requestId'
     | '/templates/mine/$templateId'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
+    | '/lovable/email/transactional/preview'
     | '/admin/help/'
     | '/admin/journal/'
     | '/books/$bookId/'
@@ -658,6 +689,9 @@ export interface FileRouteTypes {
     | '/help/categories/$categorySlug'
     | '/help/requests/$requestId'
     | '/templates/mine/$templateId'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
+    | '/lovable/email/transactional/preview'
     | '/admin/help'
     | '/admin/journal'
     | '/books/$bookId'
@@ -716,6 +750,9 @@ export interface FileRouteTypes {
     | '/_authenticated/help/categories/$categorySlug'
     | '/_authenticated/help/requests/$requestId'
     | '/_authenticated/templates/mine/$templateId'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
+    | '/lovable/email/transactional/preview'
     | '/_authenticated/admin/help/'
     | '/_authenticated/admin/journal/'
     | '/_authenticated/books/$bookId/'
@@ -738,6 +775,9 @@ export interface RootRouteChildren {
   TableIssueIdFlyerRoute: typeof TableIssueIdFlyerRoute
   TableAuthorsAuthorIdRoute: typeof TableAuthorsAuthorIdRoute
   TableBooksBookIdRoute: typeof TableBooksBookIdRoute
+  LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
+  LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
+  LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1127,6 +1167,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTemplatesMineTemplateIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/lovable/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/books/$bookId/milestones/$milestoneId': {
       id: '/_authenticated/books/$bookId/milestones/$milestoneId'
       path: '/milestones/$milestoneId'
@@ -1271,6 +1332,9 @@ const rootRouteChildren: RootRouteChildren = {
   TableIssueIdFlyerRoute: TableIssueIdFlyerRoute,
   TableAuthorsAuthorIdRoute: TableAuthorsAuthorIdRoute,
   TableBooksBookIdRoute: TableBooksBookIdRoute,
+  LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
+  LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
+  LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
