@@ -62,13 +62,13 @@
 - [x] Admin submissions: select to feature in issue
 - [x] Site words as its own admin section
 - [x] Journal admin: all posts first, post editor page, image upload, formatting
-- [ ] Admin People: edit details + reset password
-- [ ] Magazine-style flyer with pinned corner turn
+- [x] Admin People: edit details + reset password
+- [x] Magazine-style flyer with pinned corner turn
 
 ## New requests (Sep 6)
-- [ ] Homepage main heading renamed to Author's Workshop
-- [ ] Connect Google Drive when adding a file to a milestone
-- [ ] Milestone drawer opens without darkening the background
-- [ ] Start Date in book cycle details
-- [ ] End Book Cycle CTA with conditional questions, shown in Reflections
-- [ ] My Cycles page under My Books grouped by Not started / In progress / Complete
+- [x] Homepage main heading renamed to Author's Workshop
+- [x] Attach a Google Drive file link on a milestone (full account connection not set up)
+- [x] Milestone drawer opens without darkening the background
+- [x] Start Date in book cycle details
+- [x] End Book Cycle CTA with conditional questions, shown in Reflections
+- [x] My Cycles page under My Books grouped by Not started / In progress / Complete
