@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { Loader2, Send } from "lucide-react";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { Lightbulb, LifeBuoy, Loader2, Send } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppShell } from "@/components/app-shell";
@@ -63,6 +63,17 @@ function SupportPage() {
   return (
     <AppShell>
       <PageHeading title="Contact support" description="Tell us what’s happening and we’ll answer right here." backLabel="Help Center" />
+
+      <div className="mb-8 grid gap-4 md:grid-cols-2">
+        <div className="rounded-2xl border-2 border-sky/40 bg-sky/10 p-5">
+          <h2 className="flex items-center gap-2 font-serif text-xl font-normal"><LifeBuoy className="size-5" />Something’s broken or I need help</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Send us a message below and we’ll answer in this thread.</p>
+        </div>
+        <Link to="/help/requests" className="rounded-2xl border-2 border-sun/50 bg-sun/10 p-5 transition-colors hover:border-primary">
+          <h2 className="flex items-center gap-2 font-serif text-xl font-normal"><Lightbulb className="size-5" />I have an idea</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Post it to the feature request board, where other authors can vote for it.</p>
+        </Link>
+      </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <section className="space-y-4 rounded-2xl border-2 border-sky/40 bg-sky/10 p-6">
