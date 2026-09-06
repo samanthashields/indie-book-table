@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Library, LogOut, Menu, Newspaper, PanelLeftClose, Send, Shield, Utensils, X } from "lucide-react";
+import { BookOpen, Library, LogOut, Menu, Newspaper, PanelLeftClose, Send, Shield, Users, Utensils, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   { label: "My Books", to: "/" as const, icon: Library },
+  { label: "Collaborations", to: "/collaborations" as const, icon: Users },
   { label: "Templates", to: "/templates" as const, icon: BookOpen },
   { label: "My Submissions", to: "/submissions" as const, icon: Send },
   { label: "The Table", to: "/table" as const, icon: Utensils },
@@ -30,7 +31,7 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
   const initials = displayName.trim().split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase() || "?";
   const planLabel = user.data?.profile?.plan === "paid" ? "Paid plan" : "Free plan";
   const isAdmin = Boolean(user.data?.roles.includes("admin"));
-  const accountLabel = user.data?.roles.includes("collaborator") && !user.data.roles.includes("author") ? "Collaborator" : "Author";
+  const accountLabel = "Author";
   const userId = user.data?.id;
 
   useEffect(() => {

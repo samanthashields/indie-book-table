@@ -13,20 +13,22 @@ import { Input } from "@/components/ui/input";
 import { usePlanStream } from "@/lib/use-plan-stream";
 import { toPayload } from "@/lib/coach-intake";
 import { useCurrentUser } from "@/lib/use-current-user";
-import { useCreateBookCycle, useTemplates } from "@/lib/book-db";
+import { useBooks, useCreateBookCycle, useTemplates } from "@/lib/book-db";
 import type { TemplatePhase } from "@/lib/template-data";
 import { cn } from "@/lib/utils";
 
 type PathId = "coach" | "template" | "scratch";
-type Search = { path?: PathId; template?: string };
+type Search = { path?: PathId; template?: string; book?: string };
 
 export const Route = createFileRoute("/_authenticated/books/new")({
   validateSearch: (search: Record<string, unknown>): Search => {
     const path = search["path"];
     const template = search["template"];
+    const book = search["book"];
     return {
       ...(path === "coach" || path === "template" || path === "scratch" ? { path } : {}),
       ...(typeof template === "string" ? { template } : {}),
+      ...(typeof book === "string" ? { book } : {}),
     };
   },
   head: () => ({ meta: [
@@ -58,8 +60,11 @@ function CreateBook() {
   const isPaid = currentUser.data?.profile?.plan === "paid";
 
 
-  const go = (next: Search) => void navigate({ to: "/books/new", search: next });
-  const backToChooser = () => void navigate({ to: "/books/new", search: {} });
+  const books = useBooks();
+  const existingBook = search.book ? books.data?.find((entry) => entry.id === search.book) : undefined;
+
+  const go = (next: Search) => void navigate({ to: "/books/new", search: { ...next, ...(search.book ? { book: search.book } : {}) } });
+  const backToChooser = () => void navigate({ to: "/books/new", search: { ...(search.book ? { book: search.book } : {}) } });
 
   const create = (input: { title: string; targetDate: string; phases: TemplatePhase[]; templateId?: string; genre?: string; illustrated?: boolean }) => {
     createCycle.mutate(
@@ -70,6 +75,7 @@ function CreateBook() {
         ...(input.templateId ? { templateId: input.templateId } : {}),
         ...(input.genre ? { genre: input.genre } : {}),
         ...(input.illustrated !== undefined ? { illustrated: input.illustrated } : {}),
+        ...(search.book ? { bookId: search.book } : {}),
       },
       {
         onSuccess: (bookId) => void navigate({ to: "/books/$bookId", params: { bookId } }),
@@ -81,7 +87,7 @@ function CreateBook() {
   if (!started) {
     return (
       <AppShell coachContext="create">
-        <PageHeading title="Create a Book Cycle" description="Begin with what you know. You can adjust the plan as the book changes." />
+        <PageHeading title={existingBook ? `Start a cycle for “${existingBook.title}”` : "Create a Book Cycle"} description="Begin with what you know. You can adjust the plan as the book changes." />
         <div className="grid gap-4 md:grid-cols-3">
           {paths.map(({ id, title, copy, icon: Icon, tint }) => (
             <button key={id} onClick={() => setPending(id)} className={cn("relative min-h-52 rounded-2xl border p-6 text-left shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md", tint, pending === id ? "border-2 border-primary" : "border-border")}>
@@ -133,6 +139,7 @@ function CreateBook() {
           title={template.title}
           description={template.description ?? ""}
           phases={template.phases}
+          initialTitle={existingBook?.title ?? ""}
           creating={createCycle.isPending}
           onBack={() => go({ path: "template" })}
           onCreate={(input) => create({ ...input, templateId: template.id, ...(template.genre ? { genre: template.genre } : {}), illustrated: template.details.illustrated ?? false })}
@@ -149,6 +156,7 @@ function CreateBook() {
           title="Your book cycle"
           description="Add at least one milestone per phase. Each milestone carries exactly one requirement."
           phases={blankPhases}
+          initialTitle={existingBook?.title ?? ""}
           creating={createCycle.isPending}
           onBack={backToChooser}
           onCreate={(input) => create(input)}
@@ -190,7 +198,7 @@ function CreateBook() {
 
       <div className="grid gap-8 xl:grid-cols-[1fr_300px]">
         <div className="space-y-8">
-          <CoachConversation generating={isStreaming} onGenerate={(answers) => { setCoachTitle(answers["title"] ?? ""); void start(toPayload(answers)); }} />
+          <CoachConversation generating={isStreaming} onGenerate={(answers) => { setCoachTitle(answers["title"] ?? existingBook?.title ?? ""); void start(toPayload(answers)); }} />
 
           {error && <p className="rounded-xl border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">{error}</p>}
           {canceled && <p className="rounded-xl border border-border bg-secondary p-4 text-sm">You stopped the draft. Everything the coach had written so far is kept below.</p>}

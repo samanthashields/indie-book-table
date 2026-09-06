@@ -31,7 +31,6 @@ function GoogleIcon() {
 function AuthPage() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<Mode>("signin");
-  const [accountType, setAccountType] = useState<"author" | "collaborator">("author");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -46,7 +45,7 @@ function AuthPage() {
     if (mode === "signup") {
       const { data, error } = await supabase.auth.signUp({
         email, password,
-        options: { emailRedirectTo: window.location.origin, data: { display_name: name, account_type: accountType } },
+        options: { emailRedirectTo: window.location.origin, data: { display_name: name } },
       });
       setBusy(false);
       if (error) { setError(error.message); return; }
@@ -83,7 +82,7 @@ function AuthPage() {
         <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 text-center shadow-xs">
           <span className="mx-auto mb-5 grid size-14 place-items-center rounded-full bg-teal/15"><Mail className="size-6 text-teal" /></span>
           <h1 className="font-serif text-3xl font-normal">Check your email</h1>
-          <p className="mt-3 text-sm leading-6 text-muted-foreground">We sent a confirmation link to <strong>{email}</strong>. Open it to finish creating your {accountType} account.</p>
+          <p className="mt-3 text-sm leading-6 text-muted-foreground">We sent a confirmation link to <strong>{email}</strong>. Open it to finish creating your account.</p>
           <Button variant="outline" className="mt-6" onClick={() => { setAwaitingConfirm(false); setMode("signin"); }}>Back to sign in</Button>
         </div>
       </div>
@@ -117,19 +116,12 @@ function AuthPage() {
           </div>
 
           <h1 className="font-serif text-3xl font-normal">{mode === "signin" ? "Welcome back" : "Start your account"}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">{mode === "signin" ? "Pick up right where your book left off." : "Choose how you'll use Book Cycles."}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{mode === "signin" ? "Pick up right where your book left off." : "Your shelf, your cycles, and any book shared with you."}</p>
 
           <form className="mt-7 space-y-4" onSubmit={(event) => { event.preventDefault(); void submit(); }}>
             {mode === "signup" && (
               <>
-                <div className="grid grid-cols-2 gap-3">
-                  {([["author", "I'm an author", "Writing and publishing my own book."], ["collaborator", "I'm a collaborator", "Editing, design, illustration, or reading."]] as const).map(([value, label, copy]) => (
-                    <button type="button" key={value} onClick={() => setAccountType(value)} className={cn("rounded-xl border p-4 text-left transition-all", accountType === value ? "border-2 border-primary bg-teal/8" : "border-border bg-card")}>
-                      <p className="text-sm font-semibold">{label}</p>
-                      <p className="mt-1 text-xs leading-5 text-muted-foreground">{copy}</p>
-                    </button>
-                  ))}
-                </div>
+                <p className="rounded-xl border border-border bg-card p-4 text-xs leading-5 text-muted-foreground">One account covers everything: write your own books, and accept invitations to help on other authors&rsquo; books.</p>
                 <label className="block text-sm font-semibold">Your name<Input className="mt-2" value={name} onChange={(event) => setName(event.target.value)} placeholder="Mara Ellison" autoComplete="name" /></label>
               </>
             )}

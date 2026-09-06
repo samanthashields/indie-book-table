@@ -23,16 +23,17 @@ export const blankPhases: TemplatePhase[] = [
   { id: "growth", name: "Post-Launch & Growth", mode: "Loop", summary: "Learn from the launch and build steady readership.", milestones: [] },
 ];
 
-export function CycleBuilder({ title, description, phases: initial, creating, onBack, onCreate }: {
+export function CycleBuilder({ title, description, phases: initial, initialTitle, creating, onBack, onCreate }: {
   title: string;
   description: string;
   phases: TemplatePhase[];
+  initialTitle?: string;
   creating?: boolean;
   onBack: () => void;
   onCreate: (input: { title: string; targetDate: string; phases: TemplatePhase[] }) => void;
 }) {
   const [phases, setPhases] = useState<TemplatePhase[]>(initial);
-  const [bookTitle, setBookTitle] = useState("");
+  const [bookTitle, setBookTitle] = useState(initialTitle ?? "");
   const [targetDate, setTargetDate] = useState("");
 
   const updateMilestone = (phaseId: string, index: number, patch: Partial<TemplatePhase["milestones"][number]>) =>

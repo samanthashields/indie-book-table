@@ -34,6 +34,7 @@ export type BookRow = {
   edition: string | null;
   cover_url: string | null;
   status: string;
+  has_cycle: boolean;
   template_id: string | null;
   metadata: Record<string, unknown>;
   created_at: string;
@@ -73,6 +74,9 @@ export type BookSummary = {
   title: string;
   subtitle?: string;
   author: string;
+  authorId: string;
+  isMine: boolean;
+  hasCycle: boolean;
   genre: string;
   status: string;
   progress: number;
@@ -100,17 +104,19 @@ const milestoneToUi = (row: MilestoneRow): Milestone => ({
   ...(row.due_date ? { dueIso: row.due_date } : {}),
 });
 
-const summarize = (book: BookRow, milestones: MilestoneRow[], authorName: string): BookSummary => {
+const summarize = (book: BookRow, milestones: MilestoneRow[], authorName: string, currentUserId: string | undefined): BookSummary => {
   const sorted = [...milestones].sort((a, b) => a.position - b.position);
   const done = sorted.filter((m) => m.status === "Complete").length;
   const progress = sorted.length ? Math.round((done / sorted.length) * 100) : 0;
   const next = sorted.find((m) => m.status === "In progress") ?? sorted.find((m) => m.status !== "Complete");
-  const activePhase = next?.phase_id;
   return {
     id: book.id,
     title: book.title,
     ...(book.subtitle ? { subtitle: book.subtitle } : {}),
     author: book.pen_name || authorName,
+    authorId: book.author_id,
+    isMine: book.author_id === currentUserId,
+    hasCycle: Boolean(book.has_cycle),
     genre: book.genre ?? "Uncategorised",
     status: book.status === "active" ? "In progress" : book.status,
     progress,
@@ -145,7 +151,7 @@ export function useBooks() {
       for (const milestone of (milestoneRows ?? []) as MilestoneRow[]) {
         grouped.set(milestone.book_id, [...(grouped.get(milestone.book_id) ?? []), milestone]);
       }
-      return rows.map((row) => summarize(row, grouped.get(row.id) ?? [], authorName));
+      return rows.map((row) => summarize(row, grouped.get(row.id) ?? [], authorName, userId));
     },
   });
 }
@@ -210,6 +216,8 @@ export type CreateCycleInput = {
   templateId?: string;
   phases: TemplatePhase[];
   summaryNote?: string;
+  /** When set, the cycle is attached to an existing book in the library. */
+  bookId?: string;
 };
 
 export function useCreateBookCycle() {
@@ -218,23 +226,34 @@ export function useCreateBookCycle() {
     mutationFn: async (input: CreateCycleInput) => {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData.user) throw new Error("You need to be signed in.");
-      const { data: book, error } = await supabase
-        .from("books")
-        .insert({
-          author_id: userData.user.id,
-          title: input.title,
-          genre: input.genre ?? null,
-          target_publication_date: input.targetDate ?? null,
-          template_id: input.templateId ?? null,
-          metadata: {
-            manuscriptStatus: input.manuscriptStatus ?? "drafting",
-            illustrated: input.illustrated ?? false,
-            phaseSummaries: Object.fromEntries(input.phases.map((phase) => [phase.id, phase.summary])),
-          },
-        })
-        .select("id")
-        .single();
-      if (error) throw error;
+      const payload = {
+        title: input.title,
+        genre: input.genre ?? null,
+        target_publication_date: input.targetDate ?? null,
+        template_id: input.templateId ?? null,
+        status: "active",
+        has_cycle: true,
+        metadata: {
+          manuscriptStatus: input.manuscriptStatus ?? "drafting",
+          illustrated: input.illustrated ?? false,
+          phaseSummaries: Object.fromEntries(input.phases.map((phase) => [phase.id, phase.summary])),
+        },
+      };
+      let book: { id: string };
+      if (input.bookId) {
+        const { data, error } = await supabase.from("books").update(payload).eq("id", input.bookId).select("id").single();
+        if (error) throw error;
+        book = data as { id: string };
+      } else {
+        const { data, error } = await supabase
+          .from("books")
+          .insert({ author_id: userData.user.id, ...payload })
+          .select("id")
+          .single();
+        if (error) throw error;
+        book = data as { id: string };
+      }
+
 
       const target = input.targetDate ? new Date(`${input.targetDate}T00:00:00`) : new Date(Date.now() + 365 * 86400000);
       const timeline = suggestPhaseRanges(new Date(), target, input.manuscriptStatus ?? "drafting", input.illustrated ?? false);
@@ -351,5 +370,98 @@ export function useSaveReflection(bookId: string) {
       if (error) throw error;
     },
     onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["reflection", bookId] }),
+  });
+}
+
+/** Saves a book idea to the library, without starting a cycle yet. */
+export function useCreateBookIdea() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: { title: string; subtitle?: string; pen_name?: string; genre?: string; audience?: string; goals?: string; target_publication_date?: string }) => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error("You need to be signed in.");
+      const { data, error } = await supabase
+        .from("books")
+        .insert({
+          author_id: userData.user.id,
+          title: input.title,
+          subtitle: input.subtitle || null,
+          pen_name: input.pen_name || null,
+          genre: input.genre || null,
+          audience: input.audience || null,
+          goals: input.goals || null,
+          target_publication_date: input.target_publication_date || null,
+          status: "idea",
+          has_cycle: false,
+        })
+        .select("id")
+        .single();
+      if (error) throw error;
+      return data.id as string;
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["books"] }),
+  });
+}
+
+export function useDeleteBook() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (bookId: string) => {
+      const { error } = await supabase.from("books").delete().eq("id", bookId);
+      if (error) throw error;
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["books"] }),
+  });
+}
+
+export type AuthorTemplateInput = {
+  title: string;
+  description?: string;
+  genre?: string;
+  audience?: string;
+  duration?: string;
+  phases: TemplatePhase[];
+  details?: { illustrated?: boolean; highlights?: string[] };
+};
+
+export function useSaveAuthorTemplate() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, input }: { id?: string; input: AuthorTemplateInput }) => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error("You need to be signed in.");
+      const payload = {
+        owner_id: userData.user.id,
+        title: input.title,
+        description: input.description ?? null,
+        genre: input.genre ?? null,
+        audience: input.audience ?? null,
+        duration: input.duration ?? null,
+        phases: input.phases as unknown as never,
+        details: (input.details ?? {}) as unknown as never,
+        published: false,
+        archived: false,
+      };
+      if (id) {
+        const { error } = await supabase.from("templates").update(payload).eq("id", id);
+        if (error) throw error;
+        return id;
+      }
+      const { data, error } = await supabase.from("templates").insert(payload).select("id").single();
+      if (error) throw error;
+      return data.id as string;
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["templates"] }),
+  });
+}
+
+export function useDeleteAuthorTemplate() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("templates").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["templates"] }),
   });
 }
