@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react'
+import { template as featureRequestUpdateTemplate } from './feature-request-update'
 
 export interface TemplateEntry {
   component: ComponentType<any>
