@@ -151,7 +151,7 @@ export function useBooks() {
       for (const milestone of (milestoneRows ?? []) as MilestoneRow[]) {
         grouped.set(milestone.book_id, [...(grouped.get(milestone.book_id) ?? []), milestone]);
       }
-      return rows.map((row) => summarize(row, grouped.get(row.id) ?? [], authorName));
+      return rows.map((row) => summarize(row, grouped.get(row.id) ?? [], authorName, userId));
     },
   });
 }
