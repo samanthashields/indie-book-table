@@ -163,23 +163,33 @@ export function PenChat({
             </div>
           )}
 
-          {messages.map((message) => (
-            <Message key={message.id} from={message.role}>
-              <MessageContent
-                className={
-                  message.role === "assistant"
-                    ? "bg-transparent p-0 text-foreground"
-                    : "bg-primary text-primary-foreground"
-                }
-              >
-                {message.parts.map((part, index) =>
-                  part.type === "text" ? (
-                    <MessageResponse key={index}>{part.text}</MessageResponse>
-                  ) : null,
-                )}
-              </MessageContent>
-            </Message>
-          ))}
+          {messages.map((message) => {
+            const raw = message.parts
+              .map((part) => (part.type === "text" ? part.text : ""))
+              .join("");
+            const parsed =
+              message.role === "assistant"
+                ? parsePenMessage(raw)
+                : { text: raw, references: [] as never[] };
+
+            return (
+              <Message key={message.id} from={message.role}>
+                <MessageContent
+                  className={
+                    message.role === "assistant"
+                      ? "bg-transparent p-0 text-foreground"
+                      : "bg-primary text-primary-foreground"
+                  }
+                >
+                  <MessageResponse>{parsed.text}</MessageResponse>
+                  {message.role === "assistant" && (
+                    <PenReferenceChips references={parsed.references} />
+                  )}
+                </MessageContent>
+              </Message>
+            );
+          })}
+
 
           {status === "submitted" && <Shimmer className="text-sm">Pen is thinking…</Shimmer>}
 
