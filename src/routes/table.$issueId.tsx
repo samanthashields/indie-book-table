@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { PublicShell } from "@/components/site/public-shell";
@@ -79,7 +79,24 @@ function IssuePage() {
 
   const { issueId } = Route.useParams();
   const { preview } = Route.useSearch();
-  const { data } = useSuspenseQuery(preview ? issuePreviewQuery(issueId) : issueCatalogQuery(issueId));
+  // Preview reads drafts through an admin-only server fn, which needs the
+  // browser session's bearer token — so it can only run after hydration.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+  const previewResult = useQuery({ ...issuePreviewQuery(issueId), enabled: Boolean(preview) && hydrated });
+  const publicResult = useQuery({ ...issueCatalogQuery(issueId), enabled: !preview });
+  const data = preview ? previewResult.data : publicResult.data;
+
+  if (!data) {
+    return (
+      <PublicShell>
+        <p className="text-muted-foreground">
+          {previewResult.error || publicResult.error ? "This issue could not be loaded." : "Loading the issue…"}
+        </p>
+      </PublicShell>
+    );
+  }
+
   const issue = data.issue;
 
   return (
