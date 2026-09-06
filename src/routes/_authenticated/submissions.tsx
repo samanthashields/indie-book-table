@@ -132,7 +132,10 @@ function SubmissionsPage() {
         <div className="rounded-2xl border border-dashed border-border bg-paper p-10 text-center">
           <h2 className="font-serif text-2xl font-normal">Nothing sent yet</h2>
           <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">When your book is out in the world, submit it and the editors will consider it for an upcoming issue of The Table.</p>
-          <Button className="mt-5" asChild><Link to="/submit">Submit your first book</Link></Button>
+          <div className="mt-5 flex flex-wrap justify-center gap-3">
+            <Button asChild><Link to="/submit">Submit your first book</Link></Button>
+            <Button variant="outline" asChild><Link to="/"><BookOpen />Pick a book from My Books</Link></Button>
+          </div>
         </div>
       ) : (
         <div className="space-y-5">
