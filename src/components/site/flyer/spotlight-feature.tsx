@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 
 import type { CatalogBook } from "@/lib/catalog-types";
-import { categoryRibbonColor, panelClass } from "@/lib/flyer-theme";
 import { PricePill, formatPrice } from "./price-pill";
 import { TagChips } from "./tag-chips";
 import { CircleToggle } from "@/components/site/circle-toggle";
@@ -19,53 +18,52 @@ export function SpotlightFeature({
   circled?: boolean;
   onCircle?: (entry: WishlistEntry) => void;
 }) {
-  const panel = panelClass(categoryRibbonColor(category));
   const ebook = formatPrice(book.ebook_price);
   const print = formatPrice(book.print_price);
 
   return (
-    <div className="mx-auto mt-6 max-w-4xl">
-      <div className="relative">
-        <span aria-hidden="true" className="banner-wide absolute inset-x-0 top-[4px] block h-full bg-cocoa" />
-        <div className={`banner-wide relative flex items-center justify-center py-2.5 ${panel}`}>
-          <span className="px-8 text-[0.8rem] font-bold uppercase tracking-[0.22em] sm:text-base">
-            Spotlight pick
-          </span>
-        </div>
+    <div className="mx-auto max-w-4xl">
+      <div className="poster-slant rounded-2xl bg-cocoa px-6 py-4 text-center">
+        <p className="poster-unslant font-serif text-2xl font-black uppercase tracking-[0.12em] text-paper sm:text-4xl">
+          Spotlight pick
+        </p>
+        <p className="poster-unslant mt-1 text-[0.6rem] font-black uppercase tracking-[0.3em] text-paper/70">
+          {category}
+        </p>
       </div>
 
-      <div className="panel-outline paper-grain relative mt-10 grid items-start gap-8 bg-card p-5 sm:grid-cols-[minmax(0,16rem)_1fr] sm:p-7">
+      <div className="poster-panel relative mt-10 grid items-center gap-8 bg-card p-6 sm:grid-cols-[minmax(0,18rem)_1fr] sm:p-9">
         <span
           aria-hidden="true"
-          className="absolute -right-5 -top-8 rotate-[9deg] rounded-full border-[3px] border-cocoa bg-amber px-4 py-3 text-center text-[0.6rem] font-bold uppercase leading-tight tracking-[0.1em] text-cocoa shadow-[3px_3px_0_0_var(--cocoa)]"
+          className="starburst absolute -right-4 -top-8 flex size-24 rotate-[8deg] items-center justify-center bg-amber text-center text-[0.6rem] font-black uppercase leading-tight tracking-[0.08em] text-cocoa"
         >
           Don&rsquo;t
           <br />
           miss!
         </span>
 
-        <div className="relative w-full rotate-[-2deg]">
-        <Link
-          to="/table/books/$bookId"
-          params={{ bookId: book.id }}
-          className="group relative block w-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cocoa"
-        >
-          {book.cover_image_url ? (
-            <img
-              src={book.cover_image_url}
-              alt={`Cover of ${book.title} by ${book.author_name}`}
-              loading="lazy"
-              width={672}
-              height={992}
-              className="aspect-[2/3] w-full border-[3px] border-cocoa object-cover transition-transform duration-300 group-hover:-translate-y-1"
-            />
-          ) : (
-            <span className="flex aspect-[2/3] w-full items-center justify-center border-[3px] border-dashed border-cocoa/50 bg-paper p-4 text-center font-serif text-xl text-cocoa/70">
-              {book.title}
-            </span>
-          )}
-        </Link>
-        {onCircle && <CircleToggle book={book} circled={circled} onToggle={onCircle} />}
+        <div className="relative">
+          <Link
+            to="/table/books/$bookId"
+            params={{ bookId: book.id }}
+            className="group relative block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cocoa"
+          >
+            {book.cover_image_url ? (
+              <img
+                src={book.cover_image_url}
+                alt={`Cover of ${book.title} by ${book.author_name}`}
+                loading="lazy"
+                width={672}
+                height={992}
+                className="aspect-[2/3] w-full rounded-2xl object-cover shadow-[0_24px_50px_-22px_var(--cocoa)] transition-transform duration-300 group-hover:-translate-y-1"
+              />
+            ) : (
+              <span className="flex aspect-[2/3] w-full items-center justify-center rounded-2xl bg-paper p-4 text-center font-serif text-xl text-cocoa/70">
+                {book.title}
+              </span>
+            )}
+          </Link>
+          {onCircle && <CircleToggle book={book} circled={circled} onToggle={onCircle} />}
         </div>
 
         <div>
@@ -74,8 +72,7 @@ export function SpotlightFeature({
               {book.title}
             </Link>
           </h3>
-          <p className="mt-1 text-sm font-bold text-cocoa/80">
-            by{" "}
+          <p className="mt-1 text-sm font-bold uppercase tracking-[0.08em] text-cocoa/75">
             <Link
               to="/table/authors/$authorId"
               params={{ authorId: book.author_id }}
@@ -90,20 +87,20 @@ export function SpotlightFeature({
             {book.spotlight_blurb ?? book.hook}
           </p>
 
-          <div className="mt-4 flex flex-col items-start gap-1.5">
+          <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
             {ebook && <PricePill format="ebook" amount={ebook} />}
             {print && <PricePill format="print" amount={print} />}
           </div>
 
           {book.purchase_links.length > 0 && (
-            <ul className="mt-4 flex flex-wrap gap-2">
+            <ul className="mt-5 flex flex-wrap gap-2">
               {book.purchase_links.map((link) => (
                 <li key={link.id}>
                   <a
                     href={link.url}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="panel-outline-thin inline-block bg-amber px-3 py-1 text-[0.62rem] font-bold uppercase tracking-[0.1em] text-cocoa"
+                    className="inline-block rounded-full bg-cocoa px-4 py-1.5 text-[0.65rem] font-black uppercase tracking-[0.12em] text-paper"
                   >
                     {link.platform_label}
                   </a>

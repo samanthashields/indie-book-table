@@ -123,12 +123,12 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
       >
         {page.kind === "cover" && (
           <div className="flex min-h-[min(70rem,calc(100vh-14rem))] flex-col justify-center">
-            <div className="border-y-4 border-cocoa py-3 text-center">
-              <p className="font-serif text-[2.6rem] uppercase leading-none tracking-[0.12em] text-cocoa sm:text-[4rem]">
+            <div className="poster-slant rounded-2xl bg-cocoa py-4 text-center">
+              <p className="poster-unslant font-serif text-[2.6rem] font-black uppercase leading-none tracking-[0.1em] text-paper sm:text-[4.5rem]">
                 The Indie Table
               </p>
             </div>
-            <div className="mt-2 flex items-center justify-between border-b border-cocoa/40 pb-2 text-[0.6rem] font-bold uppercase tracking-[0.3em] text-inkblue">
+            <div className="mt-4 flex items-center justify-between rounded-full bg-card/80 px-4 py-2 text-[0.6rem] font-bold uppercase tracking-[0.3em] text-inkblue">
               <span>{data.issue?.display_label ?? "Current"} issue</span>
               <span>{allBooks.length} titles</span>
               <span className="hidden sm:inline">Independently published</span>
@@ -148,7 +148,7 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
                 </p>
               </div>
               {theme.cover_image_url ? (
-                <figure className="panel-outline bg-card p-2">
+                <figure className="poster-panel bg-card p-3">
                   <img
                     src={theme.cover_image_url}
                     alt={`Cover art for the ${data.issue?.display_label ?? "current"} issue`}
@@ -156,7 +156,7 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
                   />
                 </figure>
               ) : (
-                <div className="panel-outline bg-card p-5">
+                <div className="poster-panel bg-card p-6">
                   <p className="text-[0.6rem] font-bold uppercase tracking-[0.3em] text-cocoa/70">In this issue</p>
                   <ol className="mt-3 space-y-1.5 text-sm text-cocoa/85">
                     {pages.slice(1).map((entry, i) => (
@@ -171,7 +171,7 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
             </div>
 
             {theme.cover_image_url && (
-              <div className="panel-outline mt-8 bg-card p-4">
+              <div className="poster-panel mt-8 bg-card p-5">
                 <p className="text-[0.6rem] font-bold uppercase tracking-[0.3em] text-cocoa/70">In this issue</p>
                 <ol className="mt-3 grid gap-x-8 gap-y-1.5 text-sm text-cocoa/85 sm:grid-cols-2">
                   {pages.slice(1).map((entry, i) => (
@@ -195,9 +195,9 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
             <CategoryRibbon category={page.category} count={page.books.length} />
             <div className="relative mt-6">
               <Doodles seed={index} />
-              <div className="relative columns-1 gap-8 sm:columns-2">
+              <div className="relative grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {page.books.map((book) => (
-                  <div key={book.id} className="mb-5 break-inside-avoid">
+                  <div key={book.id}>
                     <ListingRow
                       book={book}
                       listingNumber={listingNumbers.get(book.id)}
@@ -224,7 +224,7 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
   };
 
   return (
-    <div className="paper-grain min-h-screen bg-paper/60">
+    <div className="min-h-screen bg-paper/60">
       <div
         className="mx-auto max-w-5xl px-3 pb-10 pt-6 sm:px-6 sm:pt-10"
         onTouchStart={(event) => {

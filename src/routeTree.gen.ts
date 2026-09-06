@@ -20,6 +20,7 @@ import { Route as AuthenticatedCyclesRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedSubmissionsRouteImport } from './routes/_authenticated/submissions'
 import { Route as AuthenticatedSubmitRouteImport } from './routes/_authenticated/submit'
 import { Route as ApiCoachPlanRouteImport } from './routes/api/coach-plan'
+import { Route as ApiPenRouteImport } from './routes/api/pen'
 import { Route as IssuesIndexRouteImport } from './routes/issues.index'
 import { Route as JournalIndexRouteImport } from './routes/journal.index'
 import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
@@ -42,6 +43,8 @@ import { Route as AuthenticatedBooksNewRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedHelpIndexRouteImport } from './routes/_authenticated/help.index'
 import { Route as AuthenticatedHelpReleasesRouteImport } from './routes/_authenticated/help.releases'
 import { Route as AuthenticatedHelpSupportRouteImport } from './routes/_authenticated/help.support'
+import { Route as AuthenticatedPenIndexRouteImport } from './routes/_authenticated/pen.index'
+import { Route as AuthenticatedPenThreadIdRouteImport } from './routes/_authenticated/pen.$threadId'
 import { Route as AuthenticatedTemplatesIndexRouteImport } from './routes/_authenticated/templates.index'
 import { Route as AuthenticatedTemplatesTemplateIdRouteImport } from './routes/_authenticated/templates.$templateId'
 import { Route as TableIssueIdFlyerRouteImport } from './routes/table.$issueId_.flyer'
@@ -114,6 +117,11 @@ const AuthenticatedSubmitRoute = AuthenticatedSubmitRouteImport.update({
 const ApiCoachPlanRoute = ApiCoachPlanRouteImport.update({
   id: '/api/coach-plan',
   path: '/api/coach-plan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPenRoute = ApiPenRouteImport.update({
+  id: '/api/pen',
+  path: '/api/pen',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IssuesIndexRoute = IssuesIndexRouteImport.update({
@@ -239,6 +247,17 @@ const AuthenticatedHelpSupportRoute =
     path: '/help/support',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPenIndexRoute = AuthenticatedPenIndexRouteImport.update({
+  id: '/pen/',
+  path: '/pen/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPenThreadIdRoute =
+  AuthenticatedPenThreadIdRouteImport.update({
+    id: '/pen/$threadId',
+    path: '/pen/$threadId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTemplatesIndexRoute =
   AuthenticatedTemplatesIndexRouteImport.update({
     id: '/templates/',
@@ -350,6 +369,7 @@ export interface FileRoutesByFullPath {
   '/submissions': typeof AuthenticatedSubmissionsRoute
   '/submit': typeof AuthenticatedSubmitRoute
   '/api/coach-plan': typeof ApiCoachPlanRoute
+  '/api/pen': typeof ApiPenRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/table/$issueId': typeof TableIssueIdRoute
   '/issues/': typeof IssuesIndexRoute
@@ -370,12 +390,14 @@ export interface FileRoutesByFullPath {
   '/books/new': typeof AuthenticatedBooksNewRoute
   '/help/releases': typeof AuthenticatedHelpReleasesRoute
   '/help/support': typeof AuthenticatedHelpSupportRoute
+  '/pen/$threadId': typeof AuthenticatedPenThreadIdRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
   '/table/$issueId/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/help/': typeof AuthenticatedHelpIndexRoute
+  '/pen/': typeof AuthenticatedPenIndexRoute
   '/templates/': typeof AuthenticatedTemplatesIndexRoute
   '/admin/help/$articleId': typeof AuthenticatedAdminHelpArticleIdRoute
   '/admin/journal/$postId': typeof AuthenticatedAdminJournalPostIdRoute
@@ -399,6 +421,7 @@ export interface FileRoutesByTo {
   '/submissions': typeof AuthenticatedSubmissionsRoute
   '/submit': typeof AuthenticatedSubmitRoute
   '/api/coach-plan': typeof ApiCoachPlanRoute
+  '/api/pen': typeof ApiPenRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/table/$issueId': typeof TableIssueIdRoute
   '/': typeof AuthenticatedIndexRoute
@@ -419,12 +442,14 @@ export interface FileRoutesByTo {
   '/books/new': typeof AuthenticatedBooksNewRoute
   '/help/releases': typeof AuthenticatedHelpReleasesRoute
   '/help/support': typeof AuthenticatedHelpSupportRoute
+  '/pen/$threadId': typeof AuthenticatedPenThreadIdRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
   '/table/$issueId/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/help': typeof AuthenticatedHelpIndexRoute
+  '/pen': typeof AuthenticatedPenIndexRoute
   '/templates': typeof AuthenticatedTemplatesIndexRoute
   '/admin/help/$articleId': typeof AuthenticatedAdminHelpArticleIdRoute
   '/admin/journal/$postId': typeof AuthenticatedAdminJournalPostIdRoute
@@ -451,6 +476,7 @@ export interface FileRoutesById {
   '/_authenticated/submissions': typeof AuthenticatedSubmissionsRoute
   '/_authenticated/submit': typeof AuthenticatedSubmitRoute
   '/api/coach-plan': typeof ApiCoachPlanRoute
+  '/api/pen': typeof ApiPenRoute
   '/journal/$slug': typeof JournalSlugRoute
   '/table/$issueId': typeof TableIssueIdRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
@@ -472,12 +498,14 @@ export interface FileRoutesById {
   '/_authenticated/books/new': typeof AuthenticatedBooksNewRoute
   '/_authenticated/help/releases': typeof AuthenticatedHelpReleasesRoute
   '/_authenticated/help/support': typeof AuthenticatedHelpSupportRoute
+  '/_authenticated/pen/$threadId': typeof AuthenticatedPenThreadIdRoute
   '/_authenticated/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
   '/table/$issueId_/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/help/': typeof AuthenticatedHelpIndexRoute
+  '/_authenticated/pen/': typeof AuthenticatedPenIndexRoute
   '/_authenticated/templates/': typeof AuthenticatedTemplatesIndexRoute
   '/_authenticated/admin/help/$articleId': typeof AuthenticatedAdminHelpArticleIdRoute
   '/_authenticated/admin/journal/$postId': typeof AuthenticatedAdminJournalPostIdRoute
@@ -505,6 +533,7 @@ export interface FileRouteTypes {
     | '/submissions'
     | '/submit'
     | '/api/coach-plan'
+    | '/api/pen'
     | '/journal/$slug'
     | '/table/$issueId'
     | '/issues/'
@@ -525,12 +554,14 @@ export interface FileRouteTypes {
     | '/books/new'
     | '/help/releases'
     | '/help/support'
+    | '/pen/$threadId'
     | '/templates/$templateId'
     | '/table/$issueId/flyer'
     | '/table/authors/$authorId'
     | '/table/books/$bookId'
     | '/admin/'
     | '/help/'
+    | '/pen/'
     | '/templates/'
     | '/admin/help/$articleId'
     | '/admin/journal/$postId'
@@ -554,6 +585,7 @@ export interface FileRouteTypes {
     | '/submissions'
     | '/submit'
     | '/api/coach-plan'
+    | '/api/pen'
     | '/journal/$slug'
     | '/table/$issueId'
     | '/'
@@ -574,12 +606,14 @@ export interface FileRouteTypes {
     | '/books/new'
     | '/help/releases'
     | '/help/support'
+    | '/pen/$threadId'
     | '/templates/$templateId'
     | '/table/$issueId/flyer'
     | '/table/authors/$authorId'
     | '/table/books/$bookId'
     | '/admin'
     | '/help'
+    | '/pen'
     | '/templates'
     | '/admin/help/$articleId'
     | '/admin/journal/$postId'
@@ -605,6 +639,7 @@ export interface FileRouteTypes {
     | '/_authenticated/submissions'
     | '/_authenticated/submit'
     | '/api/coach-plan'
+    | '/api/pen'
     | '/journal/$slug'
     | '/table/$issueId'
     | '/_authenticated/'
@@ -626,12 +661,14 @@ export interface FileRouteTypes {
     | '/_authenticated/books/new'
     | '/_authenticated/help/releases'
     | '/_authenticated/help/support'
+    | '/_authenticated/pen/$threadId'
     | '/_authenticated/templates/$templateId'
     | '/table/$issueId_/flyer'
     | '/table/authors/$authorId'
     | '/table/books/$bookId'
     | '/_authenticated/admin/'
     | '/_authenticated/help/'
+    | '/_authenticated/pen/'
     | '/_authenticated/templates/'
     | '/_authenticated/admin/help/$articleId'
     | '/_authenticated/admin/journal/$postId'
@@ -653,6 +690,7 @@ export interface RootRouteChildren {
   MissionRoute: typeof MissionRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ApiCoachPlanRoute: typeof ApiCoachPlanRoute
+  ApiPenRoute: typeof ApiPenRoute
   JournalSlugRoute: typeof JournalSlugRoute
   TableIssueIdRoute: typeof TableIssueIdRoute
   IssuesIndexRoute: typeof IssuesIndexRoute
@@ -740,6 +778,13 @@ declare module '@tanstack/react-router' {
       path: '/api/coach-plan'
       fullPath: '/api/coach-plan'
       preLoaderRoute: typeof ApiCoachPlanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/pen': {
+      id: '/api/pen'
+      path: '/api/pen'
+      fullPath: '/api/pen'
+      preLoaderRoute: typeof ApiPenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/issues/': {
@@ -894,6 +939,20 @@ declare module '@tanstack/react-router' {
       path: '/help/support'
       fullPath: '/help/support'
       preLoaderRoute: typeof AuthenticatedHelpSupportRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/pen/': {
+      id: '/_authenticated/pen/'
+      path: '/pen'
+      fullPath: '/pen/'
+      preLoaderRoute: typeof AuthenticatedPenIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/pen/$threadId': {
+      id: '/_authenticated/pen/$threadId'
+      path: '/pen/$threadId'
+      fullPath: '/pen/$threadId'
+      preLoaderRoute: typeof AuthenticatedPenThreadIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/templates/': {
@@ -1093,8 +1152,10 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBooksNewRoute: typeof AuthenticatedBooksNewRoute
   AuthenticatedHelpReleasesRoute: typeof AuthenticatedHelpReleasesRoute
   AuthenticatedHelpSupportRoute: typeof AuthenticatedHelpSupportRoute
+  AuthenticatedPenThreadIdRoute: typeof AuthenticatedPenThreadIdRoute
   AuthenticatedTemplatesTemplateIdRoute: typeof AuthenticatedTemplatesTemplateIdRoute
   AuthenticatedHelpIndexRoute: typeof AuthenticatedHelpIndexRoute
+  AuthenticatedPenIndexRoute: typeof AuthenticatedPenIndexRoute
   AuthenticatedTemplatesIndexRoute: typeof AuthenticatedTemplatesIndexRoute
   AuthenticatedHelpArticlesSlugRoute: typeof AuthenticatedHelpArticlesSlugRoute
   AuthenticatedHelpCategoriesCategorySlugRoute: typeof AuthenticatedHelpCategoriesCategorySlugRoute
@@ -1113,8 +1174,10 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBooksNewRoute: AuthenticatedBooksNewRoute,
   AuthenticatedHelpReleasesRoute: AuthenticatedHelpReleasesRoute,
   AuthenticatedHelpSupportRoute: AuthenticatedHelpSupportRoute,
+  AuthenticatedPenThreadIdRoute: AuthenticatedPenThreadIdRoute,
   AuthenticatedTemplatesTemplateIdRoute: AuthenticatedTemplatesTemplateIdRoute,
   AuthenticatedHelpIndexRoute: AuthenticatedHelpIndexRoute,
+  AuthenticatedPenIndexRoute: AuthenticatedPenIndexRoute,
   AuthenticatedTemplatesIndexRoute: AuthenticatedTemplatesIndexRoute,
   AuthenticatedHelpArticlesSlugRoute: AuthenticatedHelpArticlesSlugRoute,
   AuthenticatedHelpCategoriesCategorySlugRoute:
@@ -1132,6 +1195,7 @@ const rootRouteChildren: RootRouteChildren = {
   MissionRoute: MissionRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ApiCoachPlanRoute: ApiCoachPlanRoute,
+  ApiPenRoute: ApiPenRoute,
   JournalSlugRoute: JournalSlugRoute,
   TableIssueIdRoute: TableIssueIdRoute,
   IssuesIndexRoute: IssuesIndexRoute,

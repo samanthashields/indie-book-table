@@ -271,3 +271,19 @@ export function resolvePage(
     pattern: theme.border_pattern ?? preset.pattern,
   };
 }
+
+/** Saturated colour block used as the poster ground for a fair-flyer page. */
+const POSTER_GROUND: Record<FlyerColor, string> = {
+  lime: "bg-leaf/30",
+  red: "bg-clay/30",
+  yellow: "bg-amber/30",
+  sky: "bg-teal/25",
+  pink: "bg-clay/20",
+  purple: "bg-inkblue/20",
+  orange: "bg-clay/25",
+  teal: "bg-teal/30",
+};
+
+export function posterGroundClass(color: FlyerColor): string {
+  return POSTER_GROUND[color];
+}

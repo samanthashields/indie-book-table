@@ -3,11 +3,15 @@ import type { ReactNode } from "react";
 import {
   accentBarClass,
   patternClass,
+  posterGroundClass,
   type BorderPattern,
   type FlyerColor,
 } from "@/lib/flyer-theme";
 
-/** One printed sheet of the flip-book: border motif, stock, accent rule. */
+/**
+ * One page of the fair flyer, printed like a glossy poster: a full-bleed
+ * colour block inside a thick rounded frame, with a slanted masthead bar.
+ */
 export function FlyerPage({
   children,
   groundClass,
@@ -27,41 +31,48 @@ export function FlyerPage({
   folio?: string;
   corner?: ReactNode;
 }) {
-  const ground = groundClass ?? "bg-background";
+  const ground = accent ? posterGroundClass(accent) : (groundClass ?? "bg-background");
 
   return (
     <div
-      className={`${patternClass(pattern)} relative flex min-h-[min(78rem,calc(100vh-9rem))] overflow-hidden border-4 border-cocoa p-[0.7rem] shadow-[var(--shadow-page)]`}
+      className={`${patternClass(pattern)} poster-frame poster-gloss relative flex min-h-[min(78rem,calc(100vh-9rem))] overflow-hidden bg-cocoa p-[0.55rem]`}
     >
-      <div className={`paper-grain relative flex-1 overflow-hidden border-[3px] border-cocoa ${ground}`}>
+      <div className="poster-frame relative flex-1 overflow-hidden bg-paper">
+        <div aria-hidden="true" className={`pointer-events-none absolute inset-0 ${ground}`} />
+
         {backgroundImage && (
           <>
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.09]"
+              className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.14]"
               style={{ backgroundImage: `url(${backgroundImage})` }}
             />
             <div aria-hidden="true" className={`pointer-events-none absolute inset-0 ${ground} opacity-40`} />
           </>
         )}
-        {accent && (
-          <span aria-hidden="true" className={`absolute inset-x-0 top-0 h-[6px] ${accentBarClass(accent)}`} />
-        )}
-        {/* staple edge */}
-        <span aria-hidden="true" className="absolute left-1.5 top-[18%] h-7 w-[5px] bg-cocoa/60" />
-        <span aria-hidden="true" className="absolute bottom-[18%] left-1.5 h-7 w-[5px] bg-cocoa/60" />
 
         {runningHead && (
-          <div className="relative flex items-center justify-between border-b border-cocoa/25 px-4 pb-2 pt-4 text-[0.6rem] font-bold uppercase tracking-[0.32em] text-cocoa/65 sm:px-8">
-            <span className="truncate">{runningHead}</span>
-            <span aria-hidden="true" className="hidden sm:inline">The Indie Table</span>
+          <div className="relative overflow-hidden">
+            <div
+              className={`poster-slant -mx-6 -mt-4 flex items-center justify-between px-10 pb-2.5 pt-7 ${accent ? accentBarClass(accent) : "bg-amber"}`}
+            >
+              <span className="poster-unslant truncate text-[0.68rem] font-black uppercase tracking-[0.3em] text-cocoa">
+                {runningHead}
+              </span>
+              <span
+                aria-hidden="true"
+                className="poster-unslant hidden text-[0.68rem] font-black uppercase tracking-[0.3em] text-cocoa/80 sm:inline"
+              >
+                The Indie Table
+              </span>
+            </div>
           </div>
         )}
 
-        <div className="relative px-4 py-6 sm:px-8 sm:py-9">{children}</div>
+        <div className="relative px-4 py-7 sm:px-9 sm:py-10">{children}</div>
 
         {folio && (
-          <span className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 text-[0.6rem] font-bold uppercase tracking-[0.3em] text-cocoa/55">
+          <span className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-cocoa px-3 py-1 text-[0.58rem] font-black uppercase tracking-[0.24em] text-paper">
             {folio}
           </span>
         )}
