@@ -8,7 +8,7 @@ import { CatalogBookCard } from "@/components/site/catalog-book-card";
 import { WishlistBar } from "@/components/site/wishlist-bar";
 import { SubscribeGateModal } from "@/components/site/subscribe-gate-modal";
 import { useWishlist, useWishlistGate, type WishlistEntry } from "@/lib/wishlist";
-import { getIssueCatalog } from "@/lib/catalog.functions";
+import { getIssueCatalog, getIssuePreview } from "@/lib/catalog.functions";
 
 const issueCatalogQuery = (issueId: string) =>
   queryOptions({
@@ -16,8 +16,19 @@ const issueCatalogQuery = (issueId: string) =>
     queryFn: () => getIssueCatalog({ data: { issueId } }),
   });
 
+const issuePreviewQuery = (issueId: string) =>
+  queryOptions({
+    queryKey: ["catalog", "issue-preview", issueId],
+    queryFn: () => getIssuePreview({ data: { issueId } }),
+  });
+
 export const Route = createFileRoute("/table/$issueId")({
-  loader: async ({ context, params }) => {
+  validateSearch: (search: Record<string, unknown>) => ({
+    preview: search["preview"] === "1" || search["preview"] === true ? true : undefined,
+  }),
+  loaderDeps: ({ search }) => ({ preview: search.preview }),
+  loader: async ({ context, params, deps }) => {
+    if (deps.preview) return null;
     const data = await context.queryClient.ensureQueryData(issueCatalogQuery(params.issueId));
     if (!data.issue) throw notFound();
     return data;
@@ -68,7 +79,8 @@ function IssuePage() {
   };
 
   const { issueId } = Route.useParams();
-  const { data } = useSuspenseQuery(issueCatalogQuery(issueId));
+  const { preview } = Route.useSearch();
+  const { data } = useSuspenseQuery(preview ? issuePreviewQuery(issueId) : issueCatalogQuery(issueId));
   const issue = data.issue;
 
   return (
