@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useBookTree, useUpdateBook } from "@/lib/book-db";
+import { BOOK_STATUSES } from "@/lib/book-status";
 
 export const Route = createFileRoute("/_authenticated/books/$bookId/details")({ head: () => ({ meta: [
   { title: "Book Details — Book Cycles" }, { name: "description", content: "Edit the publishing, audience, format, and distribution details for your book." }, { property: "og:title", content: "Book Details — Book Cycles" }, { property: "og:description", content: "Edit the publishing, audience, format, and distribution details for your book." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
@@ -17,7 +18,7 @@ const Field = ({ label, name, value, onChange, type = "text" }: { label: string;
   <label className="block text-sm font-semibold">{label}<Input className="mt-2" type={type} name={name} value={value} onChange={(event) => onChange(name, event.target.value)} /></label>
 );
 
-const fields = ["title", "subtitle", "pen_name", "genre", "series", "edition", "audience", "comparables", "goals", "length_estimate", "language", "trim_size", "isbn", "imprint", "price", "publishing_path", "target_publication_date", "budget"] as const;
+const fields = ["title", "subtitle", "pen_name", "genre", "series", "edition", "audience", "comparables", "goals", "length_estimate", "language", "trim_size", "isbn", "imprint", "price", "publishing_path", "target_publication_date", "budget", "shelf_status"] as const;
 type FormState = Record<(typeof fields)[number], string>;
 
 function BookDetails() {
@@ -36,7 +37,7 @@ function BookDetails() {
         series: book.series ?? "", edition: book.edition ?? "", audience: book.audience ?? "", comparables: book.comparables ?? "",
         goals: book.goals ?? "", length_estimate: book.length_estimate ?? "", language: book.language ?? "", trim_size: book.trim_size ?? "",
         isbn: book.isbn ?? "", imprint: book.imprint ?? "", price: book.price ?? "", publishing_path: book.publishing_path ?? "",
-        target_publication_date: book.target_publication_date ?? "", budget: book.budget != null ? String(book.budget) : "",
+        target_publication_date: book.target_publication_date ?? "", budget: book.budget != null ? String(book.budget) : "", shelf_status: book.shelf_status ?? "idea",
       });
     }
     if (data && !coverReady) { setCover(data.book.cover_url); setCoverReady(true); }
@@ -53,7 +54,7 @@ function BookDetails() {
         series: form.series || null, edition: form.edition || null, audience: form.audience || null, comparables: form.comparables || null,
         goals: form.goals || null, length_estimate: form.length_estimate || null, language: form.language || null, trim_size: form.trim_size || null,
         isbn: form.isbn || null, imprint: form.imprint || null, price: form.price || null, publishing_path: form.publishing_path || null,
-        target_publication_date: form.target_publication_date || null, budget: form.budget ? Number(form.budget) : null,
+        target_publication_date: form.target_publication_date || null, budget: form.budget ? Number(form.budget) : null, shelf_status: form.shelf_status || "idea",
         cover_url: cover,
       },
       { onSuccess: () => toast.success("Book details saved"), onError: () => toast.error("Couldn’t save the details") },
@@ -77,6 +78,11 @@ function BookDetails() {
             <Field label="Genre or category" name="genre" value={form.genre} onChange={onChange} />
             <Field label="Series" name="series" value={form.series} onChange={onChange} />
             <Field label="Edition" name="edition" value={form.edition} onChange={onChange} />
+            <label className="block text-sm font-semibold md:col-span-2">Book status
+              <select className="mt-2 h-10 w-full rounded-xl border border-input bg-paper px-3 text-sm" value={form.shelf_status} onChange={(event) => onChange("shelf_status", event.target.value)}>
+                {BOOK_STATUSES.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              </select>
+            </label>
           </div>
         </section>
         <section className="rounded-2xl border border-border bg-card p-6 shadow-xs">
