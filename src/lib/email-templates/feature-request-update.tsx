@@ -54,7 +54,7 @@ export const FeatureRequestUpdateEmail = ({
 export const template = {
   component: FeatureRequestUpdateEmail,
   subject: (data: Record<string, any>) =>
-    `“${data.requestTitle ?? 'Your feature request'}” is now ${data.statusLabel ?? 'updated'}`,
+    `“${data['requestTitle'] ?? 'Your feature request'}” is now ${data['statusLabel'] ?? 'updated'}`,
   displayName: 'Feature request update',
   previewData: {
     siteName: "Author's Workshop",
