@@ -16,8 +16,11 @@ import {
   PromptInputFooter,
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
+import { PenQuickActions } from "@/components/pen/pen-quick-actions";
+import { PenReferenceChips, parsePenMessage } from "@/components/pen/pen-references";
 import { penAuthHeaders } from "@/lib/pen-db";
 import penMark from "@/assets/pen-mark.png";
+
 
 export const PEN_OPENERS: Record<string, { greeting: string; suggestions: string[] }> = {
   overview: {
@@ -160,23 +163,33 @@ export function PenChat({
             </div>
           )}
 
-          {messages.map((message) => (
-            <Message key={message.id} from={message.role}>
-              <MessageContent
-                className={
-                  message.role === "assistant"
-                    ? "bg-transparent p-0 text-foreground"
-                    : "bg-primary text-primary-foreground"
-                }
-              >
-                {message.parts.map((part, index) =>
-                  part.type === "text" ? (
-                    <MessageResponse key={index}>{part.text}</MessageResponse>
-                  ) : null,
-                )}
-              </MessageContent>
-            </Message>
-          ))}
+          {messages.map((message) => {
+            const raw = message.parts
+              .map((part) => (part.type === "text" ? part.text : ""))
+              .join("");
+            const parsed =
+              message.role === "assistant"
+                ? parsePenMessage(raw)
+                : { text: raw, references: [] as never[] };
+
+            return (
+              <Message key={message.id} from={message.role}>
+                <MessageContent
+                  className={
+                    message.role === "assistant"
+                      ? "bg-transparent p-0 text-foreground"
+                      : "bg-primary text-primary-foreground"
+                  }
+                >
+                  <MessageResponse>{parsed.text}</MessageResponse>
+                  {message.role === "assistant" && (
+                    <PenReferenceChips references={parsed.references} />
+                  )}
+                </MessageContent>
+              </Message>
+            );
+          })}
+
 
           {status === "submitted" && <Shimmer className="text-sm">Pen is thinking…</Shimmer>}
 
@@ -201,12 +214,15 @@ export function PenChat({
         <ConversationScrollButton />
       </Conversation>
 
-      <PromptInput onSubmit={handleSubmit} className="mt-3">
+      <PenQuickActions section={section} disabled={busy} onPick={send} />
+
+      <PromptInput onSubmit={handleSubmit} className="mt-2">
         <PromptInputTextarea ref={textareaRef} placeholder="Talk to Pen about your books…" />
         <PromptInputFooter className="justify-end">
           <PromptInputSubmit status={status} disabled={busy} />
         </PromptInputFooter>
       </PromptInput>
+
     </div>
   );
 }
