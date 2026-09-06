@@ -726,6 +726,92 @@ export type Database = {
           },
         ]
       }
+      help_articles: {
+        Row: {
+          body: string
+          category_id: string | null
+          cover_image_url: string | null
+          created_at: string
+          id: string
+          position: number
+          published_at: string | null
+          related_ids: string[]
+          slug: string
+          status: Database["public"]["Enums"]["post_status"]
+          summary: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          category_id?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          id?: string
+          position?: number
+          published_at?: string | null
+          related_ids?: string[]
+          slug: string
+          status?: Database["public"]["Enums"]["post_status"]
+          summary?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          category_id?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          id?: string
+          position?: number
+          published_at?: string | null
+          related_ids?: string[]
+          slug?: string
+          status?: Database["public"]["Enums"]["post_status"]
+          summary?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "help_articles_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "help_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      help_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          position: number
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          position?: number
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          position?: number
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       milestone_notes: {
         Row: {
           attachment_path: string | null
@@ -1015,6 +1101,107 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      release_notes: {
+        Row: {
+          body: string
+          created_at: string
+          highlight: boolean
+          id: string
+          label: string | null
+          released_on: string
+          status: Database["public"]["Enums"]["post_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          highlight?: boolean
+          id?: string
+          label?: string | null
+          released_on?: string
+          status?: Database["public"]["Enums"]["post_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          highlight?: boolean
+          id?: string
+          label?: string | null
+          released_on?: string
+          status?: Database["public"]["Enums"]["post_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      support_messages: {
+        Row: {
+          attachment_path: string | null
+          body: string
+          created_at: string
+          from_admin: boolean
+          id: string
+          sender_user_id: string
+          ticket_id: string
+        }
+        Insert: {
+          attachment_path?: string | null
+          body: string
+          created_at?: string
+          from_admin?: boolean
+          id?: string
+          sender_user_id: string
+          ticket_id: string
+        }
+        Update: {
+          attachment_path?: string | null
+          body?: string
+          created_at?: string
+          from_admin?: boolean
+          id?: string
+          sender_user_id?: string
+          ticket_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_messages_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_tickets: {
+        Row: {
+          created_at: string
+          id: string
+          status: string
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          status?: string
+          subject: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          status?: string
+          subject?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       templates: {
         Row: {
