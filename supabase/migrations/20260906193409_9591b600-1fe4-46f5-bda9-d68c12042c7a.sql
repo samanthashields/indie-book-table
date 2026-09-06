@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.sync_feature_request_votes() FROM PUBLIC, anon, authenticated;
