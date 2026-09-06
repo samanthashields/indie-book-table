@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { BookOpen } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -14,6 +14,8 @@ const links = [
 export function PublicShell({ children }: { children: ReactNode }) {
   const user = useCurrentUser();
   const signedIn = Boolean(user.data?.id);
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const siteTitle = pathname.startsWith("/table") ? "The Indie Book Table" : "Book Cycles";
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
@@ -23,7 +25,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
             <span className="grid size-9 place-items-center rounded-xl bg-cocoa text-paper">
               <BookOpen className="size-5" />
             </span>
-            <span className="font-serif text-xl">Book Cycles</span>
+            <span className="font-serif text-xl">{siteTitle}</span>
           </Link>
           <nav className="ml-auto flex items-center gap-1 text-sm font-semibold">
             {links.map((link) => (
