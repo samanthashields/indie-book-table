@@ -167,7 +167,7 @@ function Index() {
   return (
     <AppShell>
       <PageHeading
-        title="My Books"
+        title="Author's Workshop"
         description="Every book you’re thinking about, writing, or launching — all in one shelf."
         back={false}
         action={
