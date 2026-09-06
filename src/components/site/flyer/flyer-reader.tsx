@@ -113,31 +113,77 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
         accent={look.accent}
         pattern={look.pattern}
         backgroundImage={look.backgroundImage}
+        {...(page.kind === "cover"
+          ? {}
+          : {
+              runningHead: page.kind === "spotlight" ? `Spotlight — ${page.category}` : page.category,
+              folio: `Page ${index + 1} of ${total}`,
+            })}
+        corner={<CornerTurn onNext={goNext} disabled={index >= total - 1} />}
       >
         {page.kind === "cover" && (
-          <div className="flex min-h-[min(70rem,calc(100vh-14rem))] flex-col justify-center text-center">
-            <p className="text-[0.72rem] font-bold uppercase tracking-[0.4em] text-inkblue">
-              {data.issue?.display_label ?? "The Table"} Issue
-            </p>
+          <div className="flex min-h-[min(70rem,calc(100vh-14rem))] flex-col justify-center">
+            <div className="border-y-4 border-cocoa py-3 text-center">
+              <p className="font-serif text-[2.6rem] uppercase leading-none tracking-[0.12em] text-cocoa sm:text-[4rem]">
+                The Indie Table
+              </p>
+            </div>
+            <div className="mt-2 flex items-center justify-between border-b border-cocoa/40 pb-2 text-[0.6rem] font-bold uppercase tracking-[0.3em] text-inkblue">
+              <span>{data.issue?.display_label ?? "Current"} issue</span>
+              <span>{allBooks.length} titles</span>
+              <span className="hidden sm:inline">Independently published</span>
+            </div>
+
+            <div className="mt-8 grid items-center gap-8 sm:grid-cols-[1.1fr_0.9fr]">
+              <div className="text-left">
+                <h1 className="font-serif text-5xl leading-[0.95] text-cocoa sm:text-7xl">
+                  {theme.cover_headline ?? data.issue?.display_label ?? "The Table"}
+                </h1>
+                <p className="mt-5 max-w-md font-serif text-lg italic leading-relaxed text-cocoa/80">
+                  {theme.cover_tagline ??
+                    "A hand-curated flyer of independently published books. Flip through and find your next read."}
+                </p>
+                <p className="mt-6 text-[0.65rem] font-bold uppercase tracking-[0.22em] text-clay">
+                  Turn the page to start browsing →
+                </p>
+              </div>
+              {theme.cover_image_url ? (
+                <figure className="panel-outline bg-card p-2">
+                  <img
+                    src={theme.cover_image_url}
+                    alt={`Cover art for the ${data.issue?.display_label ?? "current"} issue`}
+                    className="mx-auto max-h-[22rem] w-full object-cover"
+                  />
+                </figure>
+              ) : (
+                <div className="panel-outline bg-card p-5">
+                  <p className="text-[0.6rem] font-bold uppercase tracking-[0.3em] text-cocoa/70">In this issue</p>
+                  <ol className="mt-3 space-y-1.5 text-sm text-cocoa/85">
+                    {pages.slice(1).map((entry, i) => (
+                      <li key={`${entry.label}-${i}`} className="flex items-baseline justify-between gap-3 border-b border-dashed border-cocoa/25 pb-1">
+                        <span className="truncate font-semibold">{entry.label}</span>
+                        <span className="text-[0.65rem] font-bold tracking-[0.14em] text-cocoa/60">{i + 2}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+            </div>
+
             {theme.cover_image_url && (
-              <figure className="panel-outline mx-auto mt-6 max-w-md bg-card p-2">
-                <img
-                  src={theme.cover_image_url}
-                  alt={`Cover art for the ${data.issue?.display_label ?? "current"} issue`}
-                  className="mx-auto max-h-[20rem] w-auto object-contain"
-                />
-              </figure>
+              <div className="panel-outline mt-8 bg-card p-4">
+                <p className="text-[0.6rem] font-bold uppercase tracking-[0.3em] text-cocoa/70">In this issue</p>
+                <ol className="mt-3 grid gap-x-8 gap-y-1.5 text-sm text-cocoa/85 sm:grid-cols-2">
+                  {pages.slice(1).map((entry, i) => (
+                    <li key={`${entry.label}-${i}`} className="flex items-baseline justify-between gap-3 border-b border-dashed border-cocoa/25 pb-1">
+                      <span className="truncate font-semibold">{entry.label}</span>
+                      <span className="text-[0.65rem] font-bold tracking-[0.14em] text-cocoa/60">{i + 2}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
             )}
-            <h1 className="mt-5 font-serif text-6xl leading-[0.95] text-cocoa sm:text-8xl">
-              {theme.cover_headline ?? data.issue?.display_label ?? "The Table"}
-            </h1>
-            <p className="mx-auto mt-6 max-w-md text-[0.95rem] leading-relaxed text-cocoa/80">
-              {theme.cover_tagline ??
-                "A hand-curated flyer of independently published books. Flip through and find your next read."}
-            </p>
-            <p className="mt-8 -rotate-1 font-serif text-2xl italic text-clay">
-              Turn the page to start browsing →
-            </p>
+
             <div className="mt-8">
               <IconLegend />
             </div>
@@ -149,15 +195,16 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
             <CategoryRibbon category={page.category} count={page.books.length} />
             <div className="relative mt-6">
               <Doodles seed={index} />
-              <div className="relative grid gap-x-8 gap-y-5 sm:grid-cols-2">
+              <div className="relative columns-1 gap-8 sm:columns-2">
                 {page.books.map((book) => (
-                  <ListingRow
-                    key={book.id}
-                    book={book}
-                    listingNumber={listingNumbers.get(book.id)}
-                    circled={isCircled(book.id)}
-                    onCircle={handleCircle}
-                  />
+                  <div key={book.id} className="mb-5 break-inside-avoid">
+                    <ListingRow
+                      book={book}
+                      listingNumber={listingNumbers.get(book.id)}
+                      circled={isCircled(book.id)}
+                      onCircle={handleCircle}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
@@ -172,8 +219,6 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
             onCircle={handleCircle}
           />
         )}
-
-        <CornerTurn onNext={goNext} disabled={index >= total - 1} />
       </FlyerPage>
     );
   };
