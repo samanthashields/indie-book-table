@@ -126,13 +126,20 @@ async function signCoverPath(
 }
 
 /** Loads one published issue (the newest when no id is given) with its grouped books. */
-export async function loadIssueCatalog(issueId?: string): Promise<CatalogIssue> {
-  const supabase = createPublicClient();
+export async function loadIssueCatalog(
+  issueId?: string,
+  options?: { includeDrafts?: boolean },
+): Promise<CatalogIssue> {
+  let supabase = createPublicClient();
+  if (options?.includeDrafts) {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    supabase = supabaseAdmin as unknown as ReturnType<typeof createPublicClient>;
+  }
 
   let query = supabase
     .from("catalog_issues")
-    .select("id, display_label, issue_month, catalog_issue_themes ( preset, border_pattern, cover_headline, cover_tagline, cover_image_url )")
-    .eq("status", "published");
+    .select("id, display_label, issue_month, catalog_issue_themes ( preset, border_pattern, cover_headline, cover_tagline, cover_image_url )");
+  if (!options?.includeDrafts) query = query.eq("status", "published");
 
   query = issueId
     ? query.eq("id", issueId)
