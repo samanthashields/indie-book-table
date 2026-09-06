@@ -60,6 +60,7 @@ import { Route as AuthenticatedBooksBookIdReflectionRouteImport } from './routes
 import { Route as AuthenticatedBooksBookIdTeamRouteImport } from './routes/_authenticated/books.$bookId.team'
 import { Route as AuthenticatedHelpArticlesSlugRouteImport } from './routes/_authenticated/help.articles.$slug'
 import { Route as AuthenticatedHelpCategoriesCategorySlugRouteImport } from './routes/_authenticated/help.categories.$categorySlug'
+import { Route as AuthenticatedHelpRequestsIndexRouteImport } from './routes/_authenticated/help.requests.index'
 import { Route as AuthenticatedTemplatesMineTemplateIdRouteImport } from './routes/_authenticated/templates.mine.$templateId'
 import { Route as AuthenticatedBooksBookIdMilestonesMilestoneIdRouteImport } from './routes/_authenticated/books.$bookId.milestones.$milestoneId'
 
@@ -345,6 +346,12 @@ const AuthenticatedHelpCategoriesCategorySlugRoute =
     path: '/help/categories/$categorySlug',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedHelpRequestsIndexRoute =
+  AuthenticatedHelpRequestsIndexRouteImport.update({
+    id: '/help/requests/',
+    path: '/help/requests/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTemplatesMineTemplateIdRoute =
   AuthenticatedTemplatesMineTemplateIdRouteImport.update({
     id: '/templates/mine/$templateId',
@@ -410,6 +417,7 @@ export interface FileRoutesByFullPath {
   '/admin/help/': typeof AuthenticatedAdminHelpIndexRoute
   '/admin/journal/': typeof AuthenticatedAdminJournalIndexRoute
   '/books/$bookId/': typeof AuthenticatedBooksBookIdIndexRoute
+  '/help/requests/': typeof AuthenticatedHelpRequestsIndexRoute
   '/books/$bookId/milestones/$milestoneId': typeof AuthenticatedBooksBookIdMilestonesMilestoneIdRoute
 }
 export interface FileRoutesByTo {
@@ -462,6 +470,7 @@ export interface FileRoutesByTo {
   '/admin/help': typeof AuthenticatedAdminHelpIndexRoute
   '/admin/journal': typeof AuthenticatedAdminJournalIndexRoute
   '/books/$bookId': typeof AuthenticatedBooksBookIdIndexRoute
+  '/help/requests': typeof AuthenticatedHelpRequestsIndexRoute
   '/books/$bookId/milestones/$milestoneId': typeof AuthenticatedBooksBookIdMilestonesMilestoneIdRoute
 }
 export interface FileRoutesById {
@@ -518,6 +527,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/help/': typeof AuthenticatedAdminHelpIndexRoute
   '/_authenticated/admin/journal/': typeof AuthenticatedAdminJournalIndexRoute
   '/_authenticated/books/$bookId/': typeof AuthenticatedBooksBookIdIndexRoute
+  '/_authenticated/help/requests/': typeof AuthenticatedHelpRequestsIndexRoute
   '/_authenticated/books/$bookId/milestones/$milestoneId': typeof AuthenticatedBooksBookIdMilestonesMilestoneIdRoute
 }
 export interface FileRouteTypes {
@@ -574,6 +584,7 @@ export interface FileRouteTypes {
     | '/admin/help/'
     | '/admin/journal/'
     | '/books/$bookId/'
+    | '/help/requests/'
     | '/books/$bookId/milestones/$milestoneId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -626,6 +637,7 @@ export interface FileRouteTypes {
     | '/admin/help'
     | '/admin/journal'
     | '/books/$bookId'
+    | '/help/requests'
     | '/books/$bookId/milestones/$milestoneId'
   id:
     | '__root__'
@@ -681,6 +693,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/help/'
     | '/_authenticated/admin/journal/'
     | '/_authenticated/books/$bookId/'
+    | '/_authenticated/help/requests/'
     | '/_authenticated/books/$bookId/milestones/$milestoneId'
   fileRoutesById: FileRoutesById
 }
@@ -1060,6 +1073,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHelpCategoriesCategorySlugRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/help/requests/': {
+      id: '/_authenticated/help/requests/'
+      path: '/help/requests'
+      fullPath: '/help/requests/'
+      preLoaderRoute: typeof AuthenticatedHelpRequestsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/templates/mine/$templateId': {
       id: '/_authenticated/templates/mine/$templateId'
       path: '/templates/mine/$templateId'
@@ -1160,6 +1180,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHelpArticlesSlugRoute: typeof AuthenticatedHelpArticlesSlugRoute
   AuthenticatedHelpCategoriesCategorySlugRoute: typeof AuthenticatedHelpCategoriesCategorySlugRoute
   AuthenticatedTemplatesMineTemplateIdRoute: typeof AuthenticatedTemplatesMineTemplateIdRoute
+  AuthenticatedHelpRequestsIndexRoute: typeof AuthenticatedHelpRequestsIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -1184,6 +1205,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedHelpCategoriesCategorySlugRoute,
   AuthenticatedTemplatesMineTemplateIdRoute:
     AuthenticatedTemplatesMineTemplateIdRoute,
+  AuthenticatedHelpRequestsIndexRoute: AuthenticatedHelpRequestsIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

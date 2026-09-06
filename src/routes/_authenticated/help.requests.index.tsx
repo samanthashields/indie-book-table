@@ -36,13 +36,13 @@ export const Route = createFileRoute("/_authenticated/help/requests/")({
   }),
 });
 
-const TONE: Record<FeatureRequestStatus, "good" | "warm" | "cool"> = {
+const TONE: Record<FeatureRequestStatus, "good" | "warm" | "neutral"> = {
   waiting: "warm",
   considering: "warm",
-  planned: "cool",
-  in_progress: "cool",
+  planned: "neutral",
+  in_progress: "neutral",
   shipped: "good",
-  not_planned: "warm",
+  not_planned: "neutral",
 };
 
 function FeatureRequestsBoard() {
