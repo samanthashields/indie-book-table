@@ -16,6 +16,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedCollaborationsRouteImport } from './routes/_authenticated/collaborations'
+import { Route as AuthenticatedCyclesRouteImport } from './routes/_authenticated/cycles'
 import { Route as AuthenticatedSubmissionsRouteImport } from './routes/_authenticated/submissions'
 import { Route as AuthenticatedSubmitRouteImport } from './routes/_authenticated/submit'
 import { Route as ApiCoachPlanRouteImport } from './routes/api/coach-plan'
@@ -82,6 +83,11 @@ const AuthenticatedCollaborationsRoute =
     path: '/collaborations',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedCyclesRoute = AuthenticatedCyclesRouteImport.update({
+  id: '/cycles',
+  path: '/cycles',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedSubmissionsRoute =
   AuthenticatedSubmissionsRouteImport.update({
     id: '/submissions',
@@ -258,6 +264,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/collaborations': typeof AuthenticatedCollaborationsRoute
+  '/cycles': typeof AuthenticatedCyclesRoute
   '/submissions': typeof AuthenticatedSubmissionsRoute
   '/submit': typeof AuthenticatedSubmitRoute
   '/api/coach-plan': typeof ApiCoachPlanRoute
@@ -294,6 +301,7 @@ export interface FileRoutesByTo {
   '/mission': typeof MissionRoute
   '/reset-password': typeof ResetPasswordRoute
   '/collaborations': typeof AuthenticatedCollaborationsRoute
+  '/cycles': typeof AuthenticatedCyclesRoute
   '/submissions': typeof AuthenticatedSubmissionsRoute
   '/submit': typeof AuthenticatedSubmitRoute
   '/api/coach-plan': typeof ApiCoachPlanRoute
@@ -333,6 +341,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/collaborations': typeof AuthenticatedCollaborationsRoute
+  '/_authenticated/cycles': typeof AuthenticatedCyclesRoute
   '/_authenticated/submissions': typeof AuthenticatedSubmissionsRoute
   '/_authenticated/submit': typeof AuthenticatedSubmitRoute
   '/api/coach-plan': typeof ApiCoachPlanRoute
@@ -374,6 +383,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/admin'
     | '/collaborations'
+    | '/cycles'
     | '/submissions'
     | '/submit'
     | '/api/coach-plan'
@@ -410,6 +420,7 @@ export interface FileRouteTypes {
     | '/mission'
     | '/reset-password'
     | '/collaborations'
+    | '/cycles'
     | '/submissions'
     | '/submit'
     | '/api/coach-plan'
@@ -448,6 +459,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/admin'
     | '/_authenticated/collaborations'
+    | '/_authenticated/cycles'
     | '/_authenticated/submissions'
     | '/_authenticated/submit'
     | '/api/coach-plan'
@@ -545,6 +557,13 @@ declare module '@tanstack/react-router' {
       path: '/collaborations'
       fullPath: '/collaborations'
       preLoaderRoute: typeof AuthenticatedCollaborationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/cycles': {
+      id: '/_authenticated/cycles'
+      path: '/cycles'
+      fullPath: '/cycles'
+      preLoaderRoute: typeof AuthenticatedCyclesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/submissions': {
@@ -814,6 +833,7 @@ const AuthenticatedBooksBookIdRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedCollaborationsRoute: typeof AuthenticatedCollaborationsRoute
+  AuthenticatedCyclesRoute: typeof AuthenticatedCyclesRoute
   AuthenticatedSubmissionsRoute: typeof AuthenticatedSubmissionsRoute
   AuthenticatedSubmitRoute: typeof AuthenticatedSubmitRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
@@ -828,6 +848,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedCollaborationsRoute: AuthenticatedCollaborationsRoute,
+  AuthenticatedCyclesRoute: AuthenticatedCyclesRoute,
   AuthenticatedSubmissionsRoute: AuthenticatedSubmissionsRoute,
   AuthenticatedSubmitRoute: AuthenticatedSubmitRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,

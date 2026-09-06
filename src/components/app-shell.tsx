@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Library, LogOut, Menu, Newspaper, PanelLeftClose, Send, Shield, Users, Utensils, X } from "lucide-react";
+import { BookOpen, Library, LogOut, Menu, Newspaper, PanelLeftClose, Send, Shield, Sparkles, Users, Utensils, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
