@@ -131,6 +131,8 @@ function BookOverview() {
           {drawer && <MilestoneBody key={drawer.milestone.id} bookId={bookId} milestone={drawer.milestone} phaseName={drawer.phaseName} compact />}
         </SheetContent>
       </Sheet>
+
+      <EndCycleDialog bookId={bookId} open={endOpen} onOpenChange={setEndOpen} />
     </AppShell>
   );
 }

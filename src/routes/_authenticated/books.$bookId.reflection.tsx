@@ -31,7 +31,7 @@ function Reflection() {
         setGoalsNotes(reflection.data.goals_notes ?? "");
         setOnTime(reflection.data.published_on_time);
         setNextSteps(reflection.data.next_steps ?? "");
-        setMemory(reflection.data.custom?.[0]?.answer ?? "");
+        setMemory(reflection.data.custom?.find((entry) => entry.prompt.startsWith("What do you want to remember"))?.answer ?? "");
       }
       setLoaded(true);
     }
