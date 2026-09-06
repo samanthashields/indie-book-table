@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { CalendarDays, Check, FileText, Link2, MessageSquare, Paperclip, Pencil, UserRound } from "lucide-react";
+import { CalendarDays, Check, FileText, HardDrive, Link2, MessageSquare, Paperclip, Pencil, UserRound } from "lucide-react";
 import { toast } from "sonner";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
