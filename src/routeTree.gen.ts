@@ -28,6 +28,7 @@ import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminActivityRouteImport } from './routes/_authenticated/admin.activity'
 import { Route as AuthenticatedAdminIssuesRouteImport } from './routes/_authenticated/admin.issues'
 import { Route as AuthenticatedAdminPeopleRouteImport } from './routes/_authenticated/admin.people'
+import { Route as AuthenticatedAdminReleasesRouteImport } from './routes/_authenticated/admin.releases'
 import { Route as AuthenticatedAdminSitewordsRouteImport } from './routes/_authenticated/admin.sitewords'
 import { Route as AuthenticatedAdminSubmissionsRouteImport } from './routes/_authenticated/admin.submissions'
 import { Route as AuthenticatedAdminTemplatesRouteImport } from './routes/_authenticated/admin.templates'
@@ -42,6 +43,8 @@ import { Route as AuthenticatedTemplatesTemplateIdRouteImport } from './routes/_
 import { Route as TableIssueIdFlyerRouteImport } from './routes/table.$issueId_.flyer'
 import { Route as TableAuthorsAuthorIdRouteImport } from './routes/table.authors.$authorId'
 import { Route as TableBooksBookIdRouteImport } from './routes/table.books.$bookId'
+import { Route as AuthenticatedAdminHelpIndexRouteImport } from './routes/_authenticated/admin.help.index'
+import { Route as AuthenticatedAdminHelpArticleIdRouteImport } from './routes/_authenticated/admin.help.$articleId'
 import { Route as AuthenticatedAdminJournalIndexRouteImport } from './routes/_authenticated/admin.journal.index'
 import { Route as AuthenticatedAdminJournalPostIdRouteImport } from './routes/_authenticated/admin.journal.$postId'
 import { Route as AuthenticatedBooksBookIdIndexRouteImport } from './routes/_authenticated/books.$bookId.index'
@@ -152,6 +155,12 @@ const AuthenticatedAdminPeopleRoute =
     path: '/people',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminReleasesRoute =
+  AuthenticatedAdminReleasesRouteImport.update({
+    id: '/releases',
+    path: '/releases',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminSitewordsRoute =
   AuthenticatedAdminSitewordsRouteImport.update({
     id: '/sitewords',
@@ -230,6 +239,18 @@ const TableBooksBookIdRoute = TableBooksBookIdRouteImport.update({
   path: '/table/books/$bookId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminHelpIndexRoute =
+  AuthenticatedAdminHelpIndexRouteImport.update({
+    id: '/help/',
+    path: '/help/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminHelpArticleIdRoute =
+  AuthenticatedAdminHelpArticleIdRouteImport.update({
+    id: '/help/$articleId',
+    path: '/help/$articleId',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminJournalIndexRoute =
   AuthenticatedAdminJournalIndexRouteImport.update({
     id: '/journal/',
@@ -309,6 +330,7 @@ export interface FileRoutesByFullPath {
   '/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/admin/issues': typeof AuthenticatedAdminIssuesRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/admin/releases': typeof AuthenticatedAdminReleasesRoute
   '/admin/sitewords': typeof AuthenticatedAdminSitewordsRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/templates': typeof AuthenticatedAdminTemplatesRoute
@@ -324,6 +346,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/help/': typeof AuthenticatedHelpIndexRoute
   '/templates/': typeof AuthenticatedTemplatesIndexRoute
+  '/admin/help/$articleId': typeof AuthenticatedAdminHelpArticleIdRoute
   '/admin/journal/$postId': typeof AuthenticatedAdminJournalPostIdRoute
   '/books/$bookId/details': typeof AuthenticatedBooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof AuthenticatedBooksBookIdReflectionRoute
@@ -331,6 +354,7 @@ export interface FileRoutesByFullPath {
   '/help/articles/$slug': typeof AuthenticatedHelpArticlesSlugRoute
   '/help/categories/$categorySlug': typeof AuthenticatedHelpCategoriesCategorySlugRoute
   '/templates/mine/$templateId': typeof AuthenticatedTemplatesMineTemplateIdRoute
+  '/admin/help/': typeof AuthenticatedAdminHelpIndexRoute
   '/admin/journal/': typeof AuthenticatedAdminJournalIndexRoute
   '/books/$bookId/': typeof AuthenticatedBooksBookIdIndexRoute
   '/books/$bookId/milestones/$milestoneId': typeof AuthenticatedBooksBookIdMilestonesMilestoneIdRoute
@@ -352,6 +376,7 @@ export interface FileRoutesByTo {
   '/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/admin/issues': typeof AuthenticatedAdminIssuesRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/admin/releases': typeof AuthenticatedAdminReleasesRoute
   '/admin/sitewords': typeof AuthenticatedAdminSitewordsRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/templates': typeof AuthenticatedAdminTemplatesRoute
@@ -366,6 +391,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/help': typeof AuthenticatedHelpIndexRoute
   '/templates': typeof AuthenticatedTemplatesIndexRoute
+  '/admin/help/$articleId': typeof AuthenticatedAdminHelpArticleIdRoute
   '/admin/journal/$postId': typeof AuthenticatedAdminJournalPostIdRoute
   '/books/$bookId/details': typeof AuthenticatedBooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof AuthenticatedBooksBookIdReflectionRoute
@@ -373,6 +399,7 @@ export interface FileRoutesByTo {
   '/help/articles/$slug': typeof AuthenticatedHelpArticlesSlugRoute
   '/help/categories/$categorySlug': typeof AuthenticatedHelpCategoriesCategorySlugRoute
   '/templates/mine/$templateId': typeof AuthenticatedTemplatesMineTemplateIdRoute
+  '/admin/help': typeof AuthenticatedAdminHelpIndexRoute
   '/admin/journal': typeof AuthenticatedAdminJournalIndexRoute
   '/books/$bookId': typeof AuthenticatedBooksBookIdIndexRoute
   '/books/$bookId/milestones/$milestoneId': typeof AuthenticatedBooksBookIdMilestonesMilestoneIdRoute
@@ -397,6 +424,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/_authenticated/admin/issues': typeof AuthenticatedAdminIssuesRoute
   '/_authenticated/admin/people': typeof AuthenticatedAdminPeopleRoute
+  '/_authenticated/admin/releases': typeof AuthenticatedAdminReleasesRoute
   '/_authenticated/admin/sitewords': typeof AuthenticatedAdminSitewordsRoute
   '/_authenticated/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/_authenticated/admin/templates': typeof AuthenticatedAdminTemplatesRoute
@@ -412,6 +440,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/help/': typeof AuthenticatedHelpIndexRoute
   '/_authenticated/templates/': typeof AuthenticatedTemplatesIndexRoute
+  '/_authenticated/admin/help/$articleId': typeof AuthenticatedAdminHelpArticleIdRoute
   '/_authenticated/admin/journal/$postId': typeof AuthenticatedAdminJournalPostIdRoute
   '/_authenticated/books/$bookId/details': typeof AuthenticatedBooksBookIdDetailsRoute
   '/_authenticated/books/$bookId/reflection': typeof AuthenticatedBooksBookIdReflectionRoute
@@ -419,6 +448,7 @@ export interface FileRoutesById {
   '/_authenticated/help/articles/$slug': typeof AuthenticatedHelpArticlesSlugRoute
   '/_authenticated/help/categories/$categorySlug': typeof AuthenticatedHelpCategoriesCategorySlugRoute
   '/_authenticated/templates/mine/$templateId': typeof AuthenticatedTemplatesMineTemplateIdRoute
+  '/_authenticated/admin/help/': typeof AuthenticatedAdminHelpIndexRoute
   '/_authenticated/admin/journal/': typeof AuthenticatedAdminJournalIndexRoute
   '/_authenticated/books/$bookId/': typeof AuthenticatedBooksBookIdIndexRoute
   '/_authenticated/books/$bookId/milestones/$milestoneId': typeof AuthenticatedBooksBookIdMilestonesMilestoneIdRoute
@@ -443,6 +473,7 @@ export interface FileRouteTypes {
     | '/admin/activity'
     | '/admin/issues'
     | '/admin/people'
+    | '/admin/releases'
     | '/admin/sitewords'
     | '/admin/submissions'
     | '/admin/templates'
@@ -458,6 +489,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/help/'
     | '/templates/'
+    | '/admin/help/$articleId'
     | '/admin/journal/$postId'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
@@ -465,6 +497,7 @@ export interface FileRouteTypes {
     | '/help/articles/$slug'
     | '/help/categories/$categorySlug'
     | '/templates/mine/$templateId'
+    | '/admin/help/'
     | '/admin/journal/'
     | '/books/$bookId/'
     | '/books/$bookId/milestones/$milestoneId'
@@ -486,6 +519,7 @@ export interface FileRouteTypes {
     | '/admin/activity'
     | '/admin/issues'
     | '/admin/people'
+    | '/admin/releases'
     | '/admin/sitewords'
     | '/admin/submissions'
     | '/admin/templates'
@@ -500,6 +534,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/help'
     | '/templates'
+    | '/admin/help/$articleId'
     | '/admin/journal/$postId'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
@@ -507,6 +542,7 @@ export interface FileRouteTypes {
     | '/help/articles/$slug'
     | '/help/categories/$categorySlug'
     | '/templates/mine/$templateId'
+    | '/admin/help'
     | '/admin/journal'
     | '/books/$bookId'
     | '/books/$bookId/milestones/$milestoneId'
@@ -530,6 +566,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/activity'
     | '/_authenticated/admin/issues'
     | '/_authenticated/admin/people'
+    | '/_authenticated/admin/releases'
     | '/_authenticated/admin/sitewords'
     | '/_authenticated/admin/submissions'
     | '/_authenticated/admin/templates'
@@ -545,6 +582,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/'
     | '/_authenticated/help/'
     | '/_authenticated/templates/'
+    | '/_authenticated/admin/help/$articleId'
     | '/_authenticated/admin/journal/$postId'
     | '/_authenticated/books/$bookId/details'
     | '/_authenticated/books/$bookId/reflection'
@@ -552,6 +590,7 @@ export interface FileRouteTypes {
     | '/_authenticated/help/articles/$slug'
     | '/_authenticated/help/categories/$categorySlug'
     | '/_authenticated/templates/mine/$templateId'
+    | '/_authenticated/admin/help/'
     | '/_authenticated/admin/journal/'
     | '/_authenticated/books/$bookId/'
     | '/_authenticated/books/$bookId/milestones/$milestoneId'
@@ -707,6 +746,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPeopleRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/releases': {
+      id: '/_authenticated/admin/releases'
+      path: '/releases'
+      fullPath: '/admin/releases'
+      preLoaderRoute: typeof AuthenticatedAdminReleasesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/sitewords': {
       id: '/_authenticated/admin/sitewords'
       path: '/sitewords'
@@ -805,6 +851,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TableBooksBookIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/help/': {
+      id: '/_authenticated/admin/help/'
+      path: '/help'
+      fullPath: '/admin/help/'
+      preLoaderRoute: typeof AuthenticatedAdminHelpIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/help/$articleId': {
+      id: '/_authenticated/admin/help/$articleId'
+      path: '/help/$articleId'
+      fullPath: '/admin/help/$articleId'
+      preLoaderRoute: typeof AuthenticatedAdminHelpArticleIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/journal/': {
       id: '/_authenticated/admin/journal/'
       path: '/journal'
@@ -882,11 +942,14 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminActivityRoute: typeof AuthenticatedAdminActivityRoute
   AuthenticatedAdminIssuesRoute: typeof AuthenticatedAdminIssuesRoute
   AuthenticatedAdminPeopleRoute: typeof AuthenticatedAdminPeopleRoute
+  AuthenticatedAdminReleasesRoute: typeof AuthenticatedAdminReleasesRoute
   AuthenticatedAdminSitewordsRoute: typeof AuthenticatedAdminSitewordsRoute
   AuthenticatedAdminSubmissionsRoute: typeof AuthenticatedAdminSubmissionsRoute
   AuthenticatedAdminTemplatesRoute: typeof AuthenticatedAdminTemplatesRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminHelpArticleIdRoute: typeof AuthenticatedAdminHelpArticleIdRoute
   AuthenticatedAdminJournalPostIdRoute: typeof AuthenticatedAdminJournalPostIdRoute
+  AuthenticatedAdminHelpIndexRoute: typeof AuthenticatedAdminHelpIndexRoute
   AuthenticatedAdminJournalIndexRoute: typeof AuthenticatedAdminJournalIndexRoute
 }
 
@@ -894,11 +957,14 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminActivityRoute: AuthenticatedAdminActivityRoute,
   AuthenticatedAdminIssuesRoute: AuthenticatedAdminIssuesRoute,
   AuthenticatedAdminPeopleRoute: AuthenticatedAdminPeopleRoute,
+  AuthenticatedAdminReleasesRoute: AuthenticatedAdminReleasesRoute,
   AuthenticatedAdminSitewordsRoute: AuthenticatedAdminSitewordsRoute,
   AuthenticatedAdminSubmissionsRoute: AuthenticatedAdminSubmissionsRoute,
   AuthenticatedAdminTemplatesRoute: AuthenticatedAdminTemplatesRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminHelpArticleIdRoute: AuthenticatedAdminHelpArticleIdRoute,
   AuthenticatedAdminJournalPostIdRoute: AuthenticatedAdminJournalPostIdRoute,
+  AuthenticatedAdminHelpIndexRoute: AuthenticatedAdminHelpIndexRoute,
   AuthenticatedAdminJournalIndexRoute: AuthenticatedAdminJournalIndexRoute,
 }
 
