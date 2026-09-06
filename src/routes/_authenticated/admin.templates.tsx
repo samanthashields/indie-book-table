@@ -143,10 +143,30 @@ function AdminTemplates() {
                     <Button variant="ghost" size="icon" aria-label="Move up" disabled={index === 0} onClick={() => move(index, -1)}><ArrowUp /></Button>
                     <Button variant="ghost" size="icon" aria-label="Move down" disabled={index === (templates.data ?? []).length - 1} onClick={() => move(index, 1)}><ArrowDown /></Button>
                     <Button variant="ghost" size="icon" aria-label="Duplicate" onClick={() => duplicate.mutate(template)}><Copy /></Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        if (editing === template.id) { setEditing(null); return; }
+                        setEditing(template.id);
+                        setDraftPhases(Array.isArray(template.phases) ? (template.phases as TemplatePhase[]) : []);
+                      }}
+                    >
+                      {editing === template.id ? "Close phases" : "Edit phases"}
+                    </Button>
                     <Button variant="outline" onClick={() => update.mutate({ id: template.id, patch: { published: !template.published } })}>{template.published ? "Unpublish" : "Publish"}</Button>
                     <Button variant={template.archived ? "default" : "outline"} onClick={() => update.mutate({ id: template.id, patch: { archived: !template.archived } })}>{template.archived ? "Restore" : "Archive"}</Button>
                   </div>
                 </div>
+
+                {editing === template.id && (
+                  <div className="mt-6 border-t border-border pt-6">
+                    <PhaseEditor phases={draftPhases} onChange={setDraftPhases} />
+                    <div className="mt-4 flex gap-2">
+                      <Button disabled={savePhases.isPending} onClick={() => savePhases.mutate({ id: template.id, phases: draftPhases })}>Save phases</Button>
+                      <Button variant="ghost" onClick={() => setEditing(null)}>Cancel</Button>
+                    </div>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
