@@ -214,12 +214,15 @@ export function PenChat({
         <ConversationScrollButton />
       </Conversation>
 
-      <PromptInput onSubmit={handleSubmit} className="mt-3">
+      <PenQuickActions section={section} disabled={busy} onPick={send} />
+
+      <PromptInput onSubmit={handleSubmit} className="mt-2">
         <PromptInputTextarea ref={textareaRef} placeholder="Talk to Pen about your books…" />
         <PromptInputFooter className="justify-end">
           <PromptInputSubmit status={status} disabled={busy} />
         </PromptInputFooter>
       </PromptInput>
+
     </div>
   );
 }
