@@ -122,7 +122,7 @@ function BookOverview() {
       </section>
 
       <Sheet open={Boolean(drawer)} onOpenChange={(next) => { if (!next) setDrawer(null); }}>
-        <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-xl">
+        <SheetContent side="right" dim={false} className="w-full overflow-y-auto border-l-2 shadow-2xl sm:max-w-xl">
           <SheetTitle className="sr-only">{drawer?.milestone.name ?? "Milestone"}</SheetTitle>
           {drawer && <MilestoneBody key={drawer.milestone.id} bookId={bookId} milestone={drawer.milestone} phaseName={drawer.phaseName} compact />}
         </SheetContent>
