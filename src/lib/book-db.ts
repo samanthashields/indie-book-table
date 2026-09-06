@@ -380,7 +380,7 @@ export function useSaveReflection(bookId: string) {
 export function useCreateBookIdea() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (input: { title: string; subtitle?: string; pen_name?: string; genre?: string; audience?: string; goals?: string; target_publication_date?: string }) => {
+    mutationFn: async (input: { title: string; subtitle?: string; pen_name?: string; genre?: string; audience?: string; goals?: string; target_publication_date?: string; shelf_status?: string }) => {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData.user) throw new Error("You need to be signed in.");
       const { data, error } = await supabase
@@ -395,6 +395,7 @@ export function useCreateBookIdea() {
           goals: input.goals || null,
           target_publication_date: input.target_publication_date || null,
           status: "idea",
+          shelf_status: input.shelf_status || "idea",
           has_cycle: false,
         })
         .select("id")
