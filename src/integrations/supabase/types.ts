@@ -726,6 +726,41 @@ export type Database = {
           },
         ]
       }
+      feature_request_updates: {
+        Row: {
+          author_user_id: string | null
+          body: string | null
+          created_at: string
+          id: string
+          request_id: string
+          status: string
+        }
+        Insert: {
+          author_user_id?: string | null
+          body?: string | null
+          created_at?: string
+          id?: string
+          request_id: string
+          status: string
+        }
+        Update: {
+          author_user_id?: string | null
+          body?: string | null
+          created_at?: string
+          id?: string
+          request_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feature_request_updates_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "feature_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       feature_request_votes: {
         Row: {
           created_at: string
@@ -759,10 +794,13 @@ export type Database = {
         Row: {
           approved: boolean
           area: string | null
+          attachments: Json
           body: string
           created_at: string
           id: string
+          links: string[]
           merged_into: string | null
+          priority: string
           public_note: string | null
           status: string
           submitted_by: string
@@ -773,10 +811,13 @@ export type Database = {
         Insert: {
           approved?: boolean
           area?: string | null
+          attachments?: Json
           body: string
           created_at?: string
           id?: string
+          links?: string[]
           merged_into?: string | null
+          priority?: string
           public_note?: string | null
           status?: string
           submitted_by: string
@@ -787,10 +828,13 @@ export type Database = {
         Update: {
           approved?: boolean
           area?: string | null
+          attachments?: Json
           body?: string
           created_at?: string
           id?: string
+          links?: string[]
           merged_into?: string | null
+          priority?: string
           public_note?: string | null
           status?: string
           submitted_by?: string
@@ -1331,6 +1375,7 @@ export type Database = {
       support_tickets: {
         Row: {
           created_at: string
+          feature_request_id: string | null
           id: string
           status: string
           subject: string
@@ -1339,6 +1384,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          feature_request_id?: string | null
           id?: string
           status?: string
           subject: string
@@ -1347,13 +1393,22 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          feature_request_id?: string | null
           id?: string
           status?: string
           subject?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "support_tickets_feature_request_id_fkey"
+            columns: ["feature_request_id"]
+            isOneToOne: false
+            referencedRelation: "feature_requests"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       templates: {
         Row: {

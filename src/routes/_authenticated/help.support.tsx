@@ -9,6 +9,7 @@ import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { FEATURE_STATUS_LABELS, useFeatureRequest } from "@/lib/feature-requests";
 import { TICKET_STATUS_LABELS, useOpenTicket, useReplyToTicket, useSupportTickets, useTicketMessages } from "@/lib/help-db";
 import { useCurrentUser } from "@/lib/use-current-user";
 
@@ -38,6 +39,8 @@ function SupportPage() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [replyBody, setReplyBody] = useState("");
   const messages = useTicketMessages(activeId);
+  const activeTicket = (tickets.data ?? []).find((ticket) => ticket.id === activeId) ?? null;
+  const linkedIdea = useFeatureRequest(activeTicket?.feature_request_id ?? "");
 
   const mine = (tickets.data ?? []).filter((ticket) => ticket.user_id === user.data?.id);
 
@@ -109,6 +112,17 @@ function SupportPage() {
       {activeId && (
         <section className="mt-6 max-w-3xl rounded-2xl border border-border bg-paper p-6">
           <h2 className="font-serif text-xl font-normal">Conversation</h2>
+          {linkedIdea.data && (
+            <Link
+              to="/help/requests/$requestId"
+              params={{ requestId: linkedIdea.data.id }}
+              className="mt-3 flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm hover:border-primary"
+            >
+              <span className="text-muted-foreground">This is tracked as:</span>
+              <span className="font-semibold">{linkedIdea.data.title}</span>
+              <StatusPill tone={linkedIdea.data.status === "shipped" ? "good" : "warm"}>{FEATURE_STATUS_LABELS[linkedIdea.data.status]}</StatusPill>
+            </Link>
+          )}
           <ol className="mt-4 space-y-3">
             {(messages.data ?? []).map((message) => (
               <li key={message.id} className={`rounded-xl p-4 text-sm shadow-xs ${message.from_admin ? "bg-teal/15" : "bg-card"}`}>

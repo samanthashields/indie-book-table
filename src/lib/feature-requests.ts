@@ -27,6 +27,26 @@ export const FEATURE_STATUS_ORDER: FeatureRequestStatus[] = [
   "not_planned",
 ];
 
+export type FeaturePriority = "nice_to_have" | "would_help" | "blocking";
+
+export const FEATURE_PRIORITY_LABELS: Record<FeaturePriority, string> = {
+  nice_to_have: "Nice to have",
+  would_help: "Would really help",
+  blocking: "Blocking my work",
+};
+
+export const FEATURE_PRIORITY_ORDER: FeaturePriority[] = ["nice_to_have", "would_help", "blocking"];
+
+/** What an author can expect to happen next, per stage. */
+export const FEATURE_NEXT_STEPS: Record<FeatureRequestStatus, string> = {
+  waiting: "We read every idea and post a first reply here once it has been reviewed.",
+  considering: "We're weighing this up against everything else authors have asked for. Votes help.",
+  planned: "It's on the build list. We'll post here again the moment work starts.",
+  in_progress: "Being built now. The next update here will be the release note.",
+  shipped: "This one is live. If it doesn't work the way you hoped, send us a support message.",
+  not_planned: "We're not taking this one forward for now. The note above explains why.",
+};
+
 export const FEATURE_AREAS = [
   "Book cycles",
   "Milestones",
@@ -44,6 +64,9 @@ export type FeatureRequest = {
   title: string;
   body: string;
   area: string | null;
+  priority: FeaturePriority;
+  links: string[];
+  attachments: FeatureAttachment[];
   status: FeatureRequestStatus;
   public_note: string | null;
   approved: boolean;
@@ -53,8 +76,30 @@ export type FeatureRequest = {
   updated_at: string;
 };
 
+export type FeatureAttachment = { path: string; name: string };
+
+export type FeatureRequestUpdate = {
+  id: string;
+  request_id: string;
+  author_user_id: string | null;
+  status: FeatureRequestStatus;
+  body: string | null;
+  created_at: string;
+};
+
+export type FeatureRequestDraft = {
+  title: string;
+  body: string;
+  area: string | null;
+  priority: FeaturePriority;
+  links: string[];
+  attachments: FeatureAttachment[];
+};
+
 const FIELDS =
-  "id, submitted_by, title, body, area, status, public_note, approved, vote_count, merged_into, created_at, updated_at";
+  "id, submitted_by, title, body, area, priority, links, attachments, status, public_note, approved, vote_count, merged_into, created_at, updated_at";
+
+const ATTACHMENT_BUCKET = "feature-request-files";
 
 /** Everything the signed-in reader may see: approved requests plus their own. */
 export function useFeatureRequests() {
@@ -100,12 +145,20 @@ export function useMyFeatureVotes() {
 export function useSubmitFeatureRequest() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (input: { title: string; body: string; area: string | null }) => {
+    mutationFn: async (input: FeatureRequestDraft) => {
       const { data: auth } = await supabase.auth.getUser();
       if (!auth.user) throw new Error("Sign in first");
       const { data, error } = await supabase
         .from("feature_requests")
-        .insert({ submitted_by: auth.user.id, title: input.title, body: input.body, area: input.area })
+        .insert({
+          submitted_by: auth.user.id,
+          title: input.title,
+          body: input.body,
+          area: input.area,
+          priority: input.priority,
+          links: input.links,
+          attachments: input.attachments,
+        })
         .select(FIELDS)
         .single();
       if (error) throw error;
@@ -118,10 +171,17 @@ export function useSubmitFeatureRequest() {
 export function useUpdateMyFeatureRequest() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (input: { id: string; title: string; body: string; area: string | null }) => {
+    mutationFn: async (input: FeatureRequestDraft & { id: string }) => {
       const { error } = await supabase
         .from("feature_requests")
-        .update({ title: input.title, body: input.body, area: input.area })
+        .update({
+          title: input.title,
+          body: input.body,
+          area: input.area,
+          priority: input.priority,
+          links: input.links,
+          attachments: input.attachments,
+        })
         .eq("id", input.id);
       if (error) throw error;
     },
@@ -196,5 +256,55 @@ export function useSetFeatureEmailPreference() {
       if (error) throw error;
     },
     onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["feature-email-preference"] }),
+  });
+}
+
+/** The public history of an idea: submitted, then every reply we posted. */
+export function useFeatureRequestUpdates(requestId: string) {
+  return useQuery({
+    queryKey: ["feature-request-updates", requestId],
+    queryFn: async (): Promise<FeatureRequestUpdate[]> => {
+      const { data, error } = await supabase
+        .from("feature_request_updates")
+        .select("id, request_id, author_user_id, status, body, created_at")
+        .eq("request_id", requestId)
+        .order("created_at");
+      if (error) throw error;
+      return (data ?? []) as FeatureRequestUpdate[];
+    },
+  });
+}
+
+export const MAX_FEATURE_ATTACHMENTS = 5;
+
+/** Uploads a screenshot into the signed-in author's own folder. */
+export async function uploadFeatureAttachment(file: File): Promise<FeatureAttachment> {
+  const { data: auth } = await supabase.auth.getUser();
+  if (!auth.user) throw new Error("Sign in first");
+  if (!file.type.startsWith("image/")) throw new Error("Only images can be attached");
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
+  const path = `${auth.user.id}/${crypto.randomUUID()}-${safeName}`;
+  const { error } = await supabase.storage.from(ATTACHMENT_BUCKET).upload(path, file, { upsert: false });
+  if (error) throw error;
+  return { path, name: file.name };
+}
+
+/** Short-lived preview links for a set of attachments. */
+export function useFeatureAttachmentUrls(attachments: FeatureAttachment[]) {
+  const key = attachments.map((item) => item.path).join(",");
+  return useQuery({
+    queryKey: ["feature-attachment-urls", key],
+    enabled: attachments.length > 0,
+    queryFn: async (): Promise<Record<string, string>> => {
+      const { data, error } = await supabase.storage
+        .from(ATTACHMENT_BUCKET)
+        .createSignedUrls(attachments.map((item) => item.path), 60 * 30);
+      if (error) throw error;
+      const map: Record<string, string> = {};
+      (data ?? []).forEach((row) => {
+        if (row.path && row.signedUrl) map[row.path] = row.signedUrl;
+      });
+      return map;
+    },
   });
 }

@@ -6,10 +6,13 @@ import { toast } from "sonner";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import { FEATURE_STATUS_LABELS, useFeatureRequests } from "@/lib/feature-requests";
 import {
   TICKET_STATUS_LABELS,
   useReplyToTicket,
+  useSetTicketFeatureRequest,
   useSetTicketStatus,
   useSupportTickets,
   useTicketMessages,
@@ -37,6 +40,8 @@ function AdminSupport() {
   const tickets = useSupportTickets();
   const reply = useReplyToTicket();
   const setStatus = useSetTicketStatus();
+  const setLinkedIdea = useSetTicketFeatureRequest();
+  const ideas = useFeatureRequests();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [body, setBody] = useState("");
   const messages = useTicketMessages(activeId);
@@ -94,6 +99,29 @@ function AdminSupport() {
               </label>
             </div>
             <p className="mt-1 text-xs text-muted-foreground">From {authors.data?.[active.user_id] ?? "an author"}</p>
+
+            <div className="mt-4 rounded-xl border border-border/70 bg-paper p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Tracked as a feature request</p>
+              <Select
+                value={active.feature_request_id ?? "none"}
+                onValueChange={(value) =>
+                  setLinkedIdea.mutate(
+                    { ticketId: active.id, featureRequestId: value === "none" ? null : value },
+                    { onSuccess: () => toast.success("Link updated"), onError: () => toast.error("Couldn’t update the link") },
+                  )
+                }
+              >
+                <SelectTrigger className="mt-2" aria-label="Linked feature request"><SelectValue placeholder="Not linked" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Not linked</SelectItem>
+                  {(ideas.data ?? []).map((idea) => (
+                    <SelectItem key={idea.id} value={idea.id}>
+                      {idea.title} — {FEATURE_STATUS_LABELS[idea.status]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
             <ol className="mt-5 space-y-3">
               {(messages.data ?? []).map((message) => (

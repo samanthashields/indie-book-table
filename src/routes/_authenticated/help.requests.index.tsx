@@ -9,16 +9,18 @@ import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { FeatureRequestFields } from "@/components/feature-request-fields";
 import { useCurrentUser } from "@/lib/use-current-user";
 import {
-  FEATURE_AREAS,
+  FEATURE_PRIORITY_LABELS,
   FEATURE_STATUS_LABELS,
   FEATURE_STATUS_ORDER,
   useFeatureRequests,
   useMyFeatureVotes,
   useSubmitFeatureRequest,
   useToggleFeatureVote,
+  type FeatureAttachment,
+  type FeaturePriority,
   type FeatureRequestStatus,
 } from "@/lib/feature-requests";
 
@@ -58,6 +60,9 @@ function FeatureRequestsBoard() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [area, setArea] = useState<string>("");
+  const [priority, setPriority] = useState<FeaturePriority>("nice_to_have");
+  const [links, setLinks] = useState<string[]>([]);
+  const [attachments, setAttachments] = useState<FeatureAttachment[]>([]);
 
   const votedIds = useMemo(() => new Set(votes.data ?? []), [votes.data]);
   const all = requests.data ?? [];
@@ -77,12 +82,15 @@ function FeatureRequestsBoard() {
       return;
     }
     submit.mutate(
-      { title: title.trim(), body: body.trim(), area: area || null },
+      { title: title.trim(), body: body.trim(), area: area || null, priority, links, attachments },
       {
         onSuccess: () => {
           setTitle("");
           setBody("");
           setArea("");
+          setPriority("nice_to_have");
+          setLinks([]);
+          setAttachments([]);
           setShowForm(false);
           toast.success("Thanks — we’ll read it and post it to the board once it’s reviewed");
         },
@@ -105,14 +113,16 @@ function FeatureRequestsBoard() {
           <h2 className="font-serif text-2xl font-normal">Your idea</h2>
           <Input placeholder="One line — what should it do?" aria-label="Title" value={title} onChange={(event) => setTitle(event.target.value)} />
           <Textarea rows={6} placeholder="What are you trying to get done, and where does the workshop get in the way today?" aria-label="Details" value={body} onChange={(event) => setBody(event.target.value)} />
-          <div className="max-w-xs">
-            <Select value={area} onValueChange={setArea}>
-              <SelectTrigger aria-label="Part of the workshop"><SelectValue placeholder="Which part of the workshop?" /></SelectTrigger>
-              <SelectContent>
-                {FEATURE_AREAS.map((option) => <SelectItem key={option} value={option}>{option}</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </div>
+          <FeatureRequestFields
+            area={area}
+            onAreaChange={setArea}
+            priority={priority}
+            onPriorityChange={setPriority}
+            links={links}
+            onLinksChange={setLinks}
+            attachments={attachments}
+            onAttachmentsChange={setAttachments}
+          />
           <p className="text-xs text-muted-foreground">We read every idea. Once it’s reviewed it appears on the board below, where other authors can vote for it.</p>
           <Button disabled={submit.isPending} onClick={send}>{submit.isPending ? <Loader2 className="animate-spin" /> : <Send />}Send idea</Button>
         </section>
@@ -173,6 +183,7 @@ function FeatureRequestsBoard() {
                 <p className="mt-3 flex flex-wrap items-center gap-2">
                   <StatusPill tone={TONE[request.status]}>{FEATURE_STATUS_LABELS[request.status]}</StatusPill>
                   {request.area && <span className="text-xs text-muted-foreground">{request.area}</span>}
+                  <span className="text-xs text-muted-foreground">{FEATURE_PRIORITY_LABELS[request.priority]}</span>
                 </p>
               </div>
             </li>
