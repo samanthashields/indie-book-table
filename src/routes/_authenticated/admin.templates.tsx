@@ -7,7 +7,9 @@ import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { PhaseEditor } from "@/components/phase-editor";
 import { supabase } from "@/integrations/supabase/client";
+import type { TemplatePhase } from "@/lib/template-data";
 
 export const Route = createFileRoute("/_authenticated/admin/templates")({
   head: () => ({ meta: [
@@ -37,6 +39,8 @@ type TemplateRow = {
 function AdminTemplates() {
   const queryClient = useQueryClient();
   const [draft, setDraft] = useState({ title: "", description: "", genre: "" });
+  const [editing, setEditing] = useState<string | null>(null);
+  const [draftPhases, setDraftPhases] = useState<TemplatePhase[]>([]);
 
   const templates = useQuery({
     queryKey: ["admin-templates"],
@@ -76,6 +80,15 @@ function AdminTemplates() {
     },
     onSuccess: () => { setDraft({ title: "", description: "", genre: "" }); refresh(); toast.success("Template created"); },
     onError: () => toast.error("Couldn’t create that template"),
+  });
+
+  const savePhases = useMutation({
+    mutationFn: async ({ id, phases }: { id: string; phases: TemplatePhase[] }) => {
+      const { error } = await supabase.from("templates").update({ phases: phases as never }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { refresh(); setEditing(null); toast.success("Phases saved"); },
+    onError: () => toast.error("Couldn’t save those phases"),
   });
 
   const duplicate = useMutation({
