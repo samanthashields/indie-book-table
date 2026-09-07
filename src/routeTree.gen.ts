@@ -17,6 +17,7 @@ import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedCollaborationsRouteImport } from './routes/_authenticated/collaborations'
 import { Route as AuthenticatedCyclesRouteImport } from './routes/_authenticated/cycles'
+import { Route as AuthenticatedMyTableRouteImport } from './routes/_authenticated/my-table'
 import { Route as AuthenticatedSubmissionsRouteImport } from './routes/_authenticated/submissions'
 import { Route as AuthenticatedSubmitRouteImport } from './routes/_authenticated/submit'
 import { Route as ApiCoachPlanRouteImport } from './routes/api/coach-plan'
@@ -47,7 +48,6 @@ import { Route as AuthenticatedHelpSupportRouteImport } from './routes/_authenti
 import { Route as AuthenticatedPenIndexRouteImport } from './routes/_authenticated/pen.index'
 import { Route as AuthenticatedPenThreadIdRouteImport } from './routes/_authenticated/pen.$threadId'
 import { Route as AuthenticatedPenButtonsRouteImport } from './routes/_authenticated/pen.buttons'
-import { Route as AuthenticatedTableMineRouteImport } from './routes/_authenticated/table.mine'
 import { Route as AuthenticatedTemplatesIndexRouteImport } from './routes/_authenticated/templates.index'
 import { Route as AuthenticatedTemplatesTemplateIdRouteImport } from './routes/_authenticated/templates.$templateId'
 import { Route as TableIssueIdFlyerRouteImport } from './routes/table.$issueId_.flyer'
@@ -109,6 +109,11 @@ const AuthenticatedCollaborationsRoute =
 const AuthenticatedCyclesRoute = AuthenticatedCyclesRouteImport.update({
   id: '/cycles',
   path: '/cycles',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMyTableRoute = AuthenticatedMyTableRouteImport.update({
+  id: '/my-table',
+  path: '/my-table',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSubmissionsRoute =
@@ -277,11 +282,6 @@ const AuthenticatedPenButtonsRoute = AuthenticatedPenButtonsRouteImport.update({
   path: '/pen/buttons',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedTableMineRoute = AuthenticatedTableMineRouteImport.update({
-  id: '/table/mine',
-  path: '/table/mine',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedTemplatesIndexRoute =
   AuthenticatedTemplatesIndexRouteImport.update({
     id: '/templates/',
@@ -418,6 +418,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/collaborations': typeof AuthenticatedCollaborationsRoute
   '/cycles': typeof AuthenticatedCyclesRoute
+  '/my-table': typeof AuthenticatedMyTableRoute
   '/submissions': typeof AuthenticatedSubmissionsRoute
   '/submit': typeof AuthenticatedSubmitRoute
   '/api/coach-plan': typeof ApiCoachPlanRoute
@@ -445,7 +446,6 @@ export interface FileRoutesByFullPath {
   '/help/support': typeof AuthenticatedHelpSupportRoute
   '/pen/$threadId': typeof AuthenticatedPenThreadIdRoute
   '/pen/buttons': typeof AuthenticatedPenButtonsRoute
-  '/table/mine': typeof AuthenticatedTableMineRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
   '/table/$issueId/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
@@ -478,6 +478,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/collaborations': typeof AuthenticatedCollaborationsRoute
   '/cycles': typeof AuthenticatedCyclesRoute
+  '/my-table': typeof AuthenticatedMyTableRoute
   '/submissions': typeof AuthenticatedSubmissionsRoute
   '/submit': typeof AuthenticatedSubmitRoute
   '/api/coach-plan': typeof ApiCoachPlanRoute
@@ -505,7 +506,6 @@ export interface FileRoutesByTo {
   '/help/support': typeof AuthenticatedHelpSupportRoute
   '/pen/$threadId': typeof AuthenticatedPenThreadIdRoute
   '/pen/buttons': typeof AuthenticatedPenButtonsRoute
-  '/table/mine': typeof AuthenticatedTableMineRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
   '/table/$issueId/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
@@ -541,6 +541,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/collaborations': typeof AuthenticatedCollaborationsRoute
   '/_authenticated/cycles': typeof AuthenticatedCyclesRoute
+  '/_authenticated/my-table': typeof AuthenticatedMyTableRoute
   '/_authenticated/submissions': typeof AuthenticatedSubmissionsRoute
   '/_authenticated/submit': typeof AuthenticatedSubmitRoute
   '/api/coach-plan': typeof ApiCoachPlanRoute
@@ -569,7 +570,6 @@ export interface FileRoutesById {
   '/_authenticated/help/support': typeof AuthenticatedHelpSupportRoute
   '/_authenticated/pen/$threadId': typeof AuthenticatedPenThreadIdRoute
   '/_authenticated/pen/buttons': typeof AuthenticatedPenButtonsRoute
-  '/_authenticated/table/mine': typeof AuthenticatedTableMineRoute
   '/_authenticated/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
   '/table/$issueId_/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
@@ -606,6 +606,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/collaborations'
     | '/cycles'
+    | '/my-table'
     | '/submissions'
     | '/submit'
     | '/api/coach-plan'
@@ -633,7 +634,6 @@ export interface FileRouteTypes {
     | '/help/support'
     | '/pen/$threadId'
     | '/pen/buttons'
-    | '/table/mine'
     | '/templates/$templateId'
     | '/table/$issueId/flyer'
     | '/table/authors/$authorId'
@@ -666,6 +666,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/collaborations'
     | '/cycles'
+    | '/my-table'
     | '/submissions'
     | '/submit'
     | '/api/coach-plan'
@@ -693,7 +694,6 @@ export interface FileRouteTypes {
     | '/help/support'
     | '/pen/$threadId'
     | '/pen/buttons'
-    | '/table/mine'
     | '/templates/$templateId'
     | '/table/$issueId/flyer'
     | '/table/authors/$authorId'
@@ -728,6 +728,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/collaborations'
     | '/_authenticated/cycles'
+    | '/_authenticated/my-table'
     | '/_authenticated/submissions'
     | '/_authenticated/submit'
     | '/api/coach-plan'
@@ -756,7 +757,6 @@ export interface FileRouteTypes {
     | '/_authenticated/help/support'
     | '/_authenticated/pen/$threadId'
     | '/_authenticated/pen/buttons'
-    | '/_authenticated/table/mine'
     | '/_authenticated/templates/$templateId'
     | '/table/$issueId_/flyer'
     | '/table/authors/$authorId'
@@ -860,6 +860,13 @@ declare module '@tanstack/react-router' {
       path: '/cycles'
       fullPath: '/cycles'
       preLoaderRoute: typeof AuthenticatedCyclesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/my-table': {
+      id: '/_authenticated/my-table'
+      path: '/my-table'
+      fullPath: '/my-table'
+      preLoaderRoute: typeof AuthenticatedMyTableRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/submissions': {
@@ -1070,13 +1077,6 @@ declare module '@tanstack/react-router' {
       path: '/pen/buttons'
       fullPath: '/pen/buttons'
       preLoaderRoute: typeof AuthenticatedPenButtonsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/table/mine': {
-      id: '/_authenticated/table/mine'
-      path: '/table/mine'
-      fullPath: '/table/mine'
-      preLoaderRoute: typeof AuthenticatedTableMineRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/templates/': {
@@ -1305,6 +1305,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedCollaborationsRoute: typeof AuthenticatedCollaborationsRoute
   AuthenticatedCyclesRoute: typeof AuthenticatedCyclesRoute
+  AuthenticatedMyTableRoute: typeof AuthenticatedMyTableRoute
   AuthenticatedSubmissionsRoute: typeof AuthenticatedSubmissionsRoute
   AuthenticatedSubmitRoute: typeof AuthenticatedSubmitRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
@@ -1315,7 +1316,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHelpSupportRoute: typeof AuthenticatedHelpSupportRoute
   AuthenticatedPenThreadIdRoute: typeof AuthenticatedPenThreadIdRoute
   AuthenticatedPenButtonsRoute: typeof AuthenticatedPenButtonsRoute
-  AuthenticatedTableMineRoute: typeof AuthenticatedTableMineRoute
   AuthenticatedTemplatesTemplateIdRoute: typeof AuthenticatedTemplatesTemplateIdRoute
   AuthenticatedHelpIndexRoute: typeof AuthenticatedHelpIndexRoute
   AuthenticatedPenIndexRoute: typeof AuthenticatedPenIndexRoute
@@ -1331,6 +1331,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedCollaborationsRoute: AuthenticatedCollaborationsRoute,
   AuthenticatedCyclesRoute: AuthenticatedCyclesRoute,
+  AuthenticatedMyTableRoute: AuthenticatedMyTableRoute,
   AuthenticatedSubmissionsRoute: AuthenticatedSubmissionsRoute,
   AuthenticatedSubmitRoute: AuthenticatedSubmitRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
@@ -1341,7 +1342,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHelpSupportRoute: AuthenticatedHelpSupportRoute,
   AuthenticatedPenThreadIdRoute: AuthenticatedPenThreadIdRoute,
   AuthenticatedPenButtonsRoute: AuthenticatedPenButtonsRoute,
-  AuthenticatedTableMineRoute: AuthenticatedTableMineRoute,
   AuthenticatedTemplatesTemplateIdRoute: AuthenticatedTemplatesTemplateIdRoute,
   AuthenticatedHelpIndexRoute: AuthenticatedHelpIndexRoute,
   AuthenticatedPenIndexRoute: AuthenticatedPenIndexRoute,

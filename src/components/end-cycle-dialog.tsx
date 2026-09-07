@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { PartyPopper } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { useAchievements } from "@/lib/achievements";
+import { celebrate } from "@/lib/celebrate";
 import { useReflection, useSaveReflection, useUpdateBook } from "@/lib/book-db";
 
 export const END_CYCLE_PROMPTS = {
