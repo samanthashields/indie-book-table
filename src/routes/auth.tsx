@@ -115,7 +115,7 @@ function AuthPage() {
             ))}
           </div>
 
-          <h1 className="font-serif text-3xl font-normal">{mode === "signin" ? "Welcome back" : "Start your account"}</h1>
+          <h1 className="font-serif text-3xl font-normal">{mode === "signin" ? "Author's Workshop Sign In" : "Author's Workshop Sign Up"}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{mode === "signin" ? "Pick up right where your book left off." : "Your shelf, your cycles, and any book shared with you."}</p>
 
           <form className="mt-7 space-y-4" onSubmit={(event) => { event.preventDefault(); void submit(); }}>
