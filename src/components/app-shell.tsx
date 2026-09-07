@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { MessageCircle, BookOpen, Library, LifeBuoy, LogOut, Menu, Newspaper, PanelLeftClose, Send, Shield, Sparkles, Users, Utensils, X } from "lucide-react";
+import { MessageCircle, BookOpen, Library, LifeBuoy, LogOut, Menu, Newspaper, PanelLeftClose, Send, Shield, Sparkles, Trophy, Users, Utensils, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 const nav = [
   { label: "My Books", to: "/" as const, icon: Library },
   { label: "My Cycles", to: "/cycles" as const, icon: Sparkles },
+  { label: "My Table", to: "/my-table" as const, icon: Trophy },
   { label: "Collaborations", to: "/collaborations" as const, icon: Users },
   { label: "Templates", to: "/templates" as const, icon: BookOpen },
   { label: "My Submissions", to: "/submissions" as const, icon: Send },
