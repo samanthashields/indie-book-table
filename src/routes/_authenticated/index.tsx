@@ -238,11 +238,16 @@ function Index() {
           </div>
         }
       />
-      <section className="mb-10 grid gap-3 rounded-2xl border border-border bg-card p-2 shadow-xs sm:grid-cols-3" aria-label="Publishing priorities">
-        <div className="rounded-xl bg-destructive/8 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><CircleAlert className="size-4 text-destructive" />Book ideas</div><p className="mt-1 text-2xl font-semibold">{ideas.length}</p></div>
-        <div className="rounded-xl bg-accent/20 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><CalendarDays className="size-4" />Active cycles</div><p className="mt-1 text-2xl font-semibold">{cycles.length}</p></div>
-        <div className="rounded-xl bg-chart-3/15 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><Clock3 className="size-4 text-primary" />Pending action</div><p className="mt-1 text-2xl font-semibold">{pending}</p></div>
-      </section>
+      {isLoading ? (
+        <StatsSkeleton />
+      ) : (
+        <section className="mb-10 grid gap-3 rounded-2xl border border-border bg-card p-2 shadow-xs sm:grid-cols-3" aria-label="Publishing priorities">
+          <div className="rounded-xl bg-destructive/8 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><CircleAlert className="size-4 text-destructive" />Book ideas</div><p className="mt-1 text-2xl font-semibold">{ideas.length}</p></div>
+          <div className="rounded-xl bg-accent/20 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><CalendarDays className="size-4" />Active cycles</div><p className="mt-1 text-2xl font-semibold">{cycles.length}</p></div>
+          <div className="rounded-xl bg-chart-3/15 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><Clock3 className="size-4 text-primary" />Pending action</div><p className="mt-1 text-2xl font-semibold">{pending}</p></div>
+        </section>
+      )}
+
 
       {isLoading ? (
         <p className="text-sm text-muted-foreground">Loading your books…</p>
