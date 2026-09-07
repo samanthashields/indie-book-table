@@ -84,12 +84,14 @@ function HelpCenter() {
           </div>
           <ul className="mt-4 grid gap-3 md:grid-cols-3">
             {latest.map((note) => (
-              <li key={note.id} className="rounded-xl bg-card p-4 shadow-xs">
-                <div className="flex items-center gap-2">
-                  {note.label && <StatusPill tone="good">{note.label}</StatusPill>}
-                  <span className="text-xs text-muted-foreground">{new Date(note.released_on).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</span>
-                </div>
-                <p className="mt-2 text-sm font-semibold">{note.title}</p>
+              <li key={note.id}>
+                <Link to="/help/releases" className="block rounded-xl bg-card p-4 shadow-xs transition-colors hover:border-primary">
+                  <div className="flex items-center gap-2">
+                    {note.label && <StatusPill tone="good">{note.label}</StatusPill>}
+                    <span className="text-xs text-muted-foreground">{new Date(note.released_on).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</span>
+                  </div>
+                  <p className="mt-2 text-sm font-semibold">{note.title}</p>
+                </Link>
               </li>
             ))}
           </ul>

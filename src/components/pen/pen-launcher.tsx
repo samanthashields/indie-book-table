@@ -72,10 +72,9 @@ export function PenLauncher({ context = "overview" }: { context?: string | undef
         <button
           onClick={() => setOpen(true)}
           aria-label="Open Pen, your book coach"
-          className="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-full bg-primary py-2.5 pl-2.5 pr-5 text-primary-foreground shadow-lg transition-transform hover:-translate-y-0.5"
+          className="fixed bottom-5 right-5 z-50 grid size-12 place-items-center rounded-full bg-primary p-2 text-primary-foreground shadow-lg transition-transform hover:-translate-y-0.5"
         >
           <img src={penMark} alt="" width={512} height={512} className="size-8" />
-          <span className="text-sm font-semibold">Ask Pen</span>
         </button>
       )}
     </>

@@ -64,9 +64,9 @@ function Templates() {
             <h2 className="mb-5 font-serif text-2xl font-semibold">Genre templates</h2>
             <div className="grid gap-6 lg:grid-cols-2">
               {globals.map((template, index) => (
-                <article key={template.id} className="grid overflow-hidden rounded-2xl border border-border bg-card shadow-xs transition-shadow hover:shadow-md sm:grid-cols-[180px_1fr]">
-                  <img src={templateCover(template.details.illustrated)} alt={`Cover artwork for the ${template.title}`} width={768} height={1152} className="h-full min-h-64 w-full object-cover" loading={index === 0 ? undefined : "lazy"} />
-                  <div className={index === 0 ? "bg-amber/8 p-6" : "bg-teal/8 p-6"}>
+                <article key={template.id} className="grid overflow-hidden rounded-2xl border border-border bg-card shadow-xs transition-shadow hover:shadow-md sm:grid-cols-[140px_1fr]">
+                  <img src={templateCover(template.details.illustrated)} alt={`Cover artwork for the ${template.title}`} width={768} height={1152} className="h-40 w-full object-cover sm:h-full sm:min-h-48" loading={index === 0 ? undefined : "lazy"} />
+                  <div className="bg-card p-6">
                     <div className="mb-3 flex flex-wrap gap-2"><StatusPill tone={index === 0 ? "warm" : "good"}>{template.genre}</StatusPill><StatusPill>{template.phases.length} phases</StatusPill></div>
                     <h3 className="font-serif text-3xl font-normal">{template.title}</h3>
                     <p className="mt-2 text-sm leading-6 text-muted-foreground">{template.description}</p>

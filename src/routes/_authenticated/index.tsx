@@ -172,7 +172,7 @@ function Index() {
         back={false}
         action={
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center rounded-xl border border-border bg-card p-1" role="group" aria-label="Choose how books are shown">
+            <div className="hidden items-center rounded-xl border border-border bg-card p-1 sm:flex" role="group" aria-label="Choose how books are shown">
               <button type="button" aria-label="List view" aria-pressed={view === "list"} onClick={() => chooseView("list")} className={cn("grid size-8 place-items-center rounded-lg", view === "list" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")}><List className="size-4" /></button>
               <button type="button" aria-label="Grid view" aria-pressed={view === "grid"} onClick={() => chooseView("grid")} className={cn("grid size-8 place-items-center rounded-lg", view === "grid" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")}><LayoutGrid className="size-4" /></button>
             </div>
