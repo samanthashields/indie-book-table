@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { BookOpen, CalendarDays, CircleAlert, Clock3, LayoutGrid, Lightbulb, List, MoreVertical, Plus, Send, Sparkles, SquarePen, Trash2 } from "lucide-react";
+import { BookOpen, CalendarDays, CircleAlert, Clock3, LayoutGrid, Lightbulb, List, MoreVertical, Plus, Send, Sparkles, SquarePen, Trash2, Trophy } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/app-shell";
 import { BookCover } from "@/components/book-cover";
@@ -211,6 +211,7 @@ function Index() {
   const mine = books.filter((book) => book.isMine);
   const cycles = mine.filter((book) => book.hasCycle);
   const ideas = mine.filter((book) => !book.hasCycle);
+  const publishedCount = mine.filter((book) => book.shelfStatus === "published").length;
   const pending = cycles.filter((book) => book.nextAction !== "All milestones complete").length;
 
   const remove = (id: string) => {
@@ -233,6 +234,9 @@ function Index() {
               <button type="button" aria-label="List view" aria-pressed={view === "list"} onClick={() => chooseView("list")} className={cn("grid size-8 place-items-center rounded-lg", view === "list" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")}><List className="size-4" /></button>
               <button type="button" aria-label="Grid view" aria-pressed={view === "grid"} onClick={() => chooseView("grid")} className={cn("grid size-8 place-items-center rounded-lg", view === "grid" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")}><LayoutGrid className="size-4" /></button>
             </div>
+            {publishedCount > 0 && (
+              <Button variant="ghost" asChild><Link to="/my-table"><Trophy />See my table</Link></Button>
+            )}
             <Button variant="outline" onClick={() => void navigate({ to: "/books/add" })}><Plus />Add a book</Button>
             <Button asChild><Link to="/books/new"><Sparkles />Start a book cycle</Link></Button>
           </div>
