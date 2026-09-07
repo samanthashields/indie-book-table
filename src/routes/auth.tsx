@@ -107,7 +107,7 @@ function AuthPage() {
 
       <main className="flex items-center justify-center p-6">
         <div className="w-full max-w-md">
-          <div className="mb-8 lg:hidden"><Link to="/" className="flex min-w-0 items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground"><BookOpen className="size-5" /></span><span className="min-w-0 truncate font-serif text-xl font-normal">The Indie Book Table's Author's Workshop</span></Link></div>
+          <div className="mb-8 lg:hidden"><Link to="/" className="flex min-w-0 items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground"><BookOpen className="size-5" /></span><span className="min-w-0 truncate font-serif text-xl font-normal">The Indie Book Table</span></Link></div>
 
           <div className="mb-6 grid grid-cols-2 rounded-xl bg-secondary p-1">
             {([["signin", "Sign in"], ["signup", "Create account"]] as const).map(([value, label]) => (
