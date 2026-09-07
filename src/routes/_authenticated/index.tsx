@@ -8,6 +8,7 @@ import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useBooks, useDeleteBook, type BookSummary } from "@/lib/book-db";
 import { bookStatusLabel, bookStatusTone } from "@/lib/book-status";
@@ -131,6 +132,59 @@ function BookGroup({ books, view, submissionByBook, onDelete }: { books: BookSum
   return <div className="space-y-3">{books.map((book) => <BookRow key={book.id} book={book} submission={submissionByBook.get(book.id)} onDelete={onDelete} />)}</div>;
 }
 
+function StatsSkeleton() {
+  return (
+    <section className="mb-10 grid gap-3 rounded-2xl border border-border bg-card p-2 shadow-xs sm:grid-cols-3" aria-label="Publishing priorities" aria-busy="true">
+      <div className="rounded-xl bg-primary/5 px-4 py-4"><Skeleton className="h-4 w-28" /><Skeleton className="mt-3 h-8 w-12" /></div>
+      <div className="rounded-xl bg-primary/5 px-4 py-4"><Skeleton className="h-4 w-28" /><Skeleton className="mt-3 h-8 w-12" /></div>
+      <div className="rounded-xl bg-primary/5 px-4 py-4"><Skeleton className="h-4 w-28" /><Skeleton className="mt-3 h-8 w-12" /></div>
+    </section>
+  );
+}
+
+function BookRowSkeleton() {
+  return (
+    <div className="group grid gap-5 rounded-2xl border border-border bg-card px-5 py-5 shadow-xs sm:grid-cols-[88px_1fr_auto_auto] sm:items-center" aria-hidden="true">
+      <Skeleton className="aspect-[2/3] w-20 shrink-0 rounded-lg" />
+      <div className="min-w-0 space-y-3">
+        <div className="flex flex-wrap items-center gap-2"><Skeleton className="h-6 w-40" /><Skeleton className="h-5 w-20" /></div>
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-1.5 w-full max-w-xl rounded-full" />
+        <Skeleton className="h-4 w-48" />
+      </div>
+      <div className="hidden space-y-2 text-left sm:block sm:text-right"><Skeleton className="h-3 w-24" /><Skeleton className="h-4 w-20" /></div>
+      <div className="flex items-center gap-2"><Skeleton className="size-8 rounded-md" /><Skeleton className="size-8 rounded-md" /></div>
+    </div>
+  );
+}
+
+function BookCardSkeleton() {
+  return (
+    <div className="group flex flex-col rounded-2xl border border-border bg-card p-4 shadow-xs" aria-hidden="true">
+      <div className="flex items-start justify-between gap-2">
+        <Skeleton className="aspect-[3/4] w-full rounded-xl" />
+        <Skeleton className="size-8 shrink-0 rounded-md" />
+      </div>
+      <div className="mt-4 space-y-2"><Skeleton className="h-5 w-3/4" /><Skeleton className="h-4 w-1/2" /></div>
+      <div className="mt-3 flex flex-wrap gap-2"><Skeleton className="h-5 w-16" /><Skeleton className="h-5 w-20" /></div>
+      <Skeleton className="mt-4 h-1.5 w-full rounded-full" />
+      <Skeleton className="mt-4 h-3 w-3/4" />
+    </div>
+  );
+}
+
+function BookGroupSkeleton({ view }: { view: "list" | "grid" }) {
+  if (view === "grid") {
+    return (
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => <BookCardSkeleton key={i} />)}
+      </div>
+    );
+  }
+  return <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <BookRowSkeleton key={i} />)}</div>;
+}
+
+
 function Index() {
   const { data: books = [], isLoading } = useBooks();
   const { data: submissions = [] } = useMySubmissions();
@@ -184,14 +238,28 @@ function Index() {
           </div>
         }
       />
-      <section className="mb-10 grid gap-3 rounded-2xl border border-border bg-card p-2 shadow-xs sm:grid-cols-3" aria-label="Publishing priorities">
-        <div className="rounded-xl bg-destructive/8 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><CircleAlert className="size-4 text-destructive" />Book ideas</div><p className="mt-1 text-2xl font-semibold">{ideas.length}</p></div>
-        <div className="rounded-xl bg-accent/20 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><CalendarDays className="size-4" />Active cycles</div><p className="mt-1 text-2xl font-semibold">{cycles.length}</p></div>
-        <div className="rounded-xl bg-chart-3/15 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><Clock3 className="size-4 text-primary" />Pending action</div><p className="mt-1 text-2xl font-semibold">{pending}</p></div>
-      </section>
+      {isLoading ? (
+        <StatsSkeleton />
+      ) : (
+        <section className="mb-10 grid gap-3 rounded-2xl border border-border bg-card p-2 shadow-xs sm:grid-cols-3" aria-label="Publishing priorities">
+          <div className="rounded-xl bg-destructive/8 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><CircleAlert className="size-4 text-destructive" />Book ideas</div><p className="mt-1 text-2xl font-semibold">{ideas.length}</p></div>
+          <div className="rounded-xl bg-accent/20 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><CalendarDays className="size-4" />Active cycles</div><p className="mt-1 text-2xl font-semibold">{cycles.length}</p></div>
+          <div className="rounded-xl bg-chart-3/15 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><Clock3 className="size-4 text-primary" />Pending action</div><p className="mt-1 text-2xl font-semibold">{pending}</p></div>
+        </section>
+      )}
+
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">Loading your books…</p>
+        <div className="space-y-10">
+          <section>
+            <div className="mb-4 flex items-baseline justify-between"><h2 className="font-serif text-2xl font-semibold">In a book cycle</h2><Skeleton className="h-4 w-16" /></div>
+            <BookGroupSkeleton view={effectiveView} />
+          </section>
+          <section>
+            <div className="mb-4 flex items-baseline justify-between"><h2 className="flex items-center gap-2 font-serif text-2xl font-semibold"><Lightbulb className="size-5 text-amber" />Ideas and drafts</h2><Skeleton className="h-4 w-16" /></div>
+            <BookGroupSkeleton view={effectiveView} />
+          </section>
+        </div>
       ) : mine.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-paper p-10 text-center">
           <BookOpen className="mx-auto mb-4 size-8 text-primary" />
