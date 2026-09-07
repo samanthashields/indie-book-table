@@ -127,8 +127,17 @@ function BookCard({ book, submission, onDelete }: { book: BookSummary; submissio
         {submission && <TableChip submission={submission} />}
       </div>
       {book.hasCycle && (
-        <div className="mt-4 flex items-center gap-3"><Progress value={book.progress} className="h-1.5" /><span className="text-xs font-semibold">{book.progress}%</span></div>
+        <div className="mt-4 flex items-center gap-3">
+          <span className={phaseStyle(book.phaseKey ?? "writing").dot}>
+            <ProgressRing value={book.progress} label={`${book.progress}% of this book cycle done`} />
+          </span>
+          <div className="min-w-0">
+            {book.phaseName && <p className="truncate text-sm font-semibold">{book.phaseName}</p>}
+            <p className="text-xs text-muted-foreground">{book.stepsDone} of {book.stepsTotal} steps</p>
+          </div>
+        </div>
       )}
+
       <p className="mt-4 text-xs text-muted-foreground">Target publication · {book.target}</p>
     </div>
   );
