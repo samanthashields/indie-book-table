@@ -132,6 +132,59 @@ function BookGroup({ books, view, submissionByBook, onDelete }: { books: BookSum
   return <div className="space-y-3">{books.map((book) => <BookRow key={book.id} book={book} submission={submissionByBook.get(book.id)} onDelete={onDelete} />)}</div>;
 }
 
+function StatsSkeleton() {
+  return (
+    <section className="mb-10 grid gap-3 rounded-2xl border border-border bg-card p-2 shadow-xs sm:grid-cols-3" aria-label="Publishing priorities" aria-busy="true">
+      <div className="rounded-xl bg-primary/5 px-4 py-4"><Skeleton className="h-4 w-28" /><Skeleton className="mt-3 h-8 w-12" /></div>
+      <div className="rounded-xl bg-primary/5 px-4 py-4"><Skeleton className="h-4 w-28" /><Skeleton className="mt-3 h-8 w-12" /></div>
+      <div className="rounded-xl bg-primary/5 px-4 py-4"><Skeleton className="h-4 w-28" /><Skeleton className="mt-3 h-8 w-12" /></div>
+    </section>
+  );
+}
+
+function BookRowSkeleton() {
+  return (
+    <div className="group grid gap-5 rounded-2xl border border-border bg-card px-5 py-5 shadow-xs sm:grid-cols-[88px_1fr_auto_auto] sm:items-center" aria-hidden="true">
+      <Skeleton className="aspect-[2/3] w-20 shrink-0 rounded-lg" />
+      <div className="min-w-0 space-y-3">
+        <div className="flex flex-wrap items-center gap-2"><Skeleton className="h-6 w-40" /><Skeleton className="h-5 w-20" /></div>
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-1.5 w-full max-w-xl rounded-full" />
+        <Skeleton className="h-4 w-48" />
+      </div>
+      <div className="hidden space-y-2 text-left sm:block sm:text-right"><Skeleton className="h-3 w-24" /><Skeleton className="h-4 w-20" /></div>
+      <div className="flex items-center gap-2"><Skeleton className="size-8 rounded-md" /><Skeleton className="size-8 rounded-md" /></div>
+    </div>
+  );
+}
+
+function BookCardSkeleton() {
+  return (
+    <div className="group flex flex-col rounded-2xl border border-border bg-card p-4 shadow-xs" aria-hidden="true">
+      <div className="flex items-start justify-between gap-2">
+        <Skeleton className="aspect-[3/4] w-full rounded-xl" />
+        <Skeleton className="size-8 shrink-0 rounded-md" />
+      </div>
+      <div className="mt-4 space-y-2"><Skeleton className="h-5 w-3/4" /><Skeleton className="h-4 w-1/2" /></div>
+      <div className="mt-3 flex flex-wrap gap-2"><Skeleton className="h-5 w-16" /><Skeleton className="h-5 w-20" /></div>
+      <Skeleton className="mt-4 h-1.5 w-full rounded-full" />
+      <Skeleton className="mt-4 h-3 w-3/4" />
+    </div>
+  );
+}
+
+function BookGroupSkeleton({ view }: { view: "list" | "grid" }) {
+  if (view === "grid") {
+    return (
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => <BookCardSkeleton key={i} />)}
+      </div>
+    );
+  }
+  return <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <BookRowSkeleton key={i} />)}</div>;
+}
+
+
 function Index() {
   const { data: books = [], isLoading } = useBooks();
   const { data: submissions = [] } = useMySubmissions();
