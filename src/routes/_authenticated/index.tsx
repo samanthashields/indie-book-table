@@ -78,12 +78,21 @@ function BookRow({ book, submission, onDelete }: { book: BookSummary; submission
           <p className="mt-1 text-sm text-muted-foreground">{book.genre}, by {book.author}</p>
           {book.hasCycle ? (
             <>
-              <div className="mt-4 flex max-w-xl items-center gap-3"><Progress value={book.progress} className="h-1.5" /><span className="text-xs font-semibold">{book.progress}%</span></div>
+              <div className="mt-4 flex max-w-xl items-center gap-3">
+                <Progress value={book.progress} className="h-1.5" />
+                <span className="text-xs font-semibold">{book.progress}%</span>
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">
+                {book.phaseName ? <span className={phaseStyle(book.phaseKey ?? "writing").dot}>{book.phaseName}</span> : null}
+                {book.phaseName ? " · " : null}
+                {book.stepsDone} of {book.stepsTotal} steps
+              </p>
               <p className="mt-3 text-sm"><span className="text-muted-foreground">Next:</span> {book.nextAction}</p>
             </>
           ) : (
             <p className="mt-3 text-sm text-muted-foreground">Saved for later. Start a cycle whenever this one is ready.</p>
           )}
+
         </div>
         <div className="text-left sm:text-right"><p className="text-xs text-muted-foreground">Target publication</p><p className="mt-1 text-sm font-semibold">{book.target}</p></div>
       </Link>
