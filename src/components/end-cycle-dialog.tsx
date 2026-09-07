@@ -73,9 +73,9 @@ export function EndCycleDialog({ bookId, open, onOpenChange }: { bookId: string;
             { status: "complete", ...(completed && published ? { shelf_status: "published" } : {}) },
             {
               onSuccess: () => {
-                toast.success("Book cycle closed");
-                onOpenChange(false);
-                void navigate({ to: "/books/$bookId/reflection", params: { bookId } });
+                setDone(true);
+                if (completed && published) void celebrate();
+                else toast.success("Book cycle closed");
               },
               onError: () => toast.error("Couldn’t close the cycle"),
             },
