@@ -8,6 +8,7 @@ import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useBooks, useDeleteBook, type BookSummary } from "@/lib/book-db";
 import { bookStatusLabel, bookStatusTone } from "@/lib/book-status";
