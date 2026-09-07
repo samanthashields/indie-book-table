@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { BookOpen, CalendarDays, CircleAlert, Clock3, LayoutGrid, Lightbulb, List, MoreVertical, Plus, Send, Sparkles, SquarePen, Trash2 } from "lucide-react";
+import { BookOpen, CalendarDays, CircleAlert, Clock3, LayoutGrid, Lightbulb, List, MoreVertical, Plus, Send, Sparkles, SquarePen, Trash2, Trophy } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/app-shell";
 import { BookCover } from "@/components/book-cover";
@@ -211,6 +211,7 @@ function Index() {
   const mine = books.filter((book) => book.isMine);
   const cycles = mine.filter((book) => book.hasCycle);
   const ideas = mine.filter((book) => !book.hasCycle);
+  const publishedCount = mine.filter((book) => book.shelfStatus === "published").length;
   const pending = cycles.filter((book) => book.nextAction !== "All milestones complete").length;
 
   const remove = (id: string) => {
