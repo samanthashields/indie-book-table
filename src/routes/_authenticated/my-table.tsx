@@ -9,7 +9,7 @@ import { PageHeading } from "@/components/page-heading";
 import { Skeleton } from "@/components/ui/skeleton";
 import { readSeenBadges, useAchievements, writeSeenBadges, type BadgeId } from "@/lib/achievements";
 
-export const Route = createFileRoute("/_authenticated/table/mine")({
+export const Route = createFileRoute("/_authenticated/my-table")({
   head: () => ({ meta: [
     { title: "My Table — Author's Workshop" },
     { name: "description", content: "See every book you've finished and published laid out on your own author's table." },
