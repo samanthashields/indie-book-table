@@ -209,7 +209,7 @@ function Index() {
             {cycles.length === 0 ? (
               <p className="rounded-2xl border border-dashed border-border bg-paper p-6 text-sm text-muted-foreground">No cycles running yet. Open a book below and choose “Create book cycle” when you’re ready.</p>
             ) : (
-              <BookGroup books={cycles} view={view} submissionByBook={submissionByBook} onDelete={remove} />
+              <BookGroup books={cycles} view={effectiveView} submissionByBook={submissionByBook} onDelete={remove} />
             )}
           </section>
 
@@ -218,7 +218,7 @@ function Index() {
             {ideas.length === 0 ? (
               <p className="rounded-2xl border border-dashed border-border bg-paper p-6 text-sm text-muted-foreground">Nothing waiting in the wings. Add a book to keep an idea safe until it’s ready.</p>
             ) : (
-              <BookGroup books={ideas} view={view} submissionByBook={submissionByBook} onDelete={remove} />
+              <BookGroup books={ideas} view={effectiveView} submissionByBook={submissionByBook} onDelete={remove} />
             )}
           </section>
         </div>
