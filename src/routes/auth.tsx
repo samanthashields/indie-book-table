@@ -12,9 +12,9 @@ type Mode = "signin" | "signup";
 export const Route = createFileRoute("/auth")({
   ssr: false,
   head: () => ({ meta: [
-    { title: "Sign in — The Indie Book Table's Author's Workshop" },
+    { title: "Sign in — The Indie Book Table" },
     { name: "description", content: "Sign in to your publishing workspace, or create an author or collaborator account." },
-    { property: "og:title", content: "Sign in — The Indie Book Table's Author's Workshop" },
+    { property: "og:title", content: "Sign in — The Indie Book Table" },
     { property: "og:description", content: "Sign in to your publishing workspace, or create an author or collaborator account." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
