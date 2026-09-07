@@ -250,7 +250,16 @@ function Index() {
 
 
       {isLoading ? (
-        <p className="text-sm text-muted-foreground">Loading your books…</p>
+        <div className="space-y-10">
+          <section>
+            <div className="mb-4 flex items-baseline justify-between"><h2 className="font-serif text-2xl font-semibold">In a book cycle</h2><Skeleton className="h-4 w-16" /></div>
+            <BookGroupSkeleton view={effectiveView} />
+          </section>
+          <section>
+            <div className="mb-4 flex items-baseline justify-between"><h2 className="flex items-center gap-2 font-serif text-2xl font-semibold"><Lightbulb className="size-5 text-amber" />Ideas and drafts</h2><Skeleton className="h-4 w-16" /></div>
+            <BookGroupSkeleton view={effectiveView} />
+          </section>
+        </div>
       ) : mine.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-paper p-10 text-center">
           <BookOpen className="mx-auto mb-4 size-8 text-primary" />
