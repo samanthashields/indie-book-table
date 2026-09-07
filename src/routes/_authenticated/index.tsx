@@ -139,7 +139,9 @@ function Index() {
   }
   const deleteBook = useDeleteBook();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [view, setView] = useState<"list" | "grid">("list");
+  const effectiveView = isMobile ? "list" : view;
 
   useEffect(() => {
     const saved = window.localStorage.getItem("my-books-view");
