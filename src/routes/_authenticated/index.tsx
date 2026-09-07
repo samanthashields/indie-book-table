@@ -4,6 +4,8 @@ import { BookOpen, CalendarDays, CircleAlert, Clock3, LayoutGrid, Lightbulb, Lis
 import { toast } from "sonner";
 import { AppShell } from "@/components/app-shell";
 import { BookCover } from "@/components/book-cover";
+import { ProgressRing } from "@/components/progress-ring";
+
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
@@ -13,6 +15,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useBooks, useDeleteBook, type BookSummary } from "@/lib/book-db";
 import { bookStatusLabel, bookStatusTone } from "@/lib/book-status";
 import { useMySubmissions } from "@/lib/catalog-submit";
+import { phaseStyle } from "@/lib/phase-style";
+
 import { SUBMISSION_STATUS_LABELS } from "@/lib/submission-schema";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
