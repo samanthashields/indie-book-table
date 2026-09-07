@@ -90,8 +90,9 @@ export type BookSummary = {
   target: string;
   coverUrl: string | null;
   startDate: string | null;
-
+  metadata: Record<string, unknown>;
 };
+
 
 export const formatDate = (iso: string | null | undefined) =>
   iso ? new Date(`${iso}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "";
