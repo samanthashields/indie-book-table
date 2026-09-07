@@ -82,11 +82,15 @@ export type BookSummary = {
   status: string;
   shelfStatus: string;
   progress: number;
+  stepsDone: number;
+  stepsTotal: number;
+  phaseKey: string | null;
+  phaseName: string | null;
   nextAction: string;
   target: string;
   coverUrl: string | null;
   startDate: string | null;
-  metadata: Record<string, unknown>;
+
 };
 
 export const formatDate = (iso: string | null | undefined) =>
