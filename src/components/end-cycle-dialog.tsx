@@ -47,6 +47,9 @@ export function EndCycleDialog({ bookId, open, onOpenChange }: { bookId: string;
   const [notes, setNotes] = useState("");
   const [done, setDone] = useState(false);
   const achievements = useAchievements();
+  const sync = useServerFn(syncChallenges);
+  const queryClient = useQueryClient();
+
 
   const ready =
     completed === true ? published === true || (published === false && notPublished.trim().length > 0) : completed === false && notComplete.trim().length > 0;
