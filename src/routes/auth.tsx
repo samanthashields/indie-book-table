@@ -12,9 +12,9 @@ type Mode = "signin" | "signup";
 export const Route = createFileRoute("/auth")({
   ssr: false,
   head: () => ({ meta: [
-    { title: "Sign in — The Indie Book Table's Author's Workshop" },
+    { title: "Sign in — The Indie Book Table" },
     { name: "description", content: "Sign in to your publishing workspace, or create an author or collaborator account." },
-    { property: "og:title", content: "Sign in — The Indie Book Table's Author's Workshop" },
+    { property: "og:title", content: "Sign in — The Indie Book Table" },
     { property: "og:description", content: "Sign in to your publishing workspace, or create an author or collaborator account." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
@@ -92,7 +92,7 @@ function AuthPage() {
   return (
     <div className="grid min-h-screen bg-background lg:grid-cols-[1fr_minmax(420px,560px)]">
       <aside className="hidden flex-col justify-between bg-inkblue/10 p-12 lg:flex">
-        <Link to="/" className="flex min-w-0 items-center gap-3"><span className="grid size-11 place-items-center rounded-xl bg-primary text-primary-foreground"><BookOpen className="size-5" /></span><span className="min-w-0 truncate font-serif text-2xl font-normal">The Indie Book Table's Author's Workshop</span></Link>
+        <Link to="/" className="flex min-w-0 items-center gap-3"><span className="grid size-11 place-items-center rounded-xl bg-primary text-primary-foreground"><BookOpen className="size-5" /></span><span className="min-w-0 truncate font-serif text-2xl font-normal">The Indie Book Table</span></Link>
         <div>
           <h2 className="font-serif text-5xl font-normal leading-tight">Every great book deserves a plan.</h2>
           <p className="mt-4 max-w-md leading-7 text-muted-foreground">A guided path from private manuscript to published book, with a calm coach beside you the whole way.</p>
@@ -107,7 +107,7 @@ function AuthPage() {
 
       <main className="flex items-center justify-center p-6">
         <div className="w-full max-w-md">
-          <div className="mb-8 lg:hidden"><Link to="/" className="flex min-w-0 items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground"><BookOpen className="size-5" /></span><span className="min-w-0 truncate font-serif text-xl font-normal">The Indie Book Table's Author's Workshop</span></Link></div>
+          <div className="mb-8 lg:hidden"><Link to="/" className="flex min-w-0 items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground"><BookOpen className="size-5" /></span><span className="min-w-0 truncate font-serif text-xl font-normal">The Indie Book Table</span></Link></div>
 
           <div className="mb-6 grid grid-cols-2 rounded-xl bg-secondary p-1">
             {([["signin", "Sign in"], ["signup", "Create account"]] as const).map(([value, label]) => (
@@ -115,7 +115,7 @@ function AuthPage() {
             ))}
           </div>
 
-          <h1 className="font-serif text-3xl font-normal">{mode === "signin" ? "Welcome back" : "Start your account"}</h1>
+          <h1 className="font-serif text-3xl font-normal">{mode === "signin" ? "Author's Workshop Sign In" : "Author's Workshop Sign Up"}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{mode === "signin" ? "Pick up right where your book left off." : "Your shelf, your cycles, and any book shared with you."}</p>
 
           <form className="mt-7 space-y-4" onSubmit={(event) => { event.preventDefault(); void submit(); }}>
