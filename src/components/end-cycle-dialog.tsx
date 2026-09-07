@@ -41,6 +41,8 @@ export function EndCycleDialog({ bookId, open, onOpenChange }: { bookId: string;
   const [notPublished, setNotPublished] = useState("");
   const [notComplete, setNotComplete] = useState("");
   const [notes, setNotes] = useState("");
+  const [done, setDone] = useState(false);
+  const achievements = useAchievements();
 
   const ready =
     completed === true ? published === true || (published === false && notPublished.trim().length > 0) : completed === false && notComplete.trim().length > 0;
