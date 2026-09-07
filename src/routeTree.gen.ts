@@ -25,6 +25,7 @@ import { Route as ApiPenRouteImport } from './routes/api/pen'
 import { Route as IssuesIndexRouteImport } from './routes/issues.index'
 import { Route as JournalIndexRouteImport } from './routes/journal.index'
 import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
+import { Route as ShelfSlugRouteImport } from './routes/shelf.$slug'
 import { Route as TableIndexRouteImport } from './routes/table.index'
 import { Route as TableIssueIdRouteImport } from './routes/table.$issueId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
@@ -151,6 +152,11 @@ const JournalIndexRoute = JournalIndexRouteImport.update({
 const JournalSlugRoute = JournalSlugRouteImport.update({
   id: '/journal/$slug',
   path: '/journal/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShelfSlugRoute = ShelfSlugRouteImport.update({
+  id: '/shelf/$slug',
+  path: '/shelf/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TableIndexRoute = TableIndexRouteImport.update({
@@ -430,6 +436,7 @@ export interface FileRoutesByFullPath {
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/api/pen': typeof ApiPenRoute
   '/journal/$slug': typeof JournalSlugRoute
+  '/shelf/$slug': typeof ShelfSlugRoute
   '/table/$issueId': typeof TableIssueIdRoute
   '/issues/': typeof IssuesIndexRoute
   '/journal/': typeof JournalIndexRoute
@@ -491,6 +498,7 @@ export interface FileRoutesByTo {
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/api/pen': typeof ApiPenRoute
   '/journal/$slug': typeof JournalSlugRoute
+  '/shelf/$slug': typeof ShelfSlugRoute
   '/table/$issueId': typeof TableIssueIdRoute
   '/': typeof AuthenticatedIndexRoute
   '/issues': typeof IssuesIndexRoute
@@ -555,6 +563,7 @@ export interface FileRoutesById {
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/api/pen': typeof ApiPenRoute
   '/journal/$slug': typeof JournalSlugRoute
+  '/shelf/$slug': typeof ShelfSlugRoute
   '/table/$issueId': typeof TableIssueIdRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/issues/': typeof IssuesIndexRoute
@@ -621,6 +630,7 @@ export interface FileRouteTypes {
     | '/api/coach-plan'
     | '/api/pen'
     | '/journal/$slug'
+    | '/shelf/$slug'
     | '/table/$issueId'
     | '/issues/'
     | '/journal/'
@@ -682,6 +692,7 @@ export interface FileRouteTypes {
     | '/api/coach-plan'
     | '/api/pen'
     | '/journal/$slug'
+    | '/shelf/$slug'
     | '/table/$issueId'
     | '/'
     | '/issues'
@@ -745,6 +756,7 @@ export interface FileRouteTypes {
     | '/api/coach-plan'
     | '/api/pen'
     | '/journal/$slug'
+    | '/shelf/$slug'
     | '/table/$issueId'
     | '/_authenticated/'
     | '/issues/'
@@ -804,6 +816,7 @@ export interface RootRouteChildren {
   ApiCoachPlanRoute: typeof ApiCoachPlanRoute
   ApiPenRoute: typeof ApiPenRoute
   JournalSlugRoute: typeof JournalSlugRoute
+  ShelfSlugRoute: typeof ShelfSlugRoute
   TableIssueIdRoute: typeof TableIssueIdRoute
   IssuesIndexRoute: typeof IssuesIndexRoute
   JournalIndexRoute: typeof JournalIndexRoute
@@ -929,6 +942,13 @@ declare module '@tanstack/react-router' {
       path: '/journal/$slug'
       fullPath: '/journal/$slug'
       preLoaderRoute: typeof JournalSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shelf/$slug': {
+      id: '/shelf/$slug'
+      path: '/shelf/$slug'
+      fullPath: '/shelf/$slug'
+      preLoaderRoute: typeof ShelfSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/table/': {
@@ -1387,6 +1407,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCoachPlanRoute: ApiCoachPlanRoute,
   ApiPenRoute: ApiPenRoute,
   JournalSlugRoute: JournalSlugRoute,
+  ShelfSlugRoute: ShelfSlugRoute,
   TableIssueIdRoute: TableIssueIdRoute,
   IssuesIndexRoute: IssuesIndexRoute,
   JournalIndexRoute: JournalIndexRoute,
