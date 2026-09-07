@@ -641,6 +641,77 @@ export type Database = {
         }
         Relationships: []
       }
+      challenge_completions: {
+        Row: {
+          challenge_id: string
+          completed_at: string
+          decoration_key: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          challenge_id: string
+          completed_at?: string
+          decoration_key: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          challenge_id?: string
+          completed_at?: string
+          decoration_key?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "challenge_completions_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      challenges: {
+        Row: {
+          active: boolean
+          blurb: string | null
+          challenge_month: string
+          created_at: string
+          decoration_key: string
+          id: string
+          metric: Database["public"]["Enums"]["challenge_metric"]
+          target: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          blurb?: string | null
+          challenge_month: string
+          created_at?: string
+          decoration_key: string
+          id?: string
+          metric: Database["public"]["Enums"]["challenge_metric"]
+          target?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          blurb?: string | null
+          challenge_month?: string
+          created_at?: string
+          decoration_key?: string
+          id?: string
+          metric?: Database["public"]["Enums"]["challenge_metric"]
+          target?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       coach_conversations: {
         Row: {
           book_id: string | null
@@ -1512,6 +1583,39 @@ export type Database = {
           },
         ]
       }
+      table_shares: {
+        Row: {
+          author_name: string | null
+          book_count: number
+          created_at: string
+          id: string
+          image_path: string
+          slug: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          author_name?: string | null
+          book_count?: number
+          created_at?: string
+          id?: string
+          image_path: string
+          slug: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          author_name?: string | null
+          book_count?: number
+          created_at?: string
+          id?: string
+          image_path?: string
+          slug?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       templates: {
         Row: {
           archived: boolean
@@ -1624,6 +1728,11 @@ export type Database = {
         | "under_review"
         | "added_to_database"
         | "removed"
+      challenge_metric:
+        | "cycles_completed"
+        | "books_published"
+        | "milestones_completed"
+        | "books_featured"
       issue_status: "draft" | "published"
       post_status: "draft" | "published"
       target_audience:
@@ -1766,6 +1875,12 @@ export const Constants = {
         "under_review",
         "added_to_database",
         "removed",
+      ],
+      challenge_metric: [
+        "cycles_completed",
+        "books_published",
+        "milestones_completed",
+        "books_featured",
       ],
       issue_status: ["draft", "published"],
       post_status: ["draft", "published"],

@@ -25,10 +25,12 @@ import { Route as ApiPenRouteImport } from './routes/api/pen'
 import { Route as IssuesIndexRouteImport } from './routes/issues.index'
 import { Route as JournalIndexRouteImport } from './routes/journal.index'
 import { Route as JournalSlugRouteImport } from './routes/journal.$slug'
+import { Route as ShelfSlugRouteImport } from './routes/shelf.$slug'
 import { Route as TableIndexRouteImport } from './routes/table.index'
 import { Route as TableIssueIdRouteImport } from './routes/table.$issueId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminActivityRouteImport } from './routes/_authenticated/admin.activity'
+import { Route as AuthenticatedAdminChallengesRouteImport } from './routes/_authenticated/admin.challenges'
 import { Route as AuthenticatedAdminIssuesRouteImport } from './routes/_authenticated/admin.issues'
 import { Route as AuthenticatedAdminMissionpageRouteImport } from './routes/_authenticated/admin.missionpage'
 import { Route as AuthenticatedAdminPeopleRouteImport } from './routes/_authenticated/admin.people'
@@ -66,6 +68,7 @@ import { Route as AuthenticatedHelpCategoriesCategorySlugRouteImport } from './r
 import { Route as AuthenticatedHelpRequestsIndexRouteImport } from './routes/_authenticated/help.requests.index'
 import { Route as AuthenticatedHelpRequestsRequestIdRouteImport } from './routes/_authenticated/help.requests.$requestId'
 import { Route as AuthenticatedTemplatesMineTemplateIdRouteImport } from './routes/_authenticated/templates.mine.$templateId'
+import { Route as ApiPublicShelfImageSlugRouteImport } from './routes/api/public/shelf-image.$slug'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -152,6 +155,11 @@ const JournalSlugRoute = JournalSlugRouteImport.update({
   path: '/journal/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShelfSlugRoute = ShelfSlugRouteImport.update({
+  id: '/shelf/$slug',
+  path: '/shelf/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TableIndexRoute = TableIndexRouteImport.update({
   id: '/table/',
   path: '/table/',
@@ -171,6 +179,12 @@ const AuthenticatedAdminActivityRoute =
   AuthenticatedAdminActivityRouteImport.update({
     id: '/activity',
     path: '/activity',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminChallengesRoute =
+  AuthenticatedAdminChallengesRouteImport.update({
+    id: '/challenges',
+    path: '/challenges',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminIssuesRoute =
@@ -387,6 +401,11 @@ const AuthenticatedTemplatesMineTemplateIdRoute =
     path: '/templates/mine/$templateId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicShelfImageSlugRoute = ApiPublicShelfImageSlugRouteImport.update({
+  id: '/api/public/shelf-image/$slug',
+  path: '/api/public/shelf-image/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   id: '/lovable/email/auth/preview',
   path: '/lovable/email/auth/preview',
@@ -424,11 +443,13 @@ export interface FileRoutesByFullPath {
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/api/pen': typeof ApiPenRoute
   '/journal/$slug': typeof JournalSlugRoute
+  '/shelf/$slug': typeof ShelfSlugRoute
   '/table/$issueId': typeof TableIssueIdRoute
   '/issues/': typeof IssuesIndexRoute
   '/journal/': typeof JournalIndexRoute
   '/table/': typeof TableIndexRoute
   '/admin/activity': typeof AuthenticatedAdminActivityRoute
+  '/admin/challenges': typeof AuthenticatedAdminChallengesRoute
   '/admin/issues': typeof AuthenticatedAdminIssuesRoute
   '/admin/missionpage': typeof AuthenticatedAdminMissionpageRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
@@ -463,6 +484,7 @@ export interface FileRoutesByFullPath {
   '/help/categories/$categorySlug': typeof AuthenticatedHelpCategoriesCategorySlugRoute
   '/help/requests/$requestId': typeof AuthenticatedHelpRequestsRequestIdRoute
   '/templates/mine/$templateId': typeof AuthenticatedTemplatesMineTemplateIdRoute
+  '/api/public/shelf-image/$slug': typeof ApiPublicShelfImageSlugRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -484,12 +506,14 @@ export interface FileRoutesByTo {
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/api/pen': typeof ApiPenRoute
   '/journal/$slug': typeof JournalSlugRoute
+  '/shelf/$slug': typeof ShelfSlugRoute
   '/table/$issueId': typeof TableIssueIdRoute
   '/': typeof AuthenticatedIndexRoute
   '/issues': typeof IssuesIndexRoute
   '/journal': typeof JournalIndexRoute
   '/table': typeof TableIndexRoute
   '/admin/activity': typeof AuthenticatedAdminActivityRoute
+  '/admin/challenges': typeof AuthenticatedAdminChallengesRoute
   '/admin/issues': typeof AuthenticatedAdminIssuesRoute
   '/admin/missionpage': typeof AuthenticatedAdminMissionpageRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
@@ -523,6 +547,7 @@ export interface FileRoutesByTo {
   '/help/categories/$categorySlug': typeof AuthenticatedHelpCategoriesCategorySlugRoute
   '/help/requests/$requestId': typeof AuthenticatedHelpRequestsRequestIdRoute
   '/templates/mine/$templateId': typeof AuthenticatedTemplatesMineTemplateIdRoute
+  '/api/public/shelf-image/$slug': typeof ApiPublicShelfImageSlugRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -547,12 +572,14 @@ export interface FileRoutesById {
   '/api/coach-plan': typeof ApiCoachPlanRoute
   '/api/pen': typeof ApiPenRoute
   '/journal/$slug': typeof JournalSlugRoute
+  '/shelf/$slug': typeof ShelfSlugRoute
   '/table/$issueId': typeof TableIssueIdRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/issues/': typeof IssuesIndexRoute
   '/journal/': typeof JournalIndexRoute
   '/table/': typeof TableIndexRoute
   '/_authenticated/admin/activity': typeof AuthenticatedAdminActivityRoute
+  '/_authenticated/admin/challenges': typeof AuthenticatedAdminChallengesRoute
   '/_authenticated/admin/issues': typeof AuthenticatedAdminIssuesRoute
   '/_authenticated/admin/missionpage': typeof AuthenticatedAdminMissionpageRoute
   '/_authenticated/admin/people': typeof AuthenticatedAdminPeopleRoute
@@ -587,6 +614,7 @@ export interface FileRoutesById {
   '/_authenticated/help/categories/$categorySlug': typeof AuthenticatedHelpCategoriesCategorySlugRoute
   '/_authenticated/help/requests/$requestId': typeof AuthenticatedHelpRequestsRequestIdRoute
   '/_authenticated/templates/mine/$templateId': typeof AuthenticatedTemplatesMineTemplateIdRoute
+  '/api/public/shelf-image/$slug': typeof ApiPublicShelfImageSlugRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -612,11 +640,13 @@ export interface FileRouteTypes {
     | '/api/coach-plan'
     | '/api/pen'
     | '/journal/$slug'
+    | '/shelf/$slug'
     | '/table/$issueId'
     | '/issues/'
     | '/journal/'
     | '/table/'
     | '/admin/activity'
+    | '/admin/challenges'
     | '/admin/issues'
     | '/admin/missionpage'
     | '/admin/people'
@@ -651,6 +681,7 @@ export interface FileRouteTypes {
     | '/help/categories/$categorySlug'
     | '/help/requests/$requestId'
     | '/templates/mine/$templateId'
+    | '/api/public/shelf-image/$slug'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -672,12 +703,14 @@ export interface FileRouteTypes {
     | '/api/coach-plan'
     | '/api/pen'
     | '/journal/$slug'
+    | '/shelf/$slug'
     | '/table/$issueId'
     | '/'
     | '/issues'
     | '/journal'
     | '/table'
     | '/admin/activity'
+    | '/admin/challenges'
     | '/admin/issues'
     | '/admin/missionpage'
     | '/admin/people'
@@ -711,6 +744,7 @@ export interface FileRouteTypes {
     | '/help/categories/$categorySlug'
     | '/help/requests/$requestId'
     | '/templates/mine/$templateId'
+    | '/api/public/shelf-image/$slug'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -734,12 +768,14 @@ export interface FileRouteTypes {
     | '/api/coach-plan'
     | '/api/pen'
     | '/journal/$slug'
+    | '/shelf/$slug'
     | '/table/$issueId'
     | '/_authenticated/'
     | '/issues/'
     | '/journal/'
     | '/table/'
     | '/_authenticated/admin/activity'
+    | '/_authenticated/admin/challenges'
     | '/_authenticated/admin/issues'
     | '/_authenticated/admin/missionpage'
     | '/_authenticated/admin/people'
@@ -774,6 +810,7 @@ export interface FileRouteTypes {
     | '/_authenticated/help/categories/$categorySlug'
     | '/_authenticated/help/requests/$requestId'
     | '/_authenticated/templates/mine/$templateId'
+    | '/api/public/shelf-image/$slug'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -792,6 +829,7 @@ export interface RootRouteChildren {
   ApiCoachPlanRoute: typeof ApiCoachPlanRoute
   ApiPenRoute: typeof ApiPenRoute
   JournalSlugRoute: typeof JournalSlugRoute
+  ShelfSlugRoute: typeof ShelfSlugRoute
   TableIssueIdRoute: typeof TableIssueIdRoute
   IssuesIndexRoute: typeof IssuesIndexRoute
   JournalIndexRoute: typeof JournalIndexRoute
@@ -799,6 +837,7 @@ export interface RootRouteChildren {
   TableIssueIdFlyerRoute: typeof TableIssueIdFlyerRoute
   TableAuthorsAuthorIdRoute: typeof TableAuthorsAuthorIdRoute
   TableBooksBookIdRoute: typeof TableBooksBookIdRoute
+  ApiPublicShelfImageSlugRoute: typeof ApiPublicShelfImageSlugRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -918,6 +957,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JournalSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/shelf/$slug': {
+      id: '/shelf/$slug'
+      path: '/shelf/$slug'
+      fullPath: '/shelf/$slug'
+      preLoaderRoute: typeof ShelfSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/table/': {
       id: '/table/'
       path: '/table'
@@ -944,6 +990,13 @@ declare module '@tanstack/react-router' {
       path: '/activity'
       fullPath: '/admin/activity'
       preLoaderRoute: typeof AuthenticatedAdminActivityRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/challenges': {
+      id: '/_authenticated/admin/challenges'
+      path: '/challenges'
+      fullPath: '/admin/challenges'
+      preLoaderRoute: typeof AuthenticatedAdminChallengesRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/issues': {
@@ -1205,6 +1258,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTemplatesMineTemplateIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/shelf-image/$slug': {
+      id: '/api/public/shelf-image/$slug'
+      path: '/api/public/shelf-image/$slug'
+      fullPath: '/api/public/shelf-image/$slug'
+      preLoaderRoute: typeof ApiPublicShelfImageSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/auth/preview': {
       id: '/lovable/email/auth/preview'
       path: '/lovable/email/auth/preview'
@@ -1238,6 +1298,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminActivityRoute: typeof AuthenticatedAdminActivityRoute
+  AuthenticatedAdminChallengesRoute: typeof AuthenticatedAdminChallengesRoute
   AuthenticatedAdminIssuesRoute: typeof AuthenticatedAdminIssuesRoute
   AuthenticatedAdminMissionpageRoute: typeof AuthenticatedAdminMissionpageRoute
   AuthenticatedAdminPeopleRoute: typeof AuthenticatedAdminPeopleRoute
@@ -1257,6 +1318,7 @@ interface AuthenticatedAdminRouteChildren {
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminActivityRoute: AuthenticatedAdminActivityRoute,
+  AuthenticatedAdminChallengesRoute: AuthenticatedAdminChallengesRoute,
   AuthenticatedAdminIssuesRoute: AuthenticatedAdminIssuesRoute,
   AuthenticatedAdminMissionpageRoute: AuthenticatedAdminMissionpageRoute,
   AuthenticatedAdminPeopleRoute: AuthenticatedAdminPeopleRoute,
@@ -1367,6 +1429,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiCoachPlanRoute: ApiCoachPlanRoute,
   ApiPenRoute: ApiPenRoute,
   JournalSlugRoute: JournalSlugRoute,
+  ShelfSlugRoute: ShelfSlugRoute,
   TableIssueIdRoute: TableIssueIdRoute,
   IssuesIndexRoute: IssuesIndexRoute,
   JournalIndexRoute: JournalIndexRoute,
@@ -1374,6 +1437,7 @@ const rootRouteChildren: RootRouteChildren = {
   TableIssueIdFlyerRoute: TableIssueIdFlyerRoute,
   TableAuthorsAuthorIdRoute: TableAuthorsAuthorIdRoute,
   TableBooksBookIdRoute: TableBooksBookIdRoute,
+  ApiPublicShelfImageSlugRoute: ApiPublicShelfImageSlugRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,

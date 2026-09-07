@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { PartyPopper } from "lucide-react";
 import { toast } from "sonner";
 
@@ -8,7 +10,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Textarea } from "@/components/ui/textarea";
 import { useAchievements } from "@/lib/achievements";
 import { celebrate } from "@/lib/celebrate";
+import { syncChallenges } from "@/lib/challenges.functions";
 import { useReflection, useSaveReflection, useUpdateBook } from "@/lib/book-db";
+
 
 export const END_CYCLE_PROMPTS = {
   completed: "Was this book cycle completed?",
@@ -43,6 +47,9 @@ export function EndCycleDialog({ bookId, open, onOpenChange }: { bookId: string;
   const [notes, setNotes] = useState("");
   const [done, setDone] = useState(false);
   const achievements = useAchievements();
+  const sync = useServerFn(syncChallenges);
+  const queryClient = useQueryClient();
+
 
   const ready =
     completed === true ? published === true || (published === false && notPublished.trim().length > 0) : completed === false && notComplete.trim().length > 0;
@@ -74,9 +81,11 @@ export function EndCycleDialog({ bookId, open, onOpenChange }: { bookId: string;
             {
               onSuccess: () => {
                 setDone(true);
+                void sync({ data: undefined }).then(() => queryClient.invalidateQueries({ queryKey: ["challenges"] })).catch(() => undefined);
                 if (completed && published) void celebrate();
                 else toast.success("Book cycle closed");
               },
+
               onError: () => toast.error("Couldn’t close the cycle"),
             },
           );

@@ -4,6 +4,8 @@ import { BookOpen, CalendarDays, CircleAlert, Clock3, LayoutGrid, Lightbulb, Lis
 import { toast } from "sonner";
 import { AppShell } from "@/components/app-shell";
 import { BookCover } from "@/components/book-cover";
+import { ProgressRing } from "@/components/progress-ring";
+
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
@@ -13,6 +15,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useBooks, useDeleteBook, type BookSummary } from "@/lib/book-db";
 import { bookStatusLabel, bookStatusTone } from "@/lib/book-status";
 import { useMySubmissions } from "@/lib/catalog-submit";
+import { phaseStyle } from "@/lib/phase-style";
+
 import { SUBMISSION_STATUS_LABELS } from "@/lib/submission-schema";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -78,12 +82,21 @@ function BookRow({ book, submission, onDelete }: { book: BookSummary; submission
           <p className="mt-1 text-sm text-muted-foreground">{book.genre}, by {book.author}</p>
           {book.hasCycle ? (
             <>
-              <div className="mt-4 flex max-w-xl items-center gap-3"><Progress value={book.progress} className="h-1.5" /><span className="text-xs font-semibold">{book.progress}%</span></div>
+              <div className="mt-4 flex max-w-xl items-center gap-3">
+                <Progress value={book.progress} className="h-1.5" />
+                <span className="text-xs font-semibold">{book.progress}%</span>
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">
+                {book.phaseName ? <span className={phaseStyle(book.phaseKey ?? "writing").dot}>{book.phaseName}</span> : null}
+                {book.phaseName ? " · " : null}
+                {book.stepsDone} of {book.stepsTotal} steps
+              </p>
               <p className="mt-3 text-sm"><span className="text-muted-foreground">Next:</span> {book.nextAction}</p>
             </>
           ) : (
             <p className="mt-3 text-sm text-muted-foreground">Saved for later. Start a cycle whenever this one is ready.</p>
           )}
+
         </div>
         <div className="text-left sm:text-right"><p className="text-xs text-muted-foreground">Target publication</p><p className="mt-1 text-sm font-semibold">{book.target}</p></div>
       </Link>
@@ -114,8 +127,17 @@ function BookCard({ book, submission, onDelete }: { book: BookSummary; submissio
         {submission && <TableChip submission={submission} />}
       </div>
       {book.hasCycle && (
-        <div className="mt-4 flex items-center gap-3"><Progress value={book.progress} className="h-1.5" /><span className="text-xs font-semibold">{book.progress}%</span></div>
+        <div className="mt-4 flex items-center gap-3">
+          <span className={phaseStyle(book.phaseKey ?? "writing").dot}>
+            <ProgressRing value={book.progress} label={`${book.progress}% of this book cycle done`} />
+          </span>
+          <div className="min-w-0">
+            {book.phaseName && <p className="truncate text-sm font-semibold">{book.phaseName}</p>}
+            <p className="text-xs text-muted-foreground">{book.stepsDone} of {book.stepsTotal} steps</p>
+          </div>
+        </div>
       )}
+
       <p className="mt-4 text-xs text-muted-foreground">Target publication · {book.target}</p>
     </div>
   );

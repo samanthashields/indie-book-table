@@ -82,12 +82,17 @@ export type BookSummary = {
   status: string;
   shelfStatus: string;
   progress: number;
+  stepsDone: number;
+  stepsTotal: number;
+  phaseKey: string | null;
+  phaseName: string | null;
   nextAction: string;
   target: string;
   coverUrl: string | null;
   startDate: string | null;
   metadata: Record<string, unknown>;
 };
+
 
 export const formatDate = (iso: string | null | undefined) =>
   iso ? new Date(`${iso}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "";
@@ -106,11 +111,20 @@ const milestoneToUi = (row: MilestoneRow): Milestone => ({
   ...(row.due_date ? { dueIso: row.due_date } : {}),
 });
 
-const summarize = (book: BookRow, milestones: MilestoneRow[], authorName: string, currentUserId: string | undefined): BookSummary => {
+type PhaseLookup = Map<string, { key: string; name: string }>;
+
+const summarize = (
+  book: BookRow,
+  milestones: MilestoneRow[],
+  authorName: string,
+  currentUserId: string | undefined,
+  phaseById: PhaseLookup = new Map(),
+): BookSummary => {
   const sorted = [...milestones].sort((a, b) => a.position - b.position);
   const done = sorted.filter((m) => m.status === "Complete").length;
   const progress = sorted.length ? Math.round((done / sorted.length) * 100) : 0;
   const next = sorted.find((m) => m.status === "In progress") ?? sorted.find((m) => m.status !== "Complete");
+  const phase = next ? phaseById.get(next.phase_id) : undefined;
   return {
     id: book.id,
     title: book.title,
@@ -123,6 +137,10 @@ const summarize = (book: BookRow, milestones: MilestoneRow[], authorName: string
     status: book.status === "active" ? "In progress" : book.status,
     shelfStatus: book.shelf_status ?? "idea",
     progress,
+    stepsDone: done,
+    stepsTotal: sorted.length,
+    phaseKey: phase?.key ?? null,
+    phaseName: phase?.name ?? null,
     nextAction: next?.name ?? "All milestones complete",
     target: formatDate(book.target_publication_date) || "No target date",
     coverUrl: book.cover_url,
@@ -145,19 +163,23 @@ export function useBooks() {
       if (error) throw error;
       const rows = (bookRows ?? []) as BookRow[];
       if (rows.length === 0) return [];
-      const { data: milestoneRows, error: milestoneError } = await supabase
-        .from("milestones")
-        .select("*")
-        .in("book_id", rows.map((row) => row.id));
+      const bookIds = rows.map((row) => row.id);
+      const [{ data: milestoneRows, error: milestoneError }, { data: phaseRows }] = await Promise.all([
+        supabase.from("milestones").select("*").in("book_id", bookIds),
+        supabase.from("phases").select("id, key, name").in("book_id", bookIds),
+      ]);
       if (milestoneError) throw milestoneError;
+      const phaseById: PhaseLookup = new Map();
+      for (const phase of phaseRows ?? []) phaseById.set(phase.id, { key: phase.key, name: phase.name });
       const grouped = new Map<string, MilestoneRow[]>();
       for (const milestone of (milestoneRows ?? []) as MilestoneRow[]) {
         grouped.set(milestone.book_id, [...(grouped.get(milestone.book_id) ?? []), milestone]);
       }
-      return rows.map((row) => summarize(row, grouped.get(row.id) ?? [], authorName, userId));
+      return rows.map((row) => summarize(row, grouped.get(row.id) ?? [], authorName, userId, phaseById));
     },
   });
 }
+
 
 export type BookTree = {
   book: BookRow;
