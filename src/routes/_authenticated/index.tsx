@@ -14,6 +14,7 @@ import { bookStatusLabel, bookStatusTone } from "@/lib/book-status";
 import { useMySubmissions } from "@/lib/catalog-submit";
 import { SUBMISSION_STATUS_LABELS } from "@/lib/submission-schema";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type BookSubmission = { id: string; status: string };
 
