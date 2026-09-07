@@ -86,6 +86,41 @@ export function EndCycleDialog({ bookId, open, onOpenChange }: { bookId: string;
     );
   };
 
+  const goToReflection = () => {
+    onOpenChange(false);
+    void navigate({ to: "/books/$bookId/reflection", params: { bookId } });
+  };
+
+  if (done) {
+    const celebrating = Boolean(completed && published);
+    const total = achievements.publishedCount;
+    return (
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 font-serif text-2xl font-normal">
+              {celebrating && <PartyPopper className="size-6 text-primary" />}
+              {celebrating ? "Congratulations — your book is out in the world" : "Your book cycle is closed"}
+            </DialogTitle>
+            <DialogDescription>
+              {celebrating
+                ? total > 0
+                  ? `That makes ${total} published ${total === 1 ? "book" : "books"} on your table.`
+                  : "Your book now has a place on your table."
+                : "This one didn’t reach publication, and that still counts. Everything you learned is saved in the reflection."}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-wrap gap-3 pt-2">
+            {celebrating && (
+              <Button onClick={() => { onOpenChange(false); void navigate({ to: "/my-table" }); }}>See my table</Button>
+            )}
+            <Button variant={celebrating ? "outline" : "default"} onClick={goToReflection}>Go to reflection</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
