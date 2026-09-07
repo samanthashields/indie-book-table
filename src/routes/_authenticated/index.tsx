@@ -14,6 +14,7 @@ import { bookStatusLabel, bookStatusTone } from "@/lib/book-status";
 import { useMySubmissions } from "@/lib/catalog-submit";
 import { SUBMISSION_STATUS_LABELS } from "@/lib/submission-schema";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type BookSubmission = { id: string; status: string };
 
@@ -139,7 +140,9 @@ function Index() {
   }
   const deleteBook = useDeleteBook();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [view, setView] = useState<"list" | "grid">("list");
+  const effectiveView = isMobile ? "list" : view;
 
   useEffect(() => {
     const saved = window.localStorage.getItem("my-books-view");
@@ -172,7 +175,7 @@ function Index() {
         back={false}
         action={
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center rounded-xl border border-border bg-card p-1" role="group" aria-label="Choose how books are shown">
+            <div className="hidden items-center rounded-xl border border-border bg-card p-1 sm:flex" role="group" aria-label="Choose how books are shown">
               <button type="button" aria-label="List view" aria-pressed={view === "list"} onClick={() => chooseView("list")} className={cn("grid size-8 place-items-center rounded-lg", view === "list" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")}><List className="size-4" /></button>
               <button type="button" aria-label="Grid view" aria-pressed={view === "grid"} onClick={() => chooseView("grid")} className={cn("grid size-8 place-items-center rounded-lg", view === "grid" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")}><LayoutGrid className="size-4" /></button>
             </div>
@@ -206,7 +209,7 @@ function Index() {
             {cycles.length === 0 ? (
               <p className="rounded-2xl border border-dashed border-border bg-paper p-6 text-sm text-muted-foreground">No cycles running yet. Open a book below and choose “Create book cycle” when you’re ready.</p>
             ) : (
-              <BookGroup books={cycles} view={view} submissionByBook={submissionByBook} onDelete={remove} />
+              <BookGroup books={cycles} view={effectiveView} submissionByBook={submissionByBook} onDelete={remove} />
             )}
           </section>
 
@@ -215,7 +218,7 @@ function Index() {
             {ideas.length === 0 ? (
               <p className="rounded-2xl border border-dashed border-border bg-paper p-6 text-sm text-muted-foreground">Nothing waiting in the wings. Add a book to keep an idea safe until it’s ready.</p>
             ) : (
-              <BookGroup books={ideas} view={view} submissionByBook={submissionByBook} onDelete={remove} />
+              <BookGroup books={ideas} view={effectiveView} submissionByBook={submissionByBook} onDelete={remove} />
             )}
           </section>
         </div>
