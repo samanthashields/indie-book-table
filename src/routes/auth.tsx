@@ -92,7 +92,7 @@ function AuthPage() {
   return (
     <div className="grid min-h-screen bg-background lg:grid-cols-[1fr_minmax(420px,560px)]">
       <aside className="hidden flex-col justify-between bg-inkblue/10 p-12 lg:flex">
-        <Link to="/" className="flex min-w-0 items-center gap-3"><span className="grid size-11 place-items-center rounded-xl bg-primary text-primary-foreground"><BookOpen className="size-5" /></span><span className="min-w-0 truncate font-serif text-2xl font-normal">The Indie Book Table's Author's Workshop</span></Link>
+        <Link to="/" className="flex min-w-0 items-center gap-3"><span className="grid size-11 place-items-center rounded-xl bg-primary text-primary-foreground"><BookOpen className="size-5" /></span><span className="min-w-0 truncate font-serif text-2xl font-normal">The Indie Book Table</span></Link>
         <div>
           <h2 className="font-serif text-5xl font-normal leading-tight">Every great book deserves a plan.</h2>
           <p className="mt-4 max-w-md leading-7 text-muted-foreground">A guided path from private manuscript to published book, with a calm coach beside you the whole way.</p>
