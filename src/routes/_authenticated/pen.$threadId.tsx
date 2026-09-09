@@ -143,7 +143,7 @@ function PenThreadPage() {
 
         <section className="flex min-h-[32rem] flex-col rounded-2xl border border-border bg-card p-5">
           <div className="mb-3 flex items-center gap-3">
-            <img src={penMark} alt="" loading="lazy" width={512} height={512} className="size-10" />
+            <img src={penMark} alt="" loading="lazy" width={1024} height={1024} className="size-10" />
             <div>
               <p className="font-semibold">Pen</p>
               <p className="text-xs text-muted-foreground">Saved to your account</p>

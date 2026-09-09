@@ -63,7 +63,7 @@ function PenIndexPage() {
       {!paid ? (
         <div className="rounded-2xl border border-border bg-card p-6">
           <div className="flex items-start gap-4">
-            <img src={penMark} alt="" loading="lazy" width={512} height={512} className="size-14" />
+            <img src={penMark} alt="" loading="lazy" width={1024} height={1024} className="size-14" />
             <div>
               <p className="font-semibold">Pen comes with the paid plan.</p>
               <p className="mt-2 max-w-prose text-sm text-muted-foreground">
@@ -105,7 +105,7 @@ function PenIndexPage() {
 
           <section className="flex min-h-[32rem] flex-col rounded-2xl border border-border bg-card p-5">
             <div className="mb-3 flex items-center gap-3">
-              <img src={penMark} alt="" loading="lazy" width={512} height={512} className="size-10" />
+              <img src={penMark} alt="" loading="lazy" width={1024} height={1024} className="size-10" />
               <div>
                 <p className="font-semibold">Pen</p>
                 <p className="text-xs text-muted-foreground">{penOpener("overview").greeting.slice(0, 60)}…</p>
