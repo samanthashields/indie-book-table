@@ -1,13 +1,13 @@
 import { Link } from "@tanstack/react-router";
 
 import type { CatalogBook } from "@/lib/catalog-types";
-import { PricePill, formatPrice } from "./price-pill";
-import { TagChips } from "./tag-chips";
+import { PricePill, formatPrice } from "../price-pill";
+import { TagChips } from "../tag-chips";
 import { CircleToggle } from "@/components/site/circle-toggle";
 import type { WishlistEntry } from "@/lib/wishlist";
 
 /** Full-page spotlight: the issue's featured book, set like a fair poster. */
-export function SpotlightFeature({
+export function HeroBlock({
   book,
   category,
   circled = false,
