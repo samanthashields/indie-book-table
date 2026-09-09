@@ -306,6 +306,44 @@ export type Database = {
           },
         ]
       }
+      catalog_issue_blocks: {
+        Row: {
+          config: Json
+          created_at: string
+          id: string
+          issue_id: string
+          kind: string
+          position: number
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          id?: string
+          issue_id: string
+          kind: string
+          position?: number
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          id?: string
+          issue_id?: string
+          kind?: string
+          position?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_issue_blocks_issue_id_fkey"
+            columns: ["issue_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_issues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       catalog_issue_page_themes: {
         Row: {
           background_image_url: string | null
