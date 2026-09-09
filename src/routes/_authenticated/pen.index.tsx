@@ -7,7 +7,8 @@ import { PageHeading } from "@/components/page-heading";
 import { PenChat, penOpener } from "@/components/pen/pen-chat";
 import { useCreatePenThread, usePenThreads } from "@/lib/pen-db";
 import { useCurrentUser } from "@/lib/use-current-user";
-import penMark from "@/assets/pen-mark.png";
+import penMarkAsset from "@/assets/pen-mark.png.asset.json";
+const penMark = penMarkAsset.url;
 
 export const Route = createFileRoute("/_authenticated/pen/")({
   head: () => ({
@@ -63,7 +64,7 @@ function PenIndexPage() {
       {!paid ? (
         <div className="rounded-2xl border border-border bg-card p-6">
           <div className="flex items-start gap-4">
-            <img src={penMark} alt="" loading="lazy" width={1024} height={1024} className="size-14" />
+            <img src={penMark} alt="" loading="lazy" width={1100} height={850} className="max-h-14 max-w-14 object-contain" />
             <div>
               <p className="font-semibold">Pen comes with the paid plan.</p>
               <p className="mt-2 max-w-prose text-sm text-muted-foreground">
@@ -105,7 +106,7 @@ function PenIndexPage() {
 
           <section className="flex min-h-[32rem] flex-col rounded-2xl border border-border bg-card p-5">
             <div className="mb-3 flex items-center gap-3">
-              <img src={penMark} alt="" loading="lazy" width={1024} height={1024} className="size-10" />
+              <img src={penMark} alt="" loading="lazy" width={1100} height={850} className="max-h-10 max-w-10 object-contain" />
               <div>
                 <p className="font-semibold">Pen</p>
                 <p className="text-xs text-muted-foreground">{penOpener("overview").greeting.slice(0, 60)}…</p>

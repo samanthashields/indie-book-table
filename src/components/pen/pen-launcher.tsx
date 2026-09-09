@@ -6,7 +6,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { PenChat } from "@/components/pen/pen-chat";
 import { useCurrentUser } from "@/lib/use-current-user";
-import penMark from "@/assets/pen-mark.png";
+import penMarkAsset from "@/assets/pen-mark.png.asset.json";
+const penMark = penMarkAsset.url;
 
 /** Pen's floating chat window, available in every workshop section. */
 export function PenLauncher({ context = "overview" }: { context?: string | undefined }) {
@@ -20,7 +21,7 @@ export function PenLauncher({ context = "overview" }: { context?: string | undef
         <div className="fixed inset-x-3 bottom-3 z-50 flex max-h-[78vh] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl sm:inset-x-auto sm:bottom-5 sm:right-5 sm:w-[400px]">
           <div className="flex items-center justify-between border-b border-border bg-amber/20 px-4 py-3">
             <div className="flex items-center gap-3">
-              <img src={penMark} alt="" width={1024} height={1024} className="size-9" />
+              <img src={penMark} alt="" width={1100} height={850} className="max-h-9 max-w-9 object-contain" />
               <div>
                 <p className="font-semibold">Pen</p>
                 <p className="text-xs text-muted-foreground">Your book coach</p>
@@ -74,7 +75,7 @@ export function PenLauncher({ context = "overview" }: { context?: string | undef
           aria-label="Open Pen, your book coach"
           className="fixed bottom-5 right-5 z-50 grid size-12 place-items-center rounded-full bg-primary p-2 text-primary-foreground shadow-lg transition-transform hover:-translate-y-0.5"
         >
-          <img src={penMark} alt="" width={1024} height={1024} className="size-8" />
+          <img src={penMark} alt="" width={1100} height={850} className="max-h-8 max-w-8 object-contain" />
         </button>
       )}
     </>
