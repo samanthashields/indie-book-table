@@ -25,6 +25,36 @@ export type CatalogBook = {
   purchase_links: PurchaseLink[];
 };
 
+
+export type FlyerBlockKind =
+  | "cover"
+  | "sectionBanner"
+  | "hero"
+  | "grid"
+  | "fanOut"
+  | "authorSpotlight"
+  | "personality";
+
+/** A block an editor arranged for an issue, saved in `catalog_issue_blocks`. */
+export type StoredFlyerBlock = {
+  id: string;
+  kind: FlyerBlockKind;
+  position: number;
+  config: {
+    title?: string | null;
+    accent?: string | null;
+    shape?: string | null;
+    bookId?: string | null;
+    bookIds?: string[] | null;
+    featuredBookId?: string | null;
+    authorId?: string | null;
+    heading?: string | null;
+    body?: string | null;
+    hook?: string | null;
+    imageUrl?: string | null;
+  };
+};
+
 export type CatalogCategory = { category: string; books: CatalogBook[] };
 
 export type CatalogIssueMeta = {
@@ -56,6 +86,7 @@ export type CatalogIssue = {
     cover_image_url: string | null;
   };
   pageThemes?: CatalogPageTheme[];
+  blocks?: StoredFlyerBlock[];
 };
 
 export type IssueSummary = {
