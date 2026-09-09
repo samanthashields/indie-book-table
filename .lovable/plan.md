@@ -14,9 +14,6 @@ Turning the flyer from one repeating card template into a set of distinct layout
 - A featured-author page: round photo, name and a short blurb.
 - Circling books, prices, retailer links and page turning all keep working exactly as they do now, on phone and desktop, including keyboard arrows and alt text on covers.
 
-## Brand fix
-
-"The Indie Book Table" becomes **The Indie Table** everywhere it appears: site header, the sign-in page, the shared writing-table page and its page title, and the share card.
 
 ## How existing issues get converted
 
