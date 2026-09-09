@@ -16,7 +16,8 @@ import {
   useRenamePenThread,
   titleFromFirstMessage,
 } from "@/lib/pen-db";
-import penMark from "@/assets/pen-mark.png";
+import penMarkAsset from "@/assets/pen-mark.png.asset.json";
+const penMark = penMarkAsset.url;
 
 export const Route = createFileRoute("/_authenticated/pen/$threadId")({
   head: () => ({
@@ -143,7 +144,7 @@ function PenThreadPage() {
 
         <section className="flex min-h-[32rem] flex-col rounded-2xl border border-border bg-card p-5">
           <div className="mb-3 flex items-center gap-3">
-            <img src={penMark} alt="" loading="lazy" width={1024} height={1024} className="size-10" />
+            <img src={penMark} alt="" loading="lazy" width={1100} height={850} className="max-h-10 max-w-10 object-contain" />
             <div>
               <p className="font-semibold">Pen</p>
               <p className="text-xs text-muted-foreground">Saved to your account</p>
