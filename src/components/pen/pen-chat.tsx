@@ -22,7 +22,8 @@ import { PenQuickActions } from "@/components/pen/pen-quick-actions";
 import { PenReferenceChips, parsePenMessage } from "@/components/pen/pen-references";
 import { penAuthHeaders } from "@/lib/pen-db";
 import { useAddChecklistItems } from "@/lib/milestone-checklist";
-import penMark from "@/assets/pen-mark.png";
+import penMarkAsset from "@/assets/pen-mark.png.asset.json";
+const penMark = penMarkAsset.url;
 
 
 export const PEN_OPENERS: Record<string, { greeting: string; suggestions: string[] }> = {
@@ -206,7 +207,7 @@ export function PenChat({
         <ConversationContent className="space-y-4">
           {messages.length === 0 && (
             <div className="flex items-start gap-3">
-              <img src={penMark} alt="" width={512} height={512} className="size-10 shrink-0" />
+              <img src={penMark} alt="" width={1100} height={850} className="max-h-10 max-w-10 shrink-0 object-contain" />
               <p className="rounded-2xl rounded-bl-md bg-paper p-4 text-sm leading-6">
                 {opener.greeting}
               </p>
