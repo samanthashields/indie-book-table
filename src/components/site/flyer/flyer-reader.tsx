@@ -1,24 +1,21 @@
 import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import type { CatalogBook, CatalogIssue } from "@/lib/catalog-types";
+import type { CatalogIssue } from "@/lib/catalog-types";
 import { normalizeIssueTheme, resolvePage } from "@/lib/flyer-theme";
+import { buildPages } from "@/lib/flyer-blocks";
 import { FlyerPage } from "./flyer-page";
 import { PageTurner } from "./page-turner";
 import { PageNav, CornerTurn } from "./page-nav";
-import { CategoryRibbon } from "./category-ribbon";
-import { ListingRow } from "./listing-row";
-import { SpotlightFeature } from "./spotlight-feature";
-import { IconLegend } from "./tag-chips";
-import { Doodles } from "./doodles";
+import { CoverBlock } from "./blocks/cover-block";
+import { SectionBanner } from "./blocks/section-banner";
+import { HeroBlock } from "./blocks/hero-block";
+import { GridBlock } from "./blocks/grid-block";
+import { FanOutBlock } from "./blocks/fan-out-block";
+import { AuthorBlock } from "./blocks/author-block";
 import { WishlistBar } from "@/components/site/wishlist-bar";
 import { SubscribeGateModal } from "@/components/site/subscribe-gate-modal";
 import { useWishlist, useWishlistGate, type WishlistEntry } from "@/lib/wishlist";
-
-type FlyerPageSpec =
-  | { kind: "cover"; label: string }
-  | { kind: "category"; label: string; category: string; books: CatalogBook[] }
-  | { kind: "spotlight"; label: string; category: string; book: CatalogBook };
 
 /** The flip-book: one published issue rendered as page-turning flyer sheets. */
 export function FlyerReader({ data }: { data: CatalogIssue }) {
@@ -54,28 +51,7 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
     return map;
   }, [allBooks]);
 
-  const pages = useMemo<FlyerPageSpec[]>(() => {
-    if (!data.issue || data.categories.length === 0) return [];
-
-    const list: FlyerPageSpec[] = [{ kind: "cover", label: "Cover" }];
-    for (const category of data.categories) {
-      list.push({
-        kind: "category",
-        label: category.category,
-        category: category.category,
-        books: category.books,
-      });
-    }
-
-    for (const category of data.categories) {
-      const featured = category.books.find((book) => book.is_spotlight);
-      if (featured) {
-        list.push({ kind: "spotlight", label: "Spotlight", category: category.category, book: featured });
-      }
-    }
-
-    return list;
-  }, [data.issue, data.categories]);
+  const pages = useMemo(() => buildPages(data), [data]);
 
   const total = pages.length;
   const goNext = useCallback(
@@ -100,12 +76,8 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
     const page = pages[index];
     if (!page) return null;
 
-    const look = resolvePage(
-      theme,
-      pageThemes,
-      page.kind === "cover" ? null : page.category,
-      index,
-    );
+    const look = resolvePage(theme, pageThemes, page.category, index);
+    const isCover = page.category === null && page.blocks.some((block) => block.type === "cover");
 
     return (
       <FlyerPage
@@ -113,112 +85,75 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
         accent={look.accent}
         pattern={look.pattern}
         backgroundImage={look.backgroundImage}
-        {...(page.kind === "cover"
+        {...(isCover
           ? {}
           : {
-              runningHead: page.kind === "spotlight" ? `Spotlight — ${page.category}` : page.category,
+              runningHead: page.label,
               folio: `Page ${index + 1} of ${total}`,
             })}
         corner={<CornerTurn onNext={goNext} disabled={index >= total - 1} />}
       >
-        {page.kind === "cover" && (
-          <div className="flex min-h-[min(70rem,calc(100vh-14rem))] flex-col justify-center">
-            <div className="poster-slant rounded-2xl bg-cocoa py-4 text-center">
-              <p className="poster-unslant font-serif text-[2.6rem] font-black uppercase leading-none tracking-[0.1em] text-paper sm:text-[4.5rem]">
-                The Indie Table
-              </p>
-            </div>
-            <div className="mt-4 flex items-center justify-between rounded-full bg-card/80 px-4 py-2 text-[0.6rem] font-bold uppercase tracking-[0.3em] text-inkblue">
-              <span>{data.issue?.display_label ?? "Current"} issue</span>
-              <span>{allBooks.length} titles</span>
-              <span className="hidden sm:inline">Independently published</span>
-            </div>
-
-            <div className="mt-8 grid items-center gap-8 sm:grid-cols-[1.1fr_0.9fr]">
-              <div className="text-left">
-                <h1 className="font-serif text-5xl leading-[0.95] text-cocoa sm:text-7xl">
-                  {theme.cover_headline ?? data.issue?.display_label ?? "The Table"}
-                </h1>
-                <p className="mt-5 max-w-md font-serif text-lg italic leading-relaxed text-cocoa/80">
-                  {theme.cover_tagline ??
-                    "A hand-curated flyer of independently published books. Flip through and find your next read."}
-                </p>
-                <p className="mt-6 text-[0.65rem] font-bold uppercase tracking-[0.22em] text-clay">
-                  Turn the page to start browsing →
-                </p>
-              </div>
-              {theme.cover_image_url ? (
-                <figure className="poster-panel bg-card p-3">
-                  <img
-                    src={theme.cover_image_url}
-                    alt={`Cover art for the ${data.issue?.display_label ?? "current"} issue`}
-                    className="mx-auto max-h-[22rem] w-full object-cover"
+        {page.blocks.map((block, blockIndex) => {
+          switch (block.type) {
+            case "cover":
+              return (
+                <CoverBlock
+                  key={blockIndex}
+                  data={data}
+                  theme={theme}
+                  bookCount={allBooks.length}
+                  toc={pages.slice(1).map((entry, i) => ({ label: entry.label, page: i + 2 }))}
+                />
+              );
+            case "sectionBanner":
+              return <SectionBanner key={blockIndex} category={block.category} count={block.count} />;
+            case "hero":
+              return (
+                <div key={blockIndex} className={blockIndex > 0 ? "mt-6" : undefined}>
+                  <HeroBlock
+                    book={block.book}
+                    category={block.category}
+                    circled={isCircled(block.book.id)}
+                    onCircle={handleCircle}
                   />
-                </figure>
-              ) : (
-                <div className="poster-panel bg-card p-6">
-                  <p className="text-[0.6rem] font-bold uppercase tracking-[0.3em] text-cocoa/70">In this issue</p>
-                  <ol className="mt-3 space-y-1.5 text-sm text-cocoa/85">
-                    {pages.slice(1).map((entry, i) => (
-                      <li key={`${entry.label}-${i}`} className="flex items-baseline justify-between gap-3 border-b border-dashed border-cocoa/25 pb-1">
-                        <span className="truncate font-semibold">{entry.label}</span>
-                        <span className="text-[0.65rem] font-bold tracking-[0.14em] text-cocoa/60">{i + 2}</span>
-                      </li>
-                    ))}
-                  </ol>
                 </div>
-              )}
-            </div>
-
-            {theme.cover_image_url && (
-              <div className="poster-panel mt-8 bg-card p-5">
-                <p className="text-[0.6rem] font-bold uppercase tracking-[0.3em] text-cocoa/70">In this issue</p>
-                <ol className="mt-3 grid gap-x-8 gap-y-1.5 text-sm text-cocoa/85 sm:grid-cols-2">
-                  {pages.slice(1).map((entry, i) => (
-                    <li key={`${entry.label}-${i}`} className="flex items-baseline justify-between gap-3 border-b border-dashed border-cocoa/25 pb-1">
-                      <span className="truncate font-semibold">{entry.label}</span>
-                      <span className="text-[0.65rem] font-bold tracking-[0.14em] text-cocoa/60">{i + 2}</span>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            )}
-
-            <div className="mt-8">
-              <IconLegend />
-            </div>
-          </div>
-        )}
-
-        {page.kind === "category" && (
-          <>
-            <CategoryRibbon category={page.category} count={page.books.length} />
-            <div className="relative mt-6">
-              <Doodles seed={index} />
-              <div className="relative grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {page.books.map((book) => (
-                  <div key={book.id}>
-                    <ListingRow
-                      book={book}
-                      listingNumber={listingNumbers.get(book.id)}
-                      circled={isCircled(book.id)}
-                      onCircle={handleCircle}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-
-        {page.kind === "spotlight" && (
-          <SpotlightFeature
-            book={page.book}
-            category={page.category}
-            circled={isCircled(page.book.id)}
-            onCircle={handleCircle}
-          />
-        )}
+              );
+            case "grid":
+              return (
+                <GridBlock
+                  key={blockIndex}
+                  books={block.books}
+                  listingNumbers={listingNumbers}
+                  isCircled={isCircled}
+                  onCircle={handleCircle}
+                  doodleSeed={index}
+                />
+              );
+            case "fanOut":
+              return (
+                <FanOutBlock
+                  key={blockIndex}
+                  authorId={block.authorId}
+                  authorName={block.authorName}
+                  books={block.books}
+                  isCircled={isCircled}
+                  onCircle={handleCircle}
+                />
+              );
+            case "authorSpotlight":
+              return (
+                <AuthorBlock
+                  key={blockIndex}
+                  authorId={block.authorId}
+                  authorName={block.authorName}
+                  bio={block.bio}
+                  books={block.books}
+                />
+              );
+            case "personality":
+              return null;
+          }
+        })}
       </FlyerPage>
     );
   };
