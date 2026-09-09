@@ -6,6 +6,7 @@ export type CatalogBook = {
   pen_name: string | null;
   author_id: string;
   author_name: string;
+  author_bio: string | null;
   hook: string | null;
   genre: string | null;
   target_audience: string;

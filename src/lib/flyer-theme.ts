@@ -226,13 +226,38 @@ const NAMED_RIBBON: Record<string, FlyerColor> = {
   poetry: "pink",
 };
 
+function categoryHash(category: string): number {
+  const key = category.trim().toLowerCase().replace(/[_-]+/g, " ").replace(/\s+/g, " ");
+  let hash = 0;
+  for (let i = 0; i < key.length; i += 1) hash = (hash * 31 + key.charCodeAt(i)) % 100000;
+  return hash;
+}
+
 export function categoryRibbonColor(category: string): FlyerColor {
   const key = category.trim().toLowerCase().replace(/[_-]+/g, " ").replace(/\s+/g, " ");
   const named = NAMED_RIBBON[key];
   if (named) return named;
-  let hash = 0;
-  for (let i = 0; i < key.length; i += 1) hash = (hash * 31 + key.charCodeAt(i)) % 100000;
-  return RIBBON_ROTATION[hash % RIBBON_ROTATION.length]!;
+  return RIBBON_ROTATION[categoryHash(category) % RIBBON_ROTATION.length]!;
+}
+
+/** Edge treatment for a section banner: rounded panel, torn paper, or ribbon. */
+export type BannerShape = "rounded" | "torn" | "ribbon";
+
+const SHAPE_ROTATION: BannerShape[] = ["rounded", "torn", "ribbon"];
+
+/** Deterministic banner shape per category label. */
+export function categoryBannerShape(category: string): BannerShape {
+  return SHAPE_ROTATION[categoryHash(category) % SHAPE_ROTATION.length]!;
+}
+
+const BANNER_SHAPE: Record<BannerShape, string> = {
+  rounded: "rounded-2xl",
+  torn: "banner-torn",
+  ribbon: "banner-ribbon",
+};
+
+export function bannerShapeClass(shape: BannerShape): string {
+  return BANNER_SHAPE[shape];
 }
 
 /** Resolved look for one flyer page, merging preset, page override and images. */

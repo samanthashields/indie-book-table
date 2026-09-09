@@ -49,7 +49,7 @@ type SelectionRow = {
     illustrators: string | null;
     cover_designer: string | null;
     tags: string[];
-    catalog_authors: { id: string; name: string } | null;
+    catalog_authors: { id: string; name: string; bio: string | null } | null;
     catalog_purchase_links: { id: string; platform_label: string; url: string }[] | null;
   } | null;
 };
@@ -58,7 +58,7 @@ const BOOK_SELECT = `
   id, title, pen_name, hook, genre, target_audience, ebook_price, print_price,
   cover_image_url, times_featured_count, awards_reviews_text, explicit_content,
   editors, illustrators, cover_designer, tags,
-  catalog_authors!inner ( id, name ),
+  catalog_authors!inner ( id, name, bio ),
   catalog_purchase_links ( id, platform_label, url )
 `;
 
@@ -72,6 +72,7 @@ function toBook(
     pen_name: row.pen_name,
     author_id: row.catalog_authors?.id ?? "",
     author_name: row.pen_name ?? row.catalog_authors?.name ?? "Unknown author",
+    author_bio: row.catalog_authors?.bio ?? null,
     hook: row.hook,
     genre: row.genre,
     target_audience: row.target_audience,

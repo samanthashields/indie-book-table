@@ -63,7 +63,7 @@ export function FlyerPage({
                 aria-hidden="true"
                 className="poster-unslant hidden text-[0.68rem] font-black uppercase tracking-[0.3em] text-cocoa/80 sm:inline"
               >
-                The Indie Table
+                The Indie Book Table
               </span>
             </div>
           </div>
