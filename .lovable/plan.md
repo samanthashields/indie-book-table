@@ -32,6 +32,10 @@ Keep the existing `pen-mark.png.asset.json` Pen icon everywhere it currently app
   - `src/components/pen/pen-launcher.tsx`: in the unpaid-state panel or as a decorative header accent.
 - The existing small Pen icon remains the primary chat avatar; AI Pen Coach is the companion illustration.
 
+## Pen scribbling thinking state
+Replace (or accompany) the current `"Pen is thinking…"` shimmer in `src/components/pen/pen-chat.tsx` with a Pen scribbling/writing animation. Use the uploaded AI Pen Coach image or a small animated/feather-pen illustration, and keep the text label readable and accessible.
+
+
 ## Falcon decoration
 Use the Falcon image as a decorative accent. Default placement: hero image on `/mission` (`src/routes/mission.tsx`) or as a standalone decorative figure on the public landing. The plan will confirm the exact page before implementation; if no preference is given, the Mission page hero will be used.
 
