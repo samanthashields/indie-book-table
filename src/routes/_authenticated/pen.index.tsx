@@ -8,7 +8,10 @@ import { PenChat, penOpener } from "@/components/pen/pen-chat";
 import { useCreatePenThread, usePenThreads } from "@/lib/pen-db";
 import { useCurrentUser } from "@/lib/use-current-user";
 import penMarkAsset from "@/assets/pen-mark.png.asset.json";
+import aiPenCoachAsset from "@/assets/ai-pen-coach.svg.asset.json";
 const penMark = penMarkAsset.url;
+const aiPenCoach = aiPenCoachAsset.url;
+
 
 export const Route = createFileRoute("/_authenticated/pen/")({
   head: () => ({
@@ -63,8 +66,15 @@ function PenIndexPage() {
 
       {!paid ? (
         <div className="rounded-2xl border border-border bg-card p-6">
-          <div className="flex items-start gap-4">
-            <img src={penMark} alt="" loading="lazy" width={1100} height={850} className="max-h-14 max-w-14 object-contain" />
+          <div className="flex flex-col items-start gap-5 sm:flex-row">
+            <img
+              src={aiPenCoach}
+              alt=""
+              loading="lazy"
+              width={2000}
+              height={2000}
+              className="max-h-36 w-auto object-contain"
+            />
             <div>
               <p className="font-semibold">Pen comes with the paid plan.</p>
               <p className="mt-2 max-w-prose text-sm text-muted-foreground">
@@ -80,6 +90,7 @@ function PenIndexPage() {
             </div>
           </div>
         </div>
+
       ) : (
         <div className="grid gap-6 lg:grid-cols-[18rem_1fr]">
           <aside className="space-y-2">

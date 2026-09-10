@@ -299,3 +299,15 @@
 .starburst {
   clip-path: polygon(50% 0%, 61% 12%, 76% 6%, 79% 22%, 94% 24%, 88% 39%, 100% 50%, 88% 61%, 94% 76%, 79% 78%, 76% 94%, 61% 88%, 50% 100%, 39% 88%, 24% 94%, 21% 78%, 6% 76%, 12% 61%, 0% 50%, 12% 39%, 6% 24%, 21% 22%, 24% 6%, 39% 12%);
 }
+
+/* Pen "scribbling" thinking state */
+@keyframes pen-scribble {
+  0%, 100% { transform: translate(0, 0) rotate(-6deg); }
+  20% { transform: translate(3px, 1px) rotate(4deg); }
+  40% { transform: translate(-2px, 2px) rotate(-2deg); }
+  60% { transform: translate(2px, -1px) rotate(5deg); }
+  80% { transform: translate(-1px, 1px) rotate(-3deg); }
+}
+.animate-pen-scribble {
+  animation: pen-scribble 1.2s ease-in-out infinite;
+}

@@ -7,7 +7,10 @@ import { Button } from "@/components/ui/button";
 import { PenChat } from "@/components/pen/pen-chat";
 import { useCurrentUser } from "@/lib/use-current-user";
 import penMarkAsset from "@/assets/pen-mark.png.asset.json";
+import aiPenCoachAsset from "@/assets/ai-pen-coach.svg.asset.json";
 const penMark = penMarkAsset.url;
+const aiPenCoach = aiPenCoachAsset.url;
+
 
 /** Pen's floating chat window, available in every workshop section. */
 export function PenLauncher({ context = "overview" }: { context?: string | undefined }) {
@@ -45,13 +48,22 @@ export function PenLauncher({ context = "overview" }: { context?: string | undef
             </div>
           ) : (
             <div className="flex-1 space-y-4 overflow-y-auto p-5">
-              <div className="rounded-2xl bg-paper p-4 text-sm leading-6">
-                <p className="font-semibold">Pen comes with the paid plan.</p>
-                <p className="mt-2 text-muted-foreground">
-                  On the free plan you can still build a book cycle from a template or from scratch, and
-                  everything you plan stays yours. Upgrade whenever you'd like a coach to think out loud
-                  with.
-                </p>
+              <div className="flex flex-col items-center gap-3 rounded-2xl bg-paper p-4 text-center text-sm leading-6">
+                <img
+                  src={aiPenCoach}
+                  alt=""
+                  width={2000}
+                  height={2000}
+                  className="max-h-28 w-auto object-contain"
+                />
+                <div>
+                  <p className="font-semibold">Pen comes with the paid plan.</p>
+                  <p className="mt-2 text-muted-foreground">
+                    On the free plan you can still build a book cycle from a template or from scratch, and
+                    everything you plan stays yours. Upgrade whenever you'd like a coach to think out loud
+                    with.
+                  </p>
+                </div>
               </div>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="rounded-xl bg-teal/12 px-4 py-3">Talk through book ideas any time</li>
@@ -65,6 +77,7 @@ export function PenLauncher({ context = "overview" }: { context?: string | undef
                 Upgrade to the paid plan
               </Button>
             </div>
+
           )}
         </div>
       )}

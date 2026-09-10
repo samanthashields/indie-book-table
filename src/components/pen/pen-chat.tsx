@@ -23,7 +23,10 @@ import { PenReferenceChips, parsePenMessage } from "@/components/pen/pen-referen
 import { penAuthHeaders } from "@/lib/pen-db";
 import { useAddChecklistItems } from "@/lib/milestone-checklist";
 import penMarkAsset from "@/assets/pen-mark.png.asset.json";
+import aiPenCoachAsset from "@/assets/ai-pen-coach.svg.asset.json";
 const penMark = penMarkAsset.url;
+const aiPenCoach = aiPenCoachAsset.url;
+
 
 
 export const PEN_OPENERS: Record<string, { greeting: string; suggestions: string[] }> = {
@@ -261,7 +264,19 @@ export function PenChat({
           })}
 
 
-          {status === "submitted" && <Shimmer className="text-sm">Pen is thinking…</Shimmer>}
+          {status === "submitted" && (
+            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+              <img
+                src={aiPenCoach}
+                alt=""
+                width={2000}
+                height={2000}
+                className="max-h-10 w-auto animate-pen-scribble"
+              />
+              <span>Pen is writing…</span>
+            </div>
+          )}
+
 
           {messages.length === 0 && (
             <div className="pt-1">

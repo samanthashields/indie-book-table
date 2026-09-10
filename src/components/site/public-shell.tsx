@@ -1,8 +1,11 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
 import { useCurrentUser } from "@/lib/use-current-user";
+import brandLogoAsset from "@/assets/brand-logo.svg.asset.json";
+import simpleLogoAsset from "@/assets/simple-logo.svg.asset.json";
+
 
 const links = [
   { label: "The Table", to: "/table" as const },
@@ -26,12 +29,24 @@ export function PublicShell({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <header className="sticky top-0 z-30 border-b border-border/60 bg-paper/85 backdrop-blur">
         <div className="mx-auto grid h-16 w-full max-w-[1120px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 md:flex md:gap-6 md:px-8">
-          <Link to="/table" className="flex min-w-0 items-center gap-3">
-            <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-cocoa text-paper">
-              <BookOpen className="size-5" />
-            </span>
-            <span className="truncate font-serif text-lg md:text-xl">{siteTitle}</span>
+          <Link to="/table" className="flex min-w-0 items-center gap-3" aria-label={siteTitle}>
+            <img
+              src={brandLogoAsset.url}
+              alt=""
+              className="hidden h-10 w-auto md:block"
+              width={2000}
+              height={2000}
+            />
+            <img
+              src={simpleLogoAsset.url}
+              alt=""
+              className="h-8 w-auto md:hidden"
+              width={2000}
+              height={2000}
+            />
+
           </Link>
+
 
           <nav className="ml-auto hidden items-center gap-1 text-sm font-semibold md:flex">
             {links.map((link) => (
