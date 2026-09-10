@@ -174,10 +174,116 @@ export function pagesFromStoredBlocks(
   return pages.filter((page) => page.blocks.length > 0);
 }
 
-export function buildPages(data: CatalogIssue): FlyerBlockPage[] {
+/**
+ * Rough vertical cost of each block, in the same units as the page budget below.
+ * Tuned by eye against the rendered flyer; change these numbers to make pages
+ * break earlier or later.
+ */
+const BLOCK_WEIGHT = {
+  banner: 2,
+  hero: 9,
+  gridBook: 2.4,
+  fanOutBase: 3,
+  fanOutBook: 1.6,
+  wholePage: 99,
+} as const;
+
+export type PaginateOptions = { budget: number; gridChunk: number };
+
+/** Narrow screens fit far less, so they split sooner and pack fewer grid cards. */
+export const PAGINATION: Record<"mobile" | "desktop", PaginateOptions> = {
+  mobile: { budget: 10, gridChunk: 4 },
+  desktop: { budget: 15, gridChunk: 6 },
+};
+
+function weightOf(block: FlyerBlock): number {
+  switch (block.type) {
+    case "sectionBanner":
+      return BLOCK_WEIGHT.banner;
+    case "hero":
+      return BLOCK_WEIGHT.hero;
+    case "grid":
+      return block.books.length * BLOCK_WEIGHT.gridBook;
+    case "fanOut":
+      return BLOCK_WEIGHT.fanOutBase + block.books.length * BLOCK_WEIGHT.fanOutBook;
+    default:
+      return BLOCK_WEIGHT.wholePage;
+  }
+}
+
+/** Chops any grid longer than `chunk` books into several grids of that size. */
+function splitGrids(blocks: FlyerBlock[], chunk: number): FlyerBlock[] {
+  const out: FlyerBlock[] = [];
+  for (const block of blocks) {
+    if (block.type !== "grid" || block.books.length <= chunk) {
+      out.push(block);
+      continue;
+    }
+    for (let i = 0; i < block.books.length; i += chunk) {
+      const slice = block.books.slice(i, i + chunk);
+      out.push({
+        type: "grid",
+        category: block.category,
+        books: slice,
+        featuredBookId: slice.some((book) => book.id === block.featuredBookId)
+          ? block.featuredBookId
+          : null,
+      });
+    }
+  }
+  return out;
+}
+
+/**
+ * Re-flows pages so no single sheet runs far past one screenful — the reader
+ * should never have to scroll to find the page turn.
+ */
+export function paginate(pages: FlyerBlockPage[], options: PaginateOptions): FlyerBlockPage[] {
+  const out: FlyerBlockPage[] = [];
+
+  for (const page of pages) {
+    const blocks = splitGrids(page.blocks, options.gridChunk);
+    const banner = blocks[0]?.type === "sectionBanner" ? blocks[0] : null;
+    const body = banner ? blocks.slice(1) : blocks;
+
+    let current: FlyerBlock[] = banner ? [banner] : [];
+    let weight = banner ? weightOf(banner) : 0;
+    let sheet = 0;
+
+    const flush = () => {
+      if (current.length === 0 || (banner && current.length === 1)) return;
+      out.push({
+        label: sheet === 0 ? page.label : `${page.label} (continued)`,
+        category: page.category,
+        blocks: current,
+      });
+      sheet += 1;
+      current = banner ? [banner] : [];
+      weight = banner ? weightOf(banner) : 0;
+    };
+
+    for (const block of body) {
+      const cost = weightOf(block);
+      const hasContent = banner ? current.length > 1 : current.length > 0;
+      if (hasContent && weight + cost > options.budget) flush();
+      current.push(block);
+      weight += cost;
+    }
+    flush();
+
+    // A page that was only a banner (or empty) still deserves to exist.
+    if (sheet === 0) out.push(page);
+  }
+
+  return out;
+}
+
+export function buildPages(data: CatalogIssue, options?: PaginateOptions): FlyerBlockPage[] {
+  const finish = (pages: FlyerBlockPage[]) => (options ? paginate(pages, options) : pages);
+
   if (data.blocks && data.blocks.length > 0) {
     const pages = pagesFromStoredBlocks(data, data.blocks);
-    if (pages.length > 0) return pages;
+    if (pages.length > 0) return finish(pages);
   }
   if (!data.issue || data.categories.length === 0) return [];
 
