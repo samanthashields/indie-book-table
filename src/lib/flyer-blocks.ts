@@ -12,9 +12,9 @@ export type FlyerBlock =
   | {
       type: "sectionBanner";
       category: string;
-      count?: number;
-      accent?: FlyerColor;
-      shape?: BannerShape;
+      count?: number | undefined;
+      accent?: FlyerColor | undefined;
+      shape?: BannerShape | undefined;
     }
   | { type: "hero"; book: CatalogBook; category: string; hook?: string | null }
   | { type: "grid"; category: string; books: CatalogBook[]; featuredBookId?: string | null }
@@ -74,13 +74,14 @@ export function pagesFromStoredBlocks(
       categoryOf.set(book.id, group.category);
     }
   }
+  const currentCategory = (): string | null => current?.category ?? null;
   const pick = (ids?: string[] | null) =>
     (ids ?? []).map((id) => books.get(id)).filter((book): book is CatalogBook => Boolean(book));
   const authorBooks = (authorId?: string | null) =>
     [...books.values()].filter((book) => book.author_id === authorId);
 
   const pages: FlyerBlockPage[] = [];
-  let current: FlyerBlockPage | null = null;
+  let current: FlyerBlockPage | undefined;
   const startPage = (label: string, category: string | null) => {
     current = { label, category, blocks: [] };
     pages.push(current);
@@ -111,14 +112,14 @@ export function pagesFromStoredBlocks(
       case "hero": {
         const book = config.bookId ? books.get(config.bookId) : undefined;
         if (!book) break;
-        const category = current?.category ?? categoryOf.get(book.id) ?? "";
+        const category = currentCategory() ?? categoryOf.get(book.id) ?? "";
         push({ type: "hero", book, category, hook: config.hook ?? null }, book.title, category);
         break;
       }
       case "grid": {
         const list = pick(config.bookIds);
         if (list.length === 0) break;
-        const category = current?.category ?? categoryOf.get(list[0]!.id) ?? "";
+        const category = currentCategory() ?? categoryOf.get(list[0]!.id) ?? "";
         push({ type: "grid", category, books: list, featuredBookId: config.featuredBookId ?? null }, category, category);
         break;
       }
@@ -126,7 +127,7 @@ export function pagesFromStoredBlocks(
         const list = pick(config.bookIds);
         if (list.length === 0) break;
         const first = list[0]!;
-        const category = current?.category ?? categoryOf.get(first.id) ?? "";
+        const category = currentCategory() ?? categoryOf.get(first.id) ?? "";
         push(
           {
             type: "fanOut",

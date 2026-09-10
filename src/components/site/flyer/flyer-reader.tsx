@@ -106,7 +106,13 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
                 />
               );
             case "sectionBanner":
-              return <SectionBanner key={blockIndex} category={block.category} count={block.count} />;
+              return <SectionBanner
+                  key={blockIndex}
+                  category={block.category}
+                  {...(typeof block.count === "number" ? { count: block.count } : {})}
+                  {...(block.accent ? { accent: block.accent } : {})}
+                  {...(block.shape ? { shape: block.shape } : {})}
+                />;
             case "hero":
               return (
                 <div key={blockIndex} className={blockIndex > 0 ? "mt-6" : undefined}>
