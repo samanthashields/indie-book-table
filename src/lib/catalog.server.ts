@@ -7,6 +7,7 @@ import type {
   IssueSummary,
   JournalPost,
   JournalPostSummary,
+  StoredFlyerBlock,
 } from "./catalog-types";
 
 /** Publishable-key client for public catalog reads; RLS applies as `anon`. */
