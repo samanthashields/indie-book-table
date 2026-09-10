@@ -156,7 +156,15 @@ function AdminIssues() {
             </Button>
           </header>
 
+          <Tabs defaultValue="setup" className="space-y-6">
+            <TabsList>
+              <TabsTrigger value="setup">Setup</TabsTrigger>
+              <TabsTrigger value="layout">Layout</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="setup" className="space-y-8">
           <div className="rounded-2xl border border-border bg-card p-5">
+
             <h3 className="font-serif text-2xl font-normal">Cover words</h3>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <label className="block text-sm font-semibold">
