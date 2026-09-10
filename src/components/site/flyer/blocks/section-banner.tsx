@@ -1,3 +1,4 @@
+import type { BannerShape, FlyerColor } from "@/lib/flyer-theme";
 import {
   bannerShapeClass,
   categoryBannerShape,
@@ -11,14 +12,25 @@ import { cn } from "@/lib/utils";
  * colour are deterministic per category so a section keeps its identity
  * across issues.
  */
-export function SectionBanner({ category, count }: { category: string; count?: number }) {
-  const shape = categoryBannerShape(category);
+export function SectionBanner({
+  category,
+  count,
+  accent,
+  shape: shapeOverride,
+}: {
+  category: string;
+  count?: number;
+  accent?: FlyerColor;
+  shape?: BannerShape;
+}) {
+  const shape = shapeOverride ?? categoryBannerShape(category);
+  const color = accent ?? categoryRibbonColor(category);
 
   return (
     <div
       className={cn(
         "relative px-6 py-5 sm:px-9 sm:py-6",
-        panelClass(categoryRibbonColor(category)),
+        panelClass(color),
         bannerShapeClass(shape),
         shape === "torn" && "py-7 sm:py-9",
       )}

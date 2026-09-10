@@ -14,14 +14,17 @@ export function GridBlock({
   isCircled,
   onCircle,
   doodleSeed,
+  featuredBookId,
 }: {
   books: CatalogBook[];
   listingNumbers: Map<string, number>;
   isCircled: (bookId: string) => boolean;
   onCircle: (entry: WishlistEntry) => void;
   doodleSeed: number;
+  featuredBookId?: string | null;
 }) {
-  const featuredIndex = books.length >= 3 ? 0 : -1;
+  const chosen = featuredBookId ? books.findIndex((book) => book.id === featuredBookId) : -1;
+  const featuredIndex = chosen >= 0 ? chosen : books.length >= 3 ? 0 : -1;
 
   return (
     <div className="relative mt-6">

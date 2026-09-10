@@ -10,11 +10,13 @@ import type { WishlistEntry } from "@/lib/wishlist";
 export function HeroBlock({
   book,
   category,
+  hook,
   circled = false,
   onCircle,
 }: {
   book: CatalogBook;
   category: string;
+  hook?: string | null;
   circled?: boolean;
   onCircle?: (entry: WishlistEntry) => void;
 }) {
@@ -84,7 +86,7 @@ export function HeroBlock({
           <TagChips tags={book.tags} className="mt-2" />
 
           <p className="mt-4 max-w-prose text-[0.95rem] leading-relaxed text-cocoa/85">
-            {book.spotlight_blurb ?? book.hook}
+            {hook || book.spotlight_blurb || book.hook}
           </p>
 
           <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">

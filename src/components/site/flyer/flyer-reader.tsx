@@ -13,6 +13,7 @@ import { HeroBlock } from "./blocks/hero-block";
 import { GridBlock } from "./blocks/grid-block";
 import { FanOutBlock } from "./blocks/fan-out-block";
 import { AuthorBlock } from "./blocks/author-block";
+import { PersonalityBlock } from "./blocks/personality-block";
 import { WishlistBar } from "@/components/site/wishlist-bar";
 import { SubscribeGateModal } from "@/components/site/subscribe-gate-modal";
 import { useWishlist, useWishlistGate, type WishlistEntry } from "@/lib/wishlist";
@@ -119,6 +120,7 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
                   <HeroBlock
                     book={block.book}
                     category={block.category}
+                    {...(block.hook ? { hook: block.hook } : {})}
                     circled={isCircled(block.book.id)}
                     onCircle={handleCircle}
                   />
@@ -133,6 +135,7 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
                   isCircled={isCircled}
                   onCircle={handleCircle}
                   doodleSeed={index}
+                  {...(block.featuredBookId ? { featuredBookId: block.featuredBookId } : {})}
                 />
               );
             case "fanOut":
@@ -141,6 +144,7 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
                   key={blockIndex}
                   authorId={block.authorId}
                   authorName={block.authorName}
+                  {...(block.heading ? { heading: block.heading } : {})}
                   books={block.books}
                   isCircled={isCircled}
                   onCircle={handleCircle}
@@ -153,11 +157,19 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
                   authorId={block.authorId}
                   authorName={block.authorName}
                   bio={block.bio}
+                  {...(block.photoUrl ? { photoUrl: block.photoUrl } : {})}
                   books={block.books}
                 />
               );
             case "personality":
-              return null;
+              return (
+                <PersonalityBlock
+                  key={blockIndex}
+                  heading={block.heading}
+                  body={block.body}
+                  {...(block.imageUrl ? { imageUrl: block.imageUrl } : {})}
+                />
+              );
           }
         })}
       </FlyerPage>
