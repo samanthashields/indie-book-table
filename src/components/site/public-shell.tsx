@@ -3,8 +3,7 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
 import { useCurrentUser } from "@/lib/use-current-user";
-import brandLogoAsset from "@/assets/brand-logo.svg.asset.json";
-import simpleLogoAsset from "@/assets/simple-logo.svg.asset.json";
+import falconAsset from "@/assets/falcon.svg.asset.json";
 
 
 const links = [
@@ -31,20 +30,13 @@ export function PublicShell({ children }: { children: ReactNode }) {
         <div className="mx-auto grid h-16 w-full max-w-[1120px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 md:flex md:gap-6 md:px-8">
           <Link to="/table" className="flex min-w-0 items-center gap-3" aria-label={siteTitle}>
             <img
-              src={brandLogoAsset.url}
+              src={falconAsset.url}
               alt=""
-              className="hidden h-10 w-auto md:block"
+              className="h-9 w-auto"
               width={2000}
               height={2000}
             />
-            <img
-              src={simpleLogoAsset.url}
-              alt=""
-              className="h-8 w-auto md:hidden"
-              width={2000}
-              height={2000}
-            />
-
+            <span className="truncate font-serif text-xl font-normal">{siteTitle}</span>
           </Link>
 
 

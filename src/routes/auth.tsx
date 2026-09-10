@@ -6,7 +6,7 @@ import { lovable } from "@/integrations/lovable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import brandLogoAsset from "@/assets/brand-logo.svg.asset.json";
+import falconAsset from "@/assets/falcon.svg.asset.json";
 
 
 type Mode = "signin" | "signup";
@@ -94,7 +94,8 @@ function AuthPage() {
     <div className="grid min-h-screen bg-background lg:grid-cols-[1fr_minmax(420px,560px)]">
       <aside className="hidden flex-col justify-between bg-inkblue/10 p-12 lg:flex">
         <Link to="/" className="flex min-w-0 items-center gap-3" aria-label="The Indie Book Table">
-          <img src={brandLogoAsset.url} alt="" className="h-16 w-auto" width={2000} height={2000} />
+          <img src={falconAsset.url} alt="" className="h-14 w-auto" width={2000} height={2000} />
+          <span className="font-serif text-2xl font-normal">The Indie Book Table</span>
         </Link>
 
 
@@ -112,7 +113,7 @@ function AuthPage() {
 
       <main className="flex items-center justify-center p-6">
         <div className="w-full max-w-md">
-          <div className="mb-8 lg:hidden"><Link to="/" className="flex min-w-0 items-center gap-3" aria-label="The Indie Book Table"><img src={brandLogoAsset.url} alt="" className="h-10 w-auto" width={2000} height={2000} /></Link></div>
+          <div className="mb-8 lg:hidden"><Link to="/" className="flex min-w-0 items-center gap-3" aria-label="The Indie Book Table"><img src={falconAsset.url} alt="" className="h-10 w-auto" width={2000} height={2000} /><span className="font-serif text-xl font-normal">The Indie Book Table</span></Link></div>
 
 
           <div className="mb-6 grid grid-cols-2 rounded-xl bg-secondary p-1">
