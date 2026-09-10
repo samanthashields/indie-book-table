@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { BookOpen, Check, Mail } from "lucide-react";
+import { Check, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import brandLogoAsset from "@/assets/brand-logo.svg.asset.json";
+
 
 type Mode = "signin" | "signup";
 
