@@ -154,7 +154,7 @@ export async function loadIssueCatalog(
     ? issue.catalog_issue_themes[0]
     : issue.catalog_issue_themes;
 
-  const [{ data: selections, error }, { data: pageThemes, error: pageThemesError }] =
+  const [{ data: selections, error }, { data: pageThemes, error: pageThemesError }, { data: blockRows }] =
     await Promise.all([
       supabase
         .from("catalog_issue_selections")
@@ -167,6 +167,11 @@ export async function loadIssueCatalog(
         .from("catalog_issue_page_themes")
         .select("category, ground_color, background_image_url")
         .eq("issue_id", issue.id),
+      supabase
+        .from("catalog_issue_blocks")
+        .select("id, kind, position, config")
+        .eq("issue_id", issue.id)
+        .order("position", { ascending: true }),
     ]);
   if (error) throw new Error(error.message);
   if (pageThemesError) throw new Error(pageThemesError.message);
@@ -202,6 +207,15 @@ export async function loadIssueCatalog(
       cover_tagline: theme?.cover_tagline ?? null,
       cover_image_url: await signCoverPath(supabase, theme?.cover_image_url),
     },
+    blocks: await Promise.all(
+      ((blockRows ?? []) as unknown as StoredFlyerBlock[]).map(async (row) => ({
+        ...row,
+        config: {
+          ...row.config,
+          imageUrl: await signCoverPath(supabase, row.config?.imageUrl ?? null),
+        },
+      })),
+    ),
     pageThemes: await Promise.all(
       (pageThemes ?? []).map(async (row) => ({
         category: row.category,
