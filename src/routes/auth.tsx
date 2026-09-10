@@ -94,8 +94,9 @@ function AuthPage() {
     <div className="grid min-h-screen bg-background lg:grid-cols-[1fr_minmax(420px,560px)]">
       <aside className="hidden flex-col justify-between bg-inkblue/10 p-12 lg:flex">
         <Link to="/" className="flex min-w-0 items-center gap-3" aria-label="The Indie Book Table">
-          <img src={brandLogoAsset.url} alt="" className="h-12 w-auto" width={2000} height={2000} />
+          <img src={brandLogoAsset.url} alt="" className="h-16 w-auto" width={2000} height={2000} />
         </Link>
+
 
         <div>
           <h2 className="font-serif text-5xl font-normal leading-tight">Every great book deserves a plan.</h2>
