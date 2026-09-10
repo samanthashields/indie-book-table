@@ -1,8 +1,11 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
 import { useCurrentUser } from "@/lib/use-current-user";
+import brandLogoAsset from "@/assets/brand-logo.svg.asset.json";
+import simpleLogoAsset from "@/assets/simple-logo.svg.asset.json";
+
 
 const links = [
   { label: "The Table", to: "/table" as const },
