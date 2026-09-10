@@ -102,7 +102,7 @@ function PenThreadPage() {
 
       {renaming && (
         <form
-          className="flex gap-2 rounded-2xl border border-border bg-card p-4"
+          className="grid gap-2 rounded-2xl border border-border bg-card p-4 sm:grid-cols-[minmax(0,1fr)_auto_auto]"
           onSubmit={(event) => {
             event.preventDefault();
             rename.mutate({ id: threadId, title: draftTitle });

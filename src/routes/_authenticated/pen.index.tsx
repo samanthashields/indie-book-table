@@ -119,10 +119,12 @@ function PenIndexPage() {
 
           <section className="flex h-[clamp(32rem,65dvh,44rem)] min-w-0 flex-col rounded-2xl border border-border bg-card p-3 sm:p-5">
             <div className="mb-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-              <img src={penMark} alt="" loading="lazy" width={1100} height={850} className="max-h-10 max-w-10 object-contain" />
-              <div className="hidden min-w-0 sm:block">
-                <p className="font-semibold">Pen</p>
-                <p className="truncate text-xs text-muted-foreground">{penOpener("overview").greeting.slice(0, 60)}…</p>
+              <div className="flex min-w-0 items-center gap-3">
+                <img src={penMark} alt="" loading="lazy" width={1100} height={850} className="max-h-10 max-w-10 shrink-0 object-contain" />
+                <div className="hidden min-w-0 sm:block">
+                  <p className="font-semibold">Pen</p>
+                  <p className="truncate text-xs text-muted-foreground">{penOpener("overview").greeting.slice(0, 60)}…</p>
+                </div>
               </div>
               <Button
                 variant="outline"
