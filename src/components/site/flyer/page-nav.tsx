@@ -14,7 +14,7 @@ export function PageNav({
   labels: string[];
 }) {
   return (
-    <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+    <div className="panel-outline-thin sticky bottom-3 z-30 mt-6 flex flex-wrap items-center justify-between gap-4 bg-card/95 px-3 py-2 backdrop-blur supports-[backdrop-filter]:bg-card/80">
       <button
         type="button"
         onClick={onPrev}
