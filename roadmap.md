@@ -15,6 +15,7 @@
 - [x] Desktop and mobile visual verification of redesigned screens
 
 ## Usability, pacing and colour pass
+
 - [x] Template preview + use-this-template routing
 - [x] Create flow branches (template / scratch / coach)
 - [x] Floating Book Coach chat with suggested prompts
@@ -26,9 +27,11 @@
 - [x] Full palette usage across the app
 
 ## Backend planning (next)
+
 - [x] Plan accounts, sign-up, roles, super admin user management, global genre templates
 
 ## Accounts, roles and admin (approved plan)
+
 - [x] Decided: collaborators require their own plan (full accounts, email + Google sign-in)
 - [x] Decided: free plan (templates + scratch) and paid plan (adds AI coach)
 - [x] Decided: author/collaborator accounts independent
@@ -42,6 +45,7 @@
 - [x] Plan gating: coach is paid-only
 
 ## The Indie Table merge (uploaded brief)
+
 - [x] Catalog schema recreated in this backend (catalog_* tables, roles-based admin, seed issue)
 - [x] Public shell + routing: The Table and Journal alongside the Author's Workshop
 - [x] The Table: issue archive, issue pages by category, book detail, author shelf
@@ -54,6 +58,7 @@
 - [ ] Phase 5: One author identity + publish → listing → Table handoff
 
 ## Workshop polish (approved plan)
+
 - [x] Templates index/preview/editor routing
 - [x] Book status dropdown (add book + cycle details)
 - [x] Back button on every page
@@ -66,9 +71,16 @@
 - [x] Magazine-style flyer with pinned corner turn
 
 ## New requests (Sep 6)
+
 - [x] Homepage main heading renamed to Author's Workshop
 - [x] Attach a Google Drive file link on a milestone (full account connection not set up)
 - [x] Milestone drawer opens without darkening the background
 - [x] Start Date in book cycle details
 - [x] End Book Cycle CTA with conditional questions, shown in Reflections
 - [x] My Cycles page under My Books grouped by Not started / In progress / Complete
+
+## Pen chat layout (Sep 10)
+
+- [x] Fit the full Pen pages safely within desktop and mobile screens
+- [x] Increase the floating Pen window height with safe screen margins
+- [x] Verify both layouts at desktop and mobile sizes
