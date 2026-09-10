@@ -286,9 +286,16 @@ function AdminIssues() {
               })}
             </div>
           </div>
+            </TabsContent>
 
-          <IssueBlockBuilder issueId={issue.id} />
+            <TabsContent value="layout">
+              <div className="relative left-1/2 w-[calc(100vw-2.5rem)] -translate-x-1/2 md:w-[calc(100vw-4rem)]">
+                <IssueBlockBuilder issueId={issue.id} />
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
+
       )}
     </section>
   );
