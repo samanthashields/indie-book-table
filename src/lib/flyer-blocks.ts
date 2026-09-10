@@ -251,7 +251,7 @@ export function paginate(pages: FlyerBlockPage[], options: PaginateOptions): Fly
     const body = banner ? blocks.slice(1) : blocks;
 
     let current: FlyerBlock[] = banner ? [banner] : [];
-    let weight = banner ? weightOf(banner) : 0;
+    let weight = banner ? weightOf(banner, options.gridCols) : 0;
     let sheet = 0;
 
     const flush = () => {
@@ -263,11 +263,11 @@ export function paginate(pages: FlyerBlockPage[], options: PaginateOptions): Fly
       });
       sheet += 1;
       current = banner ? [banner] : [];
-      weight = banner ? weightOf(banner) : 0;
+      weight = banner ? weightOf(banner, options.gridCols) : 0;
     };
 
     for (const block of body) {
-      const cost = weightOf(block);
+      const cost = weightOf(block, options.gridCols);
       const hasContent = banner ? current.length > 1 : current.length > 0;
       if (hasContent && weight + cost > options.budget) flush();
       current.push(block);
