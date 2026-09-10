@@ -21,7 +21,7 @@ export function PenLauncher({ context = "overview" }: { context?: string | undef
   return (
     <>
       {open && (
-        <div className="fixed inset-x-3 bottom-3 z-50 flex max-h-[78vh] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl sm:inset-x-auto sm:bottom-5 sm:right-5 sm:w-[400px]">
+        <div className="fixed inset-x-3 bottom-3 z-50 flex h-[min(44rem,calc(100dvh-1.5rem))] min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl sm:inset-x-auto sm:bottom-5 sm:right-5 sm:h-[min(46rem,calc(100dvh-2.5rem))] sm:w-[400px]">
           <div className="flex items-center justify-between border-b border-border bg-amber/20 px-4 py-3">
             <div className="flex items-center gap-3">
               <img src={penMark} alt="" width={1100} height={850} className="max-h-9 max-w-9 object-contain" />
@@ -43,7 +43,7 @@ export function PenLauncher({ context = "overview" }: { context?: string | undef
           </div>
 
           {paid ? (
-            <div className="flex min-h-0 flex-1 flex-col p-4">
+            <div className="flex min-h-0 min-w-0 flex-1 flex-col p-3 sm:p-4">
               <PenChat chatId={`pen-floating-${context}`} section={context} />
             </div>
           ) : (

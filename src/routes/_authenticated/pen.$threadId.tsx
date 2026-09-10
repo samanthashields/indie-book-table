@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import type { UIMessage } from "ai";
 
 import { Button } from "@/components/ui/button";
+import { AppShell } from "@/components/app-shell";
 import { Input } from "@/components/ui/input";
 import { PageHeading } from "@/components/page-heading";
 import { PenChat } from "@/components/pen/pen-chat";
@@ -70,14 +71,15 @@ function PenThreadPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <AppShell showPenLauncher={false}>
+    <div className="min-w-0 space-y-6">
       <PageHeading
         title={thread?.title ?? "Conversation"}
         description="Pen remembers this conversation, so you can pick it back up any time."
         back
         backLabel="All conversations"
         action={
-          <div className="flex gap-2">
+          <div className="grid grid-cols-3 gap-2 sm:flex">
             <Button variant="outline" onClick={() => { setDraftTitle(thread?.title ?? ""); setRenaming(true); }}>
               <Pencil /> Rename
             </Button>
@@ -120,8 +122,8 @@ function PenThreadPage() {
         </form>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-[18rem_1fr]">
-        <aside className="space-y-2">
+      <div className="grid min-w-0 gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
+        <aside className="min-w-0 space-y-2">
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Your conversations
           </p>
@@ -142,12 +144,12 @@ function PenThreadPage() {
           ))}
         </aside>
 
-        <section className="flex min-h-[32rem] flex-col rounded-2xl border border-border bg-card p-5">
-          <div className="mb-3 flex items-center gap-3">
+        <section className="flex h-[clamp(32rem,65dvh,44rem)] min-w-0 flex-col rounded-2xl border border-border bg-card p-3 sm:p-5">
+          <div className="mb-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3">
             <img src={penMark} alt="" loading="lazy" width={1100} height={850} className="max-h-10 max-w-10 object-contain" />
-            <div>
+            <div className="min-w-0">
               <p className="font-semibold">Pen</p>
-              <p className="text-xs text-muted-foreground">Saved to your account</p>
+              <p className="truncate text-xs text-muted-foreground">Saved to your account</p>
             </div>
           </div>
           {history.isLoading ? (
@@ -164,5 +166,6 @@ function PenThreadPage() {
         </section>
       </div>
     </div>
+    </AppShell>
   );
 }

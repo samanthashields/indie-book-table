@@ -3,6 +3,7 @@ import { Plus, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
 import { PenChat, penOpener } from "@/components/pen/pen-chat";
 import { useCreatePenThread, usePenThreads } from "@/lib/pen-db";
@@ -51,7 +52,8 @@ function PenIndexPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <AppShell showPenLauncher={false}>
+    <div className="min-w-0 space-y-6">
       <PageHeading
         title="Pen"
         description="Your book coach. Talk through ideas, decide what's next, and get your books to the world."
@@ -92,8 +94,8 @@ function PenIndexPage() {
         </div>
 
       ) : (
-        <div className="grid gap-6 lg:grid-cols-[18rem_1fr]">
-          <aside className="space-y-2">
+        <div className="grid min-w-0 gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
+          <aside className="min-w-0 space-y-2">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Your conversations
             </p>
@@ -115,17 +117,17 @@ function PenIndexPage() {
             )}
           </aside>
 
-          <section className="flex min-h-[32rem] flex-col rounded-2xl border border-border bg-card p-5">
-            <div className="mb-3 flex items-center gap-3">
+          <section className="flex h-[clamp(32rem,65dvh,44rem)] min-w-0 flex-col rounded-2xl border border-border bg-card p-3 sm:p-5">
+            <div className="mb-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
               <img src={penMark} alt="" loading="lazy" width={1100} height={850} className="max-h-10 max-w-10 object-contain" />
-              <div>
+              <div className="hidden min-w-0 sm:block">
                 <p className="font-semibold">Pen</p>
-                <p className="text-xs text-muted-foreground">{penOpener("overview").greeting.slice(0, 60)}…</p>
+                <p className="truncate text-xs text-muted-foreground">{penOpener("overview").greeting.slice(0, 60)}…</p>
               </div>
               <Button
                 variant="outline"
                 size="sm"
-                className="ml-auto"
+                className="ml-auto max-w-full"
                 onClick={() => void startThread()}
                 disabled={createThread.isPending}
               >
@@ -137,5 +139,6 @@ function PenIndexPage() {
         </div>
       )}
     </div>
+    </AppShell>
   );
 }

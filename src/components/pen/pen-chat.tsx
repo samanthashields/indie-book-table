@@ -205,13 +205,13 @@ export function PenChat({
   };
 
   return (
-    <div className={`flex min-h-0 flex-1 flex-col ${className ?? ""}`}>
+    <div className={`flex min-h-0 min-w-0 flex-1 flex-col ${className ?? ""}`}>
       <Conversation className="min-h-0 flex-1">
-        <ConversationContent className="space-y-4">
+        <ConversationContent className="min-w-0 space-y-4 px-1 py-3 sm:p-4">
           {messages.length === 0 && (
-            <div className="flex items-start gap-3">
+            <div className="flex min-w-0 items-start gap-3">
               <img src={penMark} alt="" width={1100} height={850} className="max-h-10 max-w-10 shrink-0 object-contain" />
-              <p className="rounded-2xl rounded-bl-md bg-paper p-4 text-sm leading-6">
+              <p className="min-w-0 rounded-2xl rounded-bl-md bg-paper p-4 text-sm leading-6">
                 {opener.greeting}
               </p>
             </div>

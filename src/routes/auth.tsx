@@ -12,6 +12,7 @@ import falconAsset from "@/assets/falcon.svg.asset.json";
 type Mode = "signin" | "signup";
 
 export const Route = createFileRoute("/auth")({
+  ssr: false,
   head: () => ({ meta: [
     { title: "Sign in — The Indie Book Table" },
     { name: "description", content: "Sign in to your publishing workspace, or create an author or collaborator account." },

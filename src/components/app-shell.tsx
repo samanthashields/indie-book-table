@@ -24,7 +24,7 @@ const nav = [
 
 
 
-export function AppShell({ children, coachContext }: { children: ReactNode; coachContext?: string }) {
+export function AppShell({ children, coachContext, showPenLauncher = true }: { children: ReactNode; coachContext?: string; showPenLauncher?: boolean }) {
   const [navOpen, setNavOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const pathname = useRouterState({ select: (state) => state.location.pathname });
@@ -96,7 +96,7 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
           </header>
           <main className="mx-auto w-full max-w-[1120px] px-5 py-8 md:px-8 lg:px-8 lg:py-10">{children}</main>
         </div>
-        <PenLauncher context={coachContext} />
+        {showPenLauncher && <PenLauncher context={coachContext} />}
       </div>
     </div>
   );
