@@ -28,7 +28,7 @@ export function PageNav({
         <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cocoa">
           Page {index + 1} of {total}
         </p>
-        <div className="flex items-center gap-1.5">
+        <div className="flex max-w-[16rem] flex-wrap items-center justify-center gap-1.5 sm:max-w-none">
           {labels.map((label, i) => (
             <button
               key={label}

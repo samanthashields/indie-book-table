@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { CatalogIssue } from "@/lib/catalog-types";
 import { normalizeIssueTheme, resolvePage } from "@/lib/flyer-theme";
-import { buildPages } from "@/lib/flyer-blocks";
+import { buildPages, PAGINATION } from "@/lib/flyer-blocks";
 import { FlyerPage } from "./flyer-page";
 import { PageTurner } from "./page-turner";
 import { PageNav, CornerTurn } from "./page-nav";
@@ -52,7 +52,25 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
     return map;
   }, [allBooks]);
 
-  const pages = useMemo(() => buildPages(data), [data]);
+  // Read after mount so the server and first client render agree.
+  const [wide, setWide] = useState(true);
+  useEffect(() => {
+    const query = window.matchMedia("(min-width: 640px)");
+    const sync = () => setWide(query.matches);
+    sync();
+    query.addEventListener("change", sync);
+    return () => query.removeEventListener("change", sync);
+  }, []);
+
+  const pages = useMemo(
+    () => buildPages(data, wide ? PAGINATION.desktop : PAGINATION.mobile),
+    [data, wide],
+  );
+
+  // A narrower screen makes more pages; never point past the end.
+  useEffect(() => {
+    setPageIndex((i) => Math.min(i, Math.max(pages.length - 1, 0)));
+  }, [pages.length]);
 
   const total = pages.length;
   const goNext = useCallback(
