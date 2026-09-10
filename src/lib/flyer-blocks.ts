@@ -225,9 +225,10 @@ function splitGrids(blocks: FlyerBlock[], chunk: number): FlyerBlock[] {
         type: "grid",
         category: block.category,
         books: slice,
-        featuredBookId: slice.some((book) => book.id === block.featuredBookId)
-          ? block.featuredBookId
-          : null,
+        featuredBookId:
+          block.featuredBookId && slice.some((book) => book.id === block.featuredBookId)
+            ? block.featuredBookId
+            : null,
       });
     }
   }
