@@ -11,7 +11,6 @@ import aiPenCoachAsset from "@/assets/ai-pen-coach.svg.asset.json";
 const penMark = penMarkAsset.url;
 const aiPenCoach = aiPenCoachAsset.url;
 
-
 /** Pen's floating chat window, available in every workshop section. */
 export function PenLauncher({ context = "overview" }: { context?: string | undefined }) {
   const user = useCurrentUser();
@@ -24,7 +23,13 @@ export function PenLauncher({ context = "overview" }: { context?: string | undef
         <div className="fixed inset-x-3 bottom-3 z-50 flex h-[min(44rem,calc(100dvh-1.5rem))] min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl sm:inset-x-auto sm:bottom-5 sm:right-5 sm:h-[min(46rem,calc(100dvh-2.5rem))] sm:w-[400px]">
           <div className="flex items-center justify-between border-b border-border bg-amber/20 px-4 py-3">
             <div className="flex items-center gap-3">
-              <img src={penMark} alt="" width={1100} height={850} className="max-h-9 max-w-9 object-contain" />
+              <img
+                src={penMark}
+                alt=""
+                width={1100}
+                height={850}
+                className="max-h-9 max-w-9 object-contain"
+              />
               <div>
                 <p className="font-semibold">Pen</p>
                 <p className="text-xs text-muted-foreground">Your book coach</p>
@@ -36,7 +41,12 @@ export function PenLauncher({ context = "overview" }: { context?: string | undef
                   <Maximize2 className="size-4" />
                 </Link>
               </Button>
-              <Button variant="ghost" size="icon-sm" onClick={() => setOpen(false)} aria-label="Minimise Pen">
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={() => setOpen(false)}
+                aria-label="Minimise Pen"
+              >
                 <Minus className="size-4" />
               </Button>
             </div>
@@ -59,25 +69,32 @@ export function PenLauncher({ context = "overview" }: { context?: string | undef
                 <div>
                   <p className="font-semibold">Pen comes with the paid plan.</p>
                   <p className="mt-2 text-muted-foreground">
-                    On the free plan you can still build a book cycle from a template or from scratch, and
-                    everything you plan stays yours. Upgrade whenever you'd like a coach to think out loud
-                    with.
+                    On the free plan you can still build a book cycle from a template or from
+                    scratch, and everything you plan stays yours. Upgrade whenever you'd like a
+                    coach to think out loud with.
                   </p>
                 </div>
               </div>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="rounded-xl bg-teal/12 px-4 py-3">Talk through book ideas any time</li>
-                <li className="rounded-xl bg-amber/18 px-4 py-3">Honest pacing against your launch date</li>
-                <li className="rounded-xl bg-leaf/20 px-4 py-3">Do it yourself or hire, based on your budget</li>
+                <li className="rounded-xl bg-teal/12 px-4 py-3">
+                  Talk through book ideas any time
+                </li>
+                <li className="rounded-xl bg-amber/18 px-4 py-3">
+                  Honest pacing against your launch date
+                </li>
+                <li className="rounded-xl bg-leaf/20 px-4 py-3">
+                  Do it yourself or hire, based on your budget
+                </li>
               </ul>
               <Button
                 className="w-full"
-                onClick={() => toast.info("Plans are coming soon — your account is on the free plan for now.")}
+                onClick={() =>
+                  toast.info("Plans are coming soon — your account is on the free plan for now.")
+                }
               >
                 Upgrade to the paid plan
               </Button>
             </div>
-
           )}
         </div>
       )}
@@ -88,7 +105,13 @@ export function PenLauncher({ context = "overview" }: { context?: string | undef
           aria-label="Open Pen, your book coach"
           className="fixed bottom-5 right-5 z-50 grid size-12 place-items-center rounded-full bg-primary p-2 text-primary-foreground shadow-lg transition-transform hover:-translate-y-0.5"
         >
-          <img src={penMark} alt="" width={1100} height={850} className="max-h-8 max-w-8 object-contain" />
+          <img
+            src={penMark}
+            alt=""
+            width={1100}
+            height={850}
+            className="max-h-8 max-w-8 object-contain"
+          />
         </button>
       )}
     </>

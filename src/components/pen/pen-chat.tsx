@@ -27,8 +27,6 @@ import aiPenCoachAsset from "@/assets/ai-pen-coach.svg.asset.json";
 const penMark = penMarkAsset.url;
 const aiPenCoach = aiPenCoachAsset.url;
 
-
-
 export const PEN_OPENERS: Record<string, { greeting: string; suggestions: string[] }> = {
   overview: {
     greeting:
@@ -210,7 +208,13 @@ export function PenChat({
         <ConversationContent className="min-w-0 space-y-4 px-1 py-3 sm:p-4">
           {messages.length === 0 && (
             <div className="flex min-w-0 items-start gap-3">
-              <img src={penMark} alt="" width={1100} height={850} className="max-h-10 max-w-10 shrink-0 object-contain" />
+              <img
+                src={penMark}
+                alt=""
+                width={1100}
+                height={850}
+                className="max-h-10 max-w-10 shrink-0 object-contain"
+              />
               <p className="min-w-0 rounded-2xl rounded-bl-md bg-paper p-4 text-sm leading-6">
                 {opener.greeting}
               </p>
@@ -263,7 +267,6 @@ export function PenChat({
             );
           })}
 
-
           {status === "submitted" && (
             <div className="flex items-center gap-3 text-sm text-muted-foreground">
               <img
@@ -276,7 +279,6 @@ export function PenChat({
               <span>Pen is writing…</span>
             </div>
           )}
-
 
           {messages.length === 0 && (
             <div className="pt-1">
@@ -307,7 +309,6 @@ export function PenChat({
           <PromptInputSubmit status={status} disabled={busy} />
         </PromptInputFooter>
       </PromptInput>
-
     </div>
   );
 }

@@ -72,100 +72,113 @@ function PenThreadPage() {
 
   return (
     <AppShell showPenLauncher={false}>
-    <div className="min-w-0 space-y-6">
-      <PageHeading
-        title={thread?.title ?? "Conversation"}
-        description="Pen remembers this conversation, so you can pick it back up any time."
-        back
-        backLabel="All conversations"
-        action={
-          <div className="grid grid-cols-3 gap-2 sm:flex">
-            <Button variant="outline" onClick={() => { setDraftTitle(thread?.title ?? ""); setRenaming(true); }}>
-              <Pencil /> Rename
-            </Button>
-            <Button
-              variant="outline"
-              onClick={async () => {
-                await remove.mutateAsync(threadId);
-                toast.success("Conversation deleted.");
-                await navigate({ to: "/pen" });
-              }}
-            >
-              <Trash2 /> Delete
-            </Button>
-            <Button onClick={() => void startThread()} disabled={createThread.isPending}>
-              <Plus /> New
-            </Button>
-          </div>
-        }
-      />
-
-      {renaming && (
-        <form
-          className="grid gap-2 rounded-2xl border border-border bg-card p-4 sm:grid-cols-[minmax(0,1fr)_auto_auto]"
-          onSubmit={(event) => {
-            event.preventDefault();
-            rename.mutate({ id: threadId, title: draftTitle });
-            setRenaming(false);
-          }}
-        >
-          <Input
-            value={draftTitle}
-            onChange={(event) => setDraftTitle(event.target.value)}
-            aria-label="Conversation name"
-            placeholder="Name this conversation"
-          />
-          <Button type="submit">Save</Button>
-          <Button type="button" variant="ghost" onClick={() => setRenaming(false)}>
-            Cancel
-          </Button>
-        </form>
-      )}
-
-      <div className="grid min-w-0 gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
-        <aside className="min-w-0 space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Your conversations
-          </p>
-          {(threads.data ?? []).map((entry) => (
-            <Link
-              key={entry.id}
-              to="/pen/$threadId"
-              params={{ threadId: entry.id }}
-              className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-medium transition-colors ${
-                entry.id === threadId
-                  ? "border-primary bg-paper"
-                  : "border-border bg-card hover:bg-paper"
-              }`}
-            >
-              <MessageSquare className="size-4 shrink-0 text-muted-foreground" />
-              <span className="truncate">{entry.title}</span>
-            </Link>
-          ))}
-        </aside>
-
-        <section className="flex h-[clamp(32rem,65dvh,44rem)] min-w-0 flex-col rounded-2xl border border-border bg-card p-3 sm:p-5">
-          <div className="mb-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3">
-            <img src={penMark} alt="" loading="lazy" width={1100} height={850} className="max-h-10 max-w-10 object-contain" />
-            <div className="min-w-0">
-              <p className="font-semibold">Pen</p>
-              <p className="truncate text-xs text-muted-foreground">Saved to your account</p>
+      <div className="min-w-0 space-y-6">
+        <PageHeading
+          title={thread?.title ?? "Conversation"}
+          description="Pen remembers this conversation, so you can pick it back up any time."
+          back
+          backLabel="All conversations"
+          action={
+            <div className="grid grid-cols-3 gap-2 sm:flex">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setDraftTitle(thread?.title ?? "");
+                  setRenaming(true);
+                }}
+              >
+                <Pencil /> Rename
+              </Button>
+              <Button
+                variant="outline"
+                onClick={async () => {
+                  await remove.mutateAsync(threadId);
+                  toast.success("Conversation deleted.");
+                  await navigate({ to: "/pen" });
+                }}
+              >
+                <Trash2 /> Delete
+              </Button>
+              <Button onClick={() => void startThread()} disabled={createThread.isPending}>
+                <Plus /> New
+              </Button>
             </div>
-          </div>
-          {history.isLoading ? (
-            <p className="text-sm text-muted-foreground">Loading this conversation…</p>
-          ) : (
-            <PenChat
-              chatId={threadId}
-              threadId={threadId}
-              section="overview"
-              initialMessages={initialMessages}
-              onFirstMessage={handleFirstMessage}
+          }
+        />
+
+        {renaming && (
+          <form
+            className="grid gap-2 rounded-2xl border border-border bg-card p-4 sm:grid-cols-[minmax(0,1fr)_auto_auto]"
+            onSubmit={(event) => {
+              event.preventDefault();
+              rename.mutate({ id: threadId, title: draftTitle });
+              setRenaming(false);
+            }}
+          >
+            <Input
+              value={draftTitle}
+              onChange={(event) => setDraftTitle(event.target.value)}
+              aria-label="Conversation name"
+              placeholder="Name this conversation"
             />
-          )}
-        </section>
+            <Button type="submit">Save</Button>
+            <Button type="button" variant="ghost" onClick={() => setRenaming(false)}>
+              Cancel
+            </Button>
+          </form>
+        )}
+
+        <div className="grid min-w-0 gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
+          <aside className="min-w-0 space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Your conversations
+            </p>
+            {(threads.data ?? []).map((entry) => (
+              <Link
+                key={entry.id}
+                to="/pen/$threadId"
+                params={{ threadId: entry.id }}
+                className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-medium transition-colors ${
+                  entry.id === threadId
+                    ? "border-primary bg-paper"
+                    : "border-border bg-card hover:bg-paper"
+                }`}
+              >
+                <MessageSquare className="size-4 shrink-0 text-muted-foreground" />
+                <span className="truncate">{entry.title}</span>
+              </Link>
+            ))}
+          </aside>
+
+          <section className="flex h-[clamp(32rem,65dvh,44rem)] min-w-0 flex-col rounded-2xl border border-border bg-card p-3 sm:p-5">
+            <div className="mb-3 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3">
+              <img
+                src={penMark}
+                alt=""
+                loading="lazy"
+                width={1100}
+                height={850}
+                className="max-h-10 max-w-10 object-contain"
+              />
+              <div className="min-w-0">
+                <p className="font-semibold">Pen</p>
+                <p className="truncate text-xs text-muted-foreground">Saved to your account</p>
+              </div>
+            </div>
+            {history.isLoading ? (
+              <p className="text-sm text-muted-foreground">Loading this conversation…</p>
+            ) : (
+              <PenChat
+                chatId={threadId}
+                threadId={threadId}
+                section="overview"
+                initialMessages={initialMessages}
+                onFirstMessage={handleFirstMessage}
+              />
+            )}
+          </section>
+        </div>
       </div>
-    </div>
     </AppShell>
   );
 }
