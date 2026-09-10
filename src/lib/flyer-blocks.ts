@@ -180,30 +180,33 @@ export function pagesFromStoredBlocks(
  * break earlier or later.
  */
 const BLOCK_WEIGHT = {
-  banner: 2,
-  hero: 9,
-  gridBook: 2.4,
-  fanOutBase: 3,
-  fanOutBook: 1.6,
-  wholePage: 99,
+  banner: 130,
+  hero: 700,
+  gridRow: 620,
+  fanOutBase: 300,
+  fanOutBook: 130,
+  wholePage: 9999,
 } as const;
 
-export type PaginateOptions = { budget: number; gridChunk: number };
+export type PaginateOptions = { budget: number; gridChunk: number; gridCols: number };
 
 /** Narrow screens fit far less, so they split sooner and pack fewer grid cards. */
 export const PAGINATION: Record<"mobile" | "desktop", PaginateOptions> = {
-  mobile: { budget: 10, gridChunk: 4 },
-  desktop: { budget: 15, gridChunk: 6 },
+  mobile: { budget: 800, gridChunk: 2, gridCols: 1 },
+  desktop: { budget: 820, gridChunk: 3, gridCols: 3 },
 };
 
-function weightOf(block: FlyerBlock): number {
+function weightOf(block: FlyerBlock, cols: number): number {
   switch (block.type) {
     case "sectionBanner":
       return BLOCK_WEIGHT.banner;
     case "hero":
       return BLOCK_WEIGHT.hero;
-    case "grid":
-      return block.books.length * BLOCK_WEIGHT.gridBook;
+    case "grid": {
+      // The first card runs double-width once there are three or more books.
+      const cells = block.books.length + (block.books.length >= 3 && cols > 1 ? 1 : 0);
+      return Math.ceil(cells / cols) * BLOCK_WEIGHT.gridRow;
+    }
     case "fanOut":
       return BLOCK_WEIGHT.fanOutBase + block.books.length * BLOCK_WEIGHT.fanOutBook;
     default:
