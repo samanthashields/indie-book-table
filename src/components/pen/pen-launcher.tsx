@@ -7,7 +7,10 @@ import { Button } from "@/components/ui/button";
 import { PenChat } from "@/components/pen/pen-chat";
 import { useCurrentUser } from "@/lib/use-current-user";
 import penMarkAsset from "@/assets/pen-mark.png.asset.json";
+import aiPenCoachAsset from "@/assets/ai-pen-coach.svg.asset.json";
 const penMark = penMarkAsset.url;
+const aiPenCoach = aiPenCoachAsset.url;
+
 
 /** Pen's floating chat window, available in every workshop section. */
 export function PenLauncher({ context = "overview" }: { context?: string | undefined }) {
