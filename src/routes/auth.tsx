@@ -93,7 +93,10 @@ function AuthPage() {
   return (
     <div className="grid min-h-screen bg-background lg:grid-cols-[1fr_minmax(420px,560px)]">
       <aside className="hidden flex-col justify-between bg-inkblue/10 p-12 lg:flex">
-        <Link to="/" className="flex min-w-0 items-center gap-3"><span className="grid size-11 place-items-center rounded-xl bg-primary text-primary-foreground"><BookOpen className="size-5" /></span><span className="min-w-0 truncate font-serif text-2xl font-normal">The Indie Book Table</span></Link>
+        <Link to="/" className="flex min-w-0 items-center gap-3" aria-label="The Indie Book Table">
+          <img src={brandLogoAsset.url} alt="" className="h-12 w-auto" width={2000} height={2000} />
+        </Link>
+
         <div>
           <h2 className="font-serif text-5xl font-normal leading-tight">Every great book deserves a plan.</h2>
           <p className="mt-4 max-w-md leading-7 text-muted-foreground">A guided path from private manuscript to published book, with a calm coach beside you the whole way.</p>
@@ -108,7 +111,8 @@ function AuthPage() {
 
       <main className="flex items-center justify-center p-6">
         <div className="w-full max-w-md">
-          <div className="mb-8 lg:hidden"><Link to="/" className="flex min-w-0 items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground"><BookOpen className="size-5" /></span><span className="min-w-0 truncate font-serif text-xl font-normal">The Indie Book Table</span></Link></div>
+          <div className="mb-8 lg:hidden"><Link to="/" className="flex min-w-0 items-center gap-3" aria-label="The Indie Book Table"><img src={brandLogoAsset.url} alt="" className="h-10 w-auto" width={2000} height={2000} /></Link></div>
+
 
           <div className="mb-6 grid grid-cols-2 rounded-xl bg-secondary p-1">
             {([["signin", "Sign in"], ["signup", "Create account"]] as const).map(([value, label]) => (
