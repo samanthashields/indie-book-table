@@ -60,7 +60,7 @@ export function AppShell({ children, coachContext }: { children: ReactNode; coac
       <aside className={cn("fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-sidebar-border bg-sidebar p-4 shadow-lg transition-all duration-200 lg:sticky lg:top-4 lg:z-auto lg:h-[calc(100vh-2rem)] lg:shrink-0 lg:translate-x-0 lg:rounded-2xl lg:border lg:shadow-xs", !navOpen && "-translate-x-full", collapsed && "lg:w-[76px]")}>
         <div className="mb-8 flex h-11 items-center justify-between">
           <Link to="/" className="flex items-center gap-3 overflow-hidden">
-            <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground"><BookOpen className="size-5" /></span>
+            <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary/10"><img src={falconAsset.url} alt="" width={2000} height={2000} className="size-7 object-contain" /></span>
             {!collapsed && <span className="font-serif text-xl font-normal">Author’s Workshop</span>}
           </Link>
           <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setNavOpen(false)} aria-label="Close navigation"><X /></Button>

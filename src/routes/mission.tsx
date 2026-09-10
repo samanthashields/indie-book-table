@@ -54,7 +54,7 @@ function MissionPage() {
       <article className="mx-auto max-w-3xl">
         <div className="mb-6 flex justify-center">
           <img
-            src={falconAsset.url}
+            src={brandLogoAsset.url}
             alt=""
             width={2000}
             height={2000}
