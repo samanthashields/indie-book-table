@@ -14,7 +14,7 @@ export function PageNav({
   labels: string[];
 }) {
   return (
-    <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+    <div className="panel-outline-thin sticky bottom-3 z-30 mt-6 flex items-center justify-between gap-3 bg-card/95 px-3 py-2 backdrop-blur supports-[backdrop-filter]:bg-card/85">
       <button
         type="button"
         onClick={onPrev}
@@ -24,11 +24,12 @@ export function PageNav({
         <span aria-hidden="true">←</span> Back
       </button>
 
-      <div className="flex flex-col items-center gap-2">
-        <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-cocoa">
-          Page {index + 1} of {total}
+      <div className="flex min-w-0 flex-col items-center gap-1.5">
+        <p className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-cocoa sm:text-[0.65rem] sm:tracking-[0.2em]">
+          <span className="hidden sm:inline">Page </span>
+          {index + 1} of {total}
         </p>
-        <div className="flex items-center gap-1.5">
+        <div className="flex max-w-[10rem] flex-wrap items-center justify-center gap-1.5 sm:max-w-none">
           {labels.map((label, i) => (
             <button
               key={label}

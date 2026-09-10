@@ -34,7 +34,7 @@ export function HeroBlock({
         </p>
       </div>
 
-      <div className="poster-panel relative mt-10 grid items-center gap-8 bg-card p-6 sm:grid-cols-[minmax(0,18rem)_1fr] sm:p-9">
+      <div className="poster-panel relative mt-6 grid items-center gap-6 bg-card p-5 sm:grid-cols-[minmax(0,15rem)_1fr] sm:p-7">
         <span
           aria-hidden="true"
           className="starburst absolute -right-4 -top-8 flex size-24 rotate-[8deg] items-center justify-center bg-amber text-center text-[0.6rem] font-black uppercase leading-tight tracking-[0.08em] text-cocoa"
@@ -57,7 +57,7 @@ export function HeroBlock({
                 loading="lazy"
                 width={672}
                 height={992}
-                className="aspect-[2/3] w-full rounded-2xl object-cover shadow-[0_24px_50px_-22px_var(--cocoa)] transition-transform duration-300 group-hover:-translate-y-1"
+                className="mx-auto aspect-[2/3] max-h-[38vh] w-full rounded-2xl object-cover shadow-[0_24px_50px_-22px_var(--cocoa)] transition-transform duration-300 group-hover:-translate-y-1 sm:max-h-[42vh] sm:w-auto"
               />
             ) : (
               <span className="flex aspect-[2/3] w-full items-center justify-center rounded-2xl bg-paper p-4 text-center font-serif text-xl text-cocoa/70">
