@@ -33,7 +33,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
             <img
               src={brandLogoAsset.url}
               alt=""
-              className="hidden h-8 w-auto md:block"
+              className="hidden h-10 w-auto md:block"
               width={2000}
               height={2000}
             />
@@ -44,6 +44,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
               width={2000}
               height={2000}
             />
+
           </Link>
 
 
