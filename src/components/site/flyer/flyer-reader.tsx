@@ -153,6 +153,7 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
                   isCircled={isCircled}
                   onCircle={handleCircle}
                   doodleSeed={index}
+                  compact={block.compact ?? false}
                   {...(block.featuredBookId ? { featuredBookId: block.featuredBookId } : {})}
                 />
               );

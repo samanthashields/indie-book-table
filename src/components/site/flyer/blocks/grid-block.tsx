@@ -15,6 +15,7 @@ export function GridBlock({
   onCircle,
   doodleSeed,
   featuredBookId,
+  compact = false,
 }: {
   books: CatalogBook[];
   listingNumbers: Map<string, number>;
@@ -22,9 +23,10 @@ export function GridBlock({
   onCircle: (entry: WishlistEntry) => void;
   doodleSeed: number;
   featuredBookId?: string | null;
+  compact?: boolean;
 }) {
   const chosen = featuredBookId ? books.findIndex((book) => book.id === featuredBookId) : -1;
-  const featuredIndex = chosen >= 0 ? chosen : books.length >= 3 ? 0 : -1;
+  const featuredIndex = compact ? -1 : chosen >= 0 ? chosen : books.length >= 3 ? 0 : -1;
 
   return (
     <div className="relative mt-6">

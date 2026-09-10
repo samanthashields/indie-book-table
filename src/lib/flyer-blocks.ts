@@ -271,7 +271,7 @@ export function paginate(pages: FlyerBlockPage[], options: PaginateOptions): Fly
   const out: FlyerBlockPage[] = [];
 
   for (const page of pages) {
-    const blocks = splitGrids(page.blocks, options.gridChunk);
+    const blocks = splitGrids(page.blocks, options);
     const banner = blocks[0]?.type === "sectionBanner" ? blocks[0] : null;
     const body = banner ? blocks.slice(1) : blocks;
 
