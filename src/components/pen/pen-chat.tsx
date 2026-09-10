@@ -23,7 +23,10 @@ import { PenReferenceChips, parsePenMessage } from "@/components/pen/pen-referen
 import { penAuthHeaders } from "@/lib/pen-db";
 import { useAddChecklistItems } from "@/lib/milestone-checklist";
 import penMarkAsset from "@/assets/pen-mark.png.asset.json";
+import aiPenCoachAsset from "@/assets/ai-pen-coach.svg.asset.json";
 const penMark = penMarkAsset.url;
+const aiPenCoach = aiPenCoachAsset.url;
+
 
 
 export const PEN_OPENERS: Record<string, { greeting: string; suggestions: string[] }> = {
