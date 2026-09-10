@@ -72,3 +72,8 @@
 - [x] Start Date in book cycle details
 - [x] End Book Cycle CTA with conditional questions, shown in Reflections
 - [x] My Cycles page under My Books grouped by Not started / In progress / Complete
+
+## Pen chat layout (Sep 10)
+- [x] Fit the full Pen pages safely within desktop and mobile screens
+- [x] Increase the floating Pen window height with safe screen margins
+- [x] Verify both layouts at desktop and mobile sizes
