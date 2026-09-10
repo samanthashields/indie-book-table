@@ -17,7 +17,14 @@ export type FlyerBlock =
       shape?: BannerShape | undefined;
     }
   | { type: "hero"; book: CatalogBook; category: string; hook?: string | null }
-  | { type: "grid"; category: string; books: CatalogBook[]; featuredBookId?: string | null }
+  | {
+      type: "grid";
+      category: string;
+      books: CatalogBook[];
+      featuredBookId?: string | null;
+      /** Set by pagination: even rows only, no double-width first card. */
+      compact?: boolean;
+    }
   | {
       type: "fanOut";
       category: string;
