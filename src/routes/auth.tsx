@@ -6,7 +6,7 @@ import { lovable } from "@/integrations/lovable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import brandLogoAsset from "@/assets/brand-logo.svg.asset.json";
+import falconAsset from "@/assets/falcon.svg.asset.json";
 
 
 type Mode = "signin" | "signup";

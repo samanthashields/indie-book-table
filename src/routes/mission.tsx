@@ -4,7 +4,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { PublicShell } from "@/components/site/public-shell";
 import { getSiteCopy } from "@/lib/catalog.functions";
 import { siteCopyValue } from "@/lib/site-copy";
-import falconAsset from "@/assets/falcon.svg.asset.json";
+import brandLogoAsset from "@/assets/brand-logo.svg.asset.json";
 
 
 const copyQuery = queryOptions({

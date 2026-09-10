@@ -8,6 +8,7 @@ import { NotificationBell } from "@/components/notification-bell";
 import { claimInvitations } from "@/lib/collaborators";
 import { signOut, useCurrentUser } from "@/lib/use-current-user";
 import { cn } from "@/lib/utils";
+import falconAsset from "@/assets/falcon.svg.asset.json";
 
 const nav = [
   { label: "My Books", to: "/" as const, icon: Library },
