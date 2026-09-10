@@ -222,25 +222,42 @@ function weightOf(block: FlyerBlock, cols: number): number {
   }
 }
 
-/** Chops any grid longer than `chunk` books into several grids of that size. */
-function splitGrids(blocks: FlyerBlock[], chunk: number): FlyerBlock[] {
+/**
+ * Chops any grid longer than `chunk` books into several grids of that size, and
+ * drops the double-width first card when keeping it would push a grid onto a
+ * second row of cards.
+ */
+function splitGrids(blocks: FlyerBlock[], options: PaginateOptions): FlyerBlock[] {
+  const { gridChunk: chunk, gridCols: cols, budget } = options;
   const out: FlyerBlock[] = [];
+
+  const fit = (block: Extract<FlyerBlock, { type: "grid" }>) =>
+    weightOf(block, cols) + BLOCK_WEIGHT.banner <= budget
+      ? block
+      : { ...block, compact: true, featuredBookId: null };
+
   for (const block of blocks) {
-    if (block.type !== "grid" || block.books.length <= chunk) {
+    if (block.type !== "grid") {
       out.push(block);
+      continue;
+    }
+    if (block.books.length <= chunk) {
+      out.push(fit(block));
       continue;
     }
     for (let i = 0; i < block.books.length; i += chunk) {
       const slice = block.books.slice(i, i + chunk);
-      out.push({
-        type: "grid",
-        category: block.category,
-        books: slice,
-        featuredBookId:
-          block.featuredBookId && slice.some((book) => book.id === block.featuredBookId)
-            ? block.featuredBookId
-            : null,
-      });
+      out.push(
+        fit({
+          type: "grid",
+          category: block.category,
+          books: slice,
+          featuredBookId:
+            block.featuredBookId && slice.some((book) => book.id === block.featuredBookId)
+              ? block.featuredBookId
+              : null,
+        }),
+      );
     }
   }
   return out;
