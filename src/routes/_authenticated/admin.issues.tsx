@@ -20,6 +20,7 @@ import {
   useAdminSubmissions,
   useIssueDetail,
 } from "@/lib/catalog-admin";
+import { IssueBlockBuilder } from "@/components/admin/issue-block-builder";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/admin/issues")({ component: AdminIssues });
@@ -277,6 +278,8 @@ function AdminIssues() {
               })}
             </div>
           </div>
+
+          <IssueBlockBuilder issueId={issue.id} />
         </div>
       )}
     </section>

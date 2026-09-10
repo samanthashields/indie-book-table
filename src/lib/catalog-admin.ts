@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import type { StoredFlyerBlock } from "./catalog-types";
 
 export type AdminSubmission = {
   id: string;
@@ -179,5 +180,41 @@ export function useSiteCopy() {
 
 export async function saveSiteCopy(key: string, value: string) {
   const { error } = await supabase.from("catalog_site_content").upsert({ key, value }, { onConflict: "key" });
+  if (error) throw error;
+}
+
+/** Saved flyer layout blocks for one issue (the admin block builder). */
+export function useIssueBlocks(issueId: string | undefined) {
+  return useQuery({
+    queryKey: ["catalog-admin", "issue-blocks", issueId],
+    enabled: Boolean(issueId),
+    queryFn: async (): Promise<StoredFlyerBlock[]> => {
+      const { data, error } = await supabase
+        .from("catalog_issue_blocks")
+        .select("id, kind, position, config")
+        .eq("issue_id", issueId!)
+        .order("position", { ascending: true });
+      if (error) throw error;
+      return (data ?? []) as unknown as StoredFlyerBlock[];
+    },
+  });
+}
+
+/** Replaces an issue's layout with the given ordered blocks. */
+export async function saveIssueBlocks(issueId: string, blocks: StoredFlyerBlock[]) {
+  const { error: clearError } = await supabase
+    .from("catalog_issue_blocks")
+    .delete()
+    .eq("issue_id", issueId);
+  if (clearError) throw clearError;
+  if (blocks.length === 0) return;
+  const { error } = await supabase.from("catalog_issue_blocks").insert(
+    blocks.map((block, index) => ({
+      issue_id: issueId,
+      kind: block.kind,
+      position: index,
+      config: block.config as never,
+    })),
+  );
   if (error) throw error;
 }

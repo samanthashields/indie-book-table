@@ -21,11 +21,13 @@ export function AuthorBlock({
   authorName,
   bio,
   books,
+  photoUrl,
 }: {
   authorId: string;
   authorName: string;
   bio: string | null;
   books: CatalogBook[];
+  photoUrl?: string | null;
 }) {
   return (
     <div className="mx-auto max-w-3xl">
@@ -36,12 +38,21 @@ export function AuthorBlock({
       </div>
 
       <section className="poster-panel mt-10 bg-card p-6 text-center sm:p-10">
+        {photoUrl ? (
+          <img
+            src={photoUrl}
+            alt={`Portrait of ${authorName}`}
+            loading="lazy"
+            className="mx-auto size-24 rounded-full border-[3px] border-cocoa object-cover shadow-[3px_4px_0_0_var(--cocoa)]"
+          />
+        ) : (
         <span
           aria-hidden="true"
           className="mx-auto grid size-24 place-items-center rounded-full border-[3px] border-cocoa bg-amber font-serif text-3xl font-black text-cocoa shadow-[3px_4px_0_0_var(--cocoa)]"
         >
           {initialsOf(authorName)}
         </span>
+        )}
         <h3 className="mt-4 font-serif text-3xl font-black text-cocoa sm:text-4xl">
           <Link to="/table/authors/$authorId" params={{ authorId }} className="hover:underline">
             {authorName}

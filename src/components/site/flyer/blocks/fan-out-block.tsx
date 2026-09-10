@@ -14,11 +14,13 @@ export function FanOutBlock({
   authorId,
   authorName,
   books,
+  heading,
   isCircled,
   onCircle,
 }: {
   authorId: string;
   authorName: string;
+  heading?: string | null;
   books: CatalogBook[];
   isCircled: (bookId: string) => boolean;
   onCircle?: (entry: WishlistEntry) => void;
@@ -26,7 +28,7 @@ export function FanOutBlock({
   return (
     <section className="poster-panel mt-6 bg-card p-6 sm:p-9">
       <p className="text-center text-[0.62rem] font-black uppercase tracking-[0.3em] text-cocoa/60">
-        More from one author
+        {heading || "More from one author"}
       </p>
       <h3 className="mt-1 text-center font-serif text-2xl font-black text-cocoa sm:text-3xl">
         <Link to="/table/authors/$authorId" params={{ authorId }} className="hover:underline">
