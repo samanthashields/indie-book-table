@@ -211,7 +211,8 @@ function weightOf(block: FlyerBlock, cols: number): number {
       return BLOCK_WEIGHT.hero;
     case "grid": {
       // The first card runs double-width once there are three or more books.
-      const cells = block.books.length + (block.books.length >= 3 && cols > 1 ? 1 : 0);
+      const feature = !block.compact && block.books.length >= 3 && cols > 1;
+      const cells = block.books.length + (feature ? 1 : 0);
       return Math.ceil(cells / cols) * BLOCK_WEIGHT.gridRow;
     }
     case "fanOut":
