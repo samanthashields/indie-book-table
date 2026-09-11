@@ -24,6 +24,14 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
+    server: {
+      proxy: {
+        '/__l5e': {
+          target: process.env['LOVABLE_PREVIEW_URL'] ?? 'https://id-preview--180ca307-32fc-4bcb-95b8-e2e5827f0ca1.lovable.app',
+          changeOrigin: true,
+        },
+      },
+    },
     resolve: {
       alias: [
         // Pin React Email's entities dependency to the hoisted v4.5.0 copy —
