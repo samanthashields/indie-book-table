@@ -115,7 +115,7 @@ export const templates: BookTemplate[] = [
     tagline: "A complete editorial and production journey for prose-led books.",
     cover: riverCover,
     illustrated: false,
-    highlights: ["Layered revision loops", "Cover and interior production tracks", "Budget-aware Book Coach guidance", "Advance reader programme built in"],
+    highlights: ["Layered revision loops", "Cover and interior production tracks", "Budget-aware guidance from Pen", "Advance reader programme built in"],
     phases: launchPhases(),
   },
 ];

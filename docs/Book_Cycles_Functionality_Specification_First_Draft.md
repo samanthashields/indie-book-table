@@ -33,7 +33,7 @@ Each Milestone has **one Requirement** (1:1), exactly as in 2.0. Requirement is 
 Book Cycles can be created:
 - manually from scratch,
 - from a reusable **Book Cycle Template** (genre-specific),
-- or with the **Book Coach AI** (the analog of Talent-Ed AI®).
+- or with **Pen** (the analog of Talent-Ed AI®).
 
 ### The single most important structural note
 
@@ -56,11 +56,11 @@ The Author:
 - approves collaborator deliverables (e.g., final cover),
 - completes the Post-Launch Reflection.
 
-### 2.2 Book Coach AI (the persistent guide)
+### 2.2 Pen (the persistent guide)
 
-The AI is the default **Coach** analog. It structures the cycle and guides the Author throughout, but it does **not** perform human specialist deliverables (it cannot edit to a professional standard or illustrate).
+The AI is the default **Coach** analog, named **Pen** (full name Penny). It structures the cycle and guides the Author throughout, but it does **not** perform human specialist deliverables (it cannot edit to a professional standard or illustrate).
 
-The Book Coach AI:
+Pen:
 - generates the Phase/Milestone structure at creation (from a genre template + Book Details),
 - explains each phase/milestone and recommends next actions,
 - flags common, expensive mistakes (e.g., rushing; formatting before editing is done),
@@ -312,7 +312,7 @@ The primary action the owner sees inside a Milestone. Mapped from 2.0.
 
 ## 7. Cycle Lifecycle
 
-1. A Book Cycle is created (scratch / Template / Book Coach AI).
+1. A Book Cycle is created (scratch / Template / Pen).
 2. Book Details, Book Goals, Team, and Setup Tasks are configured.
 3. Phases organize the intended progression.
 4. Each Phase contains Milestones (with parallel tracks where needed).
@@ -325,7 +325,7 @@ The primary action the owner sees inside a Milestone. Mapped from 2.0.
 
 ---
 
-## 8. The Book Coach AI
+## 8. Pen
 
 The AI is both a **creation method** and an **always-on guide** — the two roles Talent-Ed AI® plays, plus the ongoing coaching the human coach played in 2.0.
 
@@ -348,7 +348,7 @@ The AI is both a **creation method** and an **always-on guide** — the two role
 
 ## 9. Templates, Creation, Hubs
 
-- **Creation methods** produce the same hierarchy: from scratch, from a Template, or via Book Coach AI — identical to 2.0 § 13.
+- **Creation methods** produce the same hierarchy: from scratch, from a Template, or via Pen — identical to 2.0 § 13.
 - **Templates** are genre-specific and carry Phases → Milestones → Requirements + Setup Tasks + Post-Launch prompts; they exclude Author, Team, dates, Book Goals, and Resources (added to the live cycle) — same inclusion/exclusion logic as 2.0 § 15.
 - **Author workspace** (the *Receive Coaching* analog): aggregates the Author's active Book Cycles and their Pending Actions.
 - **Collaborator workspace** (loose analog to *Deliver Coaching*): aggregates the cycles/milestones where a Collaborator has assigned work and pending approvals.
@@ -365,7 +365,7 @@ The genuine departures — what a book-specific tool must do that the coaching t
 3. **Phase gating / dependencies.** 2.0 milestones are free-flowing. Publishing has hard dependencies (can't proofread before layout; can't finalize cover before page count). Some sequencing is enforced, not advisory.
 4. **Loop phases vs. sprint phases.** Not every phase is a feedback loop. Editing is loop-shaped (coaching-native); Pre-Launch/Launch are execution sprints. Tag phases so the coaching frame isn't forced where it doesn't fit.
 5. **Budget-driven optionality.** The Author's budget is a first-class input that toggles which Collaborator roles and milestones are active. The **solo author is the degenerate default** (every role = the Author), and the template must feel complete at "just me" and expand gracefully.
-6. **AI as the default coach.** The persistent guide is the Book Coach AI, not a human coach — because most self-publishers won't hire one. Human expertise enters as Collaborators, per phase.
+6. **AI as the default coach.** The persistent guide is Pen, not a human coach — because most self-publishers won't hire one. Human expertise enters as Collaborators, per phase.
 7. **Request a Service (marketplace-ready).** The Observation pattern becomes a service-request pattern — the hook for hiring editors/designers inside the product later.
 8. **B2C ownership flip.** The Author owns the account and invites the team; there is no org admin provisioning coach↔mentee pairs. Permissions are Author-controlled, per collaborator, per phase.
 9. **The loop closes across books.** A single book is linear and ends at publication. "Cycle" is justified by the Post-Launch Reflection feeding the next book — which is also the retention/renewal mechanism.
@@ -378,7 +378,7 @@ The genuine departures — what a book-specific tool must do that the coaching t
 | Concept | Decision needed |
 |---|---|
 | Scope boundary | Does the product own drafting (blank page → publish) or begin at a finished manuscript? Smaller, cleaner product if the latter. |
-| Coach model | Book Coach AI only, optional human coach as a role, and/or peer cohort? This choice defines the product's identity. |
+| Coach model | Pen only, optional human coach as a role, and/or peer cohort? This choice defines the product's identity. |
 | Collaborator sourcing | Bring-your-own only, or an in-product marketplace (with a take rate)? |
 | Guest access & permissions | Access model for one-off contractors; permission granularity per phase/milestone. |
 | Budget → structure mapping | Exactly how budget input gates roles and milestones; how the Author changes it mid-cycle. |

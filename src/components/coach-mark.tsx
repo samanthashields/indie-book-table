@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-/** A floating open book circled by a cycle arc — the Book Coach mark. */
+/** A floating open book circled by a cycle arc — the Pen mark used in the create-flow. */
 export function CoachMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 48 48" fill="none" aria-hidden="true" className={cn("size-6", className)}>

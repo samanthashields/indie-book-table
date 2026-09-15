@@ -1,8 +1,8 @@
 # Book Cycle Plan Schema (`plan_schema`)
 
-The output contract for the **Book Coach AI — Plan Generation mode**. When the create flow finishes gathering answers, the AI emits one object conforming to this schema; the app instantiates a live Book Cycle from it through the standard create pipeline. This is the shared contract referenced by three documents:
+The output contract for **Pen's Plan Generation mode**. When the create flow finishes gathering answers, the AI emits one object conforming to this schema; the app instantiates a live Book Cycle from it through the standard create pipeline. This is the shared contract referenced by three documents:
 
-- **Book Coach AI — System Prompt** → Plan Generation mode outputs `{{plan_schema}}` (this).
+- **Pen — System Prompt** (`Book_Coach_AI_System_Prompt.md`) → Plan Generation mode outputs `{{plan_schema}}` (this).
 - **Create Book Cycle Conversation Spec** → §14 requires generation output to conform to this.
 - **Book Cycles Adaptation Prompt** → the app builds the cycle by instantiating this.
 
@@ -320,7 +320,7 @@ Shows the features that matter: the plan starts at Writing (`starts_here`), Prod
 
 ## Integration notes
 
-- **System prompt:** replace the `{{plan_schema}}` placeholder in the Book Coach AI system prompt with this schema, and instruct the model to return **only** a JSON object conforming to it (no prose) in Plan Generation mode.
+- **System prompt:** replace the `{{plan_schema}}` placeholder in Pen's system prompt with this schema, and instruct the model to return **only** a JSON object conforming to it (no prose) in Plan Generation mode.
 - **Validation:** the create pipeline should validate the emitted object against the schema before instantiating, and reject/repair on failure (a retry with the validation error fed back to the model works well).
 - **Template branch:** when `source: "template"`, the same schema is emitted, pre-filled from the template with the author's edits applied; set `template_id`.
 - **IDs:** `milestone.id` values are the AI's own handles for `depends_on`. The app assigns real primary keys on instantiation.

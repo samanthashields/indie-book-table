@@ -1,12 +1,12 @@
-# Create Book Cycle with the Book Coach AI: Conversation & Content Spec
+# Create Book Cycle with Pen: Conversation & Content Spec
 
-Content deliverable for the **Create with Book Coach AI** path in Book Cycles. Defines the question sequence, microcopy, generation rules, and edge cases the AI drawer runs when an author clicks **Create with Book Coach AI**.
+Content deliverable for the **Create with Pen** path in Book Cycles. Defines the question sequence, microcopy, generation rules, and edge cases the AI drawer runs when an author clicks **Create with Pen**.
 
 Adapted section-for-section from the Coaching Cycles *Create with Talent-Ed AI: Conversation & Content Spec*, so the two can be compared directly. The conversational pattern is inherited almost verbatim; the one rule that inverts is **generation** (§7): coaching is framework-*neutral*, book cycles are phase-*anchored*. Domain differences from the coaching version are marked **\[book]** and summarized in §15.
 
 ## 1. Purpose & scope
 
-When an author chooses **Create with Book Coach AI**, a drawer opens and walks them through building a book cycle conversationally. The AI captures the required book information, optionally enriches it (team, manuscript, goals), generates a preview plan across the six publishing phases, and creates the cycle through the **existing create pipeline** — the same writes as the manual Scratch flow.
+When an author chooses **Create with Pen**, a drawer opens and walks them through building a book cycle conversationally. The AI captures the required book information, optionally enriches it (team, manuscript, goals), generates a preview plan across the six publishing phases, and creates the cycle through the **existing create pipeline** — the same writes as the manual Scratch flow.
 
 This spec covers the parts between the intro and the preview: the question sequence, all reflect-back and gate microcopy, the rule for how the AI turns answers into a phased plan, and edge-case handling. Intro, summary, preview, and post-preview actions follow the same shapes as the coaching flow.
 
@@ -73,9 +73,9 @@ The AI elicits the book's essentials, then *generates* a phased plan.
 
 **Q5 · Manuscript status → launch date (back-planning)** **\[book]**
 "Where are you with the manuscript — still drafting, first draft done, or already edited? And when would you like to launch?"
-- Maps to: **starting phase** (from status) + **Target launch date**. The AI **back-plans** phase and milestone due dates from the launch date, and starts the cycle at the phase matching the manuscript status.
+- Maps to: **starting phase** (from status) + **Target launch date** (captured here as `target_launch_date_confirmed: false` — a placeholder, not a commitment; Pen re-confirms it periodically until the author firms it up in Pre-Launch). The AI **back-plans** phase and milestone due dates from the launch date, and starts the cycle at the phase matching the manuscript status.
 - If the date is too soon for the remaining work, the AI says so and offers to adjust the date or compress scope (see §12).
-- Reflect: "\[status], launching around \[date] — I'll work the schedule backward from there."
+- Reflect: "\[status], launching around \[date] — I'll work the schedule backward from there. We can firm this up later."
 
 **Q6 · Budget** **\[book]**
 "What's your budget for producing and launching *\[title]*? A rough number is fine — I'll use it to recommend what to do yourself vs. hire out."
@@ -149,8 +149,8 @@ When a template is chosen, the cycle **inherits all phases, milestones, requirem
 **T3 · Launch date → back-planning** **\[book]**
 "When would you like to launch? I'll set the milestone due dates working backward from there."
 - Chips: Use template's default timeline · Choose a launch date
-- Either path leads to a launch-date picker with a live "starts \[date]" preview derived by back-planning. Warns if the date is unrealistic (§12).
-- Reflect: "Launching around \[date] — schedule set."
+- Either path leads to a launch-date picker with a live "starts \[date]" preview derived by back-planning. Warns if the date is unrealistic (§12). Sets `target_launch_date_confirmed: false` — same placeholder treatment as Q5.
+- Reflect: "Launching around \[date] — schedule set. We can firm this up later."
 
 **T4 · Tailor** *(optional, conversational)*
 "Want to adjust anything — add or drop a milestone, change a hire to DIY — or use it as-is?"
@@ -266,9 +266,9 @@ One short line after each answer, then the next question. Vary phrasing; never r
 ## 14. Dependencies & open items
 
 **Engineering dependencies:**
-- Feeds the **Book Coach AI create drawer** (two sub-modes: generate-from-answers, seed-from-template-then-tailor), both writing through the existing create pipeline.
+- Feeds the **Create with Pen drawer** (two sub-modes: generate-from-answers, seed-from-template-then-tailor), both writing through the existing create pipeline.
 - The template sub-mode depends on the **genre template schema** (the AI must read the template's milestone/requirement model to inherit and display it).
-- Generation output must conform to the `plan_schema` used by the Book Coach AI system prompt, so intake and instantiation agree.
+- Generation output must conform to the `plan_schema` used by Pen's system prompt, so intake and instantiation agree.
 - **Back-planning logic** (launch date → phase/milestone due dates with realistic minimums) is a shared service.
 - **Budget → DIY/hire mapping** is a shared rule used both here and in ongoing coaching.
 

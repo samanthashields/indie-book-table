@@ -290,7 +290,7 @@ function Index() {
         <div className="rounded-2xl border border-dashed border-border bg-paper p-10 text-center">
           <BookOpen className="mx-auto mb-4 size-8 text-primary" />
           <h3 className="font-serif text-2xl font-normal">Your first book starts here</h3>
-          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">Save an idea now and come back to it, or start a full book cycle from a template, from scratch, or with your Book Coach.</p>
+          <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">Save an idea now and come back to it, or start a full book cycle from a template, from scratch, or with Pen.</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Button variant="outline" onClick={() => void navigate({ to: "/books/add" })}><Plus />Add a book</Button>
             <Button asChild><Link to="/books/new"><Sparkles />Start a book cycle</Link></Button>

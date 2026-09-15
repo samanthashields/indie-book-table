@@ -31,11 +31,11 @@ export function CoachConversation({
   const [turns, setTurns] = useState<Turn[]>(
     initialFork
       ? [
-          { key: "intro", role: "coach", text: "Hello — I'm your Book Coach. I'll ask a few things about your book, then draft a full cycle across the six publishing phases. You can change anything afterwards." },
+          { key: "intro", role: "coach", text: "Hello — I'm Pen. I'll ask a few things about your book, then draft a full cycle across the six publishing phases. You can change anything afterwards." },
           { key: "q-first", role: "coach", text: questions[startIds[0]!]!.prompt({}) },
         ]
       : [
-          { key: "intro", role: "coach", text: "Hello — I'm your Book Coach. I'll ask a few things about your book, then draft a full cycle across the six publishing phases. You can change anything afterwards." },
+          { key: "intro", role: "coach", text: "Hello — I'm Pen. I'll ask a few things about your book, then draft a full cycle across the six publishing phases. You can change anything afterwards." },
           { key: "q-fork", role: "coach", text: questions["fork"]!.prompt({}) },
         ],
   );
@@ -127,7 +127,7 @@ export function CoachConversation({
       <header className="flex items-center gap-4 border-b border-border p-6">
         <span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground"><CoachMark className="size-5" /></span>
         <div className="flex-1">
-          <h2 className="font-serif text-2xl font-semibold">Plan with your Book Coach</h2>
+          <h2 className="font-serif text-2xl font-semibold">Plan with Pen</h2>
           <p className="mt-1 text-sm text-muted-foreground">One question at a time. Nothing here is final.</p>
         </div>
         <div className="hidden w-32 sm:block">
