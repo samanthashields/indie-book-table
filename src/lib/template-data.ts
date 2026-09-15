@@ -20,8 +20,8 @@ export type TemplatePhase = {
   mode: "Loop" | "Sprint" | "Launch window";
   summary: string;
   milestones: TemplateMilestone[];
-  /** Optional share of the whole cycle, in percent. Left out, the workshop spaces the phase automatically. */
-  ratio?: number | undefined;
+  /** Display-only — never deletes the phase's data or excludes it from the timeline math. */
+  hidden?: boolean | undefined;
 };
 
 export type BookTemplate = {

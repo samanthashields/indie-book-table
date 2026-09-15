@@ -90,7 +90,7 @@ function BookOverview() {
           <p className="mt-1 text-sm text-muted-foreground">Six phases from private manuscript to published book, paced around {target}.</p>
         </div>
         <div className="relative space-y-4 before:absolute before:bottom-8 before:left-5 before:top-7 before:w-px before:bg-border">
-          {phases.map((phase, index) => {
+          {phases.filter((phase) => !phase.hidden).map((phase, index) => {
             const style = phaseStyle(phase.id);
             const range = timeline.ranges[phase.id as keyof typeof timeline.ranges];
             const complete = phase.milestones.length > 0 && phase.milestones.every((milestone) => milestone.status === "Complete");

@@ -68,6 +68,7 @@ export type Phase = {
   mode: "Loop" | "Sprint" | "Launch window";
   summary: string;
   milestones: Milestone[];
+  hidden: boolean;
 };
 
 export type Book = {
@@ -144,6 +145,7 @@ export const phases: Phase[] = [
     id: "writing_development",
     name: "Writing & Development",
     mode: "Loop",
+    hidden: false,
     summary: "Shape the manuscript, test the premise, and revise with intention.",
     milestones: [
       { id: "manuscript", name: "Complete working manuscript", description: "Bring the full draft into one clean working document.", owner: "Mara Ellison", ownerKind: "author", ownerCollaboratorId: null, track: null, provision: null, dependsOn: [], requirement: "attach_a_file", status: "Complete", due: "14 Mar" },
@@ -154,6 +156,7 @@ export const phases: Phase[] = [
     id: "editing",
     name: "Editing",
     mode: "Loop",
+    hidden: false,
     summary: "Move from structural clarity to clean, confident prose.",
     milestones: [
       { id: "developmental-edit", name: "Review developmental edit", description: "Read the editor’s letter, resolve the big story questions, and agree on the revision plan.", owner: "Mara Ellison", ownerKind: "author", ownerCollaboratorId: null, track: null, provision: null, dependsOn: [], requirement: "approve_a_deliverable", status: "In progress", due: "24 Jun", approval: true },
@@ -165,6 +168,7 @@ export const phases: Phase[] = [
     id: "production",
     name: "Production",
     mode: "Sprint",
+    hidden: false,
     summary: "Turn the manuscript into a book people can hold and read.",
     milestones: [
       { id: "cover", name: "Approve cover direction", description: "Choose the visual direction before final cover production.", owner: "Mara Ellison", ownerKind: "author", ownerCollaboratorId: null, track: null, provision: null, dependsOn: [], requirement: "approve_a_deliverable", status: "Not started", approval: true },
@@ -175,6 +179,7 @@ export const phases: Phase[] = [
     id: "pre_launch",
     name: "Pre-Launch",
     mode: "Sprint",
+    hidden: false,
     summary: "Prepare the listing, early readers, and a realistic launch plan.",
     milestones: [
       { id: "metadata", name: "Finalize metadata bundle", description: "Lock the description, categories, keywords, and contributor data.", owner: "Mara Ellison", ownerKind: "author", ownerCollaboratorId: null, track: null, provision: null, dependsOn: [], requirement: "attach_a_file", status: "Not started" },
@@ -185,6 +190,7 @@ export const phases: Phase[] = [
     id: "launch",
     name: "Launch",
     mode: "Launch window",
+    hidden: false,
     summary: "Publish, verify every storefront, and invite the first wave of readers.",
     milestones: [
       { id: "publish", name: "Publish the book", description: "Release all planned formats and verify the live product pages.", owner: "Mara Ellison", ownerKind: "author", ownerCollaboratorId: null, track: null, provision: null, dependsOn: [], requirement: "complete_activity_outside", status: "Not started", due: "18 Sep" },
@@ -194,6 +200,7 @@ export const phases: Phase[] = [
     id: "post_launch_growth",
     name: "Post-Launch & Growth",
     mode: "Loop",
+    hidden: false,
     summary: "Learn from the launch and build steady, sustainable readership.",
     milestones: [
       { id: "reflection", name: "Complete post-launch reflection", description: "Record what worked, what changed, and what comes next.", owner: "Mara Ellison", ownerKind: "author", ownerCollaboratorId: null, track: null, provision: null, dependsOn: [], requirement: "complete_activity_outside", status: "Not started" },
