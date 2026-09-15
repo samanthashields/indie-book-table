@@ -102,3 +102,44 @@ export function pacing(range: PhaseRange | undefined, complete: boolean, now = n
   if (now >= range.start) return "current";
   return "ahead";
 }
+
+export type NeedsFollowUp = "behind_pace" | "no_progress" | "launch_approaching" | "on_track";
+
+export const needsFollowUpLabel: Record<NeedsFollowUp, string> = {
+  behind_pace: "Behind Pace",
+  no_progress: "No Progress",
+  launch_approaching: "Launch Approaching",
+  on_track: "On Track",
+};
+
+/** Days of inactivity before flagging No Progress. Not yet author-configurable — a sensible default. */
+const NO_PROGRESS_DAYS = 14;
+/** Days out from the target date before flagging Launch Approaching. */
+const LAUNCH_APPROACHING_DAYS = 30;
+
+/**
+ * The cycle-health signal from Functionality Spec §3.7. Priority order (first match wins):
+ * Behind Pace -> No Progress -> Launch Approaching -> On Track.
+ */
+export function needsFollowUp(input: {
+  phases: { range: PhaseRange | undefined; complete: boolean }[];
+  lastActivityAt: Date | null;
+  targetDate: Date | null;
+  now?: Date;
+}): NeedsFollowUp {
+  const now = input.now ?? new Date();
+
+  if (input.phases.some((phase) => pacing(phase.range, phase.complete, now) === "behind")) return "behind_pace";
+
+  if (input.lastActivityAt) {
+    const daysSinceActivity = Math.floor((now.getTime() - input.lastActivityAt.getTime()) / day);
+    if (daysSinceActivity >= NO_PROGRESS_DAYS) return "no_progress";
+  }
+
+  if (input.targetDate) {
+    const daysUntilTarget = Math.floor((input.targetDate.getTime() - now.getTime()) / day);
+    if (daysUntilTarget >= 0 && daysUntilTarget <= LAUNCH_APPROACHING_DAYS) return "launch_approaching";
+  }
+
+  return "on_track";
+}

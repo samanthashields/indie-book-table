@@ -16,6 +16,8 @@ import { useBooks, useDeleteBook, type BookSummary } from "@/lib/book-db";
 import { bookStatusLabel, bookStatusTone } from "@/lib/book-status";
 import { useMySubmissions } from "@/lib/catalog-submit";
 import { phaseStyle } from "@/lib/phase-style";
+import { needsFollowUpLabel } from "@/lib/phase-timeline";
+import type { NeedsFollowUp } from "@/lib/phase-timeline";
 
 import { SUBMISSION_STATUS_LABELS } from "@/lib/submission-schema";
 import { cn } from "@/lib/utils";
@@ -67,6 +69,18 @@ function TableChip({ submission }: { submission: BookSubmission }) {
   );
 }
 
+const needsFollowUpTone: Record<NeedsFollowUp, "neutral" | "good" | "warm" | "danger"> = {
+  behind_pace: "danger",
+  no_progress: "warm",
+  launch_approaching: "warm",
+  on_track: "good",
+};
+
+function NeedsFollowUpPill({ book }: { book: BookSummary }) {
+  if (!book.hasCycle || book.needsFollowUp === "on_track") return null;
+  return <StatusPill tone={needsFollowUpTone[book.needsFollowUp]}>{needsFollowUpLabel[book.needsFollowUp]}</StatusPill>;
+}
+
 function BookRow({ book, submission, onDelete }: { book: BookSummary; submission?: BookSubmission | undefined; onDelete: (id: string) => void }) {
   const to = book.hasCycle ? "/books/$bookId" : "/books/$bookId/details";
   return (
@@ -78,6 +92,7 @@ function BookRow({ book, submission, onDelete }: { book: BookSummary; submission
             <h3 className="font-serif text-2xl font-normal group-hover:text-primary">{book.title}</h3>
             <StatusPill tone={bookStatusTone(book.shelfStatus)}>{bookStatusLabel(book.shelfStatus)}</StatusPill>
             {book.hasCycle && <StatusPill tone={book.progress > 60 ? "warm" : "good"}>{book.status}</StatusPill>}
+            <NeedsFollowUpPill book={book} />
           </div>
           <p className="mt-1 text-sm text-muted-foreground">{book.genre}, by {book.author}</p>
           {book.hasCycle ? (
@@ -124,6 +139,7 @@ function BookCard({ book, submission, onDelete }: { book: BookSummary; submissio
       </Link>
       <div className="mt-3 flex flex-wrap gap-2">
         <StatusPill tone={bookStatusTone(book.shelfStatus)}>{bookStatusLabel(book.shelfStatus)}</StatusPill>
+        <NeedsFollowUpPill book={book} />
         {submission && <TableChip submission={submission} />}
       </div>
       {book.hasCycle && (

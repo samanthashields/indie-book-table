@@ -6,8 +6,8 @@ type MilestoneUpdate = Database["public"]["Tables"]["milestones"]["Update"];
 type BookUpdate = Database["public"]["Tables"]["books"]["Update"];
 type TemplateRow = Database["public"]["Tables"]["templates"]["Row"];
 import type { Milestone, Phase, RequirementType } from "@/lib/book-data";
-import type { ManuscriptStatus, TimelineResult } from "@/lib/phase-timeline";
-import { suggestPhaseRanges } from "@/lib/phase-timeline";
+import type { ManuscriptStatus, NeedsFollowUp, TimelineResult } from "@/lib/phase-timeline";
+import { needsFollowUp, suggestPhaseRanges } from "@/lib/phase-timeline";
 import type { TemplatePhase } from "@/lib/template-data";
 
 export type BookRow = {
@@ -61,6 +61,7 @@ type MilestoneRow = {
   track: string | null;
   provision: string | null;
   depends_on: string[];
+  updated_at: string;
 };
 
 type PhaseRow = {
@@ -96,6 +97,7 @@ export type BookSummary = {
   coverUrl: string | null;
   startDate: string | null;
   metadata: Record<string, unknown>;
+  needsFollowUp: NeedsFollowUp;
 };
 
 
@@ -121,7 +123,7 @@ const milestoneToUi = (row: MilestoneRow): Milestone => ({
   ...(row.due_date ? { dueIso: row.due_date } : {}),
 });
 
-type PhaseLookup = Map<string, { key: string; name: string }>;
+type PhaseLookup = Map<string, { key: string; name: string; suggested_start: string | null; suggested_end: string | null }>;
 
 const summarize = (
   book: BookRow,
@@ -135,6 +137,17 @@ const summarize = (
   const progress = sorted.length ? Math.round((done / sorted.length) * 100) : 0;
   const next = sorted.find((m) => m.status === "In progress") ?? sorted.find((m) => m.status !== "Complete");
   const phase = next ? phaseById.get(next.phase_id) : undefined;
+
+  const milestonesByPhase = new Map<string, MilestoneRow[]>();
+  for (const milestone of milestones) milestonesByPhase.set(milestone.phase_id, [...(milestonesByPhase.get(milestone.phase_id) ?? []), milestone]);
+  const phasesForPacing = [...milestonesByPhase.entries()].map(([phaseId, phaseMilestones]) => {
+    const row = phaseById.get(phaseId);
+    const range = row?.suggested_start ? { start: new Date(`${row.suggested_start}T00:00:00`), end: row.suggested_end ? new Date(`${row.suggested_end}T00:00:00`) : null } : undefined;
+    return { range, complete: phaseMilestones.every((m) => m.status === "Complete") };
+  });
+  const lastActivityAt = milestones.length > 0 ? new Date(Math.max(...milestones.map((m) => new Date(m.updated_at).getTime()))) : null;
+  const targetDate = book.target_publication_date ? new Date(`${book.target_publication_date}T00:00:00`) : null;
+
   return {
     id: book.id,
     title: book.title,
@@ -156,6 +169,7 @@ const summarize = (
     coverUrl: book.cover_url,
     startDate: book.start_date,
     metadata: book.metadata ?? {},
+    needsFollowUp: needsFollowUp({ phases: phasesForPacing, lastActivityAt, targetDate }),
   };
 };
 
@@ -176,11 +190,11 @@ export function useBooks() {
       const bookIds = rows.map((row) => row.id);
       const [{ data: milestoneRows, error: milestoneError }, { data: phaseRows }] = await Promise.all([
         supabase.from("milestones").select("*").in("book_id", bookIds),
-        supabase.from("phases").select("id, key, name").in("book_id", bookIds),
+        supabase.from("phases").select("id, key, name, suggested_start, suggested_end").in("book_id", bookIds),
       ]);
       if (milestoneError) throw milestoneError;
       const phaseById: PhaseLookup = new Map();
-      for (const phase of phaseRows ?? []) phaseById.set(phase.id, { key: phase.key, name: phase.name });
+      for (const phase of phaseRows ?? []) phaseById.set(phase.id, { key: phase.key, name: phase.name, suggested_start: phase.suggested_start, suggested_end: phase.suggested_end });
       const grouped = new Map<string, MilestoneRow[]>();
       for (const milestone of (milestoneRows ?? []) as MilestoneRow[]) {
         grouped.set(milestone.book_id, [...(grouped.get(milestone.book_id) ?? []), milestone]);
@@ -196,6 +210,7 @@ export type BookTree = {
   phases: Phase[];
   timeline: TimelineResult;
   collaboratorCount: number;
+  needsFollowUp: NeedsFollowUp;
 };
 
 export function useBookTree(bookId: string) {
@@ -216,14 +231,24 @@ export function useBookTree(bookId: string) {
       const start = typedBook.start_date ? new Date(`${typedBook.start_date}T00:00:00`) : new Date();
       const target = typedBook.target_publication_date ? new Date(`${typedBook.target_publication_date}T00:00:00`) : new Date(start.getTime() + 365 * 86400000);
       const timeline = suggestPhaseRanges(start, target, metadata.manuscriptStatus ?? "drafting", metadata.illustrated ?? false);
+      const typedMilestoneRows = (milestoneRows ?? []) as MilestoneRow[];
       const phases: Phase[] = ((phaseRows ?? []) as PhaseRow[]).map((phase) => ({
         id: phase.key,
         name: phase.name,
         mode: (phase.type === "launch-window" ? "Launch window" : phase.type === "loop" ? "Loop" : "Sprint") as Phase["mode"],
         summary: ((typedBook.metadata as Record<string, Record<string, string> | undefined>)?.["phaseSummaries"]?.[phase.key]) ?? "",
-        milestones: ((milestoneRows ?? []) as MilestoneRow[]).filter((m) => m.phase_id === phase.id).map(milestoneToUi),
+        milestones: typedMilestoneRows.filter((m) => m.phase_id === phase.id).map(milestoneToUi),
       }));
-      return { book: typedBook, phases, timeline, collaboratorCount: count ?? 0 };
+      const lastActivityAt = typedMilestoneRows.length > 0 ? new Date(Math.max(...typedMilestoneRows.map((m) => new Date(m.updated_at).getTime()))) : null;
+      const bookNeedsFollowUp = needsFollowUp({
+        phases: phases.map((phase) => ({
+          range: timeline.ranges[phase.id as keyof typeof timeline.ranges],
+          complete: phase.milestones.length > 0 && phase.milestones.every((m) => m.status === "Complete"),
+        })),
+        lastActivityAt,
+        targetDate: typedBook.target_publication_date ? target : null,
+      });
+      return { book: typedBook, phases, timeline, collaboratorCount: count ?? 0, needsFollowUp: bookNeedsFollowUp };
     },
   });
 }

@@ -12,7 +12,8 @@ import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { formatDate, useBookTree } from "@/lib/book-db";
 import type { Milestone } from "@/lib/book-data";
 import { phaseStyle } from "@/lib/phase-style";
-import { formatRange, pacing } from "@/lib/phase-timeline";
+import { formatRange, needsFollowUpLabel, pacing } from "@/lib/phase-timeline";
+import type { NeedsFollowUp } from "@/lib/phase-timeline";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/books/$bookId/")({
@@ -25,6 +26,13 @@ export const Route = createFileRoute("/_authenticated/books/$bookId/")({
 
 const pacingCopy = { done: "Wrapped up", current: "You’re in this phase now", behind: "Running past the suggested window", ahead: "Suggested window" } as const;
 
+const needsFollowUpTone: Record<NeedsFollowUp, "neutral" | "good" | "warm" | "danger"> = {
+  behind_pace: "danger",
+  no_progress: "warm",
+  launch_approaching: "warm",
+  on_track: "good",
+};
+
 function BookOverview() {
   const { bookId } = Route.useParams();
   const { data, isLoading } = useBookTree(bookId);
@@ -36,7 +44,7 @@ function BookOverview() {
   if (isLoading) return <AppShell><p className="text-sm text-muted-foreground">Loading your book…</p></AppShell>;
   if (!data) return <AppShell><p className="text-sm text-muted-foreground">This book isn’t available for your account.</p></AppShell>;
 
-  const { book, phases, timeline, collaboratorCount } = data;
+  const { book, phases, timeline, collaboratorCount, needsFollowUp } = data;
   const allMilestones = phases.flatMap((phase) => phase.milestones);
   const doneCount = allMilestones.filter((milestone) => milestone.status === "Complete").length;
   const progress = allMilestones.length ? Math.round((doneCount / allMilestones.length) * 100) : 0;
@@ -50,7 +58,11 @@ function BookOverview() {
           <BookCover src={book.cover_url} title={book.title} className="w-20 shrink-0" fallbackClassName="text-3xl" />
 
           <div>
-            <div className="mb-2 flex flex-wrap gap-2"><StatusPill tone="good">{book.status === "active" ? "In progress" : book.status}</StatusPill>{book.genre && <StatusPill tone="warm">{book.genre}</StatusPill>}</div>
+            <div className="mb-2 flex flex-wrap gap-2">
+              <StatusPill tone="good">{book.status === "active" ? "In progress" : book.status}</StatusPill>
+              {book.genre && <StatusPill tone="warm">{book.genre}</StatusPill>}
+              {needsFollowUp !== "on_track" && <StatusPill tone={needsFollowUpTone[needsFollowUp]}>{needsFollowUpLabel[needsFollowUp]}</StatusPill>}
+            </div>
             <h1 className="font-serif text-4xl font-normal md:text-5xl">{book.title}</h1>
             <p className="mt-1 text-muted-foreground">by {book.pen_name || "you"}</p>
           </div>
