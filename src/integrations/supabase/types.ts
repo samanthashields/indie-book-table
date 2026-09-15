@@ -49,6 +49,50 @@ export type Database = {
           },
         ]
       }
+      book_setup_tasks: {
+        Row: {
+          book_id: string
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          id: string
+          key: string
+          label: string
+          position: number
+          status: string
+        }
+        Insert: {
+          book_id: string
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          key: string
+          label: string
+          position?: number
+          status?: string
+        }
+        Update: {
+          book_id?: string
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          key?: string
+          label?: string
+          position?: number
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "book_setup_tasks_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       books: {
         Row: {
           attachments: Json
@@ -59,6 +103,7 @@ export type Database = {
           cover_url: string | null
           created_at: string
           edition: string | null
+          formats: string[]
           genre: string | null
           goals: string | null
           has_cycle: boolean
@@ -76,6 +121,7 @@ export type Database = {
           start_date: string | null
           status: string
           subtitle: string | null
+          target_launch_date_confirmed: boolean
           target_publication_date: string | null
           template_id: string | null
           title: string
@@ -91,6 +137,7 @@ export type Database = {
           cover_url?: string | null
           created_at?: string
           edition?: string | null
+          formats?: string[]
           genre?: string | null
           goals?: string | null
           has_cycle?: boolean
@@ -108,6 +155,7 @@ export type Database = {
           start_date?: string | null
           status?: string
           subtitle?: string | null
+          target_launch_date_confirmed?: boolean
           target_publication_date?: string | null
           template_id?: string | null
           title: string
@@ -123,6 +171,7 @@ export type Database = {
           cover_url?: string | null
           created_at?: string
           edition?: string | null
+          formats?: string[]
           genre?: string | null
           goals?: string | null
           has_cycle?: boolean
@@ -140,6 +189,7 @@ export type Database = {
           start_date?: string | null
           status?: string
           subtitle?: string | null
+          target_launch_date_confirmed?: boolean
           target_publication_date?: string | null
           template_id?: string | null
           title?: string
@@ -1154,19 +1204,24 @@ export type Database = {
           book_id: string
           completed_at: string | null
           created_at: string
+          depends_on: Json
           description: string | null
           due_date: string | null
           id: string
           instructions: string | null
           name: string
           owner: string | null
+          owner_collaborator_id: string | null
+          owner_kind: string
           owner_user_id: string | null
           phase_id: string
           position: number
+          provision: string | null
           requirement_details: Json
           requirement_type: string | null
           resources: Json
           status: string
+          track: string | null
           updated_at: string
         }
         Insert: {
@@ -1174,19 +1229,24 @@ export type Database = {
           book_id: string
           completed_at?: string | null
           created_at?: string
+          depends_on?: Json
           description?: string | null
           due_date?: string | null
           id?: string
           instructions?: string | null
           name: string
           owner?: string | null
+          owner_collaborator_id?: string | null
+          owner_kind?: string
           owner_user_id?: string | null
           phase_id: string
           position?: number
+          provision?: string | null
           requirement_details?: Json
           requirement_type?: string | null
           resources?: Json
           status?: string
+          track?: string | null
           updated_at?: string
         }
         Update: {
@@ -1194,19 +1254,24 @@ export type Database = {
           book_id?: string
           completed_at?: string | null
           created_at?: string
+          depends_on?: Json
           description?: string | null
           due_date?: string | null
           id?: string
           instructions?: string | null
           name?: string
           owner?: string | null
+          owner_collaborator_id?: string | null
+          owner_kind?: string
           owner_user_id?: string | null
           phase_id?: string
           position?: number
+          provision?: string | null
           requirement_details?: Json
           requirement_type?: string | null
           resources?: Json
           status?: string
+          track?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -1215,6 +1280,13 @@ export type Database = {
             columns: ["book_id"]
             isOneToOne: false
             referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "milestones_owner_collaborator_id_fkey"
+            columns: ["owner_collaborator_id"]
+            isOneToOne: false
+            referencedRelation: "collaborators"
             referencedColumns: ["id"]
           },
           {
@@ -1377,37 +1449,46 @@ export type Database = {
         Row: {
           book_id: string
           created_at: string
+          hidden: boolean
           id: string
           key: string
           name: string
           position: number
+          starts_here: boolean
           status: string
           suggested_end: string | null
           suggested_start: string | null
+          tracks: Json | null
           type: string
         }
         Insert: {
           book_id: string
           created_at?: string
+          hidden?: boolean
           id?: string
           key: string
           name: string
           position?: number
+          starts_here?: boolean
           status?: string
           suggested_end?: string | null
           suggested_start?: string | null
+          tracks?: Json | null
           type?: string
         }
         Update: {
           book_id?: string
           created_at?: string
+          hidden?: boolean
           id?: string
           key?: string
           name?: string
           position?: number
+          starts_here?: boolean
           status?: string
           suggested_end?: string | null
           suggested_start?: string | null
+          tracks?: Json | null
           type?: string
         }
         Relationships: [
@@ -1544,6 +1625,51 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      resources: {
+        Row: {
+          book_id: string
+          created_at: string
+          id: string
+          kind: string
+          label: string
+          milestone_id: string | null
+          url: string | null
+        }
+        Insert: {
+          book_id: string
+          created_at?: string
+          id?: string
+          kind: string
+          label: string
+          milestone_id?: string | null
+          url?: string | null
+        }
+        Update: {
+          book_id?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          label?: string
+          milestone_id?: string | null
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resources_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resources_milestone_id_fkey"
+            columns: ["milestone_id"]
+            isOneToOne: false
+            referencedRelation: "milestones"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       support_messages: {
         Row: {
