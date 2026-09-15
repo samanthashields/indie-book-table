@@ -19,6 +19,7 @@ export type GeneratedPhase = {
 export type GeneratedPlan = {
   summary: string;
   budgetNote: string;
-  pitfalls: string[];
+  /** Author-facing flags for this plan specifically — matches the Plan Schema doc's warnings[]. */
+  warnings: string[];
   phases: GeneratedPhase[];
 };
