@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { CalendarDays, CheckCircle2, ChevronDown, Circle, Clock3, FileText, Flag, FolderOpen, Settings2, Users } from "lucide-react";
+import { CalendarDays, CheckCircle2, ChevronDown, Circle, Clock3, FileText, FolderOpen, Settings2, Users } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { BookCover } from "@/components/book-cover";
-import { EndCycleDialog } from "@/components/end-cycle-dialog";
 import { MilestoneBody } from "@/components/milestone-body";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
@@ -38,7 +37,6 @@ function BookOverview() {
   const { data, isLoading } = useBookTree(bookId);
   const [open, setOpen] = useState<string[]>(["editing"]);
   const [drawer, setDrawer] = useState<{ milestone: Milestone; phaseName: string } | null>(null);
-  const [endOpen, setEndOpen] = useState(false);
   const toggle = (id: string) => setOpen((current) => current.includes(id) ? current.filter((value) => value !== id) : [...current, id]);
 
   if (isLoading) return <AppShell><p className="text-sm text-muted-foreground">Loading your book…</p></AppShell>;
@@ -71,10 +69,7 @@ function BookOverview() {
           <Button variant="outline" asChild><Link to="/books/$bookId/details" params={{ bookId }}><Settings2 />Book details</Link></Button>
           <Button variant="outline" asChild><Link to="/books/$bookId/team" params={{ bookId }}><Users />Collaborators</Link></Button>
           <Button variant="outline" asChild><Link to="/books/$bookId/resources" params={{ bookId }}><FolderOpen />Resources</Link></Button>
-          <Button variant="outline" asChild><Link to="/books/$bookId/reflection" params={{ bookId }}><FileText />Reflection</Link></Button>
-          {book.status !== "complete" && (
-            <Button variant="secondary" onClick={() => setEndOpen(true)}><Flag />End book cycle</Button>
-          )}
+          <Button variant={book.status !== "complete" ? "secondary" : "outline"} asChild><Link to="/books/$bookId/reflection" params={{ bookId }}><FileText />{book.status !== "complete" ? "End book cycle & reflect" : "Reflection"}</Link></Button>
         </div>
       </header>
 
@@ -144,8 +139,6 @@ function BookOverview() {
           {drawer && <MilestoneBody key={drawer.milestone.id} bookId={bookId} milestone={drawer.milestone} phaseName={drawer.phaseName} compact />}
         </SheetContent>
       </Sheet>
-
-      <EndCycleDialog bookId={bookId} open={endOpen} onOpenChange={setEndOpen} />
     </AppShell>
   );
 }
