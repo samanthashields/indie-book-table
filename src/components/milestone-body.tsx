@@ -5,6 +5,7 @@ import { CalendarDays, Check, FileText, HardDrive, Link2, MessageSquare, Papercl
 import { toast } from "sonner";
 import { StatusPill } from "@/components/status-pill";
 import { MilestoneChecklistPanel } from "@/components/milestone-checklist-panel";
+import { MilestoneResources } from "@/components/milestone-resources";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -315,6 +316,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
             />
           </section>
           <MilestoneChecklistPanel bookId={bookId} milestoneId={milestone.id} />
+          <MilestoneResources bookId={bookId} milestoneId={milestone.id} />
           <section>
             <h3 className="font-serif text-2xl font-semibold">Notes and attachments</h3>
             {(notes.data ?? []).length > 0 && (

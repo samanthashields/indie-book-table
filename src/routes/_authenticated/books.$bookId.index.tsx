@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { CalendarDays, CheckCircle2, ChevronDown, Circle, Clock3, FileText, Flag, Settings2, Users } from "lucide-react";
+import { CalendarDays, CheckCircle2, ChevronDown, Circle, Clock3, FileText, Flag, FolderOpen, Settings2, Users } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { BookCover } from "@/components/book-cover";
 import { EndCycleDialog } from "@/components/end-cycle-dialog";
@@ -58,6 +58,7 @@ function BookOverview() {
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" asChild><Link to="/books/$bookId/details" params={{ bookId }}><Settings2 />Book details</Link></Button>
           <Button variant="outline" asChild><Link to="/books/$bookId/team" params={{ bookId }}><Users />Collaborators</Link></Button>
+          <Button variant="outline" asChild><Link to="/books/$bookId/resources" params={{ bookId }}><FolderOpen />Resources</Link></Button>
           <Button variant="outline" asChild><Link to="/books/$bookId/reflection" params={{ bookId }}><FileText />Reflection</Link></Button>
           {book.status !== "complete" && (
             <Button variant="secondary" onClick={() => setEndOpen(true)}><Flag />End book cycle</Button>

@@ -62,6 +62,7 @@ import { Route as AuthenticatedAdminJournalPostIdRouteImport } from './routes/_a
 import { Route as AuthenticatedBooksBookIdIndexRouteImport } from './routes/_authenticated/books.$bookId.index'
 import { Route as AuthenticatedBooksBookIdDetailsRouteImport } from './routes/_authenticated/books.$bookId.details'
 import { Route as AuthenticatedBooksBookIdReflectionRouteImport } from './routes/_authenticated/books.$bookId.reflection'
+import { Route as AuthenticatedBooksBookIdResourcesRouteImport } from './routes/_authenticated/books.$bookId.resources'
 import { Route as AuthenticatedBooksBookIdTeamRouteImport } from './routes/_authenticated/books.$bookId.team'
 import { Route as AuthenticatedHelpArticlesSlugRouteImport } from './routes/_authenticated/help.articles.$slug'
 import { Route as AuthenticatedHelpCategoriesCategorySlugRouteImport } from './routes/_authenticated/help.categories.$categorySlug'
@@ -365,6 +366,12 @@ const AuthenticatedBooksBookIdReflectionRoute =
     path: '/reflection',
     getParentRoute: () => AuthenticatedBooksBookIdRoute,
   } as any)
+const AuthenticatedBooksBookIdResourcesRoute =
+  AuthenticatedBooksBookIdResourcesRouteImport.update({
+    id: '/resources',
+    path: '/resources',
+    getParentRoute: () => AuthenticatedBooksBookIdRoute,
+  } as any)
 const AuthenticatedBooksBookIdTeamRoute =
   AuthenticatedBooksBookIdTeamRouteImport.update({
     id: '/team',
@@ -479,6 +486,7 @@ export interface FileRoutesByFullPath {
   '/admin/journal/$postId': typeof AuthenticatedAdminJournalPostIdRoute
   '/books/$bookId/details': typeof AuthenticatedBooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof AuthenticatedBooksBookIdReflectionRoute
+  '/books/$bookId/resources': typeof AuthenticatedBooksBookIdResourcesRoute
   '/books/$bookId/team': typeof AuthenticatedBooksBookIdTeamRoute
   '/help/articles/$slug': typeof AuthenticatedHelpArticlesSlugRoute
   '/help/categories/$categorySlug': typeof AuthenticatedHelpCategoriesCategorySlugRoute
@@ -542,6 +550,7 @@ export interface FileRoutesByTo {
   '/admin/journal/$postId': typeof AuthenticatedAdminJournalPostIdRoute
   '/books/$bookId/details': typeof AuthenticatedBooksBookIdDetailsRoute
   '/books/$bookId/reflection': typeof AuthenticatedBooksBookIdReflectionRoute
+  '/books/$bookId/resources': typeof AuthenticatedBooksBookIdResourcesRoute
   '/books/$bookId/team': typeof AuthenticatedBooksBookIdTeamRoute
   '/help/articles/$slug': typeof AuthenticatedHelpArticlesSlugRoute
   '/help/categories/$categorySlug': typeof AuthenticatedHelpCategoriesCategorySlugRoute
@@ -609,6 +618,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/journal/$postId': typeof AuthenticatedAdminJournalPostIdRoute
   '/_authenticated/books/$bookId/details': typeof AuthenticatedBooksBookIdDetailsRoute
   '/_authenticated/books/$bookId/reflection': typeof AuthenticatedBooksBookIdReflectionRoute
+  '/_authenticated/books/$bookId/resources': typeof AuthenticatedBooksBookIdResourcesRoute
   '/_authenticated/books/$bookId/team': typeof AuthenticatedBooksBookIdTeamRoute
   '/_authenticated/help/articles/$slug': typeof AuthenticatedHelpArticlesSlugRoute
   '/_authenticated/help/categories/$categorySlug': typeof AuthenticatedHelpCategoriesCategorySlugRoute
@@ -676,6 +686,7 @@ export interface FileRouteTypes {
     | '/admin/journal/$postId'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
+    | '/books/$bookId/resources'
     | '/books/$bookId/team'
     | '/help/articles/$slug'
     | '/help/categories/$categorySlug'
@@ -739,6 +750,7 @@ export interface FileRouteTypes {
     | '/admin/journal/$postId'
     | '/books/$bookId/details'
     | '/books/$bookId/reflection'
+    | '/books/$bookId/resources'
     | '/books/$bookId/team'
     | '/help/articles/$slug'
     | '/help/categories/$categorySlug'
@@ -805,6 +817,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/journal/$postId'
     | '/_authenticated/books/$bookId/details'
     | '/_authenticated/books/$bookId/reflection'
+    | '/_authenticated/books/$bookId/resources'
     | '/_authenticated/books/$bookId/team'
     | '/_authenticated/help/articles/$slug'
     | '/_authenticated/help/categories/$categorySlug'
@@ -1216,6 +1229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBooksBookIdReflectionRouteImport
       parentRoute: typeof AuthenticatedBooksBookIdRoute
     }
+    '/_authenticated/books/$bookId/resources': {
+      id: '/_authenticated/books/$bookId/resources'
+      path: '/resources'
+      fullPath: '/books/$bookId/resources'
+      preLoaderRoute: typeof AuthenticatedBooksBookIdResourcesRouteImport
+      parentRoute: typeof AuthenticatedBooksBookIdRoute
+    }
     '/_authenticated/books/$bookId/team': {
       id: '/_authenticated/books/$bookId/team'
       path: '/team'
@@ -1342,6 +1362,7 @@ const AuthenticatedAdminRouteWithChildren =
 interface AuthenticatedBooksBookIdRouteChildren {
   AuthenticatedBooksBookIdDetailsRoute: typeof AuthenticatedBooksBookIdDetailsRoute
   AuthenticatedBooksBookIdReflectionRoute: typeof AuthenticatedBooksBookIdReflectionRoute
+  AuthenticatedBooksBookIdResourcesRoute: typeof AuthenticatedBooksBookIdResourcesRoute
   AuthenticatedBooksBookIdTeamRoute: typeof AuthenticatedBooksBookIdTeamRoute
   AuthenticatedBooksBookIdIndexRoute: typeof AuthenticatedBooksBookIdIndexRoute
   AuthenticatedBooksBookIdMilestonesMilestoneIdRoute: typeof AuthenticatedBooksBookIdMilestonesMilestoneIdRoute
@@ -1352,6 +1373,8 @@ const AuthenticatedBooksBookIdRouteChildren: AuthenticatedBooksBookIdRouteChildr
     AuthenticatedBooksBookIdDetailsRoute: AuthenticatedBooksBookIdDetailsRoute,
     AuthenticatedBooksBookIdReflectionRoute:
       AuthenticatedBooksBookIdReflectionRoute,
+    AuthenticatedBooksBookIdResourcesRoute:
+      AuthenticatedBooksBookIdResourcesRoute,
     AuthenticatedBooksBookIdTeamRoute: AuthenticatedBooksBookIdTeamRoute,
     AuthenticatedBooksBookIdIndexRoute: AuthenticatedBooksBookIdIndexRoute,
     AuthenticatedBooksBookIdMilestonesMilestoneIdRoute:
