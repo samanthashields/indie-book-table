@@ -58,6 +58,9 @@ type MilestoneRow = {
   due_date: string | null;
   approval_required: boolean;
   position: number;
+  track: string | null;
+  provision: string | null;
+  depends_on: string[];
 };
 
 type PhaseRow = {
@@ -110,6 +113,9 @@ const milestoneToUi = (row: MilestoneRow): Milestone => ({
   ownerCollaboratorId: row.owner_collaborator_id,
   requirement: (row.requirement_type ?? "attach_a_file") as RequirementType,
   status: (row.status as Milestone["status"]) ?? "Not started",
+  track: row.track,
+  provision: row.provision as Milestone["provision"],
+  dependsOn: row.depends_on ?? [],
   approval: row.approval_required,
   ...(formatShortDate(row.due_date) ? { due: formatShortDate(row.due_date)! } : {}),
   ...(row.due_date ? { dueIso: row.due_date } : {}),
@@ -300,6 +306,7 @@ export function useCreateBookCycle() {
 
       for (const [index, phase] of activePhases.entries()) {
         const range = timeline.ranges[phase.id as keyof typeof timeline.ranges];
+        const tracks = [...new Set(phase.milestones.map((m) => m.track).filter((t): t is string => Boolean(t)))];
         const { data: phaseRow, error: phaseError } = await supabase
           .from("phases")
           .insert({
@@ -311,22 +318,42 @@ export function useCreateBookCycle() {
             starts_here: index === 0,
             suggested_start: range?.start ? range.start.toISOString().slice(0, 10) : null,
             suggested_end: range?.end ? range.end.toISOString().slice(0, 10) : null,
+            tracks: tracks.length > 0 ? tracks : null,
           })
           .select("id")
           .single();
         if (phaseError) throw phaseError;
         if (phase.milestones.length > 0) {
-          const { error: milestoneError } = await supabase.from("milestones").insert(
-            phase.milestones.map((milestone, milestoneIndex) => ({
-              phase_id: phaseRow.id,
-              book_id: book.id,
-              name: milestone.name,
-              description: milestone.note,
-              requirement_type: milestone.requirement,
-              position: milestoneIndex,
-            })),
-          );
+          const { data: milestoneRows, error: milestoneError } = await supabase
+            .from("milestones")
+            .insert(
+              phase.milestones.map((milestone, milestoneIndex) => ({
+                phase_id: phaseRow.id,
+                book_id: book.id,
+                name: milestone.name,
+                description: milestone.note,
+                requirement_type: milestone.requirement,
+                position: milestoneIndex,
+                track: milestone.track ?? null,
+                provision: milestone.provision ?? null,
+              })),
+            )
+            .select("id");
           if (milestoneError) throw milestoneError;
+
+          // depends_on is advisory-only and references the plan's own localIds, which the
+          // picker only ever offers from the same phase — so this phase's milestones and their
+          // just-inserted real ids are both in hand right here, no cross-phase bookkeeping needed.
+          const localToReal = new Map(phase.milestones.map((milestone, i) => [milestone.localId, milestoneRows![i]!.id]));
+          for (const [i, milestone] of phase.milestones.entries()) {
+            const resolved = (milestone.dependsOn ?? [])
+              .map((localId) => localToReal.get(localId))
+              .filter((id): id is string => Boolean(id));
+            if (resolved.length > 0) {
+              const { error: dependsOnError } = await supabase.from("milestones").update({ depends_on: resolved }).eq("id", milestoneRows![i]!.id);
+              if (dependsOnError) throw dependsOnError;
+            }
+          }
         }
       }
       await supabase.from("activity").insert({ book_id: book.id, actor_user_id: userData.user.id, text: `Created the book cycle for “${input.title}”.` });
@@ -355,6 +382,9 @@ export function useUpdateMilestone(bookId: string) {
       if (patch.ownerKind !== undefined) update.owner_kind = patch.ownerKind;
       if (patch.ownerCollaboratorId !== undefined) update.owner_collaborator_id = patch.ownerCollaboratorId;
       if (patch.requirement !== undefined) update.requirement_type = patch.requirement;
+      if (patch.track !== undefined) update.track = patch.track;
+      if (patch.provision !== undefined) update.provision = patch.provision;
+      if (patch.dependsOn !== undefined) update.depends_on = patch.dependsOn;
       if (patch.status !== undefined) {
         update.status = statusToDb[patch.status];
         update.completed_at = patch.status === "Complete" ? new Date().toISOString() : null;

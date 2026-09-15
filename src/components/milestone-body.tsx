@@ -12,9 +12,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useUpdateMilestone } from "@/lib/book-db";
 import { uploadBookFile, useFileUrl } from "@/lib/book-files";
 import { useCollaborators } from "@/lib/collaborators";
-import { OWNER_KINDS, REQUIREMENT_TYPES, ownerKindLabel, requirementLabel } from "@/lib/book-data";
+import { OWNER_KINDS, PROVISIONS, REQUIREMENT_TYPES, ownerKindLabel, provisionLabel, requirementLabel } from "@/lib/book-data";
 import type { Collaborator } from "@/lib/collaborators";
-import type { Milestone, OwnerKind, RequirementType } from "@/lib/book-data";
+import type { Milestone, OwnerKind, Provision, RequirementType } from "@/lib/book-data";
 
 const statuses: Milestone["status"][] = ["Not started", "In progress", "Blocked", "On hold", "Complete"];
 
@@ -202,6 +202,8 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
           ownerCollaboratorId: milestone.ownerCollaboratorId,
           owner: ownerDisplay(milestone.ownerKind, milestone.ownerCollaboratorId, roster),
           requirement: milestone.requirement,
+          track: milestone.track,
+          provision: milestone.provision,
           status: milestone.status,
           dueIso: milestone.dueIso ?? "",
           approval: Boolean(milestone.approval),
@@ -278,6 +280,13 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
                 {statuses.map((status) => <option key={status} value={status}>{status}</option>)}
               </select>
             </label>
+            <label className="block text-sm font-semibold">Track<Input className="mt-2" placeholder="Optional — e.g. text, design, publishing" value={milestone.track ?? ""} onChange={(event) => update({ track: event.target.value || null })} /></label>
+            <label className="block text-sm font-semibold">Provision
+              <select className="mt-2 h-11 w-full rounded-xl border border-input bg-card px-3 text-sm" value={milestone.provision ?? ""} onChange={(event) => update({ provision: (event.target.value || null) as Provision | null })}>
+                <option value="">Not set</option>
+                {PROVISIONS.map((p) => <option key={p} value={p}>{provisionLabel[p]}</option>)}
+              </select>
+            </label>
           </div>
           <label className="flex items-center gap-3 text-sm font-semibold"><input type="checkbox" className="size-4 accent-[var(--teal)]" checked={Boolean(milestone.approval)} onChange={(event) => update({ approval: event.target.checked })} />Approval required</label>
           <div className="flex gap-3"><Button type="submit" disabled={updateMilestone.isPending}>Save milestone</Button><Button type="button" variant="outline" onClick={() => { setMilestone(initial); setEditing(false); }}>Discard changes</Button></div>
@@ -291,6 +300,8 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
               <div className="rounded-xl bg-inkblue/8 p-3"><UserRound className="mb-2 size-4 text-inkblue" /><p className="text-xs text-muted-foreground">Owner</p><p className="text-sm font-semibold">{ownerDisplay(milestone.ownerKind, milestone.ownerCollaboratorId, roster)}</p></div>
               <div className="rounded-xl bg-amber/15 p-3"><CalendarDays className="mb-2 size-4 text-amber" /><p className="text-xs text-muted-foreground">Due date</p><p className="text-sm font-semibold">{milestone.due ?? "Not set"}</p></div>
               <div className="rounded-xl bg-leaf/15 p-3"><Check className="mb-2 size-4 text-leaf" /><p className="text-xs text-muted-foreground">Approval</p><p className="text-sm font-semibold">{milestone.approval ? "Required" : "Not required"}</p></div>
+              {milestone.track && <div className="rounded-xl bg-secondary p-3"><p className="text-xs text-muted-foreground">Track</p><p className="text-sm font-semibold">{milestone.track}</p></div>}
+              {milestone.provision && <div className="rounded-xl bg-secondary p-3"><p className="text-xs text-muted-foreground">Provision</p><p className="text-sm font-semibold">{provisionLabel[milestone.provision]}</p></div>}
             </div>
           </section>
           <section>

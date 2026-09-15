@@ -189,6 +189,7 @@ function CreateBook() {
     mode: (phase.mode ?? "Sprint") as TemplatePhase["mode"],
     summary: phase.summary ?? "",
     milestones: (phase.milestones ?? []).filter((milestone) => Boolean(milestone?.name)).map((milestone) => ({
+      localId: crypto.randomUUID(),
       name: milestone.name!,
       requirement: (milestone.requirement ?? "attach_a_file") as TemplatePhase["milestones"][number]["requirement"],
       note: milestone.description ?? milestone.recommendation ?? "",
