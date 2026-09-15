@@ -87,7 +87,7 @@ function BookRow({ book, submission, onDelete }: { book: BookSummary; submission
                 <span className="text-xs font-semibold">{book.progress}%</span>
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
-                {book.phaseName ? <span className={phaseStyle(book.phaseKey ?? "writing").dot}>{book.phaseName}</span> : null}
+                {book.phaseName ? <span className={phaseStyle(book.phaseKey ?? "writing_development").dot}>{book.phaseName}</span> : null}
                 {book.phaseName ? " · " : null}
                 {book.stepsDone} of {book.stepsTotal} steps
               </p>
@@ -128,7 +128,7 @@ function BookCard({ book, submission, onDelete }: { book: BookSummary; submissio
       </div>
       {book.hasCycle && (
         <div className="mt-4 flex items-center gap-3">
-          <span className={phaseStyle(book.phaseKey ?? "writing").dot}>
+          <span className={phaseStyle(book.phaseKey ?? "writing_development").dot}>
             <ProgressRing value={book.progress} label={`${book.progress}% of this book cycle done`} />
           </span>
           <div className="min-w-0">

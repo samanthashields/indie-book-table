@@ -11,14 +11,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useUpdateMilestone } from "@/lib/book-db";
 import { uploadBookFile, useFileUrl } from "@/lib/book-files";
+import { REQUIREMENT_TYPES, requirementLabel } from "@/lib/book-data";
 import type { Milestone, RequirementType } from "@/lib/book-data";
-
-const requirementTypes: RequirementType[] = [
-  "Request a Service",
-  "Attach a File",
-  "Complete an Activity Outside the Platform",
-  "Approve a Deliverable",
-];
 
 const statuses: Milestone["status"][] = ["Not started", "In progress", "Blocked", "On hold", "Complete"];
 
@@ -40,10 +34,10 @@ export function RequirementAction({
   const [driveOpen, setDriveOpen] = useState(false);
   const [driveLink, setDriveLink] = useState("");
   const copy = {
-    "Approve a Deliverable": { title: "Review and approve the shared deliverable", body: "Your collaborator’s files appear here for approval.", action: "Approve deliverable", icon: Check },
-    "Attach a File": { title: "Add the finished file or a share link", body: "PDF, DOCX, EPUB, or a link to your working document.", action: "Choose file", icon: Paperclip },
-    "Request a Service": { title: "Invite a specialist to this milestone", body: "They’ll only see this book cycle and the work assigned to them.", action: "Invite a collaborator", icon: UserRound },
-    "Complete an Activity Outside the Platform": { title: "Finish this work in your usual tools", body: "Mark it complete here when the outside work is done.", action: "Mark complete", icon: Check },
+    approve_a_deliverable: { title: "Review and approve the shared deliverable", body: "Your collaborator’s files appear here for approval.", action: "Approve deliverable", icon: Check },
+    attach_a_file: { title: "Add the finished file or a share link", body: "PDF, DOCX, EPUB, or a link to your working document.", action: "Choose file", icon: Paperclip },
+    request_a_service: { title: "Invite a specialist to this milestone", body: "They’ll only see this book cycle and the work assigned to them.", action: "Invite a collaborator", icon: UserRound },
+    complete_activity_outside: { title: "Finish this work in your usual tools", body: "Mark it complete here when the outside work is done.", action: "Mark complete", icon: Check },
   }[type];
   const Icon = copy.icon;
 
@@ -70,9 +64,9 @@ export function RequirementAction({
         <div className="min-w-0 flex-1">
           <p className="font-semibold">{copy.title}</p>
           <p className="mt-1 text-sm text-muted-foreground">{copy.body}</p>
-          {type === "Request a Service" ? (
+          {type === "request_a_service" ? (
             <Button className="mt-4" asChild><Link to="/books/$bookId/team" params={{ bookId }}><UserRound />{copy.action}</Link></Button>
-          ) : type === "Attach a File" ? (
+          ) : type === "attach_a_file" ? (
             <>
               <div className="mt-4 flex flex-wrap gap-3">
                 <Button variant={complete ? "secondary" : "default"} disabled={busy} onClick={() => input.current?.click()}>{complete && <Check />}{busy ? "Uploading…" : complete ? "Replace file" : copy.action}</Button>
@@ -220,7 +214,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
             <label className="block text-sm font-semibold">Due date<Input className="mt-2" type="date" value={milestone.dueIso ?? ""} onChange={(event) => update({ dueIso: event.target.value })} /></label>
             <label className="block text-sm font-semibold">Requirement
               <select className="mt-2 h-11 w-full rounded-xl border border-input bg-card px-3 text-sm" value={milestone.requirement} onChange={(event) => update({ requirement: event.target.value as RequirementType })}>
-                {requirementTypes.map((type) => <option key={type} value={type}>{type}</option>)}
+                {REQUIREMENT_TYPES.map((type) => <option key={type} value={type}>{requirementLabel[type]}</option>)}
               </select>
             </label>
             <label className="block text-sm font-semibold">Status

@@ -104,7 +104,7 @@ const milestoneToUi = (row: MilestoneRow): Milestone => ({
   name: row.name,
   description: row.description ?? "",
   owner: row.owner ?? "Author",
-  requirement: (row.requirement_type ?? "Attach a File") as RequirementType,
+  requirement: (row.requirement_type ?? "attach_a_file") as RequirementType,
   status: (row.status as Milestone["status"]) ?? "Not started",
   approval: row.approval_required,
   ...(formatShortDate(row.due_date) ? { due: formatShortDate(row.due_date)! } : {}),

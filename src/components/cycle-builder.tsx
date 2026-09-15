@@ -4,24 +4,12 @@ import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { phaseStyle } from "@/lib/phase-style";
+import { PHASE_DEFS } from "@/lib/phase-timeline";
+import { REQUIREMENT_TYPES, requirementLabel } from "@/lib/book-data";
 import type { RequirementType } from "@/lib/book-data";
 import type { TemplatePhase } from "@/lib/template-data";
 
-const requirementTypes: RequirementType[] = [
-  "Request a Service",
-  "Attach a File",
-  "Complete an Activity Outside the Platform",
-  "Approve a Deliverable",
-];
-
-export const blankPhases: TemplatePhase[] = [
-  { id: "writing", name: "Writing & Development", mode: "Loop", summary: "Shape the manuscript, test the premise, and revise with intention.", milestones: [] },
-  { id: "editing", name: "Editing", mode: "Loop", summary: "Move from structural clarity to clean, confident prose.", milestones: [] },
-  { id: "production", name: "Production", mode: "Sprint", summary: "Turn the manuscript into a book people can hold and read.", milestones: [] },
-  { id: "prelaunch", name: "Pre-Launch", mode: "Sprint", summary: "Prepare the listing, early readers, and a realistic launch plan.", milestones: [] },
-  { id: "launch", name: "Launch", mode: "Launch window", summary: "Publish, verify every storefront, and invite the first readers.", milestones: [] },
-  { id: "growth", name: "Post-Launch & Growth", mode: "Loop", summary: "Learn from the launch and build steady readership.", milestones: [] },
-];
+export const blankPhases: TemplatePhase[] = PHASE_DEFS.map((def) => ({ id: def.key, name: def.name, mode: def.mode, summary: def.summary, milestones: [] }));
 
 export function CycleBuilder({ title, description, phases: initial, initialTitle, creating, onBack, onCreate }: {
   title: string;
@@ -40,7 +28,7 @@ export function CycleBuilder({ title, description, phases: initial, initialTitle
     setPhases((current) => current.map((phase) => phase.id === phaseId ? { ...phase, milestones: phase.milestones.map((milestone, i) => i === index ? { ...milestone, ...patch } : milestone) } : phase));
 
   const addMilestone = (phaseId: string) =>
-    setPhases((current) => current.map((phase) => phase.id === phaseId ? { ...phase, milestones: [...phase.milestones, { name: "New milestone", requirement: "Attach a File" as RequirementType, note: "" }] } : phase));
+    setPhases((current) => current.map((phase) => phase.id === phaseId ? { ...phase, milestones: [...phase.milestones, { name: "New milestone", requirement: "attach_a_file" as RequirementType, note: "" }] } : phase));
 
   const removeMilestone = (phaseId: string, index: number) =>
     setPhases((current) => current.map((phase) => phase.id === phaseId ? { ...phase, milestones: phase.milestones.filter((_, i) => i !== index) } : phase));
@@ -72,7 +60,7 @@ export function CycleBuilder({ title, description, phases: initial, initialTitle
                     <li key={`${phase.id}-${milestoneIndex}`} className="grid gap-3 rounded-xl bg-card p-4 shadow-xs sm:grid-cols-[minmax(0,1fr)_260px_auto] sm:items-center">
                       <Input value={milestone.name} aria-label="Milestone name" onChange={(event) => updateMilestone(phase.id, milestoneIndex, { name: event.target.value })} />
                       <select className="h-11 w-full rounded-xl border border-input bg-card px-3 text-sm" aria-label="Requirement type" value={milestone.requirement} onChange={(event) => updateMilestone(phase.id, milestoneIndex, { requirement: event.target.value as RequirementType })}>
-                        {requirementTypes.map((type) => <option key={type} value={type}>{type}</option>)}
+                        {REQUIREMENT_TYPES.map((type) => <option key={type} value={type}>{requirementLabel[type]}</option>)}
                       </select>
                       <Button variant="ghost" size="icon" aria-label={`Remove ${milestone.name}`} onClick={() => removeMilestone(phase.id, milestoneIndex)}><Trash2 /></Button>
                     </li>

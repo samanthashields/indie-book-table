@@ -1,6 +1,7 @@
 import foxCover from "@/assets/fox-lantern-cover.jpg";
 import riverCover from "@/assets/river-map-cover.jpg";
 import type { RequirementType } from "@/lib/book-data";
+import { PHASE_DEFS } from "@/lib/phase-timeline";
 
 export type TemplateMilestone = { name: string; requirement: RequirementType; note: string };
 export type TemplatePhase = {
@@ -24,67 +25,40 @@ export type BookTemplate = {
   phases: TemplatePhase[];
 };
 
-const launchPhases = (extra: Partial<Record<string, TemplateMilestone[]>> = {}): TemplatePhase[] => [
-  {
-    id: "writing",
-    name: "Writing & Development",
-    mode: "Loop",
-    summary: "Shape the manuscript, test the premise, and revise with intention.",
-    milestones: extra["writing"] ?? [
-      { name: "Complete working manuscript", requirement: "Attach a File", note: "One clean working document you can hand to an editor." },
-      { name: "Gather beta reader notes", requirement: "Request a Service", note: "A small group of trusted readers, one focused round." },
-    ],
-  },
-  {
-    id: "editing",
-    name: "Editing",
-    mode: "Loop",
-    summary: "Move from structural clarity to clean, confident prose.",
-    milestones: extra["editing"] ?? [
-      { name: "Review developmental edit", requirement: "Approve a Deliverable", note: "Approval required before revision starts." },
-      { name: "Complete revision pass", requirement: "Complete an Activity Outside the Platform", note: "Your own writing time, tracked here." },
-      { name: "Commission copyedit", requirement: "Request a Service", note: "Hire when budget allows; otherwise a strong self-edit checklist." },
-    ],
-  },
-  {
-    id: "production",
-    name: "Production",
-    mode: "Sprint",
-    summary: "Turn the manuscript into a book people can hold and read.",
-    milestones: extra["production"] ?? [
-      { name: "Approve cover direction", requirement: "Approve a Deliverable", note: "Choose the direction before final artwork." },
-      { name: "Format print interior", requirement: "Request a Service", note: "Print-ready files for every format you plan to sell." },
-    ],
-  },
-  {
-    id: "prelaunch",
-    name: "Pre-Launch",
-    mode: "Sprint",
-    summary: "Prepare the listing, early readers, and a realistic launch plan.",
-    milestones: extra["prelaunch"] ?? [
-      { name: "Finalize metadata bundle", requirement: "Attach a File", note: "Description, categories, keywords, contributors." },
-      { name: "Send advance reader copies", requirement: "Complete an Activity Outside the Platform", note: "Give reviewers at least four weeks." },
-    ],
-  },
-  {
-    id: "launch",
-    name: "Launch",
-    mode: "Launch window",
-    summary: "Publish, verify every storefront, and invite the first wave of readers.",
-    milestones: extra["launch"] ?? [
-      { name: "Publish the book", requirement: "Complete an Activity Outside the Platform", note: "Release all formats and check the live pages." },
-    ],
-  },
-  {
-    id: "growth",
-    name: "Post-Launch & Growth",
-    mode: "Loop",
-    summary: "Learn from the launch and build steady, sustainable readership.",
-    milestones: extra["growth"] ?? [
-      { name: "Complete post-launch reflection", requirement: "Complete an Activity Outside the Platform", note: "What worked, what changed, what comes next." },
-    ],
-  },
-];
+const DEFAULT_MILESTONES: Record<string, TemplateMilestone[]> = {
+  writing_development: [
+    { name: "Complete working manuscript", requirement: "attach_a_file", note: "One clean working document you can hand to an editor." },
+    { name: "Gather beta reader notes", requirement: "request_a_service", note: "A small group of trusted readers, one focused round." },
+  ],
+  editing: [
+    { name: "Review developmental edit", requirement: "approve_a_deliverable", note: "Approval required before revision starts." },
+    { name: "Complete revision pass", requirement: "complete_activity_outside", note: "Your own writing time, tracked here." },
+    { name: "Commission copyedit", requirement: "request_a_service", note: "Hire when budget allows; otherwise a strong self-edit checklist." },
+  ],
+  production: [
+    { name: "Approve cover direction", requirement: "approve_a_deliverable", note: "Choose the direction before final artwork." },
+    { name: "Format print interior", requirement: "request_a_service", note: "Print-ready files for every format you plan to sell." },
+  ],
+  pre_launch: [
+    { name: "Finalize metadata bundle", requirement: "attach_a_file", note: "Description, categories, keywords, contributors." },
+    { name: "Send advance reader copies", requirement: "complete_activity_outside", note: "Give reviewers at least four weeks." },
+  ],
+  launch: [
+    { name: "Publish the book", requirement: "complete_activity_outside", note: "Release all formats and check the live pages." },
+  ],
+  post_launch_growth: [
+    { name: "Complete post-launch reflection", requirement: "complete_activity_outside", note: "What worked, what changed, what comes next." },
+  ],
+};
+
+const launchPhases = (extra: Partial<Record<string, TemplateMilestone[]>> = {}): TemplatePhase[] =>
+  PHASE_DEFS.map((def) => ({
+    id: def.key,
+    name: def.name,
+    mode: def.mode,
+    summary: def.summary,
+    milestones: extra[def.key] ?? DEFAULT_MILESTONES[def.key] ?? [],
+  }));
 
 export const templates: BookTemplate[] = [
   {
@@ -96,15 +70,15 @@ export const templates: BookTemplate[] = [
     illustrated: true,
     highlights: ["Mandatory illustrator track", "Parallel layout and artwork approvals", "Print-proof colour check", "Longer production window for illustration rounds"],
     phases: launchPhases({
-      writing: [
-        { name: "Complete the text and page plan", requirement: "Attach a File", note: "Word count plus a 32-page spread map." },
-        { name: "Read the text aloud with young readers", requirement: "Complete an Activity Outside the Platform", note: "Picture book text is heard before it is read." },
+      writing_development: [
+        { name: "Complete the text and page plan", requirement: "attach_a_file", note: "Word count plus a 32-page spread map." },
+        { name: "Read the text aloud with young readers", requirement: "complete_activity_outside", note: "Picture book text is heard before it is read." },
       ],
       production: [
-        { name: "Commission the illustrator", requirement: "Request a Service", note: "Mandatory for this path; brief, contract, and schedule." },
-        { name: "Approve character studies", requirement: "Approve a Deliverable", note: "Lock the look before full spreads begin." },
-        { name: "Approve final spreads", requirement: "Approve a Deliverable", note: "Runs in parallel with layout." },
-        { name: "Check the printed colour proof", requirement: "Complete an Activity Outside the Platform", note: "Screen colour and press colour are not the same." },
+        { name: "Commission the illustrator", requirement: "request_a_service", note: "Mandatory for this path; brief, contract, and schedule." },
+        { name: "Approve character studies", requirement: "approve_a_deliverable", note: "Lock the look before full spreads begin." },
+        { name: "Approve final spreads", requirement: "approve_a_deliverable", note: "Runs in parallel with layout." },
+        { name: "Check the printed colour proof", requirement: "complete_activity_outside", note: "Screen colour and press colour are not the same." },
       ],
     }),
   },
