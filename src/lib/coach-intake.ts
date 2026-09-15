@@ -1,3 +1,5 @@
+import type { ManuscriptStatus } from "@/lib/phase-timeline";
+
 export type Answers = Record<string, string>;
 
 export type Question = {
@@ -256,6 +258,22 @@ export const summaryLine = (a: Answers) => {
   const hires = list(a["hires"] ?? "").length;
   return `Here's what I've got: a ${(a["genre"] ?? "book").toLowerCase()} ${formats} book, ${bookName(a)}, published via ${(a["path"] ?? "self-publishing").toLowerCase()} for ${(a["audience"] ?? "adult readers").toLowerCase()}, launching around ${a["launchDate"] || "your target date"}. I'll build the plan across the six phases${hires ? `, with ${hires} job${hires === 1 ? "" : "s"} planned as hires given your budget` : ", mostly do-it-yourself given your budget"}. Drafting it now.`;
 };
+
+/** Structured manuscript status for the timeline formula, from the `status` chip answer. */
+export const toManuscriptStatus = (status: string | undefined): ManuscriptStatus => {
+  if (/already edited/i.test(status ?? "")) return "edited";
+  if (/first draft/i.test(status ?? "")) return "first_draft_done";
+  // "Still drafting" and "Not started yet" both start the cycle at the earliest phase.
+  return "drafting";
+};
+
+const FORMAT_VALUES: Record<string, string> = { Ebook: "ebook", Print: "paperback", Audiobook: "audiobook" };
+
+/** Structured books.formats values, from the `formats` chip answer (e.g. "Ebook, Print"). */
+export const toFormats = (formats: string | undefined): string[] =>
+  list(formats ?? "")
+    .map((entry) => FORMAT_VALUES[entry])
+    .filter((entry): entry is string => Boolean(entry));
 
 export const toPayload = (a: Answers) => ({
   premise: `${bookName(a)} — ${a["premise"] || a["genre"] || "a book"}`,

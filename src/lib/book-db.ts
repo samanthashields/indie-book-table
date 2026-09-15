@@ -241,6 +241,8 @@ export type CreateCycleInput = {
   templateId?: string;
   phases: TemplatePhase[];
   summaryNote?: string;
+  budget?: number;
+  formats?: string[];
   /** When set, the cycle is attached to an existing book in the library. */
   bookId?: string;
 };
@@ -258,6 +260,8 @@ export function useCreateBookCycle() {
         template_id: input.templateId ?? null,
         status: "active",
         has_cycle: true,
+        budget: input.budget ?? null,
+        formats: input.formats ?? [],
         metadata: {
           manuscriptStatus: input.manuscriptStatus ?? "drafting",
           illustrated: input.illustrated ?? false,
@@ -283,7 +287,14 @@ export function useCreateBookCycle() {
       const target = input.targetDate ? new Date(`${input.targetDate}T00:00:00`) : new Date(Date.now() + 365 * 86400000);
       const timeline = suggestPhaseRanges(new Date(), target, input.manuscriptStatus ?? "drafting", input.illustrated ?? false);
 
-      for (const [index, phase] of input.phases.entries()) {
+      // Earlier phases than the manuscript's actual starting point are omitted rather than
+      // created with no timeline — timeline.ranges only has entries for the phases that are
+      // actually active (plus launch/post_launch_growth), so it doubles as the active-phase set.
+      // When the date is too tight to compute a timeline at all, fall back to creating every
+      // phase rather than silently dropping all of them.
+      const activePhases = timeline.valid ? input.phases.filter((phase) => phase.id in timeline.ranges) : input.phases;
+
+      for (const [index, phase] of activePhases.entries()) {
         const range = timeline.ranges[phase.id as keyof typeof timeline.ranges];
         const { data: phaseRow, error: phaseError } = await supabase
           .from("phases")
@@ -293,6 +304,7 @@ export function useCreateBookCycle() {
             name: phase.name,
             type: phase.mode === "Launch window" ? "launch-window" : phase.mode.toLowerCase(),
             position: index,
+            starts_here: index === 0,
             suggested_start: range?.start ? range.start.toISOString().slice(0, 10) : null,
             suggested_end: range?.end ? range.end.toISOString().slice(0, 10) : null,
           })
