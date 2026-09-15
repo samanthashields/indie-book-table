@@ -11,11 +11,13 @@ import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { usePlanStream } from "@/lib/use-plan-stream";
-import { toPayload } from "@/lib/coach-intake";
+import { toPayload, toManuscriptStatus, toFormats } from "@/lib/coach-intake";
+import type { Answers } from "@/lib/coach-intake";
 import { useCurrentUser } from "@/lib/use-current-user";
 import { useBooks, useCreateBookCycle, useTemplates } from "@/lib/book-db";
 import type { TemplatePhase } from "@/lib/template-data";
 import { PHASE_DEFS } from "@/lib/phase-timeline";
+import type { ManuscriptStatus } from "@/lib/phase-timeline";
 import { requirementLabel } from "@/lib/book-data";
 import { cn } from "@/lib/utils";
 
@@ -58,6 +60,7 @@ function CreateBook() {
   const createCycle = useCreateBookCycle();
   const [coachTitle, setCoachTitle] = useState("");
   const [coachDate, setCoachDate] = useState("");
+  const [coachAnswers, setCoachAnswers] = useState<Answers>({});
   const currentUser = useCurrentUser();
   const isPaid = currentUser.data?.profile?.plan === "paid";
 
@@ -68,7 +71,17 @@ function CreateBook() {
   const go = (next: Search) => void navigate({ to: "/books/new", search: { ...next, ...(search.book ? { book: search.book } : {}) } });
   const backToChooser = () => void navigate({ to: "/books/new", search: { ...(search.book ? { book: search.book } : {}) } });
 
-  const create = (input: { title: string; targetDate: string; phases: TemplatePhase[]; templateId?: string; genre?: string; illustrated?: boolean }) => {
+  const create = (input: {
+    title: string;
+    targetDate: string;
+    phases: TemplatePhase[];
+    templateId?: string;
+    genre?: string;
+    illustrated?: boolean;
+    manuscriptStatus?: ManuscriptStatus;
+    budget?: number;
+    formats?: string[];
+  }) => {
     createCycle.mutate(
       {
         title: input.title,
@@ -77,6 +90,9 @@ function CreateBook() {
         ...(input.templateId ? { templateId: input.templateId } : {}),
         ...(input.genre ? { genre: input.genre } : {}),
         ...(input.illustrated !== undefined ? { illustrated: input.illustrated } : {}),
+        ...(input.manuscriptStatus ? { manuscriptStatus: input.manuscriptStatus } : {}),
+        ...(input.budget !== undefined ? { budget: input.budget } : {}),
+        ...(input.formats && input.formats.length > 0 ? { formats: input.formats } : {}),
         ...(search.book ? { bookId: search.book } : {}),
       },
       {
@@ -200,7 +216,7 @@ function CreateBook() {
 
       <div className="grid gap-8 xl:grid-cols-[1fr_300px]">
         <div className="space-y-8">
-          <CoachConversation generating={isStreaming} onGenerate={(answers) => { setCoachTitle(answers["title"] ?? existingBook?.title ?? ""); void start(toPayload(answers)); }} />
+          <CoachConversation generating={isStreaming} onGenerate={(answers) => { setCoachTitle(answers["title"] ?? existingBook?.title ?? ""); setCoachAnswers(answers); void start(toPayload(answers)); }} />
 
           {error && <p className="rounded-xl border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">{error}</p>}
           {canceled && <p className="rounded-xl border border-border bg-secondary p-4 text-sm">You stopped the draft. Everything the coach had written so far is kept below.</p>}
@@ -240,7 +256,20 @@ function CreateBook() {
               </div>
               <div className="flex flex-wrap justify-end gap-3">
                 <Button variant="outline" onClick={backToChooser}>Change answers</Button>
-                <Button disabled={!coachTitle.trim() || planPhases.length === 0 || createCycle.isPending} onClick={() => create({ title: coachTitle.trim(), targetDate: coachDate, phases: planPhases })}>
+                <Button
+                  disabled={!coachTitle.trim() || planPhases.length === 0 || createCycle.isPending}
+                  onClick={() =>
+                    create({
+                      title: coachTitle.trim(),
+                      targetDate: coachDate,
+                      phases: planPhases,
+                      ...(coachAnswers["genre"] ? { genre: coachAnswers["genre"] } : {}),
+                      manuscriptStatus: toManuscriptStatus(coachAnswers["status"]),
+                      ...(coachAnswers["budget"] ? { budget: Number(coachAnswers["budget"]) || 0 } : {}),
+                      formats: toFormats(coachAnswers["formats"]),
+                    })
+                  }
+                >
                   {createCycle.isPending && <Loader2 className="animate-spin" />}Create the book cycle
                 </Button>
               </div>
