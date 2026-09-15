@@ -2,7 +2,7 @@
 
 **Source:** A one-question-at-a-time interview walking Sam's real, from-scratch process for *A Frequency in Time* (fiction chapter book) against the existing six-phase model, to find every milestone and structural assumption the spec was missing.
 
-**Status:** Raw findings. Next step: fold into `Book_Cycles_Functionality_Specification`, `Book_Cycle_Plan_Schema`, and `Book_Cycles_Phase_Timeline_Formula`.
+**Status:** Folded into `Book_Cycles_Functionality_Specification_First_Draft.md` (§ 3.9, § 5/§ 5.1, § 6, § 8, § 21), `Book_Cycle_Plan_Schema.md` (schema + example), and `Book_Cycles_Phase_Timeline_Formula.md` (`list_building_start_by`). Kept here as the source interview. Two items from § 2/§ 4 were deliberately left as open questions rather than committed to the schema: repeat-per-chapter as a first-class feature, and whether ISBN/trim-size decisions eventually warrant a dedicated Requirement Type.
 
 ---
 
@@ -98,4 +98,4 @@ These aren't single milestones — they change how the model itself needs to wor
 
 ---
 
-*Next step: work this into the four canonical specs so the plan schema, the create-flow questions, and Pen's own system prompt all agree with what actually happens.*
+*Folded into the Functionality Spec, Plan Schema, and Phase Timeline Formula. Not yet touched: the create-flow conversation spec (`Book_Coach_AI_Create_Flow_Conversation_Spec.md`) and Pen's own system prompt — neither was updated as part of this pass and should be reconciled against the milestones/fields above before they're treated as in sync.*

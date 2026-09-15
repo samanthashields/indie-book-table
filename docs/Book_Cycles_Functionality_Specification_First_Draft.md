@@ -153,7 +153,9 @@ An existing Goal-type entity attached to the cycle, sitting at cycle level. In p
 
 ### 3.9 Setup Task (the *Preparation Task* analog)
 
-Author-owned, cycle-level tasks completed **before/around** the production work — the strategic decisions the Write|Publish|Sell timeline insists come first: choose publishing path (self / hybrid / small press), define audience and genre, gather comparable titles, set a budget, decide launch ambition. Distinct from Milestones (which structure the primary production work).
+Author-owned, cycle-level tasks completed **before/around** the production work — the strategic decisions the Write|Publish|Sell timeline insists come first: choose publishing path (self / hybrid / small press), define audience and genre, gather comparable titles, set a budget, decide launch ambition, **select trim size / manuscript template** (e.g. a KDP template). Distinct from Milestones (which structure the primary production work).
+
+Trim size is a Setup Task, not a Production milestone, because it's a decision made early that Production later *applies* — the Production-phase "Interior formatting" milestone (§ 5.1, #22) formats *to* the template chosen here rather than choosing it. *(Folded in from the grill-session gap analysis, § 2 item D — see [Book_Cycles_Gap_Analysis_Grill_Session.md](./Book_Cycles_Gap_Analysis_Grill_Session.md).)*
 
 ### 3.10 Resource
 
@@ -193,7 +195,7 @@ The information collected to define a Book Cycle. Fields marked *(derived)* are 
 | Comparable titles | Market positioning (comps). | List. |
 | Book Goals / "why" | The end goals driving decisions. | Attached Book Goals (§ 3.8). |
 | Length estimate | Rough word/page count. | Number. Feeds cover/layout planning. |
-| **Target publication date** | The anchor date for the whole timeline. | Date. Drives Needs Follow-Up. |
+| **Target publication date** | The anchor date for the whole timeline. | Date, captured **tentative** at cycle creation (see Writing & Development milestone § 5.1 #16) and re-confirmed as **firm** in Pre-Launch (§ 5.1 #32). Not a hard commitment up front — Pen periodically re-surfaces it in ongoing coaching until firmed. Drives Needs Follow-Up. |
 | **Budget** | What the Author can spend. | Amount / tier. **Determines which Collaborator roles and milestones are active vs. optional** (see § 20.5). |
 | Team | The people on the project. | Author + invited Collaborators, each phase-scoped. |
 | ISBN / imprint | Publishing identifiers. *(prod)* | Populated in Production. |
@@ -209,14 +211,80 @@ The default six-phase structure, adapted from the Write|Publish|Sell timeline. P
 
 | # | Phase | Type | Rotates in | Example Milestones |
 |---|---|---|---|---|
-| 1 | Writing & Development | Loop | Co-author, dev editor, beta readers | Finish manuscript; rest + structured self-review; beta-reader round; developmental edit; major revision. |
-| 2 | Editing | Loop | Copyeditor, line editor | Line/copyedit round(s); author revisions; lock manuscript. *(Proofreading deferred to after layout — see § 21.)* |
-| 3 | Production | Sprint + parallel tracks | Cover designer, formatter, illustrator | **Text track:** finalize front/back matter, interior format (ebook + print), proofread laid-out files. **Design track:** finalize cover, illustrations (if any). **Publishing track:** purchase ISBN, establish imprint, finalize metadata. |
-| 4 | Pre-Launch | Sprint | Marketing help, ARC readers | Set firm pub date; upload ebook preorder; upload print files to IngramSpark; build + activate ARC team; secure reviews; grow email list; content marketing. |
-| 5 | Launch | Sprint | Publicist / launch team | Reviews (reader/ARC/editorial); email campaigns; social content; podcast/features; publicity. Launch is a *window*, not a day. |
-| 6 | Post-Launch & Growth | Loop | (data, not people) | Ongoing audience growth; long-tail marketing; metadata optimization; additional formats (audio, hardcover, translation); partnerships. Runs into the **Post-Launch Reflection** → next Book Cycle. |
+| 1 | Writing & Development | Loop | Co-author, dev editor, beta readers | Capture the idea; outline; world/rules + character development; skeletal first-pass draft; layered revision passes; early spot-check beta read; deep AI-assisted revision; print-and-markup + transcription; structured beta-reader survey; full read-through gate; draft front/back matter + blurb copy. |
+| 2 | Editing | Loop | Copyeditor, line editor | AI-assisted copyedit, chapter by chapter; full read-through gate; lock manuscript. *(Proofreading deferred to after layout — see § 21.)* |
+| 3 | Production | Sprint + parallel tracks | Cover designer, formatter, illustrator | **Text track:** interior format to the trim template chosen in Setup, build the ebook file, proofread laid-out files. **Design track:** cover design. **Publishing track:** KDP draft + format check, IngramSpark listing + format check, IngramSpark preorder scheduling, ISBN decision + purchase, set pricing, order + verify proof copies. |
+| 4 | Pre-Launch | Sprint | Marketing help, ARC readers | Firm up the pub date; build + activate ARC team; continue list-building; begin content marketing; ebook preorder live; secure early/editorial reviews; final sprint (last 1–2 weeks). |
+| 5 | Launch | Sprint | Publicist / launch team | Click publish; verify live and correct on Amazon/IngramSpark; announce (social, blog, email list); update author website from preorder to available-now. Launch is a *sequence culminating in one action*, not just a countdown window. |
+| 6 | Post-Launch & Growth | Loop | (data, not people) | Marketing push with changed ("it's here") messaging; order author copies; ongoing audience growth; long-tail marketing; metadata optimization; additional formats; partnerships. Runs into the **Post-Launch Reflection** → next Book Cycle. Tapers, doesn't close. |
 
 Note: the earlier four-phase sketch (Writing & Rest / Editing & Design / Pre-Launch / Launch & Post-Launch) is a valid *compressed* view; this six-phase model is the fuller default and separates the concurrent-but-distinct Editing, Production, and Post-Launch work.
+
+### 5.1 Full milestone catalog (fiction / chapter-book baseline)
+
+The table above is illustrative; this is the fuller catalog, folded in from a grill-session interview walking one author's real, from-scratch process for a fiction chapter book against the six-phase model (see [Book_Cycles_Gap_Analysis_Grill_Session.md](./Book_Cycles_Gap_Analysis_Grill_Session.md)). Numbering matches that source document. It is a **baseline, not a universal template** — see § 21 on sanity-checking nonfiction/memoir/co-authored arcs.
+
+Tags: *(conditional)* = Pen asks during intake and simply omits the milestone from the generated plan if the author already has the thing — a Plan Generation-time decision, not a stored schema field (see Plan Schema "Design rules"); *(repeats per chapter)* = runs once per chapter, not once per phase — schema treatment is an **open question**, see § 21; *(lead-time flag)* = the milestone's schedule depends on an external turnaround the author doesn't control, and should carry a `warnings[]` entry the same way the illustration lead-time warning already does.
+
+**Writing & Development**
+1. Capture the idea — raw notebook dump, backstory and ideas, no structure yet.
+2. Build a general outline (AI-assisted).
+3. World & rules-building + character development.
+4. Skeletal first-pass draft — short chapters capturing premise and how they connect.
+5. Layered revision passes — extending/deepening each chapter over multiple rounds. *(repeats per chapter)*
+6. Early spot-check beta read — 1–2 trusted readers, a couple of chapters only.
+7. Deep revision, chapter by chapter (AI-assisted). *(repeats per chapter)* Needs the cautious AI-role framing at § 8 / § 3 Pen-behavior.
+8. Print-and-markup pass — reading a physical printout with a red pen.
+9. Digital transcription of the markup pass — a distinct second milestone from #8, not the same session.
+10. Structured beta-reader survey round — Pen suggests a genre-based starter template (see § 21, genre → milestone catalog); author can fully edit it.
+11. Weigh & incorporate feedback — the deliberate judgment call after the survey, distinct from collecting it.
+12. **Full manuscript read-through** — the gate that decides Writing & Development is done.
+13. Draft front/back matter content — acknowledgments, about the author, table of contents, dedication. *Writing* the content; formatting it for print/ebook is a separate Production milestone (#22).
+14. Draft back-cover summary / blurb copy.
+15. *(Moved to Setup Task, § 3.9 — see gap analysis § 2 item D.)*
+16. Set a tentative/placeholder target pub date — lightweight, early; feeds the phase-timeline formula without a firm commitment. Re-confirmed at #32.
+17. Start lightweight list-building — a sign-up page plus casual "here's what I'm working on" posts. Starts here, not in Pre-Launch (see § 21, `list_building_start_by`).
+18. Create an author website. *(conditional — skip if one already exists)*
+
+**Editing**
+19. Copyedit pass, AI-assisted, chapter by chapter — grammar/typos/etc. all caught together, per chapter, not one full-book pass. *(repeats per chapter)* Same cautious AI-role framing as #7.
+20. **Full read-through gate** — confirms readiness for Production, mirroring #12's role.
+21. Lock manuscript.
+
+**Production**
+22. Interior formatting to the trim template selected in Setup (§ 3.9) — applies an earlier decision, doesn't make one.
+23. Cover design — runs **in parallel** with interior formatting (validates the parallel-tracks model). Pen's DIY-vs-hire nudge weighs **interior illustration density**, not genre alone (§ 8).
+24. KDP draft creation — triggers KDP's own automated format-check on manuscript + cover files. Distinct from personal proofing.
+25. IngramSpark listing + format check — runs in parallel with #24.
+26. IngramSpark preorder scheduling. *(lead-time flag — connecting to the KDP draft isn't instant.)*
+27. ISBN decision: free vs. purchased — a real decision with consequences (switching later means redoing every file the ISBN touches). Modeled as a `complete_activity_outside` milestone whose instructions carry the pros/cons Pen raises proactively (§ 3 Pen-behavior), not a flat checkbox — see § 6 for why this doesn't need a new Requirement Type.
+28. ISBN purchase & quantity — one per *print* format (paperback, hardback). KDP ebooks get a free ASIN automatically and don't need one.
+29. Build the ebook file via KDP's own tool — distinct from print interior layout even though both come from the same manuscript.
+30. Set final pricing across formats.
+31. Order & physically verify proof copies from both KDP and IngramSpark — the human check that catches what automated format-checks can't (print quality, binding, trim feel). Sits right before publish.
+
+**Pre-Launch**
+32. **Firm up the pub date** — the second commitment; #16 was the first (tentative) one.
+33. Build & activate the ARC team — sequenced first in this phase (longest lead time). *(lead-time flag)* Needs inline teaching for first-timers (§ 3 Pen-behavior) — a bare checkbox is useless without it.
+34. Continue list-building (started at #17) at higher intensity.
+35. Content marketing / blogging begins — deliberately starts later than list-building since it needs a concrete asset (cover, title reveal, excerpt) to be about.
+36. Ebook preorder goes live.
+37. Secure early/editorial reviews — distinct from ARC reader reviews.
+38. Final sprint (last 1–2 weeks) — countdown emails, reminder posts.
+
+**Launch**
+39. *(Framing note, not a milestone: launch is a sequence culminating in "click publish," not just a countdown window — keep that framing explicit in copy.)*
+40. Click publish.
+41. Verify live and correct on Amazon and IngramSpark — *before* announcing anything.
+42. Announce — social media.
+43. Announce — blog post.
+44. Announce — email list.
+45. Update the author website from "preorder" to "available now" — easy to forget; worth its own reminder specifically on launch day.
+
+**Post-Launch & Growth**
+46. Marketing push begins with changed messaging — shifts from pre-launch anticipation copy to reader-response/"it's here" energy. Same channels, different copy template than Pre-Launch's.
+47. Order author copies — physical stock for signings, gifts, direct sales. Distinct from the proof copies ordered in Production (#31).
+48. *(Confirmed, no change: this phase tapers, doesn't close — the model's open-ended structure is already right.)*
 
 ---
 
@@ -235,6 +303,10 @@ The primary action the owner sees inside a Milestone. Mapped from 2.0.
 | **Approve a Deliverable** *(candidate new type)* | Author signs off on a Collaborator's returned work. | Review → Approve / Request changes | *(new — could also be modeled as a Form)* |
 
 **Request a Service** is the highest-value reframing: it is structurally identical to "Request an Observation" (owner requests → other party performs → result attaches to the Milestone), and it is the natural insertion point for phase-scoped Collaborators — and, later, a **marketplace** to hire them.
+
+**Decision-point milestones (ISBN, trim size) don't need a fifth type.** The gap analysis (§ 2 item H) flags ISBN as "a real decision point with consequences, not a flat checkbox." Rather than add a new Requirement Type — which would touch the locked four-type object model — these are modeled as `complete_activity_outside` milestones whose `instructions` carry the pros/cons framing, authored by Pen and surfaced proactively before the author acts (§ 8). This keeps the object model's four types intact; flagged in § 21 as a judgment call worth revisiting if more decision-shaped milestones turn up.
+
+**Conditional and repeating milestones are a milestone-level concern, not a Requirement Type concern.** Whether a milestone appears at all (author website, § 5.1 #18) or runs once per chapter instead of once per phase (revision/copyedit passes, § 5.1 #5, #7, #19) is orthogonal to which Requirement Type it carries. See § 21 for the open schema question on per-chapter repetition.
 
 ---
 
@@ -259,10 +331,18 @@ The AI is both a **creation method** and an **always-on guide** — the two role
 
 - **Creation:** conversationally gathers Book Details, publishing path, budget, and genre, then generates the Phase/Milestone structure from the matching Template. Reviewed through the standard cycle model.
 - **Ongoing guidance:** at each phase/milestone, explains the step, recommends the next action, and surfaces the well-known pitfalls (rushing the timeline; formatting before editing; skipping the ARC team; launching with no email list).
-- **Budget-aware recommendations:** given the Author's budget, recommends DIY vs. hire per milestone, and suggests where money is best spent.
+- **Budget-aware recommendations:** given the Author's budget, recommends DIY vs. hire per milestone, and suggests where money is best spent. **For cover/illustration work specifically, the nudge weighs interior illustration density, not genre alone** — a heavily-illustrated chapter book and a plain-text novel in the same genre warrant different DIY-vs-hire defaults.
 - **Responds to Pending Actions** with guidance and nudges (the "coach responds to pending actions" behavior).
+- **Teaches concepts inline where a bare checkbox would fail a first-timer**, rather than assuming prior knowledge:
+  - **ARC teams** — what one is, why timing matters, how to run one (§ 5.1 #33).
+  - **Building an email list from zero** — concrete tactics, not just "grow your list" (§ 5.1 #17, #34).
+  - **Free vs. purchased ISBN** — raised *proactively*, before the author embeds anything in files, since switching later means redoing every affected file (§ 5.1 #27).
+- **Periodically re-confirms the tentative pub date** in ongoing coaching ("still aiming for around [date]?") rather than asking once at creation and treating it as fixed — it isn't firm until § 5.1 #32.
+- **Frames AI-assisted revision and copyedit milestones (§ 5.1 #7, #19) with explicit boundary language:** AI is a feedback and thinking partner, never the author of the work, and never a substitute for a professional pass when budget allows.
 - **Boundary:** the AI guides and recommends; it does not deliver human specialist work. AI-coach and human-Collaborators coexist within the same cycle.
 - **Constraint (from 2.0):** must not create a parallel hierarchy or promote Requirement-level actions to cycle-level objects.
+
+*Folded in from the grill-session gap analysis, § 3 (Pen-behavior changes) — see [Book_Cycles_Gap_Analysis_Grill_Session.md](./Book_Cycles_Gap_Analysis_Grill_Session.md).*
 
 ---
 
@@ -309,6 +389,9 @@ The genuine departures — what a book-specific tool must do that the coaching t
 | Series / multi-book | How related books (series, backlist) relate across cycles. |
 | Monetization | B2C pricing model; marketplace economics; AI (OpenAI) cost model. |
 | Requirement auto-completion | Which Requirement Types auto-complete their Milestone (form submitted, file uploaded, preorder link validated). |
+| Repeat-per-chapter milestones | Whether "repeats per chapter" (§ 5.1 #5, #7, #19) is a first-class schema feature — a milestone that auto-generates one instance per chapter — versus the author manually duplicating a milestone. Not resolved in the grill session. |
+| Genre → milestone catalog scope | Beyond a genre-specific milestone list, the catalog needs genre-specific **beta-survey templates** (§ 5.1 #10) and genre-specific **illustration-density guidance** (§ 8 DIY-vs-hire nudge). |
+| Generalizing beyond fiction/chapter books | The § 5.1 catalog maps one author's process for a fiction chapter book. Worth sanity-checking whether nonfiction, memoir, or a co-authored book follow a meaningfully different arc before treating it as universal. |
 
 ---
 

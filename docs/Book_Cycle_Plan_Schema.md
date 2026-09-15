@@ -15,8 +15,15 @@ Two things follow: the formal JSON Schema (what engineering validates against), 
 - `owner.kind` may be **`unassigned`** — this is how a recommended *hire* is represented when the author hasn't named a collaborator yet.
 - `provision` (`diy` / `hire` / `n/a`) captures the budget-driven recommendation for production jobs.
 - `due_date` is **back-planned from `target_launch_date`**; `depends_on` is **advisory only** (no hard sequencing — matches the "no enforced dependencies" decision).
-- `warnings[]` carries author-facing flags (e.g., a launch date too tight for the work), surfaced in the preview.
+- `warnings[]` carries author-facing flags (e.g., a launch date too tight for the work, or a lead-time-sensitive milestone like illustration, ARC team formation, or IngramSpark↔KDP scheduling), surfaced in the preview.
+- **Conditional milestones are a Plan Generation-time behavior, not a schema field.** Pen asks during intake (e.g., "do you already have an author website?") and simply omits the milestone from the emitted plan when it isn't needed — the same way `starts_here` already governs which phases appear. No `conditional_on` field; a milestone the schema doesn't include never existed for this cycle.
 - Reflection prompts are **author-only**.
+- A grill-session gap analysis of one author's real production process surfaced several candidate fields not yet added here, pending your review — see [Book_Cycles_Gap_Analysis_Grill_Session.md](./Book_Cycles_Gap_Analysis_Grill_Session.md) and the open proposals below. Deliberately **not** added: a first-class "repeat per chapter" milestone feature (§4 of that doc leaves it unresolved), and a fifth Requirement Type for decision-point milestones (ISBN, trim size use the existing `complete_activity_outside` type instead — see the Functionality Spec § 6).
+
+### Proposed (not yet in the schema below — pending approval)
+
+- **`book.trim_size`** (`string | null`): the print trim size / manuscript template the author picks as an early Setup Task (e.g. a specific KDP template). Would let the Production-phase "interior formatting" milestone reference a decision already made instead of re-asking. Not yet added.
+- **`book.target_launch_date_confirmed`** (`boolean`, default `false`): whether the launch date is still a placeholder or has been firmed up. `target_launch_date` would stay required either way (the timeline formula needs *a* date to compute ranges); this flag would just track whether Pen should keep re-confirming it in ongoing coaching or treat it as locked. Not yet added.
 
 ## JSON Schema (Draft 2020-12)
 
@@ -146,7 +153,7 @@ Two things follow: the formal JSON Schema (what engineering validates against), 
 
 ## Example output (abridged — a self-published children's picture book)
 
-Shows the features that matter: the plan starts at Writing (`starts_here`), Production runs **parallel tracks** with the illustration and cover as **hires** (one `unassigned`), formatting DIY, ISBN as an outside activity, an **approval-required** cover milestone, a linked draft manuscript, back-planned due dates, and a **warning**. Milestones are trimmed to representative ones per phase.
+Shows the features that matter: the plan starts at Writing (`starts_here`), Production runs **parallel tracks** with the illustration and cover as **hires** (one `unassigned`), formatting DIY, an ISBN decision-plus-purchase pair as outside activities, an **approval-required** cover milestone, a **conditional** author-website milestone, a linked draft manuscript, back-planned due dates, a tentative (unconfirmed) launch date, and **warnings** for two lead-time-sensitive milestones (illustration; ARC team). Milestones are trimmed to representative ones per phase.
 
 ```json
 {
@@ -185,6 +192,18 @@ Shows the features that matter: the plan starts at Writing (`starts_here`), Prod
           "owner": { "kind": "collaborator", "collaborator_role": "beta_reader" },
           "requirement": { "type": "request_a_service", "brief": "Read for pacing and read-aloud rhythm." },
           "due_date": "2026-12-15", "status": "in_progress"
+        },
+        {
+          "id": "m_write_front_back_matter", "name": "Draft front/back matter content",
+          "owner": { "kind": "author" },
+          "requirement": { "type": "attach_a_file", "auto_complete_on": "file_uploaded" },
+          "due_date": "2027-01-10", "status": "in_progress"
+        },
+        {
+          "id": "m_write_website", "name": "Create an author website",
+          "owner": { "kind": "author" }, "provision": "diy",
+          "requirement": { "type": "complete_activity_outside", "instructions": "Stand up a simple site with a sign-up form." },
+          "due_date": "2027-01-15", "status": "in_progress"
         }
       ]
     },
@@ -225,16 +244,35 @@ Shows the features that matter: the plan starts at Writing (`starts_here`), Prod
           "depends_on": ["m_prod_illustration"]
         },
         {
-          "id": "m_prod_isbn", "name": "Purchase & assign ISBN",
+          "id": "m_prod_isbn_decision", "name": "ISBN decision: free vs. purchased",
           "track": "publishing", "owner": { "kind": "author" },
-          "requirement": { "type": "complete_activity_outside", "instructions": "Buy from Bowker (US); assign one per format." },
-          "due_date": "2027-04-01", "status": "in_progress"
+          "requirement": { "type": "complete_activity_outside", "instructions": "Free (KDP-assigned) vs. purchased (Bowker, portable across vendors): weigh before any file embeds one — switching later means redoing every file it touches." },
+          "due_date": "2027-03-20", "status": "in_progress"
+        },
+        {
+          "id": "m_prod_isbn_purchase", "name": "ISBN purchase & quantity",
+          "track": "publishing", "owner": { "kind": "author" },
+          "requirement": { "type": "complete_activity_outside", "instructions": "One ISBN per print format (paperback, hardcover). KDP ebooks get a free ASIN automatically and don't need one." },
+          "due_date": "2027-04-01", "status": "in_progress",
+          "depends_on": ["m_prod_isbn_decision"]
+        },
+        {
+          "id": "m_prod_proof_copies", "name": "Order & verify proof copies",
+          "track": "publishing", "owner": { "kind": "author" },
+          "requirement": { "type": "complete_activity_outside", "instructions": "Order from both KDP and IngramSpark; check print quality, binding, and trim feel before publishing." },
+          "due_date": "2027-04-20", "status": "in_progress"
         }
       ]
     },
     {
       "key": "pre_launch", "name": "Pre-Launch", "order": 4, "type": "sprint",
       "milestones": [
+        {
+          "id": "m_pre_arc_team", "name": "Build & activate the ARC team",
+          "owner": { "kind": "author" },
+          "requirement": { "type": "complete_activity_outside", "instructions": "Recruit and onboard early readers ahead of launch; Pen explains what an ARC team is and why timing matters for first-timers." },
+          "due_date": "2027-04-10", "status": "in_progress"
+        },
         {
           "id": "m_pre_preorder", "name": "Set up ebook preorder",
           "owner": { "kind": "author" },
@@ -272,7 +310,9 @@ Shows the features that matter: the plan starts at Writing (`starts_here`), Prod
     { "audience": "author", "prompt": "What are the next steps for The Lantern Fox to be successful?", "response_type": "free_text" }
   ],
   "warnings": [
-    "Illustration is the longest lead item for a picture book — the schedule assumes you commission it right after the copyedit. Slipping it will move the launch date."
+    "Illustration is the longest lead item for a picture book — the schedule assumes you commission it right after the copyedit. Slipping it will move the launch date.",
+    "Build the ARC team as early as possible in Pre-Launch — recruiting and onboarding readers takes longer than it looks, and a late start shrinks how many reviews land by launch.",
+    "Your target launch date is still tentative — Pen will check in as Pre-Launch approaches to help firm it up."
   ]
 }
 ```
@@ -287,6 +327,7 @@ Shows the features that matter: the plan starts at Writing (`starts_here`), Prod
 ## Open items to confirm with engineering
 
 - **Dates & timezone:** `due_date` uses calendar dates (`YYYY-MM-DD`); confirm the back-planning service and the author's timezone handling.
-- **Genre → milestone library:** the AI needs a per-genre catalog of candidate milestones to draw from (esp. the children's illustration track and print-vs-ebook differences). That catalog is the template schema this depends on.
-- **Budget → provision thresholds:** where the DIY-vs-hire recommendation logic lives (in the model's reasoning vs. a rules service the model is told about).
-- **Versioning:** `schema_version` is `"1.0"`; decide the migration path when V2 adds fields (e.g., audiobook production milestones, marketplace hiring).
+- **Genre → milestone library:** the AI needs a per-genre catalog of candidate milestones to draw from (esp. the children's illustration track and print-vs-ebook differences), **plus genre-specific beta-survey templates and genre-specific illustration-density guidance** (folded in from the gap analysis, § 4). That catalog is the template schema this depends on.
+- **Budget → provision thresholds:** where the DIY-vs-hire recommendation logic lives (in the model's reasoning vs. a rules service the model is told about); for cover/illustration work this now also factors interior illustration density, not just genre.
+- **Repeat-per-chapter milestones:** unresolved — whether to add a first-class schema construct (a milestone that expands into one instance per chapter) versus documenting it in `description` as done here. Affects revision, deep-revision, and copyedit milestones.
+- **Versioning:** `schema_version` is `"1.0"`; decide the migration path when V2 adds fields (e.g., audiobook production milestones, marketplace hiring, and — if the repeat-per-chapter question above resolves toward a schema construct — a `milestone.repeat` field).
