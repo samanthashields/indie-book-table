@@ -7,7 +7,7 @@ import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { PhaseEditor } from "@/components/phase-editor";
+import { PhaseEditor, standardPhases } from "@/components/phase-editor";
 import { supabase } from "@/integrations/supabase/client";
 import type { TemplatePhase } from "@/lib/template-data";
 
@@ -72,7 +72,7 @@ function AdminTemplates() {
         title: draft.title.trim(),
         description: draft.description.trim() || null,
         genre: draft.genre.trim() || null,
-        phases: [],
+        phases: standardPhases,
         published: false,
         position: next,
       });

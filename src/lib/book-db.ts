@@ -74,6 +74,7 @@ type PhaseRow = {
   status: string;
   suggested_start: string | null;
   suggested_end: string | null;
+  hidden: boolean;
 };
 
 export type BookSummary = {
@@ -238,6 +239,7 @@ export function useBookTree(bookId: string) {
         mode: (phase.type === "launch-window" ? "Launch window" : phase.type === "loop" ? "Loop" : "Sprint") as Phase["mode"],
         summary: ((typedBook.metadata as Record<string, Record<string, string> | undefined>)?.["phaseSummaries"]?.[phase.key]) ?? "",
         milestones: typedMilestoneRows.filter((m) => m.phase_id === phase.id).map(milestoneToUi),
+        hidden: phase.hidden,
       }));
       const lastActivityAt = typedMilestoneRows.length > 0 ? new Date(Math.max(...typedMilestoneRows.map((m) => new Date(m.updated_at).getTime()))) : null;
       const bookNeedsFollowUp = needsFollowUp({
@@ -344,6 +346,7 @@ export function useCreateBookCycle() {
             suggested_start: range?.start ? range.start.toISOString().slice(0, 10) : null,
             suggested_end: range?.end ? range.end.toISOString().slice(0, 10) : null,
             tracks: tracks.length > 0 ? tracks : null,
+            hidden: phase.hidden ?? false,
           })
           .select("id")
           .single();
