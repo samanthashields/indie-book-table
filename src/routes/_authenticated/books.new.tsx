@@ -16,7 +16,7 @@ import type { Answers } from "@/lib/coach-intake";
 import { useCurrentUser } from "@/lib/use-current-user";
 import { useBooks, useCreateBookCycle, useTemplates } from "@/lib/book-db";
 import type { TemplatePhase } from "@/lib/template-data";
-import { PHASE_DEFS } from "@/lib/phase-timeline";
+import { PHASE_DEFS, suggestPhaseRanges } from "@/lib/phase-timeline";
 import type { ManuscriptStatus } from "@/lib/phase-timeline";
 import { requirementLabel } from "@/lib/book-data";
 import { cn } from "@/lib/utils";
@@ -196,6 +196,19 @@ function CreateBook() {
     })),
   }));
 
+  // One merged warnings channel: Pen's own plan-specific flags, plus a client-side schedule
+  // feasibility check against whatever launch date is currently set (matches the same check
+  // useCreateBookCycle runs after creation, surfaced here before the author commits to it).
+  const effectiveDate = coachDate || coachAnswers["launchDate"] || "";
+  const feasibilityWarning = (() => {
+    if (!effectiveDate) return null;
+    const target = new Date(`${effectiveDate}T00:00:00`);
+    if (Number.isNaN(target.getTime())) return null;
+    const illustrated = /picture book/i.test(coachAnswers["genre"] ?? "");
+    return suggestPhaseRanges(new Date(), target, toManuscriptStatus(coachAnswers["status"]), illustrated).warnings[0] ?? null;
+  })();
+  const planWarnings = [...(plan?.warnings ?? []).filter(Boolean), ...(feasibilityWarning ? [feasibilityWarning] : [])];
+
   if (!isPaid) {
     return (
       <AppShell coachContext="create">
@@ -229,7 +242,7 @@ function CreateBook() {
             {isStreaming && <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />Pen is writing this now. Phases appear as they arrive.</p>}
             {plan.summary && <p className="mt-2 text-sm leading-6 text-muted-foreground">{plan.summary}</p>}
             {plan.budgetNote && <p className="mt-4 rounded-xl bg-amber/15 p-4 text-sm leading-6">{plan.budgetNote}</p>}
-            {(plan.pitfalls?.length ?? 0) > 0 && <ul className="mt-4 space-y-2 text-sm leading-6 text-muted-foreground">{plan.pitfalls!.filter(Boolean).map((pitfall) => <li key={pitfall}>{pitfall}</li>)}</ul>}
+            {planWarnings.length > 0 && <ul className="mt-4 space-y-2 text-sm leading-6 text-muted-foreground">{planWarnings.map((warning) => <li key={warning}>{warning}</li>)}</ul>}
             <ol className="mt-8 space-y-6">
               {planPhases.map((phase, index) => <li key={phase.name} className="animate-in fade-in slide-in-from-bottom-2 rounded-2xl border border-border p-5 duration-500">
                 <div className="flex items-baseline gap-3">
