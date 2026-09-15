@@ -30,7 +30,7 @@ Do not reintroduce retired working names ("Book Coach AI", "Indie Author AI") or
 
 `Book Cycle → Phase → Milestone → Requirement`. Each Milestone has exactly **one** Requirement (1:1).
 
-- **Six fixed phases:** `writing_development`, `editing`, `production`, `pre_launch`, `launch`, `post_launch_growth`.
+- **Six fixed phases (identity, count, and order are locked):** `writing_development`, `editing`, `production`, `pre_launch`, `launch`, `post_launch_growth`. These `phase.key` values, their formula weights, and their default milestone content are fixed — never add, remove, or invent a phase. What *is* author-editable, as a presentation layer only: a phase's **display name** (rename), its **display order** (reorder in the UI), and whether it's **hidden**. Hiding a phase never deletes its data or removes it from the timeline math — only what's shown changes.
 - **Phase types:** `loop` (feedback-driven) or `sprint` (checklist-driven). Production runs **parallel tracks** (text/design/publishing).
 - **Four requirement types:** `request_a_service`, `attach_a_file`, `complete_activity_outside`, `approve_a_deliverable`.
 - **Milestone owner.kind:** `author` | `collaborator` | `unassigned`.
