@@ -6,27 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { phaseStyle } from "@/lib/phase-style";
+import { PHASE_DEFS } from "@/lib/phase-timeline";
+import { REQUIREMENT_TYPES, requirementLabel } from "@/lib/book-data";
 import type { RequirementType } from "@/lib/book-data";
 import type { TemplatePhase } from "@/lib/template-data";
-
-const requirementTypes: RequirementType[] = [
-  "Request a Service",
-  "Attach a File",
-  "Complete an Activity Outside the Platform",
-  "Approve a Deliverable",
-];
 
 const modes: TemplatePhase["mode"][] = ["Loop", "Sprint", "Launch window"];
 
 /** The six phases every standard book cycle uses, ready to drop into a template. */
-export const standardPhases: TemplatePhase[] = [
-  { id: "writing", name: "Writing & Development", mode: "Loop", summary: "Shape the manuscript, test the premise, and revise with intention.", milestones: [] },
-  { id: "editing", name: "Editing", mode: "Loop", summary: "Move from structural clarity to clean, confident prose.", milestones: [] },
-  { id: "production", name: "Production", mode: "Sprint", summary: "Turn the manuscript into a book people can hold and read.", milestones: [] },
-  { id: "prelaunch", name: "Pre-Launch", mode: "Sprint", summary: "Prepare the listing, early readers, and a realistic launch plan.", milestones: [] },
-  { id: "launch", name: "Launch", mode: "Launch window", summary: "Publish, verify every storefront, and invite the first readers.", milestones: [] },
-  { id: "growth", name: "Post-Launch & Growth", mode: "Loop", summary: "Learn from the launch and build steady readership.", milestones: [] },
-];
+export const standardPhases: TemplatePhase[] = PHASE_DEFS.map((def) => ({ id: def.key, name: def.name, mode: def.mode, summary: def.summary, milestones: [] }));
 
 const slugId = (value: string) =>
   `${value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "phase"}-${Math.random().toString(36).slice(2, 6)}`;
@@ -76,7 +64,7 @@ export function PhaseEditor({ phases, onChange }: { phases: TemplatePhase[]; onC
     onChange(
       phases.map((phase) =>
         phase.id === phaseId
-          ? { ...phase, milestones: [...phase.milestones, { name: "New milestone", requirement: "Attach a File" as RequirementType, note: "" }] }
+          ? { ...phase, milestones: [...phase.milestones, { name: "New milestone", requirement: "attach_a_file" as RequirementType, note: "" }] }
           : phase,
       ),
     );
@@ -139,7 +127,7 @@ export function PhaseEditor({ phases, onChange }: { phases: TemplatePhase[]; onC
                       value={milestone.requirement}
                       onChange={(event) => patchMilestone(phase.id, milestoneIndex, { requirement: event.target.value as RequirementType })}
                     >
-                      {requirementTypes.map((type) => <option key={type} value={type}>{type}</option>)}
+                      {REQUIREMENT_TYPES.map((type) => <option key={type} value={type}>{requirementLabel[type]}</option>)}
                     </select>
                     <Button variant="ghost" size="icon" aria-label={`Remove ${milestone.name}`} onClick={() => removeMilestone(phase.id, milestoneIndex)}><Trash2 /></Button>
                   </li>

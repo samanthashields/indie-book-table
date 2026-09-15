@@ -44,10 +44,10 @@ export const planFormat = {
                   requirement: {
                     type: "string",
                     enum: [
-                      "Request a Service",
-                      "Attach a File",
-                      "Complete an Activity Outside the Platform",
-                      "Approve a Deliverable",
+                      "request_a_service",
+                      "attach_a_file",
+                      "complete_activity_outside",
+                      "approve_a_deliverable",
                     ],
                   },
                   recommendation: { type: "string" },

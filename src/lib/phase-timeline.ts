@@ -1,18 +1,30 @@
 export type ManuscriptStatus = "drafting" | "first_draft_done" | "edited";
 
-export type PhaseKey = "writing" | "editing" | "production" | "prelaunch" | "launch" | "growth";
+export type PhaseKey = "writing_development" | "editing" | "production" | "pre_launch" | "launch" | "post_launch_growth";
 
-const WEIGHTS: Record<"writing" | "editing" | "production" | "prelaunch", number> = {
-  writing: 0.356,
+export type PhaseDef = { key: PhaseKey; name: string; mode: "Loop" | "Sprint" | "Launch window"; summary: string };
+
+/** The six phases every book cycle uses, in order. The single source of truth for phase identity — everything that needs a phase's id/name/mode/summary should build from this instead of hardcoding its own copy. */
+export const PHASE_DEFS: PhaseDef[] = [
+  { key: "writing_development", name: "Writing & Development", mode: "Loop", summary: "Shape the manuscript, test the premise, and revise with intention." },
+  { key: "editing", name: "Editing", mode: "Loop", summary: "Move from structural clarity to clean, confident prose." },
+  { key: "production", name: "Production", mode: "Sprint", summary: "Turn the manuscript into a book people can hold and read." },
+  { key: "pre_launch", name: "Pre-Launch", mode: "Sprint", summary: "Prepare the listing, early readers, and a realistic launch plan." },
+  { key: "launch", name: "Launch", mode: "Launch window", summary: "Publish, verify every storefront, and invite the first readers." },
+  { key: "post_launch_growth", name: "Post-Launch & Growth", mode: "Loop", summary: "Learn from the launch and build steady readership." },
+];
+
+const WEIGHTS: Record<"writing_development" | "editing" | "production" | "pre_launch", number> = {
+  writing_development: 0.356,
   editing: 0.171,
   production: 0.171,
-  prelaunch: 0.302,
+  pre_launch: 0.302,
 };
 
 const ACTIVE_FROM: Record<ManuscriptStatus, (keyof typeof WEIGHTS)[]> = {
-  drafting: ["writing", "editing", "production", "prelaunch"],
-  first_draft_done: ["editing", "production", "prelaunch"],
-  edited: ["production", "prelaunch"],
+  drafting: ["writing_development", "editing", "production", "pre_launch"],
+  first_draft_done: ["editing", "production", "pre_launch"],
+  edited: ["production", "pre_launch"],
 };
 
 const day = 86400000;
@@ -42,10 +54,10 @@ export function suggestPhaseRanges(
 
   const B = W - 14;
   const floors: Record<keyof typeof WEIGHTS, number> = {
-    writing: 21,
+    writing_development: 21,
     editing: 21,
     production: illustrated ? 90 : 30,
-    prelaunch: 60,
+    pre_launch: 60,
   };
 
   const active = ACTIVE_FROM[manuscriptStatus];
@@ -70,7 +82,7 @@ export function suggestPhaseRanges(
     cursor = end;
   }
   ranges.launch = { start: addDays(pub, -14), end: addDays(pub, 21), fixed: true };
-  ranges.growth = { start: addDays(pub, 22), end: null, fixed: true };
+  ranges.post_launch_growth = { start: addDays(pub, 22), end: null, fixed: true };
 
   return { valid: true, ranges, warnings, shortfall, marketingStartBy: addDays(pub, -Math.round(B * 0.5)) };
 }

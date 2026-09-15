@@ -1,11 +1,9 @@
+import type { RequirementType } from "@/lib/book-data";
+
 export type GeneratedMilestone = {
   name: string;
   description: string;
-  requirement:
-    | "Request a Service"
-    | "Attach a File"
-    | "Complete an Activity Outside the Platform"
-    | "Approve a Deliverable";
+  requirement: RequirementType;
   recommendation: string;
   approvalRequired: boolean;
   due: string | null;

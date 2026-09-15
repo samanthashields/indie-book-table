@@ -15,6 +15,8 @@ import { toPayload } from "@/lib/coach-intake";
 import { useCurrentUser } from "@/lib/use-current-user";
 import { useBooks, useCreateBookCycle, useTemplates } from "@/lib/book-db";
 import type { TemplatePhase } from "@/lib/template-data";
+import { PHASE_DEFS } from "@/lib/phase-timeline";
+import { requirementLabel } from "@/lib/book-data";
 import { cn } from "@/lib/utils";
 
 type PathId = "coach" | "template" | "scratch";
@@ -166,13 +168,13 @@ function CreateBook() {
   }
 
   const planPhases: TemplatePhase[] = phases.filter((phase) => Boolean(phase?.name)).map((phase, index) => ({
-    id: ["writing", "editing", "production", "prelaunch", "launch", "growth"][index] ?? `phase-${index}`,
+    id: PHASE_DEFS[index]?.key ?? `phase-${index}`,
     name: phase.name!,
     mode: (phase.mode ?? "Sprint") as TemplatePhase["mode"],
     summary: phase.summary ?? "",
     milestones: (phase.milestones ?? []).filter((milestone) => Boolean(milestone?.name)).map((milestone) => ({
       name: milestone.name!,
-      requirement: (milestone.requirement ?? "Attach a File") as TemplatePhase["milestones"][number]["requirement"],
+      requirement: (milestone.requirement ?? "attach_a_file") as TemplatePhase["milestones"][number]["requirement"],
       note: milestone.description ?? milestone.recommendation ?? "",
     })),
   }));
@@ -223,7 +225,7 @@ function CreateBook() {
                   {phase.milestones.map((milestone) => <li key={milestone.name} className="animate-in fade-in rounded-xl bg-secondary p-4 duration-500">
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                       <p className="font-semibold">{milestone.name}</p>
-                      <p className="text-xs text-muted-foreground">{milestone.requirement}</p>
+                      <p className="text-xs text-muted-foreground">{requirementLabel[milestone.requirement]}</p>
                     </div>
                     {milestone.note && <p className="mt-1 text-sm leading-6 text-muted-foreground">{milestone.note}</p>}
                   </li>)}
