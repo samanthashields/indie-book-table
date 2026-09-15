@@ -49,6 +49,8 @@ type MilestoneRow = {
   description: string | null;
   owner: string | null;
   owner_user_id: string | null;
+  owner_kind: string;
+  owner_collaborator_id: string | null;
   requirement_type: string | null;
   instructions: string | null;
   resources: unknown[];
@@ -104,6 +106,8 @@ const milestoneToUi = (row: MilestoneRow): Milestone => ({
   name: row.name,
   description: row.description ?? "",
   owner: row.owner ?? "Author",
+  ownerKind: (row.owner_kind as Milestone["ownerKind"]) ?? "author",
+  ownerCollaboratorId: row.owner_collaborator_id,
   requirement: (row.requirement_type ?? "attach_a_file") as RequirementType,
   status: (row.status as Milestone["status"]) ?? "Not started",
   approval: row.approval_required,
@@ -348,6 +352,8 @@ export function useUpdateMilestone(bookId: string) {
       if (patch.name !== undefined) update.name = patch.name;
       if (patch.description !== undefined) update.description = patch.description;
       if (patch.owner !== undefined) update.owner = patch.owner;
+      if (patch.ownerKind !== undefined) update.owner_kind = patch.ownerKind;
+      if (patch.ownerCollaboratorId !== undefined) update.owner_collaborator_id = patch.ownerCollaboratorId;
       if (patch.requirement !== undefined) update.requirement_type = patch.requirement;
       if (patch.status !== undefined) {
         update.status = statusToDb[patch.status];
