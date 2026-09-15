@@ -1854,6 +1854,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      catalog_author_email: { Args: { _author_id: string }; Returns: string }
       catalog_author_is_published: {
         Args: { _author_id: string }
         Returns: boolean
