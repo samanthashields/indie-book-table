@@ -20,25 +20,32 @@ Three schema-shaped things coexisted with no single source of truth going in: ha
 
 ## Decisions
 
-### Group 1 — spelling & encoding (resolved; code changes to match docs)
-- Phase keys: code adopts the docs' spelling (`writing_development`, `pre_launch`, `post_launch_growth`, etc.).
-- Requirement types: code stores the docs' snake_case as the source of truth; human-readable labels can be derived for display only.
-- Naming: "Book Coach"/"Book Coach AI" → **Pen** everywhere, including the live create-flow system prompt text. Remaining "Indie Table" spots → **"The Indie Book Table."**
-- Canonical schema shape: the **live Supabase DB schema is canonical**. Sample data and the AI-generation output shape must conform to it, not the reverse.
+### Group 1 — spelling & encoding (decided; partly landed)
+- Phase keys: code adopts the docs' spelling (`writing_development`, `pre_launch`, `post_launch_growth`, etc.). **Pending** — needs the phase-key data migration (see `Book_Cycles_Schema_Migration_Spec.md`) plus the Chunk 2 code pass replacing the 6 duplicated literal key arrays.
+- Requirement types: code stores the docs' snake_case as the source of truth; human-readable labels can be derived for display only. **Pending** — same migration + Chunk 2 pass.
+- Naming: "Book Coach"/"Book Coach AI" → **Pen** everywhere, including the live create-flow system prompt text. Remaining "Indie Table" spots → **"The Indie Book Table."** **Done** (PR #1, merged 2026-09-15) — the naming half of Group 1. "Indie Table" spelling not yet addressed.
+- Canonical schema shape: the **live Supabase DB schema is canonical**. Sample data and the AI-generation output shape must conform to it, not the reverse. Standing rule, applies as Chunk 2 touches each shape.
 
-### Group 2 — real bugs (resolved; fix regardless of any doc question)
-- Persist `budget` and `formats` instead of discarding them after plan generation.
-- Ensure `manuscript_status` is actually collected on every cycle-creation path (template and scratch-built).
-- Resolve the duplicate Post-Launch Reflection flow into one.
+### Group 2 — real bugs (decided; not yet landed)
+- Persist `budget` and `formats` instead of discarding them after plan generation. **Pending** — `formats` also needs its schema column (see migration spec); `budget` already has one, this is a pure code fix.
+- Ensure `manuscript_status` is actually collected on every cycle-creation path (template and scratch-built). **Pending** — already has a schema home (`books.metadata.manuscriptStatus`), this is a pure code fix.
+- Resolve the duplicate Post-Launch Reflection flow into one. **Pending** — pure code merge, no schema needed.
 
-### Group 3 — phase editability (resolved)
-The six phase keys, their formula weights, and their default milestone content are **locked** — never added, removed, or invented. What's author-editable is presentation only: **display name** (rename), **display order** (reorder), and **hidden** (a flag). Hiding a phase never deletes its data or removes it from the timeline math — only what's shown changes. The Phase Editor must be constrained to these three operations; it currently allows freely adding/removing phase records, which must stop.
+### Group 3 — phase editability (decided; not yet landed)
+The six phase keys, their formula weights, and their default milestone content are **locked** — never added, removed, or invented. What's author-editable is presentation only: **display name** (rename), **display order** (reorder), and **hidden** (a flag). Hiding a phase never deletes its data or removes it from the timeline math — only what's shown changes. The Phase Editor must be constrained to these three operations; it currently allows freely adding/removing phase records, which must stop. **Pending** — needs the `phases.hidden` column (see migration spec) plus the Chunk 2 UI constraint.
 
-### Group 4 — designed but not built (in progress — see the rollout prompt)
+### Group 4 — designed but not built
 Structured milestone fields (`track`, `provision`, `depends_on`), a structured `owner` shape, the Setup Tasks concept, `starts_here` + phase-omission logic, the Needs Follow-Up signal, a real Resources object (replacing the dead column + ad hoc `milestone_notes`), parallel tracks, reconciling the three disconnected `warnings` concepts into one, the real 48-item milestone catalog inside actual templates (including splitting Longform into Fiction Novel + Memoir, and adding Nonfiction/How-To), and Pen's missing coaching content (illustration-density nudge, proactive ISBN framing, ARC/email-list coaching, explicit AI-boundary language).
+
+**Status:** Pen's coaching content is **done** (PR #1). The dead `generateBookPlan()` duplicate is **removed** (PR #1). Every schema piece Group 4 needs (plus Group 1/2/3's schema needs, consolidated into one pass) is now spec'd in `Book_Cycles_Schema_Migration_Spec.md`, **ready to paste into Lovable** — see that doc, and "Shape decisions" below for how Setup Tasks, Resources, and `depends_on` ended up modeled. Everything else (structural code wiring, Needs Follow-Up, warnings reconciliation, real template content) is **pending**, sequenced as Chunk 2/3 after the migration lands and syncs back.
 
 ### Resolved 2026-09-15
 - **`book.target_launch_date_confirmed` (boolean, default false)** — **approved.** Added to the Plan Schema (`Book_Cycle_Plan_Schema.md`), implements the tentative-vs-firm pub date behavior from the grill session. Still needs wiring into create-flow + the Pre-Launch "firm up the pub date" milestone (tracked under Group 4).
 - **`book.trim_size` (string | null)** — **approved.** Added to the Plan Schema as a bridge field ahead of the full Setup Tasks concept, matching the column that already exists on Book Details in code.
 - **A possible 5th Requirement Type**, for decision-point milestones (ISBN free-vs-purchased, etc.) — **kept as decided: no, not yet.** Decision-point milestones stay `complete_activity_outside` with richer instructions and Pen coaching carrying the "this is a real decision" framing. Revisit if more decision-point milestones pile up later.
 - **`milestone.conditional_on`** — confirmed reverted (see Plan Schema "Design rules": conditional milestones are a Plan Generation-time behavior, not a schema field).
+
+### Group 4 shape decisions, resolved 2026-09-15 (see `Book_Cycles_Schema_Migration_Spec.md` for the full spec)
+- **Setup Tasks** — a dedicated `book_setup_tasks` table, mirroring Milestones' shape (a trackable step with a status), tracking **completion state only**. The actual values those steps capture (budget, formats, trim_size, `target_launch_date_confirmed`) stay as columns on `books` — this table doesn't duplicate them.
+- **Resources** — a dedicated `resources` table (book-level and milestone-scoped, `kind` matching the Plan Schema's existing `file`/`link`/`manuscript_link` shape), because a milestone-scoped jsonb column can't represent a book-level-only resource. `milestone_notes` stays untouched — Resources and Notes remain separate concepts.
+- **`depends_on`** — stores real milestone UUIDs (finishing what the Plan Schema already specified: the app assigns real primary keys on instantiation), not the AI's local plan-time handles. Needs a Chunk 2 code step: map each local id to its real row id at instantiation, then rewrite `depends_on` arrays through that map. Stays advisory only — a reference to a deleted milestone should not render, not error.
