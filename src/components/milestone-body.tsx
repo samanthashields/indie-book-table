@@ -11,10 +11,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useUpdateMilestone } from "@/lib/book-db";
 import { uploadBookFile, useFileUrl } from "@/lib/book-files";
-import { REQUIREMENT_TYPES, requirementLabel } from "@/lib/book-data";
-import type { Milestone, RequirementType } from "@/lib/book-data";
+import { useCollaborators } from "@/lib/collaborators";
+import { OWNER_KINDS, REQUIREMENT_TYPES, ownerKindLabel, requirementLabel } from "@/lib/book-data";
+import type { Collaborator } from "@/lib/collaborators";
+import type { Milestone, OwnerKind, RequirementType } from "@/lib/book-data";
 
 const statuses: Milestone["status"][] = ["Not started", "In progress", "Blocked", "On hold", "Complete"];
+
+/** The owner's display text — "Author"/"Unassigned", or the named collaborator when one is set. */
+function ownerDisplay(kind: OwnerKind, collaboratorId: string | null, roster: Collaborator[]): string {
+  if (kind === "unassigned") return "Unassigned — hire";
+  if (kind === "collaborator") {
+    const match = roster.find((c) => c.id === collaboratorId);
+    return match ? match.name || match.email : "Collaborator";
+  }
+  return "Author";
+}
 
 export function RequirementAction({
   bookId,
@@ -139,6 +151,8 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
   const [attachment, setAttachment] = useState<{ path: string; name: string } | null>(null);
   const noteFile = useRef<HTMLInputElement>(null);
   const updateMilestone = useUpdateMilestone(bookId);
+  const collaborators = useCollaborators(bookId);
+  const roster = collaborators.data ?? [];
   const queryClient = useQueryClient();
   const notes = useNotes(milestone.id);
   const update = (patch: Partial<Milestone>) => setMilestone((current) => ({ ...current, ...patch }));
@@ -179,7 +193,20 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
 
   const save = () => {
     updateMilestone.mutate(
-      { id: milestone.id, patch: { name: milestone.name, description: milestone.description, owner: milestone.owner, requirement: milestone.requirement, status: milestone.status, dueIso: milestone.dueIso ?? "", approval: Boolean(milestone.approval) } },
+      {
+        id: milestone.id,
+        patch: {
+          name: milestone.name,
+          description: milestone.description,
+          ownerKind: milestone.ownerKind,
+          ownerCollaboratorId: milestone.ownerCollaboratorId,
+          owner: ownerDisplay(milestone.ownerKind, milestone.ownerCollaboratorId, roster),
+          requirement: milestone.requirement,
+          status: milestone.status,
+          dueIso: milestone.dueIso ?? "",
+          approval: Boolean(milestone.approval),
+        },
+      },
       { onSuccess: () => { setEditing(false); toast.success("Milestone saved"); }, onError: () => toast.error("Couldn’t save the milestone") },
     );
   };
@@ -210,7 +237,36 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
           <label className="block text-sm font-semibold">Milestone name<Input className="mt-2" value={milestone.name} onChange={(event) => update({ name: event.target.value })} /></label>
           <label className="block text-sm font-semibold">Description<Textarea className="mt-2 min-h-24" value={milestone.description} onChange={(event) => update({ description: event.target.value })} /></label>
           <div className="grid gap-5 sm:grid-cols-2">
-            <label className="block text-sm font-semibold">Owner<Input className="mt-2" value={milestone.owner} onChange={(event) => update({ owner: event.target.value })} /></label>
+            <label className="block text-sm font-semibold">Owner
+              <select
+                className="mt-2 h-11 w-full rounded-xl border border-input bg-card px-3 text-sm"
+                value={milestone.ownerKind}
+                onChange={(event) => {
+                  const kind = event.target.value as OwnerKind;
+                  update({ ownerKind: kind, ...(kind === "collaborator" ? {} : { ownerCollaboratorId: null }) });
+                }}
+              >
+                {OWNER_KINDS.map((kind) => <option key={kind} value={kind}>{ownerKindLabel[kind]}</option>)}
+              </select>
+            </label>
+            {milestone.ownerKind === "collaborator" && (
+              <label className="block text-sm font-semibold sm:col-span-2">Assigned collaborator
+                {roster.length > 0 ? (
+                  <select
+                    className="mt-2 h-11 w-full rounded-xl border border-input bg-card px-3 text-sm"
+                    value={milestone.ownerCollaboratorId ?? ""}
+                    onChange={(event) => update({ ownerCollaboratorId: event.target.value || null })}
+                  >
+                    <option value="">Choose a collaborator…</option>
+                    {roster.map((c) => <option key={c.id} value={c.id}>{c.name || c.email} — {c.role}</option>)}
+                  </select>
+                ) : (
+                  <p className="mt-2 text-sm font-normal text-muted-foreground">
+                    No collaborators yet. <Link to="/books/$bookId/team" params={{ bookId }} className="font-semibold text-primary underline-offset-2 hover:underline">Invite one from the Team page</Link>.
+                  </p>
+                )}
+              </label>
+            )}
             <label className="block text-sm font-semibold">Due date<Input className="mt-2" type="date" value={milestone.dueIso ?? ""} onChange={(event) => update({ dueIso: event.target.value })} /></label>
             <label className="block text-sm font-semibold">Requirement
               <select className="mt-2 h-11 w-full rounded-xl border border-input bg-card px-3 text-sm" value={milestone.requirement} onChange={(event) => update({ requirement: event.target.value as RequirementType })}>
@@ -232,7 +288,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
             <h3 className="font-serif text-2xl font-semibold">About this milestone</h3>
             <p className="mt-3 max-w-2xl leading-7 text-muted-foreground">{milestone.description || "No description yet."}</p>
             <div className="mt-5 grid gap-4 sm:grid-cols-3">
-              <div className="rounded-xl bg-inkblue/8 p-3"><UserRound className="mb-2 size-4 text-inkblue" /><p className="text-xs text-muted-foreground">Owner</p><p className="text-sm font-semibold">{milestone.owner}</p></div>
+              <div className="rounded-xl bg-inkblue/8 p-3"><UserRound className="mb-2 size-4 text-inkblue" /><p className="text-xs text-muted-foreground">Owner</p><p className="text-sm font-semibold">{ownerDisplay(milestone.ownerKind, milestone.ownerCollaboratorId, roster)}</p></div>
               <div className="rounded-xl bg-amber/15 p-3"><CalendarDays className="mb-2 size-4 text-amber" /><p className="text-xs text-muted-foreground">Due date</p><p className="text-sm font-semibold">{milestone.due ?? "Not set"}</p></div>
               <div className="rounded-xl bg-leaf/15 p-3"><Check className="mb-2 size-4 text-leaf" /><p className="text-xs text-muted-foreground">Approval</p><p className="text-sm font-semibold">{milestone.approval ? "Required" : "Not required"}</p></div>
             </div>
