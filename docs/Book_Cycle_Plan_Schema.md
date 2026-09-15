@@ -1,8 +1,8 @@
 # Book Cycle Plan Schema (`plan_schema`)
 
-The output contract for the **Book Coach AI — Plan Generation mode**. When the create flow finishes gathering answers, the AI emits one object conforming to this schema; the app instantiates a live Book Cycle from it through the standard create pipeline. This is the shared contract referenced by three documents:
+The output contract for **Pen's Plan Generation mode**. When the create flow finishes gathering answers, the AI emits one object conforming to this schema; the app instantiates a live Book Cycle from it through the standard create pipeline. This is the shared contract referenced by three documents:
 
-- **Book Coach AI — System Prompt** → Plan Generation mode outputs `{{plan_schema}}` (this).
+- **Pen — System Prompt** (`Book_Coach_AI_System_Prompt.md`) → Plan Generation mode outputs `{{plan_schema}}` (this).
 - **Create Book Cycle Conversation Spec** → §14 requires generation output to conform to this.
 - **Book Cycles Adaptation Prompt** → the app builds the cycle by instantiating this.
 
@@ -17,13 +17,10 @@ Two things follow: the formal JSON Schema (what engineering validates against), 
 - `due_date` is **back-planned from `target_launch_date`**; `depends_on` is **advisory only** (no hard sequencing — matches the "no enforced dependencies" decision).
 - `warnings[]` carries author-facing flags (e.g., a launch date too tight for the work, or a lead-time-sensitive milestone like illustration, ARC team formation, or IngramSpark↔KDP scheduling), surfaced in the preview.
 - **Conditional milestones are a Plan Generation-time behavior, not a schema field.** Pen asks during intake (e.g., "do you already have an author website?") and simply omits the milestone from the emitted plan when it isn't needed — the same way `starts_here` already governs which phases appear. No `conditional_on` field; a milestone the schema doesn't include never existed for this cycle.
+- `book.target_launch_date_confirmed` (default `false`) tracks whether the launch date is still a placeholder or has been firmed up. `target_launch_date` stays required either way (the timeline formula needs *a* date to compute ranges); this flag just tracks whether Pen should keep re-confirming it in ongoing coaching or treat it as locked. *Approved 2026-09-15 — see [Codebase_Audit_And_Reconciliation_Decisions.md](./Codebase_Audit_And_Reconciliation_Decisions.md).*
+- `book.trim_size` is the print trim size / manuscript template the author picks as an early Setup Task (e.g. a specific KDP template) — a bridge field on the `book` object ahead of the full Setup Tasks concept being built, matching the column that already exists on Book Details in code. Lets the Production-phase "interior formatting" milestone reference a decision already made instead of re-asking. *Approved 2026-09-15 — see [Codebase_Audit_And_Reconciliation_Decisions.md](./Codebase_Audit_And_Reconciliation_Decisions.md).*
 - Reflection prompts are **author-only**.
-- A grill-session gap analysis of one author's real production process surfaced several candidate fields not yet added here, pending your review — see [Book_Cycles_Gap_Analysis_Grill_Session.md](./Book_Cycles_Gap_Analysis_Grill_Session.md) and the open proposals below. Deliberately **not** added: a first-class "repeat per chapter" milestone feature (§4 of that doc leaves it unresolved), and a fifth Requirement Type for decision-point milestones (ISBN, trim size use the existing `complete_activity_outside` type instead — see the Functionality Spec § 6).
-
-### Proposed (not yet in the schema below — pending approval)
-
-- **`book.trim_size`** (`string | null`): the print trim size / manuscript template the author picks as an early Setup Task (e.g. a specific KDP template). Would let the Production-phase "interior formatting" milestone reference a decision already made instead of re-asking. Not yet added.
-- **`book.target_launch_date_confirmed`** (`boolean`, default `false`): whether the launch date is still a placeholder or has been firmed up. `target_launch_date` would stay required either way (the timeline formula needs *a* date to compute ranges); this flag would just track whether Pen should keep re-confirming it in ongoing coaching or treat it as locked. Not yet added.
+- A grill-session gap analysis of one author's real production process surfaced these fields, plus others deliberately **not** added: a first-class "repeat per chapter" milestone feature (§4 of that doc leaves it unresolved), and a fifth Requirement Type for decision-point milestones (ISBN, trim size use the existing `complete_activity_outside` type instead — see the Functionality Spec § 6).
 
 ## JSON Schema (Draft 2020-12)
 
@@ -59,6 +56,8 @@ Two things follow: the formal JSON Schema (what engineering validates against), 
         "primary_audience": { "type": "string" },
         "manuscript_status": { "enum": ["drafting", "first_draft_done", "edited"] },
         "target_launch_date": { "type": "string", "format": "date" },
+        "target_launch_date_confirmed": { "type": "boolean", "default": false, "description": "false = tentative/placeholder; flips true when the author firms it up in Pre-Launch." },
+        "trim_size": { "type": ["string", "null"], "description": "Manuscript/print template selected as an early Setup Task, applied later by the Production interior-formatting milestone." },
         "budget": { "type": ["number", "null"], "minimum": 0 },
         "goals": { "type": "array", "items": { "type": "string" } },
         "comparable_titles": { "type": "array", "items": { "type": "string" } },
@@ -170,6 +169,8 @@ Shows the features that matter: the plan starts at Writing (`starts_here`), Prod
     "primary_audience": "Picture Books (Ages 3-8)",
     "manuscript_status": "drafting",
     "target_launch_date": "2027-06-01",
+    "target_launch_date_confirmed": false,
+    "trim_size": null,
     "budget": 4000,
     "goals": ["Read-aloud favorite that builds my author brand for school visits"],
     "comparable_titles": ["The Wonderful Things You Will Be", "Ada Twist, Scientist"],
@@ -319,7 +320,7 @@ Shows the features that matter: the plan starts at Writing (`starts_here`), Prod
 
 ## Integration notes
 
-- **System prompt:** replace the `{{plan_schema}}` placeholder in the Book Coach AI system prompt with this schema, and instruct the model to return **only** a JSON object conforming to it (no prose) in Plan Generation mode.
+- **System prompt:** replace the `{{plan_schema}}` placeholder in Pen's system prompt with this schema, and instruct the model to return **only** a JSON object conforming to it (no prose) in Plan Generation mode.
 - **Validation:** the create pipeline should validate the emitted object against the schema before instantiating, and reject/repair on failure (a retry with the validation error fed back to the model works well).
 - **Template branch:** when `source: "template"`, the same schema is emitted, pre-filled from the template with the author's edits applied; set `template_id`.
 - **IDs:** `milestone.id` values are the AI's own handles for `depends_on`. The app assigns real primary keys on instantiation.

@@ -39,7 +39,7 @@ export const Route = createFileRoute("/_authenticated/books/new")({
 });
 
 const paths = [
-  { id: "coach" as const, title: "Plan with Book Coach", copy: "Talk through your book, budget, and timing. Your coach will draft the cycle.", icon: CoachMark, tint: "bg-teal/10" },
+  { id: "coach" as const, title: "Plan with Pen", copy: "Talk through your book, budget, and timing. Pen will draft the cycle.", icon: CoachMark, tint: "bg-teal/10" },
   { id: "template" as const, title: "Start from a template", copy: "Choose a genre-specific path and tailor every milestone.", icon: BookOpen, tint: "bg-amber/12" },
   { id: "scratch" as const, title: "Build from scratch", copy: "Shape each phase and milestone yourself, one at a time.", icon: MessageSquareText, tint: "bg-leaf/12" },
 ];
@@ -180,7 +180,7 @@ function CreateBook() {
   if (!isPaid) {
     return (
       <AppShell coachContext="create">
-        <PageHeading title="Plan with Book Coach" description="Planning with the coach is part of the paid plan." />
+        <PageHeading title="Plan with Pen" description="Planning with Pen is part of the paid plan." />
         <div className="max-w-2xl rounded-2xl border border-border bg-paper p-8">
           <p className="text-sm leading-7 text-muted-foreground">Your account is on the free plan, which includes every template and building a book cycle from scratch. Upgrade whenever you’d like the coach to shape the plan around your genre, budget and launch date.</p>
           <div className="mt-6 flex flex-wrap gap-3">
@@ -194,7 +194,7 @@ function CreateBook() {
 
   return (
     <AppShell coachContext="create">
-      <PageHeading title="Plan with Book Coach" description="Answer a few questions and your coach will draft the whole cycle." />
+      <PageHeading title="Plan with Pen" description="Answer a few questions and Pen will draft the whole cycle." />
 
       <div className="grid gap-8 xl:grid-cols-[1fr_300px]">
         <div className="space-y-8">
@@ -207,7 +207,7 @@ function CreateBook() {
 
           {plan && <section className="rounded-2xl border border-border bg-card p-6 shadow-xs md:p-8">
             <h3 className="font-serif text-2xl font-semibold">Your draft book cycle</h3>
-            {isStreaming && <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />Your coach is writing this now. Phases appear as they arrive.</p>}
+            {isStreaming && <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />Pen is writing this now. Phases appear as they arrive.</p>}
             {plan.summary && <p className="mt-2 text-sm leading-6 text-muted-foreground">{plan.summary}</p>}
             {plan.budgetNote && <p className="mt-4 rounded-xl bg-amber/15 p-4 text-sm leading-6">{plan.budgetNote}</p>}
             {(plan.pitfalls?.length ?? 0) > 0 && <ul className="mt-4 space-y-2 text-sm leading-6 text-muted-foreground">{plan.pitfalls!.filter(Boolean).map((pitfall) => <li key={pitfall}>{pitfall}</li>)}</ul>}
@@ -245,7 +245,7 @@ function CreateBook() {
             </div>}
           </section>}
         </div>
-        <aside className="rounded-2xl bg-teal/12 p-6"><p className="text-sm font-semibold">What your coach will do</p><ul className="mt-4 space-y-4 text-sm leading-6 text-muted-foreground"><li>Build six publishing phases around your target date.</li><li>Recommend where to do it yourself and where specialist help matters.</li><li>Keep one clear requirement for every milestone.</li></ul></aside>
+        <aside className="rounded-2xl bg-teal/12 p-6"><p className="text-sm font-semibold">What Pen will do</p><ul className="mt-4 space-y-4 text-sm leading-6 text-muted-foreground"><li>Build six publishing phases around your target date.</li><li>Recommend where to do it yourself and where specialist help matters.</li><li>Keep one clear requirement for every milestone.</li></ul></aside>
       </div>
     </AppShell>
   );

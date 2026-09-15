@@ -66,7 +66,7 @@ The source shows marketing/preorders can begin as early as 180 DBL — overlappi
 marketing_start_by = P − round(B × 0.5)   // ~when half the build window remains
 ```
 
-The Book Coach uses it to nudge **content marketing/blogging** to begin *during* Production, rather than waiting for the Pre-Launch phase to start.
+Pen uses it to nudge **content marketing/blogging** to begin *during* Production, rather than waiting for the Pre-Launch phase to start.
 
 **`list_building_start_by` — a second, earlier marker.** Folded in from the grill-session gap analysis (§ 2 item G): `marketing_start_by` fires too late for list-building specifically. Content marketing needs a concrete asset (cover, title reveal, excerpt) to be about, so it's reasonably anchored mid-Production — but lightweight list-building (a sign-up page, casual "here's what I'm working on" posts) has no such dependency and should start back in Writing & Development, distinct from `marketing_start_by`:
 
@@ -74,7 +74,7 @@ The Book Coach uses it to nudge **content marketing/blogging** to begin *during*
 list_building_start_by = start_of(writing_development)   // as early as the cycle allows
 ```
 
-The Book Coach uses this to nudge the "start lightweight list-building" milestone (Functionality Spec § 5.1 #17) at cycle kickoff, then nudge the higher-intensity continuation (§ 5.1 #34) once `marketing_start_by` is reached in Pre-Launch.
+Pen uses this to nudge the "start lightweight list-building" milestone (Functionality Spec § 5.1 #17) at cycle kickoff, then nudge the higher-intensity continuation (§ 5.1 #34) once `marketing_start_by` is reached in Pre-Launch.
 
 ## 3. Pseudocode
 
@@ -152,13 +152,13 @@ Feasible — both phases clear their floors.
 ### C) Too-tight 70-day plan, drafting from scratch → feasibility warning
 `S = 2026-09-04`, `P = 2026-11-13` → `W = 70`, `B = 56`. All four active. Ideal splits (20 / 10 / 10 / 17) fall below floors (—/21/30/60). Floored durations sum to ≈ 20 + 21 + 30 + 60 = **131 days** vs. a 56-day build window.
 
-→ `shortfall ≈ 75 days`. The Book Coach responds: *"This book needs roughly 130+ days of build time; your date gives 56. I'd set the launch around 2027-01-27, or we can compress scope — which would you like?"*
+→ `shortfall ≈ 75 days`. Pen responds: *"This book needs roughly 130+ days of build time; your date gives 56. I'd set the launch around 2027-01-27, or we can compress scope — which would you like?"*
 
 ## 5. Integration notes
 
 - **Plan schema:** each phase's computed end date becomes the back-planned `due_date` anchor for that phase's milestones; distribute milestone due dates within the phase range.
 - **Needs Follow-Up:** "today is past `phase_i.end` but the phase isn't complete" → **Behind Pace**. Approaching `P` → **Launch Approaching**.
-- **Book Coach warnings:** the `warnings[]` and `shortfall` output map directly to the create-flow's "unrealistic date" edge case and the ongoing pace-watching behavior.
+- **Pen warnings:** the `warnings[]` and `shortfall` output map directly to the create-flow's "unrealistic date" edge case and the ongoing pace-watching behavior.
 - **Genre floors:** `is_illustrated(genre)` (children's picture books, illustrated non-fiction) raises the Production floor and should also lengthen the Writing & Development allowance for illustration rounds.
 - **`list_building_start_by`:** anchors to the start of the *earliest active build phase*, not always Writing & Development — if the cycle starts at `edited` (Example B), list-building starts at Production kickoff instead, since there's no Writing & Development phase to anchor to.
 - **Recompute on change:** re-run whenever the author moves `P`, changes `manuscript_status`, or falls behind, so the ranges and the Behind Pace signal stay honest. The formula runs against a tentative `P` just as well as a firm one — early ranges are useful before the author locks in a launch date, not gated on any confirmation state.
