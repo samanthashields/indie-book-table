@@ -56,10 +56,13 @@ export function useMyCatalogAuthor() {
     queryFn: async (): Promise<CatalogAuthorRow | null> => {
       const { data, error } = await supabase
         .from("catalog_authors")
-        .select("id, name, email, instagram_handle, website, bio")
+        .select("id, name, instagram_handle, website, bio")
         .maybeSingle();
       if (error) throw error;
-      return data ?? null;
+      if (!data) return null;
+      // Email is column-restricted; owners/admins read it through the guarded function.
+      const { data: email } = await supabase.rpc("catalog_author_email", { _author_id: data.id });
+      return { ...data, email: email ?? "" };
     },
   });
 }

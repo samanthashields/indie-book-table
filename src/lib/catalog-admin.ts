@@ -46,11 +46,25 @@ export function useAdminSubmissions() {
       const { data, error } = await supabase
         .from("catalog_books")
         .select(
-          "id, title, pen_name, genre, target_audience, hook, explicit_content, cover_image_url, tags, status, removal_reason, times_featured_count, submitted_at, catalog_authors ( id, name, email )",
+          "id, title, pen_name, genre, target_audience, hook, explicit_content, cover_image_url, tags, status, removal_reason, times_featured_count, submitted_at, catalog_authors ( id, name )",
         )
         .order("submitted_at", { ascending: false });
       if (error) throw error;
-      return (data ?? []) as unknown as AdminSubmission[];
+      const rows = (data ?? []) as unknown as AdminSubmission[];
+      // Email is column-restricted; admins read it through the guarded function.
+      const authorIds = [...new Set(rows.map((row) => row.catalog_authors?.id).filter((id): id is string => Boolean(id)))];
+      const emails = new Map<string, string>();
+      await Promise.all(
+        authorIds.map(async (authorId) => {
+          const { data: email } = await supabase.rpc("catalog_author_email", { _author_id: authorId });
+          if (email) emails.set(authorId, email);
+        }),
+      );
+      return rows.map((row) =>
+        row.catalog_authors
+          ? { ...row, catalog_authors: { ...row.catalog_authors, email: emails.get(row.catalog_authors.id) ?? "" } }
+          : row,
+      );
     },
   });
 }
