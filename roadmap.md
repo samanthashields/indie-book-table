@@ -84,3 +84,10 @@
 - [x] Fit the full Pen pages safely within desktop and mobile screens
 - [x] Increase the floating Pen window height with safe screen margins
 - [x] Verify both layouts at desktop and mobile sizes
+
+## Private publish behind coming-soon gate (Sep 16)
+
+- [x] Site-wide shared-password gate + branded coming-soon page
+- [x] Password entry hidden behind a discreet admin link
+- [ ] Publish the site (gated) to the custom domain
+- [ ] At launch: remove gate + noindex, republish
