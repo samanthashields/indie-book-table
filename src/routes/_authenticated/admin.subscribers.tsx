@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Download, Search, Send, Trash2 } from "lucide-react";
+import { Download, ImageUp, Search, Send, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { supabase } from "@/integrations/supabase/client";
 import {
   deleteSubscriber,
   getWelcomeEmail,
@@ -73,8 +74,28 @@ function downloadCsv(rows: Subscriber[]) {
 function WelcomeEmailPanel() {
   const settings = useQuery({ queryKey: ["welcome-email"], queryFn: () => getWelcomeEmail() });
   const [form, setForm] = useState<WelcomeForm | null>(null);
+  const logoInput = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
   const value = form ?? (settings.data as WelcomeForm | undefined) ?? null;
   const update = (patch: Partial<WelcomeForm>) => value && setForm({ ...value, ...patch });
+
+  const pickLogo = async (file: File | undefined) => {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const name = `logo-${Date.now()}-${slugName(file.name)}`;
+      const { error } = await supabase.storage.from("email-assets").upload(name, file, { upsert: false });
+      if (error) throw error;
+      update({ logoFile: name });
+      toast.success("Logo uploaded — save to use it");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Couldn’t upload that image");
+    } finally {
+      setUploading(false);
+      if (logoInput.current) logoInput.current.value = "";
+    }
+  };
+
 
   const save = useMutation({
     mutationFn: (data: WelcomeForm) => saveWelcomeEmail({ data }),
