@@ -278,7 +278,7 @@ function CreateBook() {
                   onClick={() =>
                     create({
                       title: coachTitle.trim(),
-                      targetDate: coachDate,
+                      targetDate: effectiveDate,
                       phases: planPhases,
                       ...(coachAnswers["genre"] ? { genre: coachAnswers["genre"] } : {}),
                       manuscriptStatus: toManuscriptStatus(coachAnswers["status"]),
