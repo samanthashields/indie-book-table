@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { CalendarDays, CheckCircle2, ChevronDown, Circle, Clock3, FileText, FolderOpen, Settings2, Users } from "lucide-react";
+import { CalendarDays, CheckCircle2, ChevronDown, Circle, Clock3, FileText, FolderOpen, ListChecks, Settings2, Users } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { BookCover } from "@/components/book-cover";
 import { MilestoneBody } from "@/components/milestone-body";
@@ -67,6 +67,7 @@ function BookOverview() {
         </div>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" asChild><Link to="/books/$bookId/details" params={{ bookId }}><Settings2 />Book details</Link></Button>
+          <Button variant="outline" asChild><Link to="/books/$bookId/setup" params={{ bookId }}><ListChecks />Setup tasks</Link></Button>
           <Button variant="outline" asChild><Link to="/books/$bookId/team" params={{ bookId }}><Users />Collaborators</Link></Button>
           <Button variant="outline" asChild><Link to="/books/$bookId/resources" params={{ bookId }}><FolderOpen />Resources</Link></Button>
           <Button variant={book.status !== "complete" ? "secondary" : "outline"} asChild><Link to="/books/$bookId/reflection" params={{ bookId }}><FileText />{book.status !== "complete" ? "End book cycle & reflect" : "Reflection"}</Link></Button>
