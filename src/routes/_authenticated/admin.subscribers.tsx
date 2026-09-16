@@ -127,6 +127,44 @@ function WelcomeEmailPanel() {
         </label>
       </div>
 
+      <div className="mt-6 flex flex-wrap items-center gap-5 rounded-xl border border-border/70 bg-background/60 p-4">
+        {value.logoFile ? (
+          <img
+            src={logoPreviewUrl(value.logoFile)}
+            alt="Logo shown at the top of the welcome email"
+            className="h-16 w-auto max-w-[160px] object-contain"
+          />
+        ) : (
+          <span className="grid h-16 w-24 place-items-center rounded-lg border border-dashed border-border text-xs text-muted-foreground">
+            No logo
+          </span>
+        )}
+        <div className="min-w-0">
+          <Label className="block">Logo</Label>
+          <p className="mt-1 max-w-prose text-xs text-muted-foreground">
+            Shown centred at the top of the email. PNG or JPG, about 400 px wide.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-3">
+            <Button type="button" variant="outline" size="sm" disabled={uploading} onClick={() => logoInput.current?.click()}>
+              <ImageUp className="size-4" />
+              {uploading ? "Uploading…" : value.logoFile ? "Replace logo" : "Upload logo"}
+            </Button>
+            {value.logoFile ? (
+              <Button type="button" variant="ghost" size="sm" onClick={() => update({ logoFile: "" })}>
+                Remove
+              </Button>
+            ) : null}
+            <input
+              ref={logoInput}
+              type="file"
+              accept="image/png,image/jpeg,image/gif,image/webp"
+              className="sr-only"
+              onChange={(event) => void pickLogo(event.target.files?.[0])}
+            />
+          </div>
+        </div>
+      </div>
+
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="welcome-subject">Subject line</Label>
