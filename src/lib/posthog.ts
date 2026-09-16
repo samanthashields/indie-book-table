@@ -24,14 +24,11 @@ export function initPostHog() {
     capture_pageleave: true,
   });
   initialized = true;
-  (window as unknown as { posthog?: unknown }).posthog = posthog; // debug
 }
 
 export function capturePageview(url: string) {
   if (!initialized) return;
-  console.log("[posthog-debug] capture $pageview", url);
   posthog.capture("$pageview", { $current_url: url });
-  console.log("[posthog-debug] state", posthog.get_distinct_id?.());
 }
 
 export function captureEvent(
