@@ -88,6 +88,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      // Kept out of search engines while the coming-soon gate is up — remove at launch.
+      { name: "robots", content: "noindex, nofollow" },
       { title: "Book Cycles" },
       { name: "description", content: "A guided publishing workspace for independent authors." },
       { name: "author", content: "Book Cycles" },
