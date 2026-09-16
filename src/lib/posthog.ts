@@ -24,6 +24,7 @@ export function initPostHog() {
     capture_pageleave: true,
   });
   initialized = true;
+  (window as unknown as { posthog?: unknown }).posthog = posthog; // debug
 }
 
 export function capturePageview(url: string) {
