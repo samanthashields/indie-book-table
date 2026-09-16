@@ -125,9 +125,14 @@ export function needsFollowUp(input: {
   phases: { range: PhaseRange | undefined; complete: boolean }[];
   lastActivityAt: Date | null;
   targetDate: Date | null;
+  /** A finished or formally closed cycle never needs follow-up. */
+  cycleComplete?: boolean;
   now?: Date;
 }): NeedsFollowUp {
   const now = input.now ?? new Date();
+
+  if (input.cycleComplete) return "on_track";
+
 
   if (input.phases.some((phase) => pacing(phase.range, phase.complete, now) === "behind")) return "behind_pace";
 
