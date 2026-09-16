@@ -44,3 +44,30 @@ So for actual updates and announcements, use the CSV export into a newsletter se
 - `subscribeEmail` in `catalog.functions.ts` calls `sendTemplateEmail('community-welcome', …)` after the upsert, wrapped in try/catch, with an idempotency key derived from the email so re-signups don't double-send. It only sends for genuinely new rows.
 - CSV generated client-side from loaded rows; no extra endpoint.
 - UI built from existing admin card/table/input/button patterns — no new components or tokens.
+
+# Team access (admin accounts)
+
+Roles are currently visible on the People screen but can't be changed there. Add both ways to give someone on your team admin access.
+
+## What you'll get
+
+On the **People** screen, for each person:
+
+- An **Admin** toggle that grants or removes admin access immediately, with the row showing the change right away
+- A safety rule: you can't remove your own admin access, and the last remaining admin can't be removed
+
+And a new **Invite admin** button at the top:
+
+- Enter a name and email, send the invite
+- They get an email inviting them to set a password and sign in
+- Their account is created with admin access already granted, so they land in the admin area on first sign-in
+- If the email already belongs to an existing account, it promotes that account instead of erroring
+
+## Technical notes
+
+- Two new server functions in `src/lib/admin-people.functions.ts`, both behind `requireSupabaseAuth` + `assertAdmin`:
+  - `setPersonRole({ userId, role: 'admin', enabled })` — inserts/deletes in `user_roles` via the admin client, with a guard rejecting self-demotion and last-admin removal.
+  - `inviteAdmin({ email, displayName })` — `supabaseAdmin.auth.admin.inviteUserByEmail`, then inserts the admin row in `user_roles`; if the user already exists, it skips creation and just grants the role.
+- Roles stay in the separate `user_roles` table with the existing `has_role` security-definer function; nothing is stored on profiles.
+- The invite email uses the existing auth invite template (`src/lib/email-templates/invite.tsx`), so it's already branded.
+- UI: a switch in each People row plus a small invite dialog, built from existing components.
