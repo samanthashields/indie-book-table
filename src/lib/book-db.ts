@@ -247,6 +247,7 @@ export function useBookTree(bookId: string) {
         hidden: phase.hidden,
       }));
       const lastActivityAt = typedMilestoneRows.length > 0 ? new Date(Math.max(...typedMilestoneRows.map((m) => new Date(m.updated_at).getTime()))) : null;
+      const allMilestonesDone = typedMilestoneRows.length > 0 && typedMilestoneRows.every((m) => m.status === "Complete");
       const bookNeedsFollowUp = needsFollowUp({
         phases: phases.map((phase) => ({
           range: timeline.ranges[phase.id as keyof typeof timeline.ranges],
@@ -254,6 +255,7 @@ export function useBookTree(bookId: string) {
         })),
         lastActivityAt,
         targetDate: typedBook.target_publication_date ? target : null,
+        cycleComplete: typedBook.status === "complete" || allMilestonesDone,
       });
       return { book: typedBook, phases, timeline, collaboratorCount: count ?? 0, needsFollowUp: bookNeedsFollowUp };
     },
