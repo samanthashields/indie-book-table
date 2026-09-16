@@ -1,35 +1,46 @@
 # Community list in the admin panel
 
-Add a "Community list" screen to the admin area so you can see everyone who has signed up, and give you a clean way to get that list into a proper newsletter tool.
+Add a "Community list" screen to the admin area so you can see everyone who has signed up, export the list, and edit the welcome email new subscribers receive.
 
 ## What you'll get
 
-A new **Community list** tab in Admin, next to People, showing:
+A new **Community list** tab in Admin, next to People, with two parts.
+
+### 1. The list
 
 - Every signup: email, which lists they opted into (community/catalog, blog), and the date they joined
-- A count at the top (total, and how many joined in the last 30 days)
-- Search by email
-- Sort newest first
+- Counts at the top (total, and how many joined in the last 30 days)
+- Search by email, newest first
 - Remove a signup (for cleanup or an unsubscribe request by email)
-- **Download CSV** — the whole list, or just the current search, ready to import anywhere
+- **Download CSV** — the whole list, or just the current search, ready to import into any newsletter tool
 
-Right now there is 1 signup in the list, so the screen will be sparse until more come in.
+Right now there is 1 signup, so the screen will be sparse until more come in.
 
-## About sending emails to the list
+### 2. Welcome email you control
 
-This is the one part I can't build the way it sounds. Lovable's built-in email is for one-to-one messages triggered by a person's own action — a confirmation, a password reset, a status update. It deliberately does not support newsletters or any email sent to a list, because mixing campaign mail into the same sending domain damages delivery for your sign-in and notification emails.
+Each new subscriber gets one branded welcome email the moment they join. You edit it from the same admin screen:
 
-So instead of a "send to everyone" button, the plan gives you:
+- Subject line
+- Headline
+- Body message (a few paragraphs, plain text with line breaks)
+- Optional button label and link
+- On/off switch, so you can pause it
+- **Send test to me** — fires the current draft to your own address so you can see it before saving
 
-1. **The CSV export above**, which imports directly into a newsletter service (Mailchimp, Kit/ConvertKit, Beehiiv, Buttondown all take this format). You write and send formatted campaigns there, with templates, scheduling, and unsubscribe handled for you.
-2. **A welcome email on signup** (optional — say the word and I'll include it): a single branded email sent to each new subscriber the moment they join, confirming they're on the list. That one is a direct response to their action, so it's fine to send from here, and it makes the signup feel finished instead of silent.
+Sending is best-effort: if the email fails, the signup is still saved and the visitor still sees "You're on the list."
 
-If you'd rather wire the app directly to a newsletter service later, that's a separate piece of work and I can do it once you've picked one.
+## About bulk emails to the whole list
+
+The welcome email works because it answers one person's own action. Sending a campaign to everyone on the list is a different thing, and Lovable's email service deliberately doesn't do newsletters or list sends — mixing campaign mail into the same sending domain damages delivery for your sign-in and notification emails.
+
+So for actual updates and announcements, use the CSV export into a newsletter service (Mailchimp, Kit, Beehiiv, Buttondown all import this format), where templates, scheduling, and unsubscribes are handled for you. If you later pick one, I can wire signups to sync into it automatically.
 
 ## Technical notes
 
-- New route `src/routes/_authenticated/admin.subscribers.tsx`, registered in the tabs list in `admin.tsx`.
-- New `src/lib/admin-subscribers.functions.ts` with `listSubscribers` and `deleteSubscriber` server functions, both using `requireSupabaseAuth` plus the same `assertAdmin` role check used in `admin-people.functions.ts`, and the admin client for reads/deletes on `catalog_subscribers`.
-- CSV is generated client-side from the already-loaded rows — no extra endpoint.
-- No schema change: `catalog_subscribers` already holds email, both opt-in flags, and `subscribed_at`. Its existing policies stay as they are; access is gated in the server functions.
-- UI built from existing admin patterns (card, table, input, button) — no new components or tokens.
+- New route `src/routes/_authenticated/admin.subscribers.tsx`, added to the tabs list in `admin.tsx`.
+- New `src/lib/admin-subscribers.functions.ts`: `listSubscribers`, `deleteSubscriber`, `getWelcomeEmailSettings`, `saveWelcomeEmailSettings`, `sendWelcomeEmailTest` — all behind `requireSupabaseAuth` plus the same `assertAdmin` role check used in `admin-people.functions.ts`, using the admin client for `catalog_subscribers`.
+- Welcome-email settings stored as keys in the existing `catalog_site_content` table (`welcome_email_enabled`, `_subject`, `_headline`, `_body`, `_cta_label`, `_cta_url`) — no schema change, and the admin-only write policy already exists.
+- New template `src/lib/email-templates/community-welcome.tsx` registered in `registry.ts`, styled from the existing templates; content comes in as props from the saved settings.
+- `subscribeEmail` in `catalog.functions.ts` calls `sendTemplateEmail('community-welcome', …)` after the upsert, wrapped in try/catch, with an idempotency key derived from the email so re-signups don't double-send. It only sends for genuinely new rows.
+- CSV generated client-side from loaded rows; no extra endpoint.
+- UI built from existing admin card/table/input/button patterns — no new components or tokens.
