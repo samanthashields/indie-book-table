@@ -233,7 +233,7 @@ function CreateBook() {
 
       <div className="grid gap-8 xl:grid-cols-[1fr_300px]">
         <div className="space-y-8">
-          <CoachConversation generating={isStreaming} onGenerate={(answers) => { setCoachTitle(answers["title"] ?? existingBook?.title ?? ""); setCoachAnswers(answers); void start(toPayload(answers)); }} />
+          <CoachConversation generating={isStreaming} onGenerate={(answers) => { setCoachTitle(answers["title"] ?? existingBook?.title ?? ""); setCoachAnswers(answers); if (answers["launchDate"]) setCoachDate(answers["launchDate"]); void start(toPayload(answers)); }} />
 
           {error && <p className="rounded-xl border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">{error}</p>}
           {canceled && <p className="rounded-xl border border-border bg-secondary p-4 text-sm">You stopped the draft. Everything the coach had written so far is kept below.</p>}
