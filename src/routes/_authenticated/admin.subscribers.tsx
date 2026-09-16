@@ -39,7 +39,15 @@ type WelcomeForm = {
   body: string;
   ctaLabel: string;
   ctaUrl: string;
+  logoFile: string;
 };
+
+const slugName = (name: string) =>
+  name.toLowerCase().replace(/[^a-z0-9.]+/g, "-").replace(/^-|-$/g, "");
+
+/** Images in emails need a plain URL; this route serves the stored file. */
+const logoPreviewUrl = (file: string) =>
+  /^https?:\/\//.test(file) ? file : `/api/public/email-asset/${file}`;
 
 function formatDate(value: string) {
   return new Date(value).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
