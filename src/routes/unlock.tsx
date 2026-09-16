@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { unlockSite } from "@/lib/gate.functions";
 import { subscribeEmail } from "@/lib/catalog.functions";
+import { captureEvent } from "@/lib/posthog";
 import falconAsset from "@/assets/falcon.svg.asset.json";
 
 export const Route = createFileRoute("/unlock")({
@@ -56,6 +57,7 @@ function UnlockPage() {
     setSubscribeError(null);
     try {
       await subscribe({ data: { email, catalog: true, blog: true } });
+      captureEvent("joined_mailing_list", { source: "coming_soon_page" });
       setSubscribed(true);
     } catch (err) {
       setSubscribeError(
