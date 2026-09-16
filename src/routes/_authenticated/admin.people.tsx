@@ -7,7 +7,9 @@ import { toast } from "sonner";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { listPeople, sendPersonReset, setPersonPassword, updatePerson } from "@/lib/admin-people.functions";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { inviteAdmin, listPeople, sendPersonReset, setPersonAdmin, setPersonPassword, updatePerson } from "@/lib/admin-people.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/people")({
   head: () => ({ meta: [
