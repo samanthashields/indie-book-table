@@ -8,11 +8,11 @@ let initialized = false;
  */
 export function initPostHog() {
   if (initialized || typeof window === "undefined") return;
-  const token = import.meta.env.VITE_LOVABLE_CONNECTOR_POSTHOG_API_KEY as
+  const token = import.meta.env["VITE_LOVABLE_CONNECTOR_POSTHOG_API_KEY"] as
     | string
     | undefined;
   if (!token) return;
-  const region = (import.meta.env.VITE_LOVABLE_CONNECTOR_POSTHOG_REGION as
+  const region = (import.meta.env["VITE_LOVABLE_CONNECTOR_POSTHOG_REGION"] as
     | string
     | undefined) ?? "us";
   const apiHost =
