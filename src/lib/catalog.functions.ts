@@ -97,6 +97,11 @@ export const subscribeEmail = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => subscribeSchema.parse(data))
   .handler(async ({ data }) => {
     const { upsertSubscriber } = await import("./catalog.server");
-    await upsertSubscriber(data);
+    const { email, created } = await upsertSubscriber(data);
+    if (created) {
+      const { sendWelcomeEmail } = await import("./welcome-email.server");
+      // Best effort: the signup stands even when the welcome email can't go out.
+      await sendWelcomeEmail(email, { idempotencyKey: `community-welcome-${email}` });
+    }
     return { ok: true as const };
   });
