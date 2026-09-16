@@ -170,7 +170,12 @@ const summarize = (
     coverUrl: book.cover_url,
     startDate: book.start_date,
     metadata: book.metadata ?? {},
-    needsFollowUp: needsFollowUp({ phases: phasesForPacing, lastActivityAt, targetDate }),
+    needsFollowUp: needsFollowUp({
+      phases: phasesForPacing,
+      lastActivityAt,
+      targetDate,
+      cycleComplete: book.status === "complete" || (sorted.length > 0 && done === sorted.length),
+    }),
   };
 };
 
