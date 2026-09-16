@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { unlockSite } from "@/lib/gate.functions";
+import { subscribeEmail } from "@/lib/catalog.functions";
 import falconAsset from "@/assets/falcon.svg.asset.json";
 
 export const Route = createFileRoute("/unlock")({
@@ -24,9 +25,16 @@ export const Route = createFileRoute("/unlock")({
 function UnlockPage() {
   const router = useRouter();
   const unlock = useServerFn(unlockSite);
+  const subscribe = useServerFn(subscribeEmail);
+
   const [showEntry, setShowEntry] = useState(false);
   const [error, setError] = useState(false);
   const [busy, setBusy] = useState(false);
+
+  const [email, setEmail] = useState("");
+  const [subscribing, setSubscribing] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
+  const [subscribeError, setSubscribeError] = useState<string | null>(null);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -39,6 +47,24 @@ function UnlockPage() {
       await router.navigate({ to: "/" });
     } else {
       setError(true);
+    }
+  }
+
+  async function onSubscribe(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSubscribing(true);
+    setSubscribeError(null);
+    try {
+      await subscribe({ data: { email, catalog: true, blog: true } });
+      setSubscribed(true);
+    } catch (err) {
+      setSubscribeError(
+        err instanceof Error && err.message.includes("valid email")
+          ? "Enter a valid email address."
+          : "Something went wrong — please try again.",
+      );
+    } finally {
+      setSubscribing(false);
     }
   }
 
@@ -63,6 +89,41 @@ function UnlockPage() {
             soon.
           </p>
 
+          <div className="mt-10">
+            {subscribed ? (
+              <p className="rounded-lg border border-border bg-muted/50 px-4 py-3 text-sm text-foreground">
+                You're on the list — we'll be in touch as soon as we open the doors.
+              </p>
+            ) : (
+              <form onSubmit={onSubscribe} className="space-y-3">
+                <p className="text-sm font-medium text-foreground">
+                  Join our community list for launch updates
+                </p>
+                <div className="flex gap-2">
+                  <Input
+                    type="email"
+                    name="email"
+                    autoComplete="email"
+                    placeholder="you@example.com"
+                    aria-label="Email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                  <Button type="submit" disabled={subscribing}>
+                    {subscribing ? "Joining…" : "Join"}
+                  </Button>
+                </div>
+                {subscribeError && (
+                  <p className="text-sm text-destructive">{subscribeError}</p>
+                )}
+                <p className="text-xs text-muted-foreground">
+                  Occasional updates only. No spam, ever.
+                </p>
+              </form>
+            )}
+          </div>
+
           {showEntry && (
             <form onSubmit={onSubmit} className="mt-10 space-y-3">
               <Input
@@ -80,7 +141,7 @@ function UnlockPage() {
                   That password isn't quite right — try again.
                 </p>
               )}
-              <Button type="submit" className="w-full" disabled={busy}>
+              <Button type="submit" variant="outline" className="w-full" disabled={busy}>
                 {busy ? "Checking…" : "Enter"}
               </Button>
             </form>
