@@ -9,7 +9,7 @@ import { EmailChangeEmail } from '@/lib/email-templates/email-change'
 import { ReauthenticationEmail } from '@/lib/email-templates/reauthentication'
 
 // Configuration
-const SITE_NAME = "Book Launchpad"
+const SITE_NAME = "The Indie Book Table"
 const SENDER_DOMAIN = "support.indiebooktable.com"
 const ROOT_DOMAIN = "indiebooktable.com"
 const FROM_DOMAIN = "indiebooktable.com"
