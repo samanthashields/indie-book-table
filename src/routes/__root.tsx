@@ -3,11 +3,13 @@ import {
   Outlet,
   Link,
   createRootRouteWithContext,
+  redirect,
   useRouter,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { isUnlocked } from "../lib/gate.functions";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -76,10 +78,18 @@ import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "@/components/ui/sonner";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  beforeLoad: async ({ location }) => {
+    // Shared-password "coming soon" gate — remove at launch along with /unlock.
+    if (location.pathname === "/unlock") return;
+    const { unlocked } = await isUnlocked();
+    if (!unlocked) throw redirect({ to: "/unlock" });
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      // Kept out of search engines while the coming-soon gate is up — remove at launch.
+      { name: "robots", content: "noindex, nofollow" },
       { title: "Book Cycles" },
       { name: "description", content: "A guided publishing workspace for independent authors." },
       { name: "author", content: "Book Cycles" },

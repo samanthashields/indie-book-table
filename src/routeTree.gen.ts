@@ -13,6 +13,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as MissionRouteImport } from './routes/mission'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as UnlockRouteImport } from './routes/unlock'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedCollaborationsRouteImport } from './routes/_authenticated/collaborations'
@@ -93,6 +94,11 @@ const MissionRoute = MissionRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnlockRoute = UnlockRouteImport.update({
+  id: '/unlock',
+  path: '/unlock',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
@@ -448,6 +454,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/mission': typeof MissionRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/unlock': typeof UnlockRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/collaborations': typeof AuthenticatedCollaborationsRoute
   '/cycles': typeof AuthenticatedCyclesRoute
@@ -514,6 +521,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/mission': typeof MissionRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/unlock': typeof UnlockRoute
   '/collaborations': typeof AuthenticatedCollaborationsRoute
   '/cycles': typeof AuthenticatedCyclesRoute
   '/my-table': typeof AuthenticatedMyTableRoute
@@ -581,6 +589,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/mission': typeof MissionRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/unlock': typeof UnlockRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/collaborations': typeof AuthenticatedCollaborationsRoute
   '/_authenticated/cycles': typeof AuthenticatedCyclesRoute
@@ -651,6 +660,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/mission'
     | '/reset-password'
+    | '/unlock'
     | '/admin'
     | '/collaborations'
     | '/cycles'
@@ -717,6 +727,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/mission'
     | '/reset-password'
+    | '/unlock'
     | '/collaborations'
     | '/cycles'
     | '/my-table'
@@ -783,6 +794,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/mission'
     | '/reset-password'
+    | '/unlock'
     | '/_authenticated/admin'
     | '/_authenticated/collaborations'
     | '/_authenticated/cycles'
@@ -852,6 +864,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   MissionRoute: typeof MissionRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  UnlockRoute: typeof UnlockRoute
   ApiCoachPlanRoute: typeof ApiCoachPlanRoute
   ApiPenRoute: typeof ApiPenRoute
   JournalSlugRoute: typeof JournalSlugRoute
@@ -897,6 +910,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unlock': {
+      id: '/unlock'
+      path: '/unlock'
+      fullPath: '/unlock'
+      preLoaderRoute: typeof UnlockRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/': {
@@ -1471,6 +1491,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   MissionRoute: MissionRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  UnlockRoute: UnlockRoute,
   ApiCoachPlanRoute: ApiCoachPlanRoute,
   ApiPenRoute: ApiPenRoute,
   JournalSlugRoute: JournalSlugRoute,
