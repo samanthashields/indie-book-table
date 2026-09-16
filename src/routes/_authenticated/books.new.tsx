@@ -122,7 +122,10 @@ function CreateBook() {
   }
 
   if (selected === "template") {
-    const templateList = templates.data ?? [];
+    // Only published, non-archived templates are offered here — matches templates.index.tsx's
+    // own filtering. Unpublished drafts (including ones mid-authoring) must not surface in the
+    // real create-flow just because a row exists in the table.
+    const templateList = (templates.data ?? []).filter((template) => template.published && !template.archived);
     if (!search.template) {
       return (
         <AppShell coachContext="create">
