@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { isUnlocked } from "../lib/gate.functions";
+import { initPostHog, capturePageview } from "../lib/posthog";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -138,6 +139,16 @@ function RootComponent() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(() => router.invalidate());
     return () => subscription.unsubscribe();
+  }, [router]);
+
+  // PostHog: init once, then capture a pageview on every resolved navigation.
+  useEffect(() => {
+    initPostHog();
+    capturePageview(window.location.href);
+    const unsubscribe = router.subscribe("onResolved", () => {
+      capturePageview(window.location.href);
+    });
+    return () => unsubscribe();
   }, [router]);
 
   return (

@@ -91,7 +91,7 @@
 - [x] Password entry hidden behind a discreet admin link
 - [x] Publish the site (gated) to the custom domain
 - [x] Mailing-list signup on the coming-soon page (reuses subscriber list)
-- [ ] Republish with the signup form live
+- [x] Republish with the signup form live
 - [ ] At launch: remove gate + noindex, republish
 
 ## Community list + team admin (Sep 16)
@@ -101,4 +101,12 @@
 - [x] Welcome email sent on new signups from the coming-soon form
 - [x] Admin toggle on People to promote/demote team members (self + last-admin guards)
 - [x] Invite admin (creates the account with admin access, or promotes an existing one)
-- [ ] Republish so the admin changes are live
+- [x] Republish so the admin changes are live
+
+## PostHog analytics (Sep 16)
+
+- [x] PostHog connector linked (project token + region)
+- [x] Browser analytics init + pageview tracking on navigation
+- [x] Custom "joined_mailing_list" event on coming-soon signup
+- [x] Republish with analytics live
+- [ ] Confirm events arriving in the PostHog dashboard (headless test browsers are bot-filtered by design)
