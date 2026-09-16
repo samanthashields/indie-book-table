@@ -7,7 +7,9 @@ import {
   Head,
   Heading,
   Html,
+  Img,
   Preview,
+  Section,
   Text,
 } from '@react-email/components'
 
@@ -19,6 +21,7 @@ export interface CommunityWelcomeProps {
   ctaLabel?: string | null
   ctaUrl?: string | null
   siteName?: string
+  logoUrl?: string | null
 }
 
 export const CommunityWelcomeEmail = ({
@@ -27,6 +30,7 @@ export const CommunityWelcomeEmail = ({
   ctaLabel,
   ctaUrl,
   siteName = 'The Indie Book Table',
+  logoUrl,
 }: CommunityWelcomeProps) => {
   const paragraphs = String(body ?? '')
     .split(/\n{2,}/)
@@ -39,6 +43,11 @@ export const CommunityWelcomeEmail = ({
       <Preview>{headline}</Preview>
       <Body style={main}>
         <Container style={container}>
+          {logoUrl ? (
+            <Section style={logoRow}>
+              <Img src={logoUrl} alt={siteName} width="140" style={logo} />
+            </Section>
+          ) : null}
           <Heading style={h1}>{headline}</Heading>
           {paragraphs.map((paragraph, index) => (
             <Text key={index} style={text}>

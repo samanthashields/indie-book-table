@@ -7,6 +7,8 @@ export interface WelcomeEmailSettings {
   body: string;
   ctaLabel: string;
   ctaUrl: string;
+  /** File name inside the email-assets bucket, or "" for no logo. */
+  logoFile: string;
 }
 
 export const WELCOME_DEFAULTS: WelcomeEmailSettings = {
@@ -17,7 +19,17 @@ export const WELCOME_DEFAULTS: WelcomeEmailSettings = {
     "Thanks for joining the community list for The Indie Book Table.\n\nWe're building a home for indie authors — a place to plan a book, publish it, and get it in front of readers. You'll be among the first to hear when we open the doors.",
   ctaLabel: "",
   ctaUrl: "",
+  logoFile: "default-logo.png",
 };
+
+/** Emails need an absolute, publicly reachable image URL. */
+export const EMAIL_ASSET_BASE = "https://indiebooktable.com/api/public/email-asset";
+
+export function emailAssetUrl(file: string | null | undefined) {
+  if (!file) return null;
+  if (/^https?:\/\//.test(file)) return file;
+  return `${EMAIL_ASSET_BASE}/${file}`;
+}
 
 const KEYS = {
   enabled: "welcome_email_enabled",
@@ -26,6 +38,7 @@ const KEYS = {
   body: "welcome_email_body",
   ctaLabel: "welcome_email_cta_label",
   ctaUrl: "welcome_email_cta_url",
+  logoFile: "welcome_email_logo_file",
 } as const;
 
 export async function loadWelcomeEmailSettings(): Promise<WelcomeEmailSettings> {
