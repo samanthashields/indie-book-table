@@ -16,6 +16,7 @@ const tabs = [
   { label: "Mission page", to: "/admin/missionpage" as const },
   { label: "Site words", to: "/admin/sitewords" as const },
   { label: "People", to: "/admin/people" as const },
+  { label: "Community list", to: "/admin/subscribers" as const },
   { label: "Templates", to: "/admin/templates" as const },
   { label: "Help articles", to: "/admin/help" as const },
   { label: "Support", to: "/admin/support" as const },
