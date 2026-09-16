@@ -89,5 +89,7 @@
 
 - [x] Site-wide shared-password gate + branded coming-soon page
 - [x] Password entry hidden behind a discreet admin link
-- [ ] Publish the site (gated) to the custom domain
+- [x] Publish the site (gated) to the custom domain
+- [x] Mailing-list signup on the coming-soon page (reuses subscriber list)
+- [ ] Republish with the signup form live
 - [ ] At launch: remove gate + noindex, republish
