@@ -43,8 +43,15 @@ function passwordMatches(input: string, expected: string): boolean {
 }
 
 export const isUnlocked = createServerFn({ method: "GET" }).handler(async () => {
-  const session = await useSession<GateSession>(getSessionConfig());
-  return { unlocked: session.data.unlocked === true };
+  // Never throw: this runs in __root beforeLoad, so an error here would replace
+  // every page (including /unlock) with an error screen. Fail closed instead.
+  try {
+    const session = await useSession<GateSession>(getSessionConfig());
+    return { unlocked: session.data.unlocked === true };
+  } catch (error) {
+    console.error("site gate session read failed", error);
+    return { unlocked: false };
+  }
 });
 
 export const unlockSite = createServerFn({ method: "POST" })
