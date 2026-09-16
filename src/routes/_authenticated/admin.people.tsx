@@ -7,7 +7,9 @@ import { toast } from "sonner";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { listPeople, sendPersonReset, setPersonPassword, updatePerson } from "@/lib/admin-people.functions";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { inviteAdmin, listPeople, sendPersonReset, setPersonAdmin, setPersonPassword, updatePerson } from "@/lib/admin-people.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/people")({
   head: () => ({ meta: [
@@ -65,7 +67,7 @@ function PersonCard({ person, onSaved }: { person: Person; onSaved: () => void }
 
   return (
     <li className="rounded-2xl border border-border bg-card px-5 py-4 shadow-xs">
-      <div className="grid gap-4 sm:grid-cols-[1fr_auto_auto_auto_auto] sm:items-center">
+      <div className="grid gap-4 sm:grid-cols-[1fr_auto_auto_auto_auto_auto] sm:items-center">
         <div className="min-w-0">
           <p className="font-semibold">{person.display_name || "No name yet"}</p>
           <p className="truncate text-sm text-muted-foreground">
@@ -74,6 +76,20 @@ function PersonCard({ person, onSaved }: { person: Person; onSaved: () => void }
           </p>
         </div>
         <StatusPill tone={person.suspended ? "danger" : "good"}>{person.suspended ? "Suspended" : "Active"}</StatusPill>
+        <label className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Switch
+            checked={person.roles.includes("admin")}
+            disabled={busy}
+            aria-label={`Admin access for ${person.display_name ?? person.email ?? "account"}`}
+            onCheckedChange={(checked) =>
+              void run(
+                () => setPersonAdmin({ data: { userId: person.user_id, enabled: checked } }),
+                checked ? "Admin access granted" : "Admin access removed",
+              )
+            }
+          />
+          Admin
+        </label>
         <select
           className="h-10 rounded-xl border border-input bg-paper px-3 text-sm"
           value={person.plan}
@@ -145,6 +161,63 @@ function PersonCard({ person, onSaved }: { person: Person; onSaved: () => void }
   );
 }
 
+function InviteAdminPanel({ onInvited }: { onInvited: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "" });
+
+  const invite = useMutation({
+    mutationFn: () =>
+      inviteAdmin({
+        data: {
+          email: form.email,
+          displayName: form.name.trim(),
+          redirectTo: `${window.location.origin}/reset-password`,
+        },
+      }),
+    onSuccess: (result: any) => {
+      toast.success(result?.invited ? "Invite sent with admin access" : "That account now has admin access");
+      setForm({ name: "", email: "" });
+      setOpen(false);
+      onInvited();
+    },
+    onError: (error) => toast.error(error instanceof Error ? error.message : "That didn’t work"),
+  });
+
+  return (
+    <div className="rounded-2xl border border-border bg-card px-5 py-4 shadow-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="font-semibold">Team access</p>
+          <p className="text-sm text-muted-foreground">
+            Invite someone on your team, or switch Admin on for an account below.
+          </p>
+        </div>
+        <Button variant={open ? "ghost" : "default"} onClick={() => setOpen((value) => !value)}>
+          {open ? "Close" : "Invite admin"}
+        </Button>
+      </div>
+      {open && (
+        <div className="mt-5 grid gap-4 border-t border-border/70 pt-5 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
+          <div className="space-y-2">
+            <Label htmlFor="invite-name">Name</Label>
+            <Input id="invite-name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Their name" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="invite-email">Email address</Label>
+            <Input id="invite-email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="teammate@example.com" />
+          </div>
+          <Button disabled={invite.isPending || !form.email.trim()} onClick={() => invite.mutate()}>
+            Send invite
+          </Button>
+          <p className="text-xs text-muted-foreground sm:col-span-3">
+            They’ll get an email to set a password, and their account already has admin access when they sign in.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function AdminPeople() {
   const people = usePeople();
   const queryClient = useQueryClient();
@@ -161,6 +234,7 @@ function AdminPeople() {
 
   return (
     <div className="space-y-6">
+      <InviteAdminPanel onInvited={refresh} />
       <label className="relative block max-w-sm">
         <Search className="pointer-events-none absolute left-3 top-3.5 size-4 text-muted-foreground" />
         <Input className="pl-9" placeholder="Search by name, email or role" value={query} onChange={(event) => setQuery(event.target.value)} aria-label="Search people" />

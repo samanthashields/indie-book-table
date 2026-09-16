@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react'
 import { template as featureRequestUpdateTemplate } from './feature-request-update'
+import { template as communityWelcomeTemplate } from './community-welcome'
 
 export interface TemplateEntry {
   component: ComponentType<any>
@@ -20,4 +21,5 @@ export interface TemplateEntry {
  */
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'feature-request-update': featureRequestUpdateTemplate,
+  'community-welcome': communityWelcomeTemplate,
 }

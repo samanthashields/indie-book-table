@@ -93,3 +93,12 @@
 - [x] Mailing-list signup on the coming-soon page (reuses subscriber list)
 - [ ] Republish with the signup form live
 - [ ] At launch: remove gate + noindex, republish
+
+## Community list + team admin (Sep 16)
+
+- [x] Admin "Community list" screen: signups, search, counts, remove, CSV export
+- [x] Editable welcome email for new subscribers (on/off, subject, headline, body, button, send test)
+- [x] Welcome email sent on new signups from the coming-soon form
+- [x] Admin toggle on People to promote/demote team members (self + last-admin guards)
+- [x] Invite admin (creates the account with admin access, or promotes an existing one)
+- [ ] Republish so the admin changes are live

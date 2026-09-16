@@ -334,9 +334,14 @@ export async function upsertSubscriber(input: {
   email: string;
   catalog: boolean;
   blog: boolean;
-}) {
+}): Promise<{ email: string; created: boolean }> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const email = input.email.trim().toLowerCase();
+  const { data: existing } = await supabaseAdmin
+    .from("catalog_subscribers")
+    .select("id")
+    .eq("email", email)
+    .maybeSingle();
   const { error } = await supabaseAdmin
     .from("catalog_subscribers")
     .upsert(
@@ -344,4 +349,5 @@ export async function upsertSubscriber(input: {
       { onConflict: "email" },
     );
   if (error) throw new Error(error.message);
+  return { email, created: !existing };
 }

@@ -82,6 +82,78 @@ export const setPersonPassword = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+/** Grants or removes admin access for a team member. */
+export const setPersonAdmin = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { userId: string; enabled: boolean }) => input)
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    if (!data.enabled) {
+      if (data.userId === context.userId) throw new Error("You can’t remove your own admin access");
+      const { count, error: countError } = await supabaseAdmin
+        .from("user_roles")
+        .select("id", { count: "exact", head: true })
+        .eq("role", "admin");
+      if (countError) throw new Error(countError.message);
+      if ((count ?? 0) <= 1) throw new Error("Keep at least one admin on the team");
+      const { error } = await supabaseAdmin
+        .from("user_roles")
+        .delete()
+        .eq("user_id", data.userId)
+        .eq("role", "admin");
+      if (error) throw new Error(error.message);
+      return { ok: true };
+    }
+    const { error } = await supabaseAdmin
+      .from("user_roles")
+      .upsert({ user_id: data.userId, role: "admin" }, { onConflict: "user_id,role" });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+/** Invites a teammate and gives their account admin access. */
+export const inviteAdmin = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { email: string; displayName?: string; redirectTo?: string }) => {
+    const email = input.email.trim().toLowerCase();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new Error("Enter a valid email address");
+    return { ...input, email };
+  })
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: existing } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 1000 });
+    let userId = existing?.users.find((user) => user.email?.toLowerCase() === data.email)?.id;
+    let invited = false;
+
+    if (!userId) {
+      const { data: created, error } = await supabaseAdmin.auth.admin.inviteUserByEmail(data.email, {
+        ...(data.redirectTo ? { redirectTo: data.redirectTo } : {}),
+        data: data.displayName ? { display_name: data.displayName } : {},
+      });
+      if (error) throw new Error(error.message);
+      userId = created?.user?.id;
+      invited = true;
+    }
+    if (!userId) throw new Error("Couldn’t create that account");
+
+    if (data.displayName?.trim()) {
+      await supabaseAdmin
+        .from("profiles")
+        .update({ display_name: data.displayName.trim() })
+        .eq("user_id", userId);
+    }
+
+    const { error: roleError } = await supabaseAdmin
+      .from("user_roles")
+      .upsert({ user_id: userId, role: "admin" }, { onConflict: "user_id,role" });
+    if (roleError) throw new Error(roleError.message);
+
+    return { ok: true, invited };
+  });
+
 /** Emails the account a password reset link. */
 export const sendPersonReset = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
