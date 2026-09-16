@@ -3,6 +3,7 @@ import { ArrowLeft, Check } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
+import { requirementLabel } from "@/lib/book-data";
 import { useTemplates } from "@/lib/book-db";
 import { phaseStyle } from "@/lib/phase-style";
 import { templateCover } from "@/lib/template-covers";
@@ -63,7 +64,7 @@ function TemplatePreview() {
                       <li key={milestone.name} className="rounded-xl bg-card p-4 shadow-xs">
                         <div className="flex flex-wrap items-baseline justify-between gap-2">
                           <p className="font-semibold">{milestone.name}</p>
-                          <p className="text-xs text-muted-foreground">{milestone.requirement}</p>
+                          <p className="text-xs text-muted-foreground">{requirementLabel[milestone.requirement]}</p>
                         </div>
                         <p className="mt-1 text-sm text-muted-foreground">{milestone.note}</p>
                       </li>
