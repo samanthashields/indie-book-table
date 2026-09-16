@@ -30,8 +30,7 @@ export function capturePageview(url: string) {
   if (!initialized) return;
   console.log("[posthog-debug] capture $pageview", url);
   posthog.capture("$pageview", { $current_url: url });
-  // @ts-expect-error debug
-  console.log("[posthog-debug] state", !!posthog._loaded, posthog.get_distinct_id?.());
+  console.log("[posthog-debug] state", posthog.get_distinct_id?.());
 }
 
 export function captureEvent(
