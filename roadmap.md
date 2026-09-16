@@ -110,3 +110,9 @@
 - [x] Custom "joined_mailing_list" event on coming-soon signup
 - [x] Republish with analytics live
 - [ ] Confirm events arriving in the PostHog dashboard (headless test browsers are bot-filtered by design)
+
+## Welcome email branding (Sep 16)
+- [x] Sender name changed from "Book Launchpad" to "The Indie Book Table" on all emails
+- [x] Welcome email logo (centred, top) editable in Admin -> Community list; stored in the email-assets bucket, served via /api/public/email-asset/<file>
+- [ ] Replace the placeholder default logo with the real brand mark via the admin upload
+- [ ] Republish so the live site sends with the new name and logo

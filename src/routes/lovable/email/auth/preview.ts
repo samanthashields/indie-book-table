@@ -18,7 +18,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "Book Launchpad"
+const SITE_NAME = "The Indie Book Table"
 const ROOT_DOMAIN = "indiebooktable.com"
 
 // Sample data for preview mode ONLY (not used in actual email sending).

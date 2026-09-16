@@ -7,6 +7,8 @@ export interface WelcomeEmailSettings {
   body: string;
   ctaLabel: string;
   ctaUrl: string;
+  /** File name inside the email-assets bucket, or "" for no logo. */
+  logoFile: string;
 }
 
 export const WELCOME_DEFAULTS: WelcomeEmailSettings = {
@@ -17,7 +19,17 @@ export const WELCOME_DEFAULTS: WelcomeEmailSettings = {
     "Thanks for joining the community list for The Indie Book Table.\n\nWe're building a home for indie authors — a place to plan a book, publish it, and get it in front of readers. You'll be among the first to hear when we open the doors.",
   ctaLabel: "",
   ctaUrl: "",
+  logoFile: "default-logo.png",
 };
+
+/** Emails need an absolute, publicly reachable image URL. */
+export const EMAIL_ASSET_BASE = "https://indiebooktable.com/api/public/email-asset";
+
+export function emailAssetUrl(file: string | null | undefined) {
+  if (!file) return null;
+  if (/^https?:\/\//.test(file)) return file;
+  return `${EMAIL_ASSET_BASE}/${file}`;
+}
 
 const KEYS = {
   enabled: "welcome_email_enabled",
@@ -26,6 +38,7 @@ const KEYS = {
   body: "welcome_email_body",
   ctaLabel: "welcome_email_cta_label",
   ctaUrl: "welcome_email_cta_url",
+  logoFile: "welcome_email_logo_file",
 } as const;
 
 export async function loadWelcomeEmailSettings(): Promise<WelcomeEmailSettings> {
@@ -47,6 +60,7 @@ export async function loadWelcomeEmailSettings(): Promise<WelcomeEmailSettings> 
     body: read(KEYS.body, WELCOME_DEFAULTS.body),
     ctaLabel: read(KEYS.ctaLabel, WELCOME_DEFAULTS.ctaLabel),
     ctaUrl: read(KEYS.ctaUrl, WELCOME_DEFAULTS.ctaUrl),
+    logoFile: read(KEYS.logoFile, WELCOME_DEFAULTS.logoFile),
   };
 }
 
@@ -59,6 +73,7 @@ export async function saveWelcomeEmailSettings(settings: WelcomeEmailSettings) {
     { key: KEYS.body, value: settings.body },
     { key: KEYS.ctaLabel, value: settings.ctaLabel },
     { key: KEYS.ctaUrl, value: settings.ctaUrl },
+    { key: KEYS.logoFile, value: settings.logoFile },
   ].map((row) => ({ ...row, updated_at: new Date().toISOString() }));
   const { error } = await supabaseAdmin
     .from("catalog_site_content")
@@ -82,6 +97,7 @@ export async function sendWelcomeEmail(
         body: settings.body,
         ctaLabel: settings.ctaLabel || null,
         ctaUrl: settings.ctaUrl || null,
+        logoUrl: emailAssetUrl(settings.logoFile),
       },
       ...(options?.idempotencyKey ? { idempotencyKey: options.idempotencyKey } : {}),
     });

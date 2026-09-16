@@ -7,7 +7,9 @@ import {
   Head,
   Heading,
   Html,
+  Img,
   Preview,
+  Section,
   Text,
 } from '@react-email/components'
 
@@ -19,6 +21,7 @@ export interface CommunityWelcomeProps {
   ctaLabel?: string | null
   ctaUrl?: string | null
   siteName?: string
+  logoUrl?: string | null
 }
 
 export const CommunityWelcomeEmail = ({
@@ -27,6 +30,7 @@ export const CommunityWelcomeEmail = ({
   ctaLabel,
   ctaUrl,
   siteName = 'The Indie Book Table',
+  logoUrl,
 }: CommunityWelcomeProps) => {
   const paragraphs = String(body ?? '')
     .split(/\n{2,}/)
@@ -39,6 +43,11 @@ export const CommunityWelcomeEmail = ({
       <Preview>{headline}</Preview>
       <Body style={main}>
         <Container style={container}>
+          {logoUrl ? (
+            <Section style={logoRow}>
+              <Img src={logoUrl} alt={siteName} width="140" style={logo} />
+            </Section>
+          ) : null}
           <Heading style={h1}>{headline}</Heading>
           {paragraphs.map((paragraph, index) => (
             <Text key={index} style={text}>
@@ -69,6 +78,7 @@ export const template = {
     body: "Thanks for joining the community list for The Indie Book Table.\n\nWe're building a home for indie authors, and you'll be among the first to hear when we open the doors.",
     ctaLabel: 'Visit the site',
     ctaUrl: 'https://indiebooktable.com',
+    logoUrl: 'https://indiebooktable.com/api/public/email-asset/default-logo.png',
   },
 } satisfies TemplateEntry
 
@@ -76,6 +86,8 @@ export default CommunityWelcomeEmail
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Georgia, serif' }
 const container = { padding: '24px 28px', maxWidth: '560px' }
+const logoRow = { textAlign: 'center' as const, margin: '8px 0 24px' }
+const logo = { display: 'inline-block', maxWidth: '140px', height: 'auto' }
 const h1 = {
   fontSize: '24px',
   fontWeight: 'normal' as const,

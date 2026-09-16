@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Download, Search, Send, Trash2 } from "lucide-react";
+import { Download, ImageUp, Search, Send, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { supabase } from "@/integrations/supabase/client";
 import {
   deleteSubscriber,
   getWelcomeEmail,
@@ -39,7 +40,15 @@ type WelcomeForm = {
   body: string;
   ctaLabel: string;
   ctaUrl: string;
+  logoFile: string;
 };
+
+const slugName = (name: string) =>
+  name.toLowerCase().replace(/[^a-z0-9.]+/g, "-").replace(/^-|-$/g, "");
+
+/** Images in emails need a plain URL; this route serves the stored file. */
+const logoPreviewUrl = (file: string) =>
+  /^https?:\/\//.test(file) ? file : `/api/public/email-asset/${file}`;
 
 function formatDate(value: string) {
   return new Date(value).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
@@ -65,8 +74,28 @@ function downloadCsv(rows: Subscriber[]) {
 function WelcomeEmailPanel() {
   const settings = useQuery({ queryKey: ["welcome-email"], queryFn: () => getWelcomeEmail() });
   const [form, setForm] = useState<WelcomeForm | null>(null);
+  const logoInput = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
   const value = form ?? (settings.data as WelcomeForm | undefined) ?? null;
   const update = (patch: Partial<WelcomeForm>) => value && setForm({ ...value, ...patch });
+
+  const pickLogo = async (file: File | undefined) => {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const name = `logo-${Date.now()}-${slugName(file.name)}`;
+      const { error } = await supabase.storage.from("email-assets").upload(name, file, { upsert: false });
+      if (error) throw error;
+      update({ logoFile: name });
+      toast.success("Logo uploaded — save to use it");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Couldn’t upload that image");
+    } finally {
+      setUploading(false);
+      if (logoInput.current) logoInput.current.value = "";
+    }
+  };
+
 
   const save = useMutation({
     mutationFn: (data: WelcomeForm) => saveWelcomeEmail({ data }),
@@ -96,6 +125,44 @@ function WelcomeEmailPanel() {
           <Switch checked={value.enabled} onCheckedChange={(checked) => update({ enabled: checked })} aria-label="Send the welcome email" />
           {value.enabled ? "On" : "Paused"}
         </label>
+      </div>
+
+      <div className="mt-6 flex flex-wrap items-center gap-5 rounded-xl border border-border/70 bg-background/60 p-4">
+        {value.logoFile ? (
+          <img
+            src={logoPreviewUrl(value.logoFile)}
+            alt="Logo shown at the top of the welcome email"
+            className="h-16 w-auto max-w-[160px] object-contain"
+          />
+        ) : (
+          <span className="grid h-16 w-24 place-items-center rounded-lg border border-dashed border-border text-xs text-muted-foreground">
+            No logo
+          </span>
+        )}
+        <div className="min-w-0">
+          <Label className="block">Logo</Label>
+          <p className="mt-1 max-w-prose text-xs text-muted-foreground">
+            Shown centred at the top of the email. PNG or JPG, about 400 px wide.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-3">
+            <Button type="button" variant="outline" size="sm" disabled={uploading} onClick={() => logoInput.current?.click()}>
+              <ImageUp className="size-4" />
+              {uploading ? "Uploading…" : value.logoFile ? "Replace logo" : "Upload logo"}
+            </Button>
+            {value.logoFile ? (
+              <Button type="button" variant="ghost" size="sm" onClick={() => update({ logoFile: "" })}>
+                Remove
+              </Button>
+            ) : null}
+            <input
+              ref={logoInput}
+              type="file"
+              accept="image/png,image/jpeg,image/gif,image/webp"
+              className="sr-only"
+              onChange={(event) => void pickLogo(event.target.files?.[0])}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2">

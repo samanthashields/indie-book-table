@@ -72,6 +72,7 @@ import { Route as AuthenticatedHelpCategoriesCategorySlugRouteImport } from './r
 import { Route as AuthenticatedHelpRequestsIndexRouteImport } from './routes/_authenticated/help.requests.index'
 import { Route as AuthenticatedHelpRequestsRequestIdRouteImport } from './routes/_authenticated/help.requests.$requestId'
 import { Route as AuthenticatedTemplatesMineTemplateIdRouteImport } from './routes/_authenticated/templates.mine.$templateId'
+import { Route as ApiPublicEmailAssetNameRouteImport } from './routes/api/public/email-asset.$name'
 import { Route as ApiPublicShelfImageSlugRouteImport } from './routes/api/public/shelf-image.$slug'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
@@ -428,6 +429,11 @@ const AuthenticatedTemplatesMineTemplateIdRoute =
     path: '/templates/mine/$templateId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicEmailAssetNameRoute = ApiPublicEmailAssetNameRouteImport.update({
+  id: '/api/public/email-asset/$name',
+  path: '/api/public/email-asset/$name',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicShelfImageSlugRoute = ApiPublicShelfImageSlugRouteImport.update({
   id: '/api/public/shelf-image/$slug',
   path: '/api/public/shelf-image/$slug',
@@ -515,6 +521,7 @@ export interface FileRoutesByFullPath {
   '/help/categories/$categorySlug': typeof AuthenticatedHelpCategoriesCategorySlugRoute
   '/help/requests/$requestId': typeof AuthenticatedHelpRequestsRequestIdRoute
   '/templates/mine/$templateId': typeof AuthenticatedTemplatesMineTemplateIdRoute
+  '/api/public/email-asset/$name': typeof ApiPublicEmailAssetNameRoute
   '/api/public/shelf-image/$slug': typeof ApiPublicShelfImageSlugRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -582,6 +589,7 @@ export interface FileRoutesByTo {
   '/help/categories/$categorySlug': typeof AuthenticatedHelpCategoriesCategorySlugRoute
   '/help/requests/$requestId': typeof AuthenticatedHelpRequestsRequestIdRoute
   '/templates/mine/$templateId': typeof AuthenticatedTemplatesMineTemplateIdRoute
+  '/api/public/email-asset/$name': typeof ApiPublicEmailAssetNameRoute
   '/api/public/shelf-image/$slug': typeof ApiPublicShelfImageSlugRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -653,6 +661,7 @@ export interface FileRoutesById {
   '/_authenticated/help/categories/$categorySlug': typeof AuthenticatedHelpCategoriesCategorySlugRoute
   '/_authenticated/help/requests/$requestId': typeof AuthenticatedHelpRequestsRequestIdRoute
   '/_authenticated/templates/mine/$templateId': typeof AuthenticatedTemplatesMineTemplateIdRoute
+  '/api/public/email-asset/$name': typeof ApiPublicEmailAssetNameRoute
   '/api/public/shelf-image/$slug': typeof ApiPublicShelfImageSlugRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -724,6 +733,7 @@ export interface FileRouteTypes {
     | '/help/categories/$categorySlug'
     | '/help/requests/$requestId'
     | '/templates/mine/$templateId'
+    | '/api/public/email-asset/$name'
     | '/api/public/shelf-image/$slug'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -791,6 +801,7 @@ export interface FileRouteTypes {
     | '/help/categories/$categorySlug'
     | '/help/requests/$requestId'
     | '/templates/mine/$templateId'
+    | '/api/public/email-asset/$name'
     | '/api/public/shelf-image/$slug'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -861,6 +872,7 @@ export interface FileRouteTypes {
     | '/_authenticated/help/categories/$categorySlug'
     | '/_authenticated/help/requests/$requestId'
     | '/_authenticated/templates/mine/$templateId'
+    | '/api/public/email-asset/$name'
     | '/api/public/shelf-image/$slug'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -889,6 +901,7 @@ export interface RootRouteChildren {
   TableIssueIdFlyerRoute: typeof TableIssueIdFlyerRoute
   TableAuthorsAuthorIdRoute: typeof TableAuthorsAuthorIdRoute
   TableBooksBookIdRoute: typeof TableBooksBookIdRoute
+  ApiPublicEmailAssetNameRoute: typeof ApiPublicEmailAssetNameRoute
   ApiPublicShelfImageSlugRoute: typeof ApiPublicShelfImageSlugRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
@@ -1338,6 +1351,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTemplatesMineTemplateIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/email-asset/$name': {
+      id: '/api/public/email-asset/$name'
+      path: '/api/public/email-asset/$name'
+      fullPath: '/api/public/email-asset/$name'
+      preLoaderRoute: typeof ApiPublicEmailAssetNameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/shelf-image/$slug': {
       id: '/api/public/shelf-image/$slug'
       path: '/api/public/shelf-image/$slug'
@@ -1525,6 +1545,7 @@ const rootRouteChildren: RootRouteChildren = {
   TableIssueIdFlyerRoute: TableIssueIdFlyerRoute,
   TableAuthorsAuthorIdRoute: TableAuthorsAuthorIdRoute,
   TableBooksBookIdRoute: TableBooksBookIdRoute,
+  ApiPublicEmailAssetNameRoute: ApiPublicEmailAssetNameRoute,
   ApiPublicShelfImageSlugRoute: ApiPublicShelfImageSlugRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
