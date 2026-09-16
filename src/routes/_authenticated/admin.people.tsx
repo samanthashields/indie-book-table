@@ -67,7 +67,7 @@ function PersonCard({ person, onSaved }: { person: Person; onSaved: () => void }
 
   return (
     <li className="rounded-2xl border border-border bg-card px-5 py-4 shadow-xs">
-      <div className="grid gap-4 sm:grid-cols-[1fr_auto_auto_auto_auto] sm:items-center">
+      <div className="grid gap-4 sm:grid-cols-[1fr_auto_auto_auto_auto_auto] sm:items-center">
         <div className="min-w-0">
           <p className="font-semibold">{person.display_name || "No name yet"}</p>
           <p className="truncate text-sm text-muted-foreground">
@@ -76,6 +76,20 @@ function PersonCard({ person, onSaved }: { person: Person; onSaved: () => void }
           </p>
         </div>
         <StatusPill tone={person.suspended ? "danger" : "good"}>{person.suspended ? "Suspended" : "Active"}</StatusPill>
+        <label className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Switch
+            checked={person.roles.includes("admin")}
+            disabled={busy}
+            aria-label={`Admin access for ${person.display_name ?? person.email ?? "account"}`}
+            onCheckedChange={(checked) =>
+              void run(
+                () => setPersonAdmin({ data: { userId: person.user_id, enabled: checked } }),
+                checked ? "Admin access granted" : "Admin access removed",
+              )
+            }
+          />
+          Admin
+        </label>
         <select
           className="h-10 rounded-xl border border-input bg-paper px-3 text-sm"
           value={person.plan}
