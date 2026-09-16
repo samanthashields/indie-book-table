@@ -60,6 +60,7 @@ export async function loadWelcomeEmailSettings(): Promise<WelcomeEmailSettings> 
     body: read(KEYS.body, WELCOME_DEFAULTS.body),
     ctaLabel: read(KEYS.ctaLabel, WELCOME_DEFAULTS.ctaLabel),
     ctaUrl: read(KEYS.ctaUrl, WELCOME_DEFAULTS.ctaUrl),
+    logoFile: read(KEYS.logoFile, WELCOME_DEFAULTS.logoFile),
   };
 }
 
@@ -72,6 +73,7 @@ export async function saveWelcomeEmailSettings(settings: WelcomeEmailSettings) {
     { key: KEYS.body, value: settings.body },
     { key: KEYS.ctaLabel, value: settings.ctaLabel },
     { key: KEYS.ctaUrl, value: settings.ctaUrl },
+    { key: KEYS.logoFile, value: settings.logoFile },
   ].map((row) => ({ ...row, updated_at: new Date().toISOString() }));
   const { error } = await supabaseAdmin
     .from("catalog_site_content")
@@ -95,6 +97,7 @@ export async function sendWelcomeEmail(
         body: settings.body,
         ctaLabel: settings.ctaLabel || null,
         ctaUrl: settings.ctaUrl || null,
+        logoUrl: emailAssetUrl(settings.logoFile),
       },
       ...(options?.idempotencyKey ? { idempotencyKey: options.idempotencyKey } : {}),
     });

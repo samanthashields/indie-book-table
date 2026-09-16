@@ -61,6 +61,7 @@ const welcomeSchema = z.object({
   body: z.string().trim().min(1, "Add a message").max(5000),
   ctaLabel: z.string().trim().max(60),
   ctaUrl: z.string().trim().max(500),
+  logoFile: z.string().trim().max(200),
 });
 
 export const saveWelcomeEmail = createServerFn({ method: "POST" })

@@ -78,6 +78,7 @@ export const template = {
     body: "Thanks for joining the community list for The Indie Book Table.\n\nWe're building a home for indie authors, and you'll be among the first to hear when we open the doors.",
     ctaLabel: 'Visit the site',
     ctaUrl: 'https://indiebooktable.com',
+    logoUrl: 'https://indiebooktable.com/api/public/email-asset/default-logo.png',
   },
 } satisfies TemplateEntry
 
@@ -85,6 +86,8 @@ export default CommunityWelcomeEmail
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Georgia, serif' }
 const container = { padding: '24px 28px', maxWidth: '560px' }
+const logoRow = { textAlign: 'center' as const, margin: '8px 0 24px' }
+const logo = { display: 'inline-block', maxWidth: '140px', height: 'auto' }
 const h1 = {
   fontSize: '24px',
   fontWeight: 'normal' as const,
