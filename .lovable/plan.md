@@ -45,8 +45,8 @@ Empty, loading, and populated states will remain stable in either view. The unde
   - **Overview:** Dashboard
   - **Editorial:** Submissions, Issues, Journal, Table homepage, Mission page, Site words
   - **Community:** People, Community list
-  - **Workshop:** Templates, Help articles, Challenges
-  - **Operations:** Support, Feature requests, Release notes, Activity log
+  - **Workshop:** Templates, Challenges
+  - **Operations:** Help articles, Support, Feature requests, Release notes, Activity log
 - Use a persistent labelled sidebar on wider screens and a compact section/page menu on narrow screens.
 - Clearly mark the current page, retain keyboard focus visibility, and avoid reducing the usable width of desktop-heavy admin tools.
 
