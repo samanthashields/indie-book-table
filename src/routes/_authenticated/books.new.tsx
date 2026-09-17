@@ -202,7 +202,9 @@ function CreateBook() {
   // One merged warnings channel: Pen's own plan-specific flags, plus a client-side schedule
   // feasibility check against whatever launch date is currently set (matches the same check
   // useCreateBookCycle runs after creation, surfaced here before the author commits to it).
-  const effectiveDate = coachDate || coachAnswers["launchDate"] || "";
+  // coachDate is seeded from the coach's launchDate answer on generate; after that the field is
+  // the single source of truth — clearing it must mean "no date", not "fall back to the answer".
+  const effectiveDate = coachDate;
   const feasibilityWarning = (() => {
     if (!effectiveDate) return null;
     const target = new Date(`${effectiveDate}T00:00:00`);
