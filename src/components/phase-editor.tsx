@@ -1,6 +1,7 @@
 import { ArrowDown, ArrowUp, Eye, EyeOff, Plus, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { MilestoneDisclosure } from "@/components/milestone-disclosure";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { phaseStyle } from "@/lib/phase-style";
@@ -83,8 +84,7 @@ export function PhaseEditor({ phases, onChange }: { phases: TemplatePhase[]; onC
                 </div>
               </div>
 
-              <ul className="mt-4 space-y-3">
-                {phase.milestones.map((milestone, milestoneIndex) => (
+              <MilestoneDisclosure items={phase.milestones} expandOnGrowth className="mt-4 space-y-3" renderItem={(milestone, milestoneIndex) => (
                   <li key={milestone.localId} className="space-y-2 rounded-xl bg-card p-4 shadow-xs">
                     <div className="flex items-center gap-3">
                       <Input className="flex-1" value={milestone.name} aria-label="Milestone name" onChange={(event) => patchMilestone(phase.id, milestoneIndex, { name: event.target.value })} />
@@ -126,7 +126,8 @@ export function PhaseEditor({ phases, onChange }: { phases: TemplatePhase[]; onC
                       </select>
                     </div>
                   </li>
-                ))}
+                )} />
+              <ul>
                 {phase.milestones.length === 0 && (
                   <li className="rounded-xl border border-dashed border-border bg-card/60 p-4 text-sm text-muted-foreground">No milestones yet in this phase.</li>
                 )}

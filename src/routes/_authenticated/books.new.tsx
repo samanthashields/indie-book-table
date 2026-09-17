@@ -3,6 +3,7 @@ import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { BookOpen, Check, Eye, Loader2, MessageSquareText, X } from "lucide-react";
 import { toast } from "sonner";
 import { CoachMark } from "@/components/coach-mark";
+import { MilestoneDisclosure } from "@/components/milestone-disclosure";
 import { AppShell } from "@/components/app-shell";
 import { CoachConversation } from "@/components/coach-conversation";
 import { CycleBuilder, blankPhases } from "@/components/cycle-builder";
@@ -256,15 +257,13 @@ function CreateBook() {
                   {phase.mode && <span className="text-xs font-semibold text-muted-foreground">{phase.mode}</span>}
                 </div>
                 {phase.summary && <p className="mt-2 text-sm leading-6 text-muted-foreground">{phase.summary}</p>}
-                <ul className="mt-4 space-y-3">
-                  {phase.milestones.map((milestone) => <li key={milestone.name} className="animate-in fade-in rounded-xl bg-secondary p-4 duration-500">
+                <MilestoneDisclosure items={phase.milestones} className="mt-4 space-y-3" renderItem={(milestone) => <li key={milestone.name} className="animate-in fade-in rounded-xl bg-secondary p-4 duration-500">
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                       <p className="font-semibold">{milestone.name}</p>
                       <p className="text-xs text-muted-foreground">{requirementLabel[milestone.requirement]}</p>
                     </div>
                     {milestone.note && <p className="mt-1 text-sm leading-6 text-muted-foreground">{milestone.note}</p>}
-                  </li>)}
-                </ul>
+                  </li>} />
               </li>)}
             </ol>
 
