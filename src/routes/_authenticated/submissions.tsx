@@ -5,6 +5,7 @@ import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
+import { ViewSwitcher, useCollectionView, type CollectionView } from "@/components/view-switcher";
 import { useCatalogCoverUrl } from "@/lib/catalog-covers";
 import { useMySubmissions, type SubmissionRow } from "@/lib/catalog-submit";
 import { SUBMISSION_STATUS_LABELS } from "@/lib/submission-schema";
@@ -66,20 +67,20 @@ function Timeline({ step }: { step: number }) {
 const submittedOn = (value: string) =>
   new Date(value).toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" });
 
-function SubmissionCard({ book }: { book: SubmissionRow }) {
+function SubmissionCard({ book, view }: { book: SubmissionRow; view: CollectionView }) {
   const cover = useCatalogCoverUrl(book.cover_image_url);
   const published = book.catalog_issue_selections.filter((s) => s.catalog_issues?.status === "published");
   const upcoming = book.catalog_issue_selections.filter((s) => s.catalog_issues?.status !== "published");
   const step = currentStep(book, published.length > 0);
 
   return (
-    <article className="flex gap-5 rounded-2xl border border-border bg-card p-5 shadow-xs">
+    <article className={cn("rounded-2xl border border-border bg-card p-5 shadow-xs", view === "grid" ? "flex min-w-0 flex-col" : "flex gap-5")}>
       {cover.data ? (
-        <img src={cover.data} alt={`Cover of ${book.title}`} className="aspect-[2/3] w-24 shrink-0 rounded-xl object-cover" loading="lazy" />
+        <img src={cover.data} alt={`Cover of ${book.title}`} className={cn("aspect-[2/3] shrink-0 rounded-xl object-cover", view === "grid" ? "w-full" : "w-24")} loading="lazy" />
       ) : (
-        <span className="grid aspect-[2/3] w-24 shrink-0 place-items-center rounded-xl bg-teal/15 p-2 text-center font-serif text-sm text-cocoa">{book.title}</span>
+        <span className={cn("grid aspect-[2/3] shrink-0 place-items-center rounded-xl bg-teal/15 p-2 text-center font-serif text-sm text-cocoa", view === "grid" ? "w-full" : "w-24")}>{book.title}</span>
       )}
-      <div className="min-w-0 flex-1">
+      <div className={cn("min-w-0 flex-1", view === "grid" && "mt-4")}>
         <div className="flex flex-wrap items-center gap-2">
           <StatusPill tone={TONE[book.status] ?? "neutral"}>{SUBMISSION_STATUS_LABELS[book.status] ?? book.status}</StatusPill>
           {book.catalog_issue_selections.some((s) => s.is_spotlight) && <StatusPill tone="warm">Spotlight</StatusPill>}
@@ -118,13 +119,14 @@ function SubmissionCard({ book }: { book: SubmissionRow }) {
 
 function SubmissionsPage() {
   const { data: books = [], isLoading } = useMySubmissions();
+  const [view, setView] = useCollectionView("my-submissions-view");
 
   return (
     <AppShell>
       <PageHeading
         title="My submissions"
         description="Books you've sent to The Table, and where each one stands."
-        action={<Button asChild><Link to="/submit"><Plus />Submit a book</Link></Button>}
+        action={<div className="flex flex-wrap items-center gap-3"><ViewSwitcher view={view} onChange={setView} label="Choose how submissions are shown" /><Button asChild><Link to="/submit"><Plus />Submit a book</Link></Button></div>}
       />
       {isLoading ? (
         <p className="text-sm text-muted-foreground">Loading your submissions…</p>
@@ -138,8 +140,8 @@ function SubmissionsPage() {
           </div>
         </div>
       ) : (
-        <div className="space-y-5">
-          {books.map((book) => <SubmissionCard key={book.id} book={book} />)}
+        <div className={view === "grid" ? "grid gap-5 lg:grid-cols-2" : "space-y-5"}>
+          {books.map((book) => <SubmissionCard key={book.id} book={book} view={view} />)}
         </div>
       )}
     </AppShell>
