@@ -124,4 +124,4 @@
 - [x] Add an account-backed first-visit Workshop welcome with “Don’t show this again”
 - [x] Add a guided, restartable Workshop walkthrough
 - [x] Add admin-managed welcome copy, media, walkthrough screens, ordering, publishing, and preview
-- [ ] Verify the complete experience in desktop and mobile browsers
+- [x] Verify the complete experience in desktop and mobile browsers
