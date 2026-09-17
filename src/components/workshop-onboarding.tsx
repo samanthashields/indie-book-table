@@ -72,6 +72,7 @@ export function WorkshopOnboarding() {
   const [mode, setMode] = useState<"closed" | "welcome" | "tour">("closed");
   const [stepIndex, setStepIndex] = useState(0);
   const [dontShow, setDontShow] = useState(false);
+  const [previewing, setPreviewing] = useState(false);
   const data = onboarding.data;
   const isWorkshopPage = !pathname.startsWith("/admin") && !pathname.startsWith("/auth");
 
@@ -82,8 +83,8 @@ export function WorkshopOnboarding() {
   }, [data, isWorkshopPage]);
 
   useEffect(() => {
-    const openWelcome = () => { setDontShow(false); setMode("welcome"); };
-    const openTour = () => { setStepIndex(0); setMode("tour"); };
+    const openWelcome = (event: Event) => { setPreviewing(event instanceof CustomEvent && event.detail?.preview === true); setDontShow(false); setMode("welcome"); };
+    const openTour = (event: Event) => { setPreviewing(event instanceof CustomEvent && event.detail?.preview === true); setStepIndex(0); setMode("tour"); };
     window.addEventListener(OPEN_WORKSHOP_WELCOME, openWelcome);
     window.addEventListener(OPEN_WORKSHOP_TOUR, openTour);
     return () => {
@@ -96,10 +97,12 @@ export function WorkshopOnboarding() {
   const closeForNow = () => {
     window.sessionStorage.setItem(SESSION_CLOSED_KEY, "true");
     setMode("closed");
+    if (previewing) return;
     void saveState.mutateAsync({ last_seen_at: new Date().toISOString(), dismissed: dontShow });
   };
   const finish = () => {
     setMode("closed");
+    if (previewing) return;
     void saveState.mutateAsync({ completed: true, dismissed: false, current_step: 0, last_seen_at: new Date().toISOString() });
   };
 
@@ -128,7 +131,7 @@ export function WorkshopOnboarding() {
           <>
             <TourScreen step={step} index={stepIndex} count={data.steps.length} />
             <DialogFooter className="items-center gap-2 sm:space-x-0">
-              <Button variant="ghost" onClick={() => { setMode("closed"); void saveState.mutateAsync({ dismissed: true, current_step: stepIndex, last_seen_at: new Date().toISOString() }); }}>Skip</Button>
+              <Button variant="ghost" onClick={() => { setMode("closed"); if (!previewing) void saveState.mutateAsync({ dismissed: true, current_step: stepIndex, last_seen_at: new Date().toISOString() }); }}>Skip</Button>
               {step.destination_label && step.destination_path ? (
                 <Button variant="outline" onClick={() => { setMode("closed"); void navigate({ to: step.destination_path as "/" }); }}>{step.destination_label}</Button>
               ) : null}
