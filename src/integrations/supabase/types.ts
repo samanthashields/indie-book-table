@@ -1849,6 +1849,111 @@ export type Database = {
         }
         Relationships: []
       }
+      workshop_onboarding: {
+        Row: {
+          body: string
+          enabled: boolean
+          heading: string
+          id: string
+          media_kind: string
+          media_value: string
+          primary_label: string
+          secondary_label: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          enabled?: boolean
+          heading?: string
+          id?: string
+          media_kind?: string
+          media_value?: string
+          primary_label?: string
+          secondary_label?: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          enabled?: boolean
+          heading?: string
+          id?: string
+          media_kind?: string
+          media_value?: string
+          primary_label?: string
+          secondary_label?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      workshop_onboarding_state: {
+        Row: {
+          completed: boolean
+          current_step: number
+          dismissed: boolean
+          last_seen_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          current_step?: number
+          dismissed?: boolean
+          last_seen_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          current_step?: number
+          dismissed?: boolean
+          last_seen_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      workshop_tour_steps: {
+        Row: {
+          body: string
+          created_at: string
+          destination_label: string
+          destination_path: string
+          id: string
+          media_kind: string
+          media_value: string
+          position: number
+          published: boolean
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          destination_label?: string
+          destination_path?: string
+          id?: string
+          media_kind?: string
+          media_value?: string
+          position?: number
+          published?: boolean
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          destination_label?: string
+          destination_path?: string
+          id?: string
+          media_kind?: string
+          media_value?: string
+          position?: number
+          published?: boolean
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
