@@ -257,7 +257,7 @@ function CreateBook() {
                   {phase.mode && <span className="text-xs font-semibold text-muted-foreground">{phase.mode}</span>}
                 </div>
                 {phase.summary && <p className="mt-2 text-sm leading-6 text-muted-foreground">{phase.summary}</p>}
-                <MilestoneDisclosure items={phase.milestones} className="mt-4 space-y-3" renderItem={(milestone) => <li key={milestone.name} className="animate-in fade-in rounded-xl bg-secondary p-4 duration-500">
+                <MilestoneDisclosure items={phase.milestones} className="mt-4 space-y-3" renderItem={(milestone, milestoneIndex) => <li key={`${milestone.name}-${milestoneIndex}`} className="animate-in fade-in rounded-xl bg-secondary p-4 duration-500">
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                       <p className="font-semibold">{milestone.name}</p>
                       <p className="text-xs text-muted-foreground">{requirementLabel[milestone.requirement]}</p>
