@@ -60,8 +60,8 @@ function TemplatePreview() {
                 <div className={`rounded-2xl border border-border p-5 ${style.soft}`}>
                   <div className="flex flex-wrap items-center gap-2"><h3 className="font-serif text-2xl font-normal">{phase.name}</h3><StatusPill>{phase.mode}</StatusPill></div>
                   <p className="mt-1 text-sm text-muted-foreground">{phase.summary}</p>
-                  <MilestoneDisclosure items={phase.milestones} className="mt-4 space-y-2" renderItem={(milestone) => (
-                      <li key={milestone.name} className="rounded-xl bg-card p-4 shadow-xs">
+                  <MilestoneDisclosure items={phase.milestones} className="mt-4 space-y-2" renderItem={(milestone, milestoneIndex) => (
+                      <li key={`${milestone.name}-${milestoneIndex}`} className="rounded-xl bg-card p-4 shadow-xs">
                         <div className="flex flex-wrap items-baseline justify-between gap-2">
                           <p className="font-semibold">{milestone.name}</p>
                           <p className="text-xs text-muted-foreground">{requirementLabel[milestone.requirement]}</p>

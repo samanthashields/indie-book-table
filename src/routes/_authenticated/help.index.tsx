@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { LifeBuoy, Lightbulb, Search, Sparkles } from "lucide-react";
+import { LifeBuoy, Lightbulb, PlayCircle, Search, Sparkles } from "lucide-react";
+import { OPEN_WORKSHOP_TOUR, OPEN_WORKSHOP_WELCOME } from "@/components/workshop-onboarding";
 
 import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
@@ -45,6 +46,8 @@ function HelpCenter() {
         description="Guides for every corner of the workshop, what’s new, and a way to reach us."
         action={
           <div className="flex flex-wrap gap-2">
+            <Button variant="outline" onClick={() => window.dispatchEvent(new Event(OPEN_WORKSHOP_WELCOME))}><PlayCircle />Welcome</Button>
+            <Button variant="outline" onClick={() => window.dispatchEvent(new Event(OPEN_WORKSHOP_TOUR))}><Sparkles />Start walkthrough</Button>
             <Button asChild variant="secondary">
               <Link to="/help/requests"><Lightbulb />Request a feature</Link>
             </Button>

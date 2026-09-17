@@ -21,6 +21,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { PenLauncher } from "@/components/pen/pen-launcher";
 import { NotificationBell } from "@/components/notification-bell";
+import { WorkshopOnboarding } from "@/components/workshop-onboarding";
 import { claimInvitations } from "@/lib/collaborators";
 import { signOut, useCurrentUser } from "@/lib/use-current-user";
 import { cn } from "@/lib/utils";
@@ -246,6 +247,7 @@ export function AppShell({
         </div>
         {showPenLauncher && <PenLauncher context={coachContext} />}
       </div>
+      <WorkshopOnboarding />
     </div>
   );
 }

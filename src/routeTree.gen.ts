@@ -34,6 +34,7 @@ import { Route as AuthenticatedAdminActivityRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminChallengesRouteImport } from './routes/_authenticated/admin.challenges'
 import { Route as AuthenticatedAdminIssuesRouteImport } from './routes/_authenticated/admin.issues'
 import { Route as AuthenticatedAdminMissionpageRouteImport } from './routes/_authenticated/admin.missionpage'
+import { Route as AuthenticatedAdminOnboardingRouteImport } from './routes/_authenticated/admin.onboarding'
 import { Route as AuthenticatedAdminPeopleRouteImport } from './routes/_authenticated/admin.people'
 import { Route as AuthenticatedAdminReleasesRouteImport } from './routes/_authenticated/admin.releases'
 import { Route as AuthenticatedAdminRequestsRouteImport } from './routes/_authenticated/admin.requests'
@@ -207,6 +208,12 @@ const AuthenticatedAdminMissionpageRoute =
   AuthenticatedAdminMissionpageRouteImport.update({
     id: '/missionpage',
     path: '/missionpage',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminOnboardingRoute =
+  AuthenticatedAdminOnboardingRouteImport.update({
+    id: '/onboarding',
+    path: '/onboarding',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminPeopleRoute =
@@ -486,6 +493,7 @@ export interface FileRoutesByFullPath {
   '/admin/challenges': typeof AuthenticatedAdminChallengesRoute
   '/admin/issues': typeof AuthenticatedAdminIssuesRoute
   '/admin/missionpage': typeof AuthenticatedAdminMissionpageRoute
+  '/admin/onboarding': typeof AuthenticatedAdminOnboardingRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
   '/admin/releases': typeof AuthenticatedAdminReleasesRoute
   '/admin/requests': typeof AuthenticatedAdminRequestsRoute
@@ -555,6 +563,7 @@ export interface FileRoutesByTo {
   '/admin/challenges': typeof AuthenticatedAdminChallengesRoute
   '/admin/issues': typeof AuthenticatedAdminIssuesRoute
   '/admin/missionpage': typeof AuthenticatedAdminMissionpageRoute
+  '/admin/onboarding': typeof AuthenticatedAdminOnboardingRoute
   '/admin/people': typeof AuthenticatedAdminPeopleRoute
   '/admin/releases': typeof AuthenticatedAdminReleasesRoute
   '/admin/requests': typeof AuthenticatedAdminRequestsRoute
@@ -626,6 +635,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/challenges': typeof AuthenticatedAdminChallengesRoute
   '/_authenticated/admin/issues': typeof AuthenticatedAdminIssuesRoute
   '/_authenticated/admin/missionpage': typeof AuthenticatedAdminMissionpageRoute
+  '/_authenticated/admin/onboarding': typeof AuthenticatedAdminOnboardingRoute
   '/_authenticated/admin/people': typeof AuthenticatedAdminPeopleRoute
   '/_authenticated/admin/releases': typeof AuthenticatedAdminReleasesRoute
   '/_authenticated/admin/requests': typeof AuthenticatedAdminRequestsRoute
@@ -698,6 +708,7 @@ export interface FileRouteTypes {
     | '/admin/challenges'
     | '/admin/issues'
     | '/admin/missionpage'
+    | '/admin/onboarding'
     | '/admin/people'
     | '/admin/releases'
     | '/admin/requests'
@@ -767,6 +778,7 @@ export interface FileRouteTypes {
     | '/admin/challenges'
     | '/admin/issues'
     | '/admin/missionpage'
+    | '/admin/onboarding'
     | '/admin/people'
     | '/admin/releases'
     | '/admin/requests'
@@ -837,6 +849,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/challenges'
     | '/_authenticated/admin/issues'
     | '/_authenticated/admin/missionpage'
+    | '/_authenticated/admin/onboarding'
     | '/_authenticated/admin/people'
     | '/_authenticated/admin/releases'
     | '/_authenticated/admin/requests'
@@ -1083,6 +1096,13 @@ declare module '@tanstack/react-router' {
       path: '/missionpage'
       fullPath: '/admin/missionpage'
       preLoaderRoute: typeof AuthenticatedAdminMissionpageRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/onboarding': {
+      id: '/_authenticated/admin/onboarding'
+      path: '/onboarding'
+      fullPath: '/admin/onboarding'
+      preLoaderRoute: typeof AuthenticatedAdminOnboardingRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/people': {
@@ -1401,6 +1421,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminChallengesRoute: typeof AuthenticatedAdminChallengesRoute
   AuthenticatedAdminIssuesRoute: typeof AuthenticatedAdminIssuesRoute
   AuthenticatedAdminMissionpageRoute: typeof AuthenticatedAdminMissionpageRoute
+  AuthenticatedAdminOnboardingRoute: typeof AuthenticatedAdminOnboardingRoute
   AuthenticatedAdminPeopleRoute: typeof AuthenticatedAdminPeopleRoute
   AuthenticatedAdminReleasesRoute: typeof AuthenticatedAdminReleasesRoute
   AuthenticatedAdminRequestsRoute: typeof AuthenticatedAdminRequestsRoute
@@ -1422,6 +1443,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminChallengesRoute: AuthenticatedAdminChallengesRoute,
   AuthenticatedAdminIssuesRoute: AuthenticatedAdminIssuesRoute,
   AuthenticatedAdminMissionpageRoute: AuthenticatedAdminMissionpageRoute,
+  AuthenticatedAdminOnboardingRoute: AuthenticatedAdminOnboardingRoute,
   AuthenticatedAdminPeopleRoute: AuthenticatedAdminPeopleRoute,
   AuthenticatedAdminReleasesRoute: AuthenticatedAdminReleasesRoute,
   AuthenticatedAdminRequestsRoute: AuthenticatedAdminRequestsRoute,

@@ -116,3 +116,12 @@
 - [x] Welcome email logo (centred, top) editable in Admin -> Community list; stored in the email-assets bucket, served via /api/public/email-asset/<file>
 - [ ] Replace the placeholder default logo with the real brand mark via the admin upload
 - [ ] Republish so the live site sends with the new name and logo
+
+## Workshop navigation and onboarding (Sep 17)
+- [x] Limit long phase summaries to five milestones with an accessible show-more control
+- [x] Add remembered list/grid views to My Books, My Cycles, Templates, My Submissions, and Collaborations
+- [x] Replace admin navigation chips with grouped desktop navigation and a compact mobile menu
+- [x] Add an account-backed first-visit Workshop welcome with “Don’t show this again”
+- [x] Add a guided, restartable Workshop walkthrough
+- [x] Add admin-managed welcome copy, media, walkthrough screens, ordering, publishing, and preview
+- [x] Verify the complete experience in desktop and mobile browsers
