@@ -8,7 +8,15 @@ import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/admin")({ component: AdminLayout });
 
-const sections = [
+type AdminPath =
+  | "/admin" | "/admin/submissions" | "/admin/issues" | "/admin/journal" | "/admin/tablehome"
+  | "/admin/missionpage" | "/admin/sitewords" | "/admin/people" | "/admin/subscribers"
+  | "/admin/templates" | "/admin/challenges" | "/admin/onboarding" | "/admin/help"
+  | "/admin/support" | "/admin/requests" | "/admin/releases" | "/admin/activity";
+
+type AdminSection = { label: string; items: { label: string; to: AdminPath; exact?: boolean }[] };
+
+const sections: AdminSection[] = [
   { label: "Overview", items: [{ label: "Dashboard", to: "/admin" as const, exact: true }] },
   { label: "Editorial", items: [
     { label: "Submissions", to: "/admin/submissions" as const }, { label: "Issues", to: "/admin/issues" as const },
