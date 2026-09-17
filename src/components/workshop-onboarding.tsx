@@ -28,7 +28,7 @@ function Media({ kind, value, label }: { kind: string; value: string; label: str
   useEffect(() => {
     let current = true;
     if (!value) { setUrl(""); return; }
-    void resolveOnboardingMedia(value).then((next) => { if (current) setUrl(next); }).catch(() => setUrl(""));
+    void resolveOnboardingMedia(value).then((next) => { if (current) setUrl(next); }).catch(() => { if (current) setUrl(""); });
     return () => { current = false; };
   }, [value]);
 

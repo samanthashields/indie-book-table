@@ -47,7 +47,7 @@ function MediaFields({ kind, value, onChange }: { kind: MediaKind; value: string
   useEffect(() => {
     let current = true;
     if (!value) { setPreview(""); return; }
-    void resolveOnboardingMedia(value).then((url) => { if (current) setPreview(url); }).catch(() => setPreview(""));
+    void resolveOnboardingMedia(value).then((url) => { if (current) setPreview(url); }).catch(() => { if (current) setPreview(""); });
     return () => { current = false; };
   }, [value]);
 
