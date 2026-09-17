@@ -5,6 +5,7 @@ import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
+import { ViewSwitcher, useCollectionView } from "@/components/view-switcher";
 import { useCurrentUser } from "@/lib/use-current-user";
 import { useDeleteAuthorTemplate, useSaveAuthorTemplate, useTemplates } from "@/lib/book-db";
 import { templateCover } from "@/lib/template-covers";
@@ -19,6 +20,7 @@ function Templates() {
   const save = useSaveAuthorTemplate();
   const remove = useDeleteAuthorTemplate();
   const navigate = useNavigate();
+  const [view, setView] = useCollectionView("templates-view", "grid");
   const userId = user.data?.id;
 
   const globals = templates.filter((template) => template.published && !template.archived);
@@ -54,7 +56,7 @@ function Templates() {
       <PageHeading
         title="Book Cycle Templates"
         description="A strong starting path, built for how your kind of book is actually made — plus the ones you save yourself."
-        action={<Button asChild><Link to="/templates/mine/$templateId" params={{ templateId: "new" }}><Plus />New template</Link></Button>}
+        action={<div className="flex flex-wrap items-center gap-3"><ViewSwitcher view={view} onChange={setView} label="Choose how templates are shown" /><Button asChild><Link to="/templates/mine/$templateId" params={{ templateId: "new" }}><Plus />New template</Link></Button></div>}
       />
       {isLoading ? (
         <p className="text-sm text-muted-foreground">Loading templates…</p>
@@ -62,10 +64,10 @@ function Templates() {
         <div className="space-y-12">
           <section>
             <h2 className="mb-5 font-serif text-2xl font-semibold">Genre templates</h2>
-            <div className="grid gap-6 lg:grid-cols-2">
+            <div className={view === "grid" ? "grid gap-6 lg:grid-cols-2" : "space-y-4"}>
               {globals.map((template, index) => (
-                <article key={template.id} className="grid overflow-hidden rounded-2xl border border-border bg-card shadow-xs transition-shadow hover:shadow-md sm:grid-cols-[140px_1fr]">
-                  <img src={templateCover(template.details.illustrated)} alt={`Cover artwork for the ${template.title}`} width={768} height={1152} className="h-40 w-full object-cover sm:h-full sm:min-h-48" loading={index === 0 ? undefined : "lazy"} />
+                <article key={template.id} className={`grid overflow-hidden rounded-2xl border border-border bg-card shadow-xs transition-shadow hover:shadow-md ${view === "list" ? "sm:grid-cols-[110px_1fr]" : "sm:grid-cols-[140px_1fr]"}`}>
+                  <img src={templateCover(template.details.illustrated)} alt={`Cover artwork for the ${template.title}`} width={768} height={1152} className={`w-full object-cover ${view === "list" ? "h-32 sm:h-full sm:min-h-40" : "h-40 sm:h-full sm:min-h-48"}`} loading={index === 0 ? undefined : "lazy"} />
                   <div className="bg-card p-6">
                     <div className="mb-3 flex flex-wrap gap-2"><StatusPill tone={index === 0 ? "warm" : "good"}>{template.genre}</StatusPill><StatusPill>{template.phases.length} phases</StatusPill></div>
                     <h3 className="font-serif text-3xl font-normal">{template.title}</h3>
@@ -92,7 +94,7 @@ function Templates() {
                 <Button className="mt-5" asChild><Link to="/templates/mine/$templateId" params={{ templateId: "new" }}><Plus />New template</Link></Button>
               </div>
             ) : (
-              <div className="grid gap-4 lg:grid-cols-2">
+              <div className={view === "grid" ? "grid gap-4 lg:grid-cols-2" : "space-y-4"}>
                 {mine.map((template) => (
                   <article key={template.id} className="rounded-2xl border border-border bg-card p-6 shadow-xs">
                     <div className="mb-3 flex flex-wrap gap-2">{template.genre && <StatusPill tone="warm">{template.genre}</StatusPill>}<StatusPill>{template.phases.length} phases</StatusPill></div>

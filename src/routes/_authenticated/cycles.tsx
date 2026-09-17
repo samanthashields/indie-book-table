@@ -7,6 +7,7 @@ import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { ViewSwitcher, useCollectionView } from "@/components/view-switcher";
 import { useBooks, type BookSummary } from "@/lib/book-db";
 
 export const Route = createFileRoute("/_authenticated/cycles")({
@@ -57,8 +58,22 @@ function CycleRow({ book }: { book: BookSummary }) {
   );
 }
 
+function CycleCard({ book }: { book: BookSummary }) {
+  return (
+    <Link to="/books/$bookId" params={{ bookId: book.id }} className="group flex min-w-0 flex-col rounded-2xl border border-border bg-card p-4 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
+      <BookCover src={book.coverUrl} title={book.title} className="w-full" fallbackClassName="text-4xl" />
+      <div className="mt-4 flex flex-wrap items-center gap-2"><h3 className="min-w-0 flex-1 truncate font-serif text-xl font-normal group-hover:text-primary">{book.title}</h3><StatusPill tone={book.status.toLowerCase() === "complete" ? "good" : "warm"}>{book.status}</StatusPill></div>
+      <p className="mt-1 truncate text-sm text-muted-foreground">{book.genre}, by {book.author}</p>
+      <div className="mt-4 flex items-center gap-3"><Progress value={book.progress} className="h-1.5" /><span className="text-xs font-semibold">{book.progress}%</span></div>
+      <p className="mt-3 line-clamp-2 text-sm"><span className="text-muted-foreground">Next:</span> {book.nextAction}</p>
+      <p className="mt-auto pt-4 text-xs text-muted-foreground">Target publication · {book.target}</p>
+    </Link>
+  );
+}
+
 function Cycles() {
   const books = useBooks();
+  const [view, setView] = useCollectionView("my-cycles-view");
   const cycles = (books.data ?? []).filter((book) => book.hasCycle && book.isMine);
 
   return (
@@ -66,7 +81,7 @@ function Cycles() {
       <PageHeading
         title="My Cycles"
         description="Every publishing cycle you have going, grouped by where it stands."
-        action={<Button asChild><Link to="/books/new"><Plus />New book cycle</Link></Button>}
+        action={<div className="flex flex-wrap items-center gap-3"><ViewSwitcher view={view} onChange={setView} label="Choose how cycles are shown" /><Button asChild><Link to="/books/new"><Plus />New book cycle</Link></Button></div>}
       />
 
       {books.isLoading ? (
@@ -92,7 +107,7 @@ function Cycles() {
                     <p className="text-sm text-muted-foreground">{section.blurb}</p>
                   </div>
                 </div>
-                <div className="space-y-4">{items.map((book) => <CycleRow key={book.id} book={book} />)}</div>
+                <div className={view === "grid" ? "grid gap-4 sm:grid-cols-2 xl:grid-cols-3" : "space-y-4"}>{items.map((book) => view === "grid" ? <CycleCard key={book.id} book={book} /> : <CycleRow key={book.id} book={book} />)}</div>
               </section>
             );
           })}

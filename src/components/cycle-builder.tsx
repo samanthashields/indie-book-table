@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 import { StatusPill } from "@/components/status-pill";
+import { MilestoneDisclosure } from "@/components/milestone-disclosure";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { phaseStyle } from "@/lib/phase-style";
@@ -55,8 +56,7 @@ export function CycleBuilder({ title, description, phases: initial, initialTitle
               <div className={`rounded-2xl border border-border p-5 ${style.soft}`}>
                 <div className="flex flex-wrap items-center gap-2"><h3 className="font-serif text-2xl font-normal">{phase.name}</h3><StatusPill>{phase.mode}</StatusPill></div>
                 <p className="mt-1 text-sm text-muted-foreground">{phase.summary}</p>
-                <ul className="mt-4 space-y-3">
-                  {phase.milestones.map((milestone, milestoneIndex) => (
+                <MilestoneDisclosure items={phase.milestones} expandOnGrowth className="mt-4 space-y-3" renderItem={(milestone, milestoneIndex) => (
                     <li key={milestone.localId} className="space-y-2 rounded-xl bg-card p-4 shadow-xs">
                       <div className="flex items-center gap-3">
                         <Input className="flex-1" value={milestone.name} aria-label="Milestone name" onChange={(event) => updateMilestone(phase.id, milestoneIndex, { name: event.target.value })} />
@@ -93,7 +93,8 @@ export function CycleBuilder({ title, description, phases: initial, initialTitle
                         </select>
                       </div>
                     </li>
-                  ))}
+                  )} />
+                <ul>
                   {phase.milestones.length === 0 && <li className="rounded-xl border border-dashed border-border bg-card/60 p-4 text-sm text-muted-foreground">No milestones yet. Add the first thing that has to happen in this phase.</li>}
                 </ul>
                 <Button variant="outline" size="sm" className="mt-4" onClick={() => addMilestone(phase.id)}><Plus />Add milestone</Button>
