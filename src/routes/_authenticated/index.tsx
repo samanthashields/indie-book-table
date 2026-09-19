@@ -3,6 +3,7 @@ import { BookOpen, CalendarDays, CircleAlert, Clock3, Lightbulb, MoreVertical, P
 import { toast } from "sonner";
 import { AppShell } from "@/components/app-shell";
 import { BookCover } from "@/components/book-cover";
+import { BookGridCard } from "@/components/book-grid-card";
 import { ProgressRing } from "@/components/progress-ring";
 
 import { PageHeading } from "@/components/page-heading";
@@ -124,21 +125,18 @@ function BookRow({ book, submission, onDelete }: { book: BookSummary; submission
 function BookCard({ book, submission, onDelete }: { book: BookSummary; submission?: BookSubmission | undefined; onDelete: (id: string) => void }) {
   const to = book.hasCycle ? "/books/$bookId" : "/books/$bookId/details";
   return (
-    <div className="group flex flex-col rounded-2xl border border-border bg-card p-4 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
-      <div className="flex items-start justify-between gap-2">
-        <Link to={to} params={{ bookId: book.id }} className="min-w-0 flex-1">
-          <BookCover src={book.coverUrl} title={book.title} className="w-full" fallbackClassName="text-4xl" />
-        </Link>
-        <BookMenu book={book} submission={submission} onDelete={onDelete} />
-      </div>
-      <Link to={to} params={{ bookId: book.id }} className="mt-4 block min-w-0">
-        <h3 className="truncate font-serif text-xl font-normal group-hover:text-primary">{book.title}</h3>
-        <p className="mt-1 truncate text-sm text-muted-foreground">{book.genre}, by {book.author}</p>
-      </Link>
+    <BookGridCard
+      size="full"
+      cover={<BookCover src={book.coverUrl} title={book.title} className="w-full" fallbackClassName="text-4xl" />}
+      title={book.title}
+      subtitle={`${book.genre}, by ${book.author}`}
+      link={{ to, params: { bookId: book.id } }}
+      menu={<BookMenu book={book} submission={submission} onDelete={onDelete} />}
+    >
       <div className="mt-3 flex flex-wrap gap-2">
         <StatusPill tone={bookStatusTone(book.shelfStatus)}>{bookStatusLabel(book.shelfStatus)}</StatusPill>
         <NeedsFollowUpPill book={book} />
-        {submission && <TableChip submission={submission} />}
+        {submission && <span className="relative z-10"><TableChip submission={submission} /></span>}
       </div>
       {book.hasCycle && (
         <div className="mt-4 flex items-center gap-3">
@@ -152,8 +150,8 @@ function BookCard({ book, submission, onDelete }: { book: BookSummary; submissio
         </div>
       )}
 
-      <p className="mt-4 text-xs text-muted-foreground">Target publication · {book.target}</p>
-    </div>
+      <p className="mt-auto pt-4 text-xs text-muted-foreground">Target publication · {book.target}</p>
+    </BookGridCard>
   );
 }
 
