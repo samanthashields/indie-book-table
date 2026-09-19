@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { CalendarDays, Check, FileText, HardDrive, Link2, MessageSquare, Paperclip, Pencil, UserRound } from "lucide-react";
+import { CalendarDays, Check, CheckCircle2, FileText, HardDrive, Link2, MessageSquare, Paperclip, Pencil, UserRound } from "lucide-react";
 import { toast } from "sonner";
 import { StatusPill } from "@/components/status-pill";
 import { MilestoneChecklistPanel } from "@/components/milestone-checklist-panel";
@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
-import { useUpdateMilestone } from "@/lib/book-db";
+import { useCompleteMilestone, useUpdateMilestone, type CompletionSource } from "@/lib/book-db";
 import { uploadBookFile, useFileUrl } from "@/lib/book-files";
 import { useCollaborators } from "@/lib/collaborators";
 import { OWNER_KINDS, PROVISIONS, REQUIREMENT_TYPES, ownerKindLabel, provisionLabel, requirementLabel } from "@/lib/book-data";
@@ -39,7 +39,7 @@ export function RequirementAction({
   bookId: string;
   type: RequirementType;
   complete: boolean;
-  onComplete: () => void;
+  onComplete: (source: CompletionSource) => void;
   onAttach: (path: string, name: string) => void;
 }) {
   const input = useRef<HTMLInputElement>(null);
@@ -60,7 +60,7 @@ export function RequirementAction({
     try {
       const path = await uploadBookFile(bookId, "deliverables", file);
       onAttach(path, file.name);
-      onComplete();
+      onComplete("auto");
       toast.success("File attached");
     } catch {
       toast.error("Couldn’t upload that file");
@@ -104,7 +104,7 @@ export function RequirementAction({
                         return;
                       }
                       onAttach(url, "Google Drive file");
-                      onComplete();
+                      onComplete("auto");
                       setDriveLink("");
                       setDriveOpen(false);
                       toast.success("Google Drive file linked");
@@ -117,7 +117,7 @@ export function RequirementAction({
               )}
             </>
           ) : (
-            <Button className="mt-4" variant={complete ? "secondary" : "default"} onClick={onComplete} disabled={complete}>{complete && <Check />}{complete ? "Completed" : copy.action}</Button>
+            <Button className="mt-4" variant={complete ? "secondary" : "default"} onClick={() => onComplete("manual")} disabled={complete}>{complete && <Check />}{complete ? "Completed" : copy.action}</Button>
           )}
         </div>
       </div>
@@ -152,6 +152,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
   const [attachment, setAttachment] = useState<{ path: string; name: string } | null>(null);
   const noteFile = useRef<HTMLInputElement>(null);
   const updateMilestone = useUpdateMilestone(bookId);
+  const completeMilestone = useCompleteMilestone(bookId);
   const collaborators = useCollaborators(bookId);
   const roster = collaborators.data ?? [];
   const queryClient = useQueryClient();
@@ -214,10 +215,12 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
     );
   };
 
-  const markComplete = () => {
+  const markComplete = (source: CompletionSource) => {
+    // An automatic completion (an upload, a linked file) must not overwrite one the author already made.
+    if (source === "auto" && milestone.status === "Complete") return;
     update({ status: "Complete" });
-    updateMilestone.mutate(
-      { id: milestone.id, patch: { status: "Complete" } },
+    completeMilestone.mutate(
+      { id: milestone.id, source },
       { onSuccess: () => toast.success("Milestone complete"), onError: () => toast.error("Couldn’t update the milestone") },
     );
   };
@@ -229,7 +232,12 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
           <div className="mb-3 flex flex-wrap gap-2"><StatusPill>{phaseName}</StatusPill><StatusPill tone={milestone.status === "Complete" ? "good" : milestone.status === "Blocked" ? "danger" : "warm"}>{milestone.status}</StatusPill></div>
           <h2 className={compact ? "font-serif text-3xl font-normal" : "font-serif text-4xl font-normal md:text-5xl"}>{milestone.name}</h2>
         </div>
-        <Button variant={editing ? "secondary" : "outline"} onClick={() => setEditing((value) => !value)}><Pencil />{editing ? "Cancel edit" : "Edit milestone"}</Button>
+        <div className="flex flex-wrap gap-2">
+          {milestone.status !== "Complete" && !editing && (
+            <Button variant="secondary" disabled={completeMilestone.isPending} onClick={() => markComplete("manual")}><CheckCircle2 />Mark as complete</Button>
+          )}
+          <Button variant={editing ? "secondary" : "outline"} onClick={() => setEditing((value) => !value)}><Pencil />{editing ? "Cancel edit" : "Edit milestone"}</Button>
+        </div>
       </div>
 
       {editing ? (
