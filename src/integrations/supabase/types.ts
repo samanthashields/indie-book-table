@@ -1514,6 +1514,7 @@ export type Database = {
           suspended: boolean
           updated_at: string
           user_id: string
+          view_preference: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -1527,6 +1528,7 @@ export type Database = {
           suspended?: boolean
           updated_at?: string
           user_id: string
+          view_preference?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -1540,6 +1542,7 @@ export type Database = {
           suspended?: boolean
           updated_at?: string
           user_id?: string
+          view_preference?: string | null
         }
         Relationships: []
       }
