@@ -433,6 +433,30 @@ export function useUpdateMilestone(bookId: string) {
   });
 }
 
+export type CompletionSource = "manual" | "auto";
+
+/**
+ * Marks a milestone complete. A manual completion always applies. An automatic
+ * one (file uploaded, link attached) only applies while the milestone is still
+ * open, so it can never overwrite a manual completion — including one made from
+ * another tab or device, which the conditional update catches server-side.
+ */
+export function useCompleteMilestone(bookId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, source }: { id: string; source: CompletionSource }) => {
+      let query = supabase.from("milestones").update({ status: "Complete", completed_at: new Date().toISOString() }).eq("id", id);
+      if (source === "auto") query = query.neq("status", "Complete");
+      const { error } = await query;
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["book", bookId] });
+      void queryClient.invalidateQueries({ queryKey: ["books"] });
+    },
+  });
+}
+
 export function useUpdateBook(bookId: string) {
   const queryClient = useQueryClient();
   return useMutation({
