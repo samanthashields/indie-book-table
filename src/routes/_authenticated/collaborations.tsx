@@ -22,7 +22,7 @@ export const Route = createFileRoute("/_authenticated/collaborations")({
 
 function Collaborations() {
   const { data: books = [], isLoading } = useBooks();
-  const [view, setView] = useCollectionView("collaborations-view");
+  const [view, setView] = useCollectionView();
   const shared = books.filter((book) => !book.isMine);
 
   return (

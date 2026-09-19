@@ -73,7 +73,7 @@ function CycleCard({ book }: { book: BookSummary }) {
 
 function Cycles() {
   const books = useBooks();
-  const [view, setView] = useCollectionView("my-cycles-view");
+  const [view, setView] = useCollectionView();
   const cycles = (books.data ?? []).filter((book) => book.hasCycle && book.isMine);
 
   return (
