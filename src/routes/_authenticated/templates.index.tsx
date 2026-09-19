@@ -68,17 +68,21 @@ function Templates() {
               {globals.map((template, index) => (
                 <article key={template.id} className={`grid overflow-hidden rounded-2xl border border-border bg-card shadow-xs transition-shadow hover:shadow-md ${view === "list" ? "sm:grid-cols-[110px_1fr]" : "sm:grid-cols-[140px_1fr]"}`}>
                   <img src={templateCover(template.details.illustrated)} alt={`Cover artwork for the ${template.title}`} width={768} height={1152} className={`w-full object-cover ${view === "list" ? "h-32 sm:h-full sm:min-h-40" : "h-40 sm:h-full sm:min-h-48"}`} loading={index === 0 ? undefined : "lazy"} />
-                  <div className="bg-card p-6">
-                    <div className="mb-3 flex flex-wrap gap-2"><StatusPill tone={index === 0 ? "warm" : "good"}>{template.genre}</StatusPill><StatusPill>{template.phases.length} phases</StatusPill></div>
-                    <h3 className="font-serif text-3xl font-normal">{template.title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-muted-foreground">{template.description}</p>
-                    <ul className="mt-5 space-y-2 text-sm">
-                      {(template.details.highlights ?? []).map((highlight) => <li key={highlight} className="flex gap-2"><Check className="size-4 shrink-0 text-leaf" />{highlight}</li>)}
-                    </ul>
-                    <div className="mt-6 flex flex-wrap gap-3">
-                      <Button variant="outline" asChild><Link to="/templates/$templateId" params={{ templateId: template.id }}><Eye />Preview</Link></Button>
-                      <Button variant="outline" disabled={save.isPending} onClick={() => clone(template)}><Copy />Make my own copy</Button>
-                      <Button asChild><Link to="/books/new" search={{ path: "template", template: template.id }}>Use this template</Link></Button>
+                  <div className={`bg-card p-6 ${view === "list" ? "lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:gap-x-10" : ""}`}>
+                    <div>
+                      <div className="mb-3 flex flex-wrap gap-2"><StatusPill tone={index === 0 ? "warm" : "good"}>{template.genre}</StatusPill><StatusPill>{template.phases.length} phases</StatusPill></div>
+                      <h3 className="font-serif text-3xl font-normal">{template.title}</h3>
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">{template.description}</p>
+                    </div>
+                    <div className="flex flex-col">
+                      <ul className="mt-5 space-y-2 text-sm lg:mt-0">
+                        {(template.details.highlights ?? []).map((highlight) => <li key={highlight} className="flex gap-2"><Check className="size-4 shrink-0 text-leaf" />{highlight}</li>)}
+                      </ul>
+                      <div className="mt-6 flex flex-wrap gap-3">
+                        <Button variant="outline" asChild><Link to="/templates/$templateId" params={{ templateId: template.id }}><Eye />Preview</Link></Button>
+                        <Button variant="outline" disabled={save.isPending} onClick={() => clone(template)}><Copy />Make my own copy</Button>
+                        <Button asChild><Link to="/books/new" search={{ path: "template", template: template.id }}>Use this template</Link></Button>
+                      </div>
                     </div>
                   </div>
                 </article>
@@ -96,11 +100,13 @@ function Templates() {
             ) : (
               <div className={view === "grid" ? "grid gap-4 lg:grid-cols-2" : "space-y-4"}>
                 {mine.map((template) => (
-                  <article key={template.id} className="rounded-2xl border border-border bg-card p-6 shadow-xs">
-                    <div className="mb-3 flex flex-wrap gap-2">{template.genre && <StatusPill tone="warm">{template.genre}</StatusPill>}<StatusPill>{template.phases.length} phases</StatusPill></div>
-                    <h3 className="font-serif text-2xl font-normal">{template.title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-muted-foreground">{template.description}</p>
-                    <div className="mt-5 flex flex-wrap gap-3">
+                  <article key={template.id} className={`rounded-2xl border border-border bg-card p-6 shadow-xs ${view === "list" ? "sm:flex sm:items-center sm:justify-between sm:gap-8" : ""}`}>
+                    <div className="min-w-0">
+                      <div className="mb-3 flex flex-wrap gap-2">{template.genre && <StatusPill tone="warm">{template.genre}</StatusPill>}<StatusPill>{template.phases.length} phases</StatusPill></div>
+                      <h3 className="font-serif text-2xl font-normal">{template.title}</h3>
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">{template.description}</p>
+                    </div>
+                    <div className={`flex flex-wrap gap-3 ${view === "list" ? "mt-5 sm:mt-0 sm:shrink-0" : "mt-5"}`}>
                       <Button variant="outline" asChild><Link to="/templates/mine/$templateId" params={{ templateId: template.id }}><SquarePen />Edit</Link></Button>
                       <Button asChild><Link to="/books/new" search={{ path: "template", template: template.id }}>Use this template</Link></Button>
                       <Button variant="ghost" size="icon" aria-label={`Delete ${template.title}`} onClick={() => destroy(template.id)}><Trash2 /></Button>
