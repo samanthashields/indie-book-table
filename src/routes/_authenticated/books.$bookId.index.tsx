@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { CalendarDays, CheckCircle2, ChevronDown, Circle, Clock3, FileText, FolderOpen, ListChecks, Settings2, Users } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { BookCover } from "@/components/book-cover";
 import { MilestoneBody } from "@/components/milestone-body";
 import { MilestoneDisclosure } from "@/components/milestone-disclosure";
 import { StatusPill } from "@/components/status-pill";
@@ -53,18 +52,14 @@ function BookOverview() {
   return (
     <AppShell>
       <header className="mb-8 flex flex-col gap-6 border-b border-border/70 pb-7 md:flex-row md:items-end md:justify-between">
-        <div className="flex gap-5">
-          <BookCover src={book.cover_url} title={book.title} className="w-20 shrink-0" fallbackClassName="text-3xl" />
-
-          <div>
-            <div className="mb-2 flex flex-wrap gap-2">
-              <StatusPill tone="good">{book.status === "active" ? "In progress" : book.status}</StatusPill>
-              {book.genre && <StatusPill tone="warm">{book.genre}</StatusPill>}
-              {needsFollowUp !== "on_track" && <StatusPill tone={needsFollowUpTone[needsFollowUp]}>{needsFollowUpLabel[needsFollowUp]}</StatusPill>}
-            </div>
-            <h1 className="font-serif text-4xl font-normal md:text-5xl">{book.title}</h1>
-            <p className="mt-1 text-muted-foreground">by {book.pen_name || "you"}</p>
+        <div>
+          <div className="mb-2 flex flex-wrap gap-2">
+            <StatusPill tone="good">{book.status === "active" ? "In progress" : book.status}</StatusPill>
+            {book.genre && <StatusPill tone="warm">{book.genre}</StatusPill>}
+            {needsFollowUp !== "on_track" && <StatusPill tone={needsFollowUpTone[needsFollowUp]}>{needsFollowUpLabel[needsFollowUp]}</StatusPill>}
           </div>
+          <h1 className="font-serif text-4xl font-normal md:text-5xl">{book.title}</h1>
+          <p className="mt-1 text-muted-foreground">by {book.pen_name || "you"}</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" asChild><Link to="/books/$bookId/details" params={{ bookId }}><Settings2 />Book details</Link></Button>

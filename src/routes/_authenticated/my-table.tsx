@@ -72,18 +72,18 @@ function MyTable() {
         </div>
       ) : (
         <div className="space-y-10">
+          <section className="grid gap-3 rounded-2xl border border-border bg-card p-2 shadow-xs sm:grid-cols-3" aria-label="Your totals">
+            <div className="rounded-xl bg-primary/5 px-4 py-4"><p className="text-sm font-semibold">Books published</p><p className="mt-1 text-2xl font-semibold">{publishedCount}</p></div>
+            <div className="rounded-xl bg-primary/5 px-4 py-4"><p className="text-sm font-semibold">Cycles completed</p><p className="mt-1 text-2xl font-semibold">{cyclesCompleted}</p></div>
+            <div className="rounded-xl bg-primary/5 px-4 py-4"><p className="text-sm font-semibold">Published this year</p><p className="mt-1 text-2xl font-semibold">{publishedThisYear}</p></div>
+          </section>
+
           {challenges.isLoading ? <Skeleton className="h-40 w-full rounded-2xl" /> : <ChallengeList challenges={challenges.data ?? []} />}
 
           <div className="space-y-4">
             <AuthorTable books={publishedBooks} decorations={earnedDecorations} />
             <ShareTable authorName={authorName} books={publishedBooks} decorations={earnedDecorations} />
           </div>
-
-          <section className="grid gap-3 rounded-2xl border border-border bg-card p-2 shadow-xs sm:grid-cols-3" aria-label="Your totals">
-            <div className="rounded-xl bg-primary/5 px-4 py-4"><p className="text-sm font-semibold">Books published</p><p className="mt-1 text-2xl font-semibold">{publishedCount}</p></div>
-            <div className="rounded-xl bg-primary/5 px-4 py-4"><p className="text-sm font-semibold">Cycles completed</p><p className="mt-1 text-2xl font-semibold">{cyclesCompleted}</p></div>
-            <div className="rounded-xl bg-primary/5 px-4 py-4"><p className="text-sm font-semibold">Published this year</p><p className="mt-1 text-2xl font-semibold">{publishedThisYear}</p></div>
-          </section>
 
           <BadgeGrid badges={badges} />
         </div>
