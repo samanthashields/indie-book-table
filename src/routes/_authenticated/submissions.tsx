@@ -119,7 +119,7 @@ function SubmissionCard({ book, view }: { book: SubmissionRow; view: CollectionV
 
 function SubmissionsPage() {
   const { data: books = [], isLoading } = useMySubmissions();
-  const [view, setView] = useCollectionView("my-submissions-view");
+  const [view, setView] = useCollectionView();
 
   return (
     <AppShell>

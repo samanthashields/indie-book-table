@@ -20,7 +20,7 @@ function Templates() {
   const save = useSaveAuthorTemplate();
   const remove = useDeleteAuthorTemplate();
   const navigate = useNavigate();
-  const [view, setView] = useCollectionView("templates-view", "grid");
+  const [view, setView] = useCollectionView("grid");
   const userId = user.data?.id;
 
   const globals = templates.filter((template) => template.published && !template.archived);

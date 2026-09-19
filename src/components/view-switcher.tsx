@@ -1,24 +1,44 @@
-import { useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LayoutGrid, List } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { supabase } from "@/integrations/supabase/client";
+import { useCurrentUser } from "@/lib/use-current-user";
 import { cn } from "@/lib/utils";
 
 export type CollectionView = "list" | "grid";
 
-export function useCollectionView(storageKey: string, initial: CollectionView = "list") {
-  const [view, setView] = useState<CollectionView>(initial);
+/**
+ * The author's grid/list default, stored on their profile so it follows them
+ * across devices. One global preference for every collection page; `initial` is
+ * only used until they've picked one.
+ */
+export function useCollectionView(initial: CollectionView = "list") {
+  const user = useCurrentUser();
+  const queryClient = useQueryClient();
+  const userId = user.data?.id;
+  const view = user.data?.profile?.view_preference ?? initial;
 
-  useEffect(() => {
-    const saved = window.localStorage.getItem(storageKey);
-    if (saved === "list" || saved === "grid") setView(saved);
-  }, [storageKey]);
+  const save = useMutation({
+    mutationFn: async (next: CollectionView) => {
+      if (!userId) return;
+      const { error } = await supabase.from("profiles").update({ view_preference: next }).eq("user_id", userId);
+      if (error) throw error;
+    },
+    onMutate: (next) => {
+      queryClient.setQueryData<typeof user.data>(["current-user"], (current) =>
+        current && current.profile ? { ...current, profile: { ...current.profile, view_preference: next } } : current,
+      );
+    },
+    onError: () => {
+      toast.error("Couldn’t save your view preference");
+      void queryClient.invalidateQueries({ queryKey: ["current-user"] });
+    },
+  });
 
-  const chooseView = (next: CollectionView) => {
-    setView(next);
-    window.localStorage.setItem(storageKey, next);
-  };
+  const chooseView = (next: CollectionView) => save.mutate(next);
 
   return [view, chooseView] as const;
 }

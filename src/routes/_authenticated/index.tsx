@@ -230,7 +230,7 @@ function Index() {
   }
   const deleteBook = useDeleteBook();
   const navigate = useNavigate();
-  const [view, chooseView] = useCollectionView("my-books-view");
+  const [view, chooseView] = useCollectionView();
 
   const mine = books.filter((book) => book.isMine);
   const cycles = mine.filter((book) => book.hasCycle);

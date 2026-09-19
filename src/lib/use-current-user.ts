@@ -8,6 +8,7 @@ export type Profile = {
   avatar_url: string | null;
   bio: string | null;
   plan: string;
+  view_preference: "list" | "grid" | null;
 };
 
 export function useCurrentUser() {
@@ -16,7 +17,7 @@ export function useCurrentUser() {
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return null;
-      const { data: profile } = await supabase.from("profiles").select("user_id, display_name, pen_name, avatar_url, bio, plan").eq("user_id", user.id).maybeSingle();
+      const { data: profile } = await supabase.from("profiles").select("user_id, display_name, pen_name, avatar_url, bio, plan, view_preference").eq("user_id", user.id).maybeSingle();
       const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", user.id);
       return {
         id: user.id,
