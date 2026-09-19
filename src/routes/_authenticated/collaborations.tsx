@@ -2,6 +2,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { Users } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { BookCover } from "@/components/book-cover";
+import { BookGridCard } from "@/components/book-grid-card";
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Progress } from "@/components/ui/progress";
@@ -38,9 +39,23 @@ function Collaborations() {
         </div>
       ) : (
         <div className={view === "grid" ? "grid gap-4 sm:grid-cols-2 xl:grid-cols-3" : "space-y-3"}>
-          {shared.map((book) => (
-            <Link key={book.id} to="/books/$bookId" params={{ bookId: book.id }} className={view === "grid" ? "group flex min-w-0 flex-col rounded-2xl border border-border bg-card p-4 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md" : "group grid gap-5 rounded-2xl border border-border bg-card px-5 py-5 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md sm:grid-cols-[88px_1fr_auto] sm:items-center"}>
-              <BookCover src={book.coverUrl} title={book.title} className={view === "grid" ? "w-full" : "w-20 shrink-0"} fallbackClassName="text-3xl" />
+          {shared.map((book) => view === "grid" ? (
+            <BookGridCard
+              key={book.id}
+              size="md"
+              cover={<BookCover src={book.coverUrl} title={book.title} className="w-full" fallbackClassName="text-3xl" />}
+              title={book.title}
+              subtitle={`${book.genre}, by ${book.author}`}
+              link={{ to: "/books/$bookId", params: { bookId: book.id } }}
+            >
+              <div className="mt-3"><StatusPill tone="good">Shared with you</StatusPill></div>
+              <div className="mt-4 flex items-center gap-3"><Progress value={book.progress} className="h-1.5" /><span className="text-xs font-semibold">{book.progress}%</span></div>
+              <p className="mt-3 line-clamp-2 text-sm"><span className="text-muted-foreground">Next:</span> {book.nextAction}</p>
+              <p className="mt-auto pt-4 text-xs text-muted-foreground">Target publication · {book.target}</p>
+            </BookGridCard>
+          ) : (
+            <Link key={book.id} to="/books/$bookId" params={{ bookId: book.id }} className="group grid gap-5 rounded-2xl border border-border bg-card px-5 py-5 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md sm:grid-cols-[88px_1fr_auto] sm:items-center">
+              <BookCover src={book.coverUrl} title={book.title} className="w-20 shrink-0" fallbackClassName="text-3xl" />
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="font-serif text-2xl font-normal group-hover:text-primary">{book.title}</h3>
@@ -50,7 +65,7 @@ function Collaborations() {
                 <div className="mt-4 flex max-w-xl items-center gap-3"><Progress value={book.progress} className="h-1.5" /><span className="text-xs font-semibold">{book.progress}%</span></div>
                 <p className="mt-3 text-sm"><span className="text-muted-foreground">Next:</span> {book.nextAction}</p>
               </div>
-              <div className={view === "grid" ? "mt-auto pt-4 text-left" : "text-left sm:text-right"}><p className="text-xs text-muted-foreground">Target publication</p><p className="mt-1 text-sm font-semibold">{book.target}</p></div>
+              <div className="text-left sm:text-right"><p className="text-xs text-muted-foreground">Target publication</p><p className="mt-1 text-sm font-semibold">{book.target}</p></div>
             </Link>
           ))}
         </div>

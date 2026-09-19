@@ -3,6 +3,7 @@ import { CheckCircle2, CircleDashed, Clock3, Plus } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { BookCover } from "@/components/book-cover";
+import { BookGridCard } from "@/components/book-grid-card";
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
@@ -60,14 +61,18 @@ function CycleRow({ book }: { book: BookSummary }) {
 
 function CycleCard({ book }: { book: BookSummary }) {
   return (
-    <Link to="/books/$bookId" params={{ bookId: book.id }} className="group flex min-w-0 flex-col rounded-2xl border border-border bg-card p-4 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
-      <BookCover src={book.coverUrl} title={book.title} className="w-full" fallbackClassName="text-4xl" />
-      <div className="mt-4 flex flex-wrap items-center gap-2"><h3 className="min-w-0 flex-1 truncate font-serif text-xl font-normal group-hover:text-primary">{book.title}</h3><StatusPill tone={book.status.toLowerCase() === "complete" ? "good" : "warm"}>{book.status}</StatusPill></div>
-      <p className="mt-1 truncate text-sm text-muted-foreground">{book.genre}, by {book.author}</p>
+    <BookGridCard
+      size="md"
+      cover={<BookCover src={book.coverUrl} title={book.title} className="w-full" fallbackClassName="text-3xl" />}
+      title={book.title}
+      subtitle={`${book.genre}, by ${book.author}`}
+      link={{ to: "/books/$bookId", params: { bookId: book.id } }}
+    >
+      <div className="mt-3"><StatusPill tone={book.status.toLowerCase() === "complete" ? "good" : "warm"}>{book.status}</StatusPill></div>
       <div className="mt-4 flex items-center gap-3"><Progress value={book.progress} className="h-1.5" /><span className="text-xs font-semibold">{book.progress}%</span></div>
       <p className="mt-3 line-clamp-2 text-sm"><span className="text-muted-foreground">Next:</span> {book.nextAction}</p>
       <p className="mt-auto pt-4 text-xs text-muted-foreground">Target publication · {book.target}</p>
-    </Link>
+    </BookGridCard>
   );
 }
 
