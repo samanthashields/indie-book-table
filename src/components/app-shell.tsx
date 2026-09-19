@@ -48,9 +48,12 @@ export function AppShell({
   coachContext?: string;
   showPenLauncher?: boolean;
 }) {
-  const [navOpen, setNavOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
   const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const inAdmin = pathname === "/admin" || pathname.startsWith("/admin/");
+  const [navOpen, setNavOpen] = useState(false);
+  // The Admin panel has its own section nav, so give it the room: collapse on
+  // entering Admin, expand on leaving. The manual toggle still works in between.
+  const [collapsed, setCollapsed] = useState(inAdmin);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const user = useCurrentUser();
@@ -67,6 +70,10 @@ export function AppShell({
   const isAdmin = Boolean(user.data?.roles.includes("admin"));
   const accountLabel = "Author";
   const userId = user.data?.id;
+
+  useEffect(() => {
+    setCollapsed(inAdmin);
+  }, [inAdmin]);
 
   useEffect(() => {
     if (!userId) return;
@@ -169,34 +176,38 @@ export function AppShell({
           )}
         </nav>
         <div className="mt-auto space-y-2">
-          <div
-            className={cn(
-              "flex items-center gap-3 border-t border-sidebar-border pt-4",
-              collapsed && "justify-center",
-            )}
-          >
-            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-accent font-semibold text-accent-foreground">
-              {initials}
-            </span>
-            {!collapsed && (
-              <div className="min-w-0">
-                <p className="truncate text-sm font-medium">{displayName}</p>
-                <p className="text-xs text-muted-foreground">
-                  {isAdmin ? "Editor" : accountLabel} · {planLabel}
-                </p>
-              </div>
-            )}
-            {!collapsed && <NotificationBell className="ml-auto shrink-0" />}
-            {!collapsed && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="shrink-0"
-                onClick={() => void handleSignOut()}
-                aria-label="Sign out"
+          <div className="border-t border-sidebar-border pt-4">
+            <div className={cn("flex items-center gap-3", collapsed && "justify-center")}>
+              <span
+                className="grid size-9 shrink-0 place-items-center rounded-full bg-accent text-sm font-semibold text-accent-foreground"
+                title={collapsed ? displayName : undefined}
               >
-                <LogOut className="size-4" />
-              </Button>
+                {initials}
+              </span>
+              {!collapsed && (
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium" title={displayName}>
+                    {displayName}
+                  </p>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {isAdmin ? "Editor" : accountLabel} · {planLabel}
+                  </p>
+                </div>
+              )}
+            </div>
+            {!collapsed && (
+              <div className="mt-3 flex items-center gap-1">
+                <NotificationBell className="shrink-0" />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex-1 justify-start text-muted-foreground"
+                  onClick={() => void handleSignOut()}
+                >
+                  <LogOut className="size-4" />
+                  Sign out
+                </Button>
+              </div>
             )}
           </div>
 
