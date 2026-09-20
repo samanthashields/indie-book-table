@@ -113,12 +113,6 @@ const normalizeStatus = (value: string | null): Milestone["status"] => {
   return ({ "not started": "Not started", "in progress": "In progress", blocked: "Blocked", "on hold": "On hold", complete: "Complete", completed: "Complete" } as Record<string, Milestone["status"]>)[key] ?? "Not started";
 };
 
-/** Some rows store the status as a slug (for example "not-started"); use the label form everywhere. */
-const normalizeStatus = (value: string | null): Milestone["status"] => {
-  const key = (value ?? "").toLowerCase().replace(/[\s_-]+/g, " ").trim();
-  return ({ "not started": "Not started", "in progress": "In progress", blocked: "Blocked", "on hold": "On hold", complete: "Complete", completed: "Complete" } as Record<string, Milestone["status"]>)[key] ?? "Not started";
-};
-
 const milestoneToUi = (row: MilestoneRow): Milestone => ({
   id: row.id,
   name: row.name,
