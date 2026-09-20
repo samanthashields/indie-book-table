@@ -68,10 +68,19 @@
   --color-inkblue: var(--inkblue);
   --color-cocoa: var(--cocoa);
   --color-clay: var(--clay);
+  --color-ink: var(--ink);
+  --color-on-ink: var(--on-ink);
+  --color-inverse: var(--inverse);
+  --color-on-inverse: var(--on-inverse);
+  --color-link: var(--link);
+  --color-text-inkblue: var(--text-inkblue);
+  --color-text-leaf: var(--text-leaf);
+  --color-text-clay: var(--text-clay);
+  --color-text-teal: var(--text-teal);
 }
 
 
-:root {
+:root, .light {
   --radius: 1rem;
   --background: oklch(0.985 0.006 76);
   --foreground: oklch(0.29 0.045 37);
@@ -112,6 +121,15 @@
   --inkblue: oklch(0.55 0.075 240);
   --cocoa: oklch(0.28 0.035 32);
   --clay: oklch(0.64 0.115 45);
+  --ink: oklch(0.28 0.035 32);
+  --on-ink: oklch(0.93 0.017 76);
+  --inverse: oklch(0.28 0.035 32);
+  --on-inverse: oklch(0.93 0.017 76);
+  --link: oklch(0.56 0.085 238);
+  --text-inkblue: oklch(0.55 0.075 240);
+  --text-leaf: oklch(0.81 0.13 118);
+  --text-clay: oklch(0.64 0.115 45);
+  --text-teal: oklch(0.75 0.083 190);
 }
 
 
