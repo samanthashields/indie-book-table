@@ -25,7 +25,7 @@ export const Route = createFileRoute("/_authenticated/submit")({
   }),
   head: () => ({
     meta: [
-      { title: "Submit your book to The Table — Book Cycles" },
+      { title: "Submit your book to The Table — The Indie Book Table" },
       { name: "description", content: "Send your finished book to the editors for a spot in an upcoming issue of The Table." },
       { property: "og:title", content: "Submit your book to The Table" },
       { property: "og:description", content: "Send your finished book to the editors for a spot in an upcoming issue of The Table." },

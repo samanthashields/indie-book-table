@@ -11,9 +11,9 @@ import { templateCover } from "@/lib/template-covers";
 
 export const Route = createFileRoute("/_authenticated/templates/$templateId")({
   head: () => ({ meta: [
-    { title: "Template Preview — Book Cycles" },
+    { title: "Template Preview — The Indie Book Table" },
     { name: "description", content: "Preview every phase, milestone, and requirement in this book cycle template before you use it." },
-    { property: "og:title", content: "Template Preview — Book Cycles" },
+    { property: "og:title", content: "Template Preview — The Indie Book Table" },
     { property: "og:description", content: "Preview every phase, milestone, and requirement in this book cycle template before you use it." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },

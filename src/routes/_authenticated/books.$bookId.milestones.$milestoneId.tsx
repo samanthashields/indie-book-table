@@ -5,8 +5,8 @@ import { useBookTree } from "@/lib/book-db";
 
 export const Route = createFileRoute("/_authenticated/books/$bookId/milestones/$milestoneId")({
   head: () => ({ meta: [
-    { title: "Milestone — Book Cycles" }, { name: "description", content: "Complete a book milestone and its single linked requirement." },
-    { property: "og:title", content: "Milestone — Book Cycles" }, { property: "og:description", content: "Complete a book milestone and its single linked requirement." },
+    { title: "Milestone — The Indie Book Table" }, { name: "description", content: "Complete a book milestone and its single linked requirement." },
+    { property: "og:title", content: "Milestone — The Indie Book Table" }, { property: "og:description", content: "Complete a book milestone and its single linked requirement." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
   ] }), component: MilestoneDetail,
 });

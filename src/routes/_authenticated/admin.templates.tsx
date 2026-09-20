@@ -13,9 +13,9 @@ import type { TemplatePhase } from "@/lib/template-data";
 
 export const Route = createFileRoute("/_authenticated/admin/templates")({
   head: () => ({ meta: [
-    { title: "Templates — Book Cycles admin" },
+    { title: "Templates — The Indie Book Table admin" },
     { name: "description", content: "Create, edit, publish and archive the genre templates authors start from." },
-    { property: "og:title", content: "Templates — Book Cycles admin" },
+    { property: "og:title", content: "Templates — The Indie Book Table admin" },
     { property: "og:description", content: "Create, edit, publish and archive the genre templates authors start from." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },

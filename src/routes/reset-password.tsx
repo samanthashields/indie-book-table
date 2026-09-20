@@ -8,10 +8,10 @@ import { Input } from "@/components/ui/input";
 export const Route = createFileRoute("/reset-password")({
   ssr: false,
   head: () => ({ meta: [
-    { title: "Reset your password — Book Cycles" },
-    { name: "description", content: "Choose a new password for your Book Cycles account." },
-    { property: "og:title", content: "Reset your password — Book Cycles" },
-    { property: "og:description", content: "Choose a new password for your Book Cycles account." },
+    { title: "Reset your password — The Indie Book Table" },
+    { name: "description", content: "Choose a new password for your account." },
+    { property: "og:title", content: "Reset your password — The Indie Book Table" },
+    { property: "og:description", content: "Choose a new password for your account." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
   ] }),
@@ -43,7 +43,7 @@ function ResetPassword() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-5">
       <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-xs">
-        <Link to="/" className="mb-8 flex items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground"><BookOpen className="size-5" /></span><span className="font-serif text-xl font-normal">Book Cycles</span></Link>
+        <Link to="/" className="mb-8 flex items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground"><BookOpen className="size-5" /></span><span className="font-serif text-xl font-normal">The Indie Book Table</span></Link>
         {done ? (
           <div className="text-center">
             <span className="mx-auto mb-4 grid size-14 place-items-center rounded-full bg-leaf/25"><CheckCircle2 className="size-6" /></span>

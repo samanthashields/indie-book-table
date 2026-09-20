@@ -37,8 +37,8 @@ export const Route = createFileRoute("/_authenticated/books/new")({
     };
   },
   head: () => ({ meta: [
-    { title: "Create a Book Cycle — Book Cycles" }, { name: "description", content: "Build a publishing plan from scratch, a template, or a guided AI conversation." },
-    { property: "og:title", content: "Create a Book Cycle — Book Cycles" }, { property: "og:description", content: "Build a publishing plan from scratch, a template, or a guided AI conversation." },
+    { title: "Create a Book Cycle — The Indie Book Table" }, { name: "description", content: "Build a publishing plan from scratch, a template, or a guided AI conversation." },
+    { property: "og:title", content: "Create a Book Cycle — The Indie Book Table" }, { property: "og:description", content: "Build a publishing plan from scratch, a template, or a guided AI conversation." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
   ] }), component: CreateBook,
 });

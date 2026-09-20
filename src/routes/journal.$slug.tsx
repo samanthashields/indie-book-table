@@ -23,7 +23,7 @@ export const Route = createFileRoute("/journal/$slug")({
     }
     const post = loaderData.post;
     const title = `${post.title} — The Journal`;
-    const description = post.excerpt ?? `${post.title}, from the Book Cycles journal.`;
+    const description = post.excerpt ?? `${post.title}, from The Indie Book Table journal.`;
     return {
       meta: [
         { title },

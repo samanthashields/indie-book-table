@@ -13,9 +13,9 @@ import type { TemplatePhase } from "@/lib/template-data";
 
 export const Route = createFileRoute("/_authenticated/templates/mine/$templateId")({
   head: () => ({ meta: [
-    { title: "Edit Template — Book Cycles" },
+    { title: "Edit Template — The Indie Book Table" },
     { name: "description", content: "Shape your own book cycle template: phases, milestones and the requirement behind each one." },
-    { property: "og:title", content: "Edit Template — Book Cycles" },
+    { property: "og:title", content: "Edit Template — The Indie Book Table" },
     { property: "og:description", content: "Shape your own book cycle template: phases, milestones and the requirement behind each one." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },

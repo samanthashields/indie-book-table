@@ -15,9 +15,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/submissions")({
   head: () => ({
     meta: [
-      { title: "My submissions — Book Cycles" },
+      { title: "My submissions — The Indie Book Table" },
       { name: "description", content: "Track the books you've sent to The Table and see which issues picked them up." },
-      { property: "og:title", content: "My submissions — Book Cycles" },
+      { property: "og:title", content: "My submissions — The Indie Book Table" },
       { property: "og:description", content: "Track the books you've sent to The Table and see which issues picked them up." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

@@ -76,7 +76,7 @@ function AdminLayout() {
 
   return (
     <AppShell>
-      <PageHeading title="Admin" description="People, global templates, The Table, and what’s happening across Book Cycles." />
+      <PageHeading title="Admin" description="People, global templates, The Table, and what’s happening across The Indie Book Table." />
       <div className="mb-6 md:hidden">
         <label htmlFor="admin-sections" className="mb-2 block text-sm font-semibold">Admin page</label>
         <div className="relative">

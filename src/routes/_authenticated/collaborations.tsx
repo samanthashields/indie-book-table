@@ -11,9 +11,9 @@ import { useBooks } from "@/lib/book-db";
 
 export const Route = createFileRoute("/_authenticated/collaborations")({
   head: () => ({ meta: [
-    { title: "Collaborations — Book Cycles" },
+    { title: "Collaborations — The Indie Book Table" },
     { name: "description", content: "Books other authors have invited you to help with, all in one place." },
-    { property: "og:title", content: "Collaborations — Book Cycles" },
+    { property: "og:title", content: "Collaborations — The Indie Book Table" },
     { property: "og:description", content: "Books other authors have invited you to help with, all in one place." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },

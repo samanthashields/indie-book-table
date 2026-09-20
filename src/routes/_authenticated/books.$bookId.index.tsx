@@ -17,8 +17,8 @@ import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/books/$bookId/")({
   head: () => ({ meta: [
-    { title: "Book Overview — Book Cycles" }, { name: "description", content: "See the phases, milestones, collaborators, and next actions for your book." },
-    { property: "og:title", content: "Book Overview — Book Cycles" }, { property: "og:description", content: "See the phases, milestones, collaborators, and next actions for your book." },
+    { title: "Book Overview — The Indie Book Table" }, { name: "description", content: "See the phases, milestones, collaborators, and next actions for your book." },
+    { property: "og:title", content: "Book Overview — The Indie Book Table" }, { property: "og:description", content: "See the phases, milestones, collaborators, and next actions for your book." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
   ] }), component: BookOverview,
 });
