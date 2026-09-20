@@ -7,6 +7,7 @@ import { MilestoneDisclosure } from "@/components/milestone-disclosure";
 import { AppShell } from "@/components/app-shell";
 import { CoachConversation } from "@/components/coach-conversation";
 import { CycleBuilder, blankPhases } from "@/components/cycle-builder";
+import { TemplateCyclePreview } from "@/components/template-cycle-preview";
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
@@ -23,17 +24,19 @@ import { requirementLabel } from "@/lib/book-data";
 import { cn } from "@/lib/utils";
 
 type PathId = "coach" | "template" | "scratch";
-type Search = { path?: PathId; template?: string; book?: string };
+type Search = { path?: PathId; template?: string; book?: string; customise?: boolean };
 
 export const Route = createFileRoute("/_authenticated/books/new")({
   validateSearch: (search: Record<string, unknown>): Search => {
     const path = search["path"];
     const template = search["template"];
     const book = search["book"];
+    const customise = search["customise"];
     return {
       ...(path === "coach" || path === "template" || path === "scratch" ? { path } : {}),
       ...(typeof template === "string" ? { template } : {}),
       ...(typeof book === "string" ? { book } : {}),
+      ...(customise === true || customise === "true" ? { customise: true } : {}),
     };
   },
   head: () => ({ meta: [
@@ -153,6 +156,22 @@ function CreateBook() {
     const template = templateList.find((entry) => entry.id === search.template);
     if (templates.isLoading) return <AppShell coachContext="create"><p className="text-sm text-muted-foreground">Loading template…</p></AppShell>;
     if (!template) return <AppShell coachContext="create"><p className="text-sm text-muted-foreground">This template is no longer available.</p></AppShell>;
+    if (!search.customise) {
+      return (
+        <AppShell coachContext="create">
+          <PageHeading title={`Preview the ${template.title}`} description="This is how your book cycle will look. Nothing is created until you finish the next step." />
+          <TemplateCyclePreview
+            key={template.id}
+            title={template.title}
+            description={template.description ?? ""}
+            genre={template.genre}
+            phases={template.phases}
+            onBack={() => go({ path: "template" })}
+            onUse={() => go({ path: "template", template: template.id, customise: true })}
+          />
+        </AppShell>
+      );
+    }
     return (
       <AppShell coachContext="create">
         <PageHeading title={`Customise the ${template.title}`} description="Every phase and milestone is yours to rename, remove, or add to." />
@@ -163,7 +182,7 @@ function CreateBook() {
           phases={template.phases}
           initialTitle={existingBook?.title ?? ""}
           creating={createCycle.isPending}
-          onBack={() => go({ path: "template" })}
+          onBack={() => go({ path: "template", template: template.id })}
           onCreate={(input) => create({ ...input, templateId: template.id, ...(template.genre ? { genre: template.genre } : {}), illustrated: template.details.illustrated ?? false })}
         />
       </AppShell>
