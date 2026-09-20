@@ -130,7 +130,7 @@ const milestoneToUi = (row: MilestoneRow): Milestone => ({
   ...(row.due_date ? { dueIso: row.due_date } : {}),
 });
 
-type PhaseLookup = Map<string, { key: string; name: string; suggested_start: string | null; suggested_end: string | null }>;
+type PhaseLookup = Map<string, { key: string; name: string; position: number; suggested_start: string | null; suggested_end: string | null }>;
 
 const summarize = (
   book: BookRow,
@@ -139,7 +139,8 @@ const summarize = (
   currentUserId: string | undefined,
   phaseById: PhaseLookup = new Map(),
 ): BookSummary => {
-  const sorted = [...milestones].sort((a, b) => a.position - b.position);
+  // Milestone positions restart in every phase, so order by phase first.
+  const sorted = [...milestones].sort((a, b) => (phaseById.get(a.phase_id)?.position ?? 0) - (phaseById.get(b.phase_id)?.position ?? 0) || a.position - b.position);
   const done = sorted.filter((m) => m.status === "Complete").length;
   const progress = sorted.length ? Math.round((done / sorted.length) * 100) : 0;
   const next = sorted.find((m) => m.status === "In progress") ?? sorted.find((m) => m.status !== "Complete");
@@ -202,11 +203,11 @@ export function useBooks() {
       const bookIds = rows.map((row) => row.id);
       const [{ data: milestoneRows, error: milestoneError }, { data: phaseRows }] = await Promise.all([
         supabase.from("milestones").select("*").in("book_id", bookIds),
-        supabase.from("phases").select("id, key, name, suggested_start, suggested_end").in("book_id", bookIds),
+        supabase.from("phases").select("id, key, name, suggested_start, suggested_end, position").in("book_id", bookIds),
       ]);
       if (milestoneError) throw milestoneError;
       const phaseById: PhaseLookup = new Map();
-      for (const phase of phaseRows ?? []) phaseById.set(phase.id, { key: phase.key, name: phase.name, suggested_start: phase.suggested_start, suggested_end: phase.suggested_end });
+      for (const phase of phaseRows ?? []) phaseById.set(phase.id, { key: phase.key, name: phase.name, position: phase.position, suggested_start: phase.suggested_start, suggested_end: phase.suggested_end });
       const grouped = new Map<string, MilestoneRow[]>();
       for (const milestone of (milestoneRows ?? []) as MilestoneRow[]) {
         grouped.set(milestone.book_id, [...(grouped.get(milestone.book_id) ?? []), milestone]);
