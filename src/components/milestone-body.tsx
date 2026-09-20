@@ -230,7 +230,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-4 border-b border-border/70 pb-6 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-4 border-b border-border/70 pb-6">
         <div className="min-w-0">
           <div className="mb-3 flex flex-wrap gap-2"><StatusPill>{phaseName}</StatusPill><StatusPill tone={milestone.status === "Complete" ? "good" : milestone.status === "Blocked" ? "danger" : "warm"}>{milestone.status}</StatusPill></div>
           <h2 className={compact ? "font-serif text-3xl font-normal" : "font-serif text-4xl font-normal md:text-5xl"}>{milestone.name}</h2>

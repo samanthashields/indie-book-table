@@ -56,7 +56,7 @@ function BookOverview() {
 
   return (
     <AppShell>
-      <header className="mb-8 flex flex-col gap-6 border-b border-border/70 pb-7 md:flex-row md:items-end md:justify-between">
+      <header className="mb-8 flex flex-col gap-6 border-b border-border/70 pb-7">
         <div>
           <div className="mb-2 flex flex-wrap gap-2">
             <StatusPill tone="good">{book.status === "active" ? "In progress" : book.status}</StatusPill>
