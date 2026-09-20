@@ -69,7 +69,7 @@ export function CatalogBookCard({
         </div>
         <div className="min-w-0">
           {book.is_spotlight && (
-            <span className="mb-1 inline-block rounded-full bg-amber px-2 py-0.5 text-[11px] font-semibold text-cocoa">
+            <span className="mb-1 inline-block rounded-full bg-amber px-2 py-0.5 text-[11px] font-semibold text-ink">
               Spotlight
             </span>
           )}

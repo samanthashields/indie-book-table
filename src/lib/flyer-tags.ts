@@ -2,12 +2,12 @@
 export type TagSpec = { value: string; label: string; icon: string; chip: string };
 
 export const FLYER_TAGS: TagSpec[] = [
-  { value: "award_winner", label: "Award winner", icon: "🎖", chip: "bg-teal text-cocoa" },
+  { value: "award_winner", label: "Award winner", icon: "🎖", chip: "bg-teal text-ink" },
   { value: "school_themed", label: "School themed", icon: "🍎", chip: "bg-clay text-card" },
   { value: "hidden_gem", label: "Hidden gem", icon: "💎", chip: "bg-inkblue text-card" },
-  { value: "needs_love", label: "Needs love", icon: "💛", chip: "bg-amber text-cocoa" },
+  { value: "needs_love", label: "Needs love", icon: "💛", chip: "bg-amber text-ink" },
   { value: "spicy", label: "Spicy", icon: "🌶", chip: "bg-clay/70 text-cocoa" },
-  { value: "preorder", label: "Pre-order", icon: "⏳", chip: "bg-leaf text-cocoa" },
+  { value: "preorder", label: "Pre-order", icon: "⏳", chip: "bg-leaf text-ink" },
   { value: "item", label: "Item (not a book)", icon: "🛍", chip: "bg-clay/80 text-cocoa" },
 ];
 
@@ -18,6 +18,6 @@ export function tagSpec(value: string): TagSpec | null {
 }
 
 export const FORMAT_LEGEND = [
-  { label: "eBook", icon: "📘", chip: "bg-teal text-cocoa" },
+  { label: "eBook", icon: "📘", chip: "bg-teal text-ink" },
   { label: "Physical book", icon: "📕", chip: "bg-clay/70 text-cocoa" },
 ] as const;
