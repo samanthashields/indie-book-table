@@ -31,7 +31,7 @@ function TemplatePreview() {
 
   return (
     <AppShell>
-      <nav className="mb-6"><Link to="/templates" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"><ArrowLeft className="size-4" />All templates</Link></nav>
+      <nav className="mb-6"><Link to="/templates" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-link"><ArrowLeft className="size-4" />All templates</Link></nav>
       <header className="mb-9 grid gap-6 rounded-2xl border border-border bg-paper p-6 md:grid-cols-[140px_minmax(0,1fr)_auto] md:items-center">
         <img src={templateCover(template.details.illustrated)} alt={`Cover artwork for the ${template.title}`} width={768} height={1152} className="aspect-[2/3] w-28 rounded-lg object-cover shadow-sm" />
         <div className="min-w-0">

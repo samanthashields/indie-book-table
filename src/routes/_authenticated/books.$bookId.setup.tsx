@@ -62,7 +62,7 @@ function SetupTasksPage() {
                       <p className="mt-2 text-xs">
                         <span className={hasValue ? "font-semibold text-leaf" : "font-semibold text-amber"}>{hasValue ? "Set in Book Details" : "Not set yet"}</span>
                         {" — "}
-                        <Link to="/books/$bookId/details" params={{ bookId }} className="font-semibold text-primary underline-offset-2 hover:underline">Edit in Book Details</Link>
+                        <Link to="/books/$bookId/details" params={{ bookId }} className="font-semibold text-link underline-offset-2 hover:underline">Edit in Book Details</Link>
                       </p>
                     )}
                   </div>

@@ -73,7 +73,7 @@ export function RequirementAction({
   return (
     <div className="rounded-2xl border border-teal/40 bg-teal/10 p-5">
       <div className="flex items-start gap-4">
-        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-card text-primary shadow-xs"><Icon className="size-5" /></span>
+        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-card text-link shadow-xs"><Icon className="size-5" /></span>
         <div className="min-w-0 flex-1">
           <p className="font-semibold">{copy.title}</p>
           <p className="mt-1 text-sm text-muted-foreground">{copy.body}</p>
@@ -142,7 +142,7 @@ function NoteAttachment({ path }: { path: string }) {
   const url = useFileUrl(path);
   const name = path.split("/").pop() ?? "attachment";
   if (!url.data) return <p className="mt-2 text-xs text-muted-foreground">Preparing attachment…</p>;
-  return <a href={url.data} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-2 text-xs font-semibold text-primary underline-offset-2 hover:underline"><Paperclip className="size-3" />{name.replace(/^\d+-/, "")}</a>;
+  return <a href={url.data} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-2 text-xs font-semibold text-link underline-offset-2 hover:underline"><Paperclip className="size-3" />{name.replace(/^\d+-/, "")}</a>;
 }
 
 export function MilestoneBody({ bookId, milestone: initial, phaseName, compact = false }: { bookId: string; milestone: Milestone; phaseName: string; compact?: boolean }) {
@@ -273,7 +273,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
                   </select>
                 ) : (
                   <p className="mt-2 text-sm font-normal text-muted-foreground">
-                    No collaborators yet. <Link to="/books/$bookId/team" params={{ bookId }} className="font-semibold text-primary underline-offset-2 hover:underline">Invite one from the Team page</Link>.
+                    No collaborators yet. <Link to="/books/$bookId/team" params={{ bookId }} className="font-semibold text-link underline-offset-2 hover:underline">Invite one from the Team page</Link>.
                   </p>
                 )}
               </label>
@@ -339,7 +339,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
               </ul>
             )}
             <Textarea className="mt-3 min-h-28" placeholder="Add a note for yourself or your collaborator" value={note} onChange={(event) => setNote(event.target.value)} />
-            {attachment && <p className="mt-2 flex items-center gap-2 text-xs font-semibold text-primary"><Paperclip className="size-3" />{attachment.name} will be saved with this note</p>}
+            {attachment && <p className="mt-2 flex items-center gap-2 text-xs font-semibold text-link"><Paperclip className="size-3" />{attachment.name} will be saved with this note</p>}
             <div className="mt-3 flex flex-wrap gap-2">
               <Button variant="outline" type="button" onClick={() => noteFile.current?.click()}><Paperclip />Attach file</Button>
               <input ref={noteFile} type="file" className="sr-only" onChange={(event) => void pickNoteFile(event.target.files?.[0])} />

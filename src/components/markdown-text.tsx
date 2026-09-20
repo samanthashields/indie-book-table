@@ -17,7 +17,7 @@ function inline(text: string, keyBase: string): ReactNode[] {
     else if (token.startsWith("[")) {
       const label = token.slice(1, token.indexOf("]"));
       const href = token.slice(token.indexOf("(") + 1, -1);
-      nodes.push(<a key={key} href={href} className="underline hover:text-primary">{label}</a>);
+      nodes.push(<a key={key} href={href} className="underline hover:text-link">{label}</a>);
     } else nodes.push(<em key={key}>{token.slice(1, -1)}</em>);
     last = match.index + token.length;
   }

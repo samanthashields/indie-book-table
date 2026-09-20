@@ -78,7 +78,7 @@ function JournalIndex() {
             <Link
               to="/journal/$slug"
               params={{ slug: post.slug }}
-              className="mt-4 inline-block text-sm font-semibold text-primary hover:underline"
+              className="mt-4 inline-block text-sm font-semibold text-link hover:underline"
             >
               Read the post
             </Link>

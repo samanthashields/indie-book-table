@@ -170,7 +170,7 @@ function FeatureRequestsBoard() {
                 aria-label={voted ? "Remove my vote" : "Vote for this idea"}
                 disabled={toggleVote.isPending}
                 onClick={() => toggleVote.mutate({ requestId: request.id, voted })}
-                className={`flex w-16 shrink-0 flex-col items-center rounded-xl border-2 px-2 py-2 transition-colors ${voted ? "border-primary bg-primary/10 text-primary" : "border-border/70 text-muted-foreground hover:border-primary"}`}
+                className={`flex w-16 shrink-0 flex-col items-center rounded-xl border-2 px-2 py-2 transition-colors ${voted ? "border-primary bg-primary/10 text-link" : "border-border/70 text-muted-foreground hover:border-primary"}`}
               >
                 <ChevronUp className="size-5" />
                 <span className="text-sm font-semibold">{request.vote_count}</span>

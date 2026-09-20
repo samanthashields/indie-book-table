@@ -313,7 +313,7 @@ function AuthPage() {
             <button
               onClick={() => void forgot()}
               disabled={busy}
-              className="mt-3 text-sm font-semibold text-primary hover:underline"
+              className="mt-3 text-sm font-semibold text-link hover:underline"
             >
               Forgot your password?
             </button>

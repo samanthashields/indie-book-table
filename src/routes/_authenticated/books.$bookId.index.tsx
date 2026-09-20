@@ -115,7 +115,7 @@ function BookOverview() {
                   {expanded && (
                     <div className="animate-in fade-in slide-in-from-top-1 border-t border-border/70 px-5 pb-4 pt-2 duration-200">
                       <MilestoneDisclosure items={phase.milestones} className="space-y-1" renderItem={(milestone) => (
-                        <li key={milestone.id}><button onClick={() => setDrawer({ milestone: { ...milestone }, phaseName: phase.name })} className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-xl px-2 py-3 text-left text-sm transition-colors hover:bg-secondary hover:text-primary">
+                        <li key={milestone.id}><button onClick={() => setDrawer({ milestone: { ...milestone }, phaseName: phase.name })} className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-xl px-2 py-3 text-left text-sm transition-colors hover:bg-secondary hover:text-link">
                           {milestone.status === "Complete" ? <CheckCircle2 className={cn("size-5", style.dot)} /> : <Circle className="size-5 text-muted-foreground" />}
                           <span className="min-w-0 font-medium">{milestone.name}</span>
                           {milestone.due && <span className="text-muted-foreground">{milestone.due}</span>}

@@ -44,7 +44,7 @@ function CycleRow({ book }: { book: BookSummary }) {
       <BookCover src={book.coverUrl} title={book.title} className="w-16 shrink-0" fallbackClassName="text-2xl" />
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
-          <h3 className="font-serif text-2xl font-normal group-hover:text-primary">{book.title}</h3>
+          <h3 className="font-serif text-2xl font-normal group-hover:text-link">{book.title}</h3>
           <StatusPill tone={book.status.toLowerCase() === "complete" ? "good" : "warm"}>{book.status}</StatusPill>
         </div>
         <p className="mt-1 text-sm text-muted-foreground">{book.genre}, by {book.author}</p>

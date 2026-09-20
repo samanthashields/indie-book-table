@@ -140,7 +140,7 @@ export function CoachConversation({
         {turns.map((turn) =>
           turn.role === "coach" ? (
             <div key={turn.key} className="flex gap-3 duration-500 animate-in fade-in slide-in-from-bottom-2">
-              <span className="mt-1 grid size-7 shrink-0 place-items-center rounded-full bg-primary/10 text-primary"><CoachMark className="size-4" /></span>
+              <span className="mt-1 grid size-7 shrink-0 place-items-center rounded-full bg-primary/10 text-link"><CoachMark className="size-4" /></span>
               <p className="max-w-prose text-sm leading-6">{turn.text}</p>
             </div>
           ) : (
