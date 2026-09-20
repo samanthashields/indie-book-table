@@ -1980,6 +1980,7 @@ export type Database = {
         Returns: boolean
       }
       current_user_email: { Args: never; Returns: string }
+      delete_book_cycle: { Args: { _book_id: string }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
