@@ -107,6 +107,18 @@ export const formatDate = (iso: string | null | undefined) =>
 export const formatShortDate = (iso: string | null | undefined) =>
   iso ? new Date(`${iso}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : undefined;
 
+/** Some rows store the status as a slug (for example "not-started"); use the label form everywhere. */
+const normalizeStatus = (value: string | null): Milestone["status"] => {
+  const key = (value ?? "").toLowerCase().replace(/[\s_-]+/g, " ").trim();
+  return ({ "not started": "Not started", "in progress": "In progress", blocked: "Blocked", "on hold": "On hold", complete: "Complete", completed: "Complete" } as Record<string, Milestone["status"]>)[key] ?? "Not started";
+};
+
+/** Some rows store the status as a slug (for example "not-started"); use the label form everywhere. */
+const normalizeStatus = (value: string | null): Milestone["status"] => {
+  const key = (value ?? "").toLowerCase().replace(/[\s_-]+/g, " ").trim();
+  return ({ "not started": "Not started", "in progress": "In progress", blocked: "Blocked", "on hold": "On hold", complete: "Complete", completed: "Complete" } as Record<string, Milestone["status"]>)[key] ?? "Not started";
+};
+
 const milestoneToUi = (row: MilestoneRow): Milestone => ({
   id: row.id,
   name: row.name,
@@ -115,7 +127,7 @@ const milestoneToUi = (row: MilestoneRow): Milestone => ({
   ownerKind: (row.owner_kind as Milestone["ownerKind"]) ?? "author",
   ownerCollaboratorId: row.owner_collaborator_id,
   requirement: (row.requirement_type ?? "attach_a_file") as RequirementType,
-  status: (row.status as Milestone["status"]) ?? "Not started",
+  status: normalizeStatus(row.status),
   track: row.track,
   provision: row.provision as Milestone["provision"],
   dependsOn: row.depends_on ?? [],
