@@ -609,3 +609,23 @@ export function useDeleteAuthorTemplate() {
     onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["templates"] }),
   });
 }
+
+/**
+ * Removes a book's cycle (phases, milestones, notes, steps, setup tasks and reflection)
+ * but keeps the book itself on the author's shelf as an idea.
+ */
+export function useDeleteBookCycle() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (bookId: string) => {
+      const { data, error } = await supabase.rpc("delete_book_cycle", { _book_id: bookId });
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (_data, bookId) => {
+      void queryClient.invalidateQueries({ queryKey: ["books"] });
+      queryClient.removeQueries({ queryKey: ["book", bookId] });
+      for (const key of ["setup-tasks", "reflection", "resources"]) void queryClient.invalidateQueries({ queryKey: [key, bookId] });
+    },
+  });
+}

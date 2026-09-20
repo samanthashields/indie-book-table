@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { BookOpen, CalendarDays, CircleAlert, Clock3, Lightbulb, MoreVertical, Plus, Send, Sparkles, SquarePen, Trash2, Trophy } from "lucide-react";
+import { BookOpen, CalendarDays, CircleAlert, Clock3, Lightbulb, MoreVertical, Plus, Send, Sparkles, SquarePen, Eraser, Trash2, Trophy } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/app-shell";
 import { BookCover } from "@/components/book-cover";
 import { BookGridCard } from "@/components/book-grid-card";
+import { DeleteCycleDialog } from "@/components/delete-cycle";
 import { ProgressRing } from "@/components/progress-ring";
 
 import { PageHeading } from "@/components/page-heading";
@@ -37,7 +39,9 @@ export const Route = createFileRoute("/_authenticated/")({
 });
 
 function BookMenu({ book, submission, onDelete }: { book: BookSummary; submission?: BookSubmission | undefined; onDelete: (id: string) => void }) {
+  const [confirmCycle, setConfirmCycle] = useState(false);
   return (
+    <>
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" aria-label={`Actions for ${book.title}`} onClick={(event) => { event.preventDefault(); event.stopPropagation(); }}><MoreVertical /></Button>
@@ -54,9 +58,16 @@ function BookMenu({ book, submission, onDelete }: { book: BookSummary; submissio
         ) : (
           <DropdownMenuItem asChild><Link to="/submit" search={{ bookId: book.id }}><Send />Submit to The Table</Link></DropdownMenuItem>
         )}
+        {book.hasCycle && <DropdownMenuItem className="text-destructive focus:text-destructive" onSelect={() => setConfirmCycle(true)}><Eraser />Delete book cycle</DropdownMenuItem>}
         <DropdownMenuItem className="text-destructive focus:text-destructive" onSelect={() => onDelete(book.id)}><Trash2 />Delete this book</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+    {book.hasCycle && (
+      <span onClick={(event) => event.stopPropagation()}>
+        <DeleteCycleDialog open={confirmCycle} onOpenChange={setConfirmCycle} bookId={book.id} title={book.title} total={book.stepsTotal} done={book.stepsDone} />
+      </span>
+    )}
+    </>
   );
 }
 
