@@ -11,19 +11,27 @@ export function MilestoneDisclosure<T>({
   renderItem,
   className,
   expandOnGrowth = false,
+  reveal,
 }: {
   items: T[];
   renderItem: (item: T, index: number) => ReactNode;
   className?: string;
   expandOnGrowth?: boolean;
+  /** Keeps the list open when this item would otherwise sit behind "Show more". */
+  reveal?: (item: T) => boolean;
 }) {
-  const [expanded, setExpanded] = useState(false);
+  const revealIndex = reveal ? items.findIndex(reveal) : -1;
+  const [expanded, setExpanded] = useState(revealIndex >= DEFAULT_VISIBLE);
   const previousCount = useRef(items.length);
 
   useEffect(() => {
     if (expandOnGrowth && items.length > previousCount.current && items.length > DEFAULT_VISIBLE) setExpanded(true);
     previousCount.current = items.length;
   }, [expandOnGrowth, items.length]);
+
+  useEffect(() => {
+    if (revealIndex >= DEFAULT_VISIBLE) setExpanded(true);
+  }, [revealIndex]);
 
   const hiddenCount = Math.max(0, items.length - DEFAULT_VISIBLE);
   const shown = expanded ? items : items.slice(0, DEFAULT_VISIBLE);

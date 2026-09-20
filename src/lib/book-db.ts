@@ -429,7 +429,11 @@ export function useUpdateMilestone(bookId: string) {
       const { error } = await supabase.from("milestones").update(update).eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["book", bookId] }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["book", bookId] });
+      // Names, progress and the next action on My Books and My Cycles come from the same rows.
+      void queryClient.invalidateQueries({ queryKey: ["books"] });
+    },
   });
 }
 
