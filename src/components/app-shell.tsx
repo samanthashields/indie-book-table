@@ -24,6 +24,7 @@ import { NotificationBell } from "@/components/notification-bell";
 import { WorkshopOnboarding } from "@/components/workshop-onboarding";
 import { claimInvitations } from "@/lib/collaborators";
 import { signOut, useCurrentUser } from "@/lib/use-current-user";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import falconAsset from "@/assets/falcon.svg.asset.json";
 
@@ -196,7 +197,8 @@ export function AppShell({
               )}
             </div>
             {!collapsed && (
-              <div className="mt-3 flex items-center gap-1">
+              <div className="mt-3 flex flex-wrap items-center gap-1">
+                <ThemeToggle className="mb-2 w-full" />
                 <NotificationBell className="shrink-0" />
                 <Button
                   variant="ghost"

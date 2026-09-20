@@ -3,6 +3,7 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
 import { useCurrentUser } from "@/lib/use-current-user";
+import { ThemeToggle } from "@/components/theme-toggle";
 import falconAsset from "@/assets/falcon.svg.asset.json";
 
 
@@ -105,6 +106,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
             <Link to="/journal" className="hover:text-foreground">Journal</Link>
             <Link to="/mission" className="hover:text-foreground">Our mission</Link>
             <Link to="/auth" className="hover:text-foreground">Author sign in</Link>
+            <ThemeToggle />
           </div>
         </div>
       </footer>
