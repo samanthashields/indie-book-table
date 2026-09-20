@@ -4,6 +4,7 @@ import { CheckCircle2, CircleDashed, Clock3, Plus } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { BookCover } from "@/components/book-cover";
 import { BookGridCard } from "@/components/book-grid-card";
+import { CycleActionsMenu } from "@/components/delete-cycle";
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
@@ -36,11 +37,8 @@ const sections: { key: Group; title: string; blurb: string; icon: typeof Clock3 
 
 function CycleRow({ book }: { book: BookSummary }) {
   return (
-    <Link
-      to="/books/$bookId"
-      params={{ bookId: book.id }}
-      className="group grid gap-5 rounded-2xl border border-border bg-card px-5 py-5 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md sm:grid-cols-[72px_1fr_auto] sm:items-center"
-    >
+    <div className="group grid gap-5 rounded-2xl border border-border bg-card px-5 py-5 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md sm:grid-cols-[72px_1fr_auto_auto] sm:items-center">
+      <Link to="/books/$bookId" params={{ bookId: book.id }} className="contents">
       <BookCover src={book.coverUrl} title={book.title} className="w-16 shrink-0" fallbackClassName="text-2xl" />
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
@@ -55,7 +53,9 @@ function CycleRow({ book }: { book: BookSummary }) {
         <p className="text-xs text-muted-foreground">Target publication</p>
         <p className="mt-1 text-sm font-semibold">{book.target}</p>
       </div>
-    </Link>
+      </Link>
+      <CycleActionsMenu bookId={book.id} title={book.title} total={book.stepsTotal} done={book.stepsDone} />
+    </div>
   );
 }
 
@@ -67,6 +67,7 @@ function CycleCard({ book }: { book: BookSummary }) {
       title={book.title}
       subtitle={`${book.genre}, by ${book.author}`}
       link={{ to: "/books/$bookId", params: { bookId: book.id } }}
+      menu={<CycleActionsMenu bookId={book.id} title={book.title} total={book.stepsTotal} done={book.stepsDone} />}
     >
       <div className="mt-3"><StatusPill tone={book.status.toLowerCase() === "complete" ? "good" : "warm"}>{book.status}</StatusPill></div>
       <div className="mt-4 flex items-center gap-3"><Progress value={book.progress} className="h-1.5" /><span className="text-xs font-semibold">{book.progress}%</span></div>
