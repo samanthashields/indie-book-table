@@ -118,7 +118,7 @@ function BookPage() {
                     href={link.url}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="rounded-full bg-cocoa px-4 py-2 text-sm font-semibold text-paper transition-colors hover:bg-cocoa/90"
+                    className="rounded-full bg-inverse px-4 py-2 text-sm font-semibold text-on-inverse transition-colors hover:bg-inverse/90"
                   >
                     {link.platform_label}
                   </a>

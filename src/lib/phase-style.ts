@@ -6,7 +6,7 @@ const styles: Record<string, PhaseStyle> = {
   production: { marker: "bg-leaf text-cocoa border-leaf", chip: "border-leaf/45 bg-leaf/20 text-foreground", dot: "text-text-leaf", soft: "bg-leaf/12" },
   pre_launch: { marker: "bg-amber text-cocoa border-amber", chip: "border-amber/45 bg-amber/22 text-foreground", dot: "text-amber", soft: "bg-amber/12" },
   launch: { marker: "bg-clay text-primary-foreground border-clay", chip: "border-clay/40 bg-clay/15 text-foreground", dot: "text-text-clay", soft: "bg-clay/10" },
-  post_launch_growth: { marker: "bg-cocoa text-paper border-cocoa", chip: "border-cocoa/25 bg-cocoa/10 text-foreground", dot: "text-cocoa", soft: "bg-paper" },
+  post_launch_growth: { marker: "bg-inverse text-on-inverse border-inverse", chip: "border-cocoa/25 bg-cocoa/10 text-foreground", dot: "text-cocoa", soft: "bg-paper" },
 };
 
 const fallback: PhaseStyle = styles["writing_development"]!;
