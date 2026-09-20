@@ -1,0 +1,1 @@
+ALTER TABLE public.milestones ALTER COLUMN status SET DEFAULT 'Not started';
