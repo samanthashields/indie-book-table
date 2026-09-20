@@ -19,7 +19,7 @@ function MilestoneDetail() {
   if (!data || !found) return <AppShell coachContext="milestone"><p className="text-sm text-muted-foreground">This milestone isn’t available.</p></AppShell>;
   return (
     <AppShell coachContext="milestone">
-      <nav className="mb-6 text-sm text-muted-foreground"><Link to="/books/$bookId" params={{ bookId }} className="hover:text-primary">{data.book.title}</Link> / {found.phaseName}</nav>
+      <nav className="mb-6 text-sm text-muted-foreground"><Link to="/books/$bookId" params={{ bookId }} className="hover:text-link">{data.book.title}</Link> / {found.phaseName}</nav>
       <MilestoneBody bookId={bookId} milestone={found.milestone} phaseName={found.phaseName} />
     </AppShell>
   );

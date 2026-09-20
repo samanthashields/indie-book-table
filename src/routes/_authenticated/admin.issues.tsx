@@ -115,7 +115,7 @@ function AdminIssues() {
               onClick={() => setSelectedId(item.id)}
               className={cn(
                 "w-full rounded-xl px-4 py-3 text-left text-sm font-semibold transition-colors",
-                item.id === activeId ? "bg-cocoa text-paper" : "bg-card text-muted-foreground hover:text-foreground",
+                item.id === activeId ? "bg-inverse text-on-inverse" : "bg-card text-muted-foreground hover:text-foreground",
               )}
             >
               {item.display_label}

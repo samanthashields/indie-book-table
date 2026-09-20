@@ -80,7 +80,7 @@ function BookPage() {
               {book.author_name}
             </Link>
           </p>
-          <p className="mt-3 text-sm font-semibold text-inkblue">
+          <p className="mt-3 text-sm font-semibold text-text-inkblue">
             {book.genre ?? "Indie"} · {AUDIENCE_LABELS[book.target_audience] ?? book.target_audience}
             {book.explicit_content ? " · Mature content" : ""}
           </p>
@@ -118,7 +118,7 @@ function BookPage() {
                     href={link.url}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="rounded-full bg-cocoa px-4 py-2 text-sm font-semibold text-paper transition-colors hover:bg-cocoa/90"
+                    className="rounded-full bg-inverse px-4 py-2 text-sm font-semibold text-on-inverse transition-colors hover:bg-inverse/90"
                   >
                     {link.platform_label}
                   </a>

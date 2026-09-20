@@ -7,7 +7,7 @@ export function PricePill({
   amount: string;
 }) {
   const spec = {
-    ebook: { icon: "📘", chip: "bg-teal text-cocoa", label: "eBook" },
+    ebook: { icon: "📘", chip: "bg-teal text-ink", label: "eBook" },
     print: { icon: "📕", chip: "bg-clay/70 text-cocoa", label: "Physical book" },
     item: { icon: "🛍", chip: "bg-clay/80 text-cocoa", label: "Item" },
   }[format];

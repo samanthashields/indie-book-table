@@ -159,7 +159,7 @@ function FeatureRequestDetail() {
                           href={link}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                          className="inline-flex items-center gap-1 text-sm text-link hover:underline"
                         >
                           <ExternalLink className="size-3.5" />
                           <span className="truncate">{link}</span>
@@ -227,7 +227,7 @@ function FeatureRequestDetail() {
                 type="button"
                 disabled={toggleVote.isPending}
                 onClick={() => toggleVote.mutate({ requestId: data.id, voted })}
-                className={`mt-4 flex w-full items-center justify-center gap-2 rounded-xl border-2 px-4 py-3 text-sm font-semibold transition-colors ${voted ? "border-primary bg-primary/10 text-primary" : "border-border/70 hover:border-primary"}`}
+                className={`mt-4 flex w-full items-center justify-center gap-2 rounded-xl border-2 px-4 py-3 text-sm font-semibold transition-colors ${voted ? "border-primary bg-primary/10 text-link" : "border-border/70 hover:border-primary"}`}
               >
                 <ChevronUp className="size-4" />
                 {voted ? "You voted" : "Vote for this"} · {data.vote_count}

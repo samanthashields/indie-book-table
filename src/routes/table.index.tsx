@@ -166,7 +166,7 @@ function TableHomePage() {
           </Button>
         </div>
         <div className="rounded-3xl border border-border/70 bg-card p-8">
-          <p className="text-sm font-semibold text-inkblue">
+          <p className="text-sm font-semibold text-text-inkblue">
             {current.issue ? current.issue.display_label : "Next issue"}
           </p>
           <h2 className="mt-2 font-serif text-3xl">

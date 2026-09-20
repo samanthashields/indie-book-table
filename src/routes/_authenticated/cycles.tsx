@@ -44,7 +44,7 @@ function CycleRow({ book }: { book: BookSummary }) {
       <BookCover src={book.coverUrl} title={book.title} className="w-16 shrink-0" fallbackClassName="text-2xl" />
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
-          <h3 className="font-serif text-2xl font-normal group-hover:text-primary">{book.title}</h3>
+          <h3 className="font-serif text-2xl font-normal group-hover:text-link">{book.title}</h3>
           <StatusPill tone={book.status.toLowerCase() === "complete" ? "good" : "warm"}>{book.status}</StatusPill>
         </div>
         <p className="mt-1 text-sm text-muted-foreground">{book.genre}, by {book.author}</p>
@@ -106,7 +106,7 @@ function Cycles() {
             return (
               <section key={section.key}>
                 <div className="mb-4 flex items-center gap-3">
-                  <span className="grid size-9 place-items-center rounded-xl bg-teal/15 text-teal"><Icon className="size-5" /></span>
+                  <span className="grid size-9 place-items-center rounded-xl bg-teal/15 text-text-teal"><Icon className="size-5" /></span>
                   <div>
                     <h2 className="font-serif text-2xl font-normal">{section.title} <span className="text-muted-foreground">({items.length})</span></h2>
                     <p className="text-sm text-muted-foreground">{section.blurb}</p>

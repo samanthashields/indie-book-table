@@ -184,7 +184,7 @@ function AdminSubmissions() {
             onClick={() => setFilter(item.key)}
             className={cn(
               "rounded-full px-4 py-1.5 text-sm font-semibold transition-colors",
-              filter === item.key ? "bg-cocoa text-paper" : "bg-secondary text-muted-foreground hover:text-foreground",
+              filter === item.key ? "bg-inverse text-on-inverse" : "bg-secondary text-muted-foreground hover:text-foreground",
             )}
           >
             {item.label} ({item.key === "all" ? books.length : books.filter((book) => book.status === item.key).length})

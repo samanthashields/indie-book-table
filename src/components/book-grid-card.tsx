@@ -41,7 +41,7 @@ export function BookGridCard({
   className?: string;
 }) {
   const heading = (
-    <h3 className="line-clamp-2 font-serif text-xl font-normal group-hover:text-primary">{title}</h3>
+    <h3 className="line-clamp-2 font-serif text-xl font-normal group-hover:text-link">{title}</h3>
   );
 
   return (

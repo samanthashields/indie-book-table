@@ -53,16 +53,16 @@ function SetupTasksPage() {
                     onClick={() => update.mutate({ id: task.id, complete: !complete })}
                     className="mt-0.5 shrink-0"
                   >
-                    {complete ? <CheckCircle2 className="size-5 text-leaf" /> : <Circle className="size-5 text-muted-foreground" />}
+                    {complete ? <CheckCircle2 className="size-5 text-text-leaf" /> : <Circle className="size-5 text-muted-foreground" />}
                   </button>
                   <div className="min-w-0 flex-1">
                     <p className={cn("font-semibold", complete && "text-muted-foreground line-through")}>{task.label}</p>
                     <p className="mt-1 text-sm text-muted-foreground">{task.description}</p>
                     {def?.bookField && (
                       <p className="mt-2 text-xs">
-                        <span className={hasValue ? "font-semibold text-leaf" : "font-semibold text-amber"}>{hasValue ? "Set in Book Details" : "Not set yet"}</span>
+                        <span className={hasValue ? "font-semibold text-text-leaf" : "font-semibold text-amber"}>{hasValue ? "Set in Book Details" : "Not set yet"}</span>
                         {" — "}
-                        <Link to="/books/$bookId/details" params={{ bookId }} className="font-semibold text-primary underline-offset-2 hover:underline">Edit in Book Details</Link>
+                        <Link to="/books/$bookId/details" params={{ bookId }} className="font-semibold text-link underline-offset-2 hover:underline">Edit in Book Details</Link>
                       </p>
                     )}
                   </div>

@@ -110,7 +110,7 @@ function CreateBook() {
         <div className="grid gap-4 md:grid-cols-3">
           {paths.map(({ id, title, copy, icon: Icon, tint }) => (
             <button key={id} onClick={() => setPending(id)} className={cn("relative min-h-52 rounded-2xl border p-6 text-left shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md", tint, pending === id ? "border-2 border-primary" : "border-border")}>
-              <Icon className="mb-8 size-7 text-primary" />
+              <Icon className="mb-8 size-7 text-link" />
               <h2 className="font-serif text-2xl font-normal">{title}</h2>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">{copy}</p>
               {pending === id && <span className="absolute right-4 top-4 grid size-6 place-items-center rounded-full bg-primary text-primary-foreground"><Check className="size-4" /></span>}

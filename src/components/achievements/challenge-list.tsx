@@ -29,7 +29,7 @@ function ChallengeCard({ challenge }: { challenge: ChallengeProgress }) {
       <p className="mt-2 text-xs text-muted-foreground">{metricLabel}</p>
       <p className="mt-3 flex items-center gap-1.5 text-sm font-semibold">
         {challenge.completed ? (
-          <><CheckCircle2 className="size-4 text-primary" />Complete — {decoration?.label ?? "decoration"} added to your table</>
+          <><CheckCircle2 className="size-4 text-link" />Complete — {decoration?.label ?? "decoration"} added to your table</>
         ) : (
           <><Sparkles className="size-4 text-amber" />Unlocks the {decoration?.label.toLowerCase() ?? "decoration"}</>
         )}

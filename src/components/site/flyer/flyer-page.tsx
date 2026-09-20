@@ -35,7 +35,7 @@ export function FlyerPage({
 
   return (
     <div
-      className={`${patternClass(pattern)} poster-frame poster-gloss relative flex min-h-[min(78rem,calc(100vh-9rem))] overflow-hidden bg-cocoa p-[0.55rem]`}
+      className={`${patternClass(pattern)} light poster-frame poster-gloss relative flex min-h-[min(78rem,calc(100vh-9rem))] overflow-hidden bg-cocoa p-[0.55rem]`}
     >
       <div className="poster-frame relative flex-1 overflow-hidden bg-paper">
         <div aria-hidden="true" className={`pointer-events-none absolute inset-0 ${ground}`} />

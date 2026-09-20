@@ -16,7 +16,7 @@ export function BadgeGrid({ badges }: { badges: Badge[] }) {
               badge.earned ? "border-primary/30 bg-card" : "border-dashed border-border bg-paper opacity-70",
             )}
           >
-            <span className={cn("grid size-9 shrink-0 place-items-center rounded-full", badge.earned ? "bg-primary/12 text-primary" : "bg-muted text-muted-foreground")}>
+            <span className={cn("grid size-9 shrink-0 place-items-center rounded-full", badge.earned ? "bg-primary/12 text-link" : "bg-muted text-muted-foreground")}>
               {badge.earned ? <Award className="size-5" /> : <Lock className="size-4" />}
             </span>
             <div className="min-w-0">

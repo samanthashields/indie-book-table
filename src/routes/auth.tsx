@@ -134,7 +134,7 @@ function AuthPage() {
       <div className="flex min-h-screen items-center justify-center bg-background px-5">
         <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 text-center shadow-xs">
           <span className="mx-auto mb-5 grid size-14 place-items-center rounded-full bg-teal/15">
-            <Mail className="size-6 text-teal" />
+            <Mail className="size-6 text-text-teal" />
           </span>
           <h1 className="font-serif text-3xl font-normal">Check your email</h1>
           <p className="mt-3 text-sm leading-6 text-muted-foreground">
@@ -313,7 +313,7 @@ function AuthPage() {
             <button
               onClick={() => void forgot()}
               disabled={busy}
-              className="mt-3 text-sm font-semibold text-primary hover:underline"
+              className="mt-3 text-sm font-semibold text-link hover:underline"
             >
               Forgot your password?
             </button>

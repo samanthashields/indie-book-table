@@ -127,7 +127,7 @@ function AdminFeatureRequests() {
               <ul className="space-y-1">
                 {active.links.map((link) => (
                   <li key={link}>
-                    <a href={link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm text-primary hover:underline">
+                    <a href={link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm text-link hover:underline">
                       <ExternalLink className="size-3.5" /><span className="truncate">{link}</span>
                     </a>
                   </li>

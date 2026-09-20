@@ -51,7 +51,7 @@ function HelpArticlePage() {
           <ul className="mt-3 space-y-2">
             {related.map((entry) => (
               <li key={entry.id}>
-                <Link to="/help/articles/$slug" params={{ slug: entry.slug }} className="block rounded-xl bg-card px-4 py-3 text-sm font-semibold shadow-xs hover:text-primary">{entry.title}</Link>
+                <Link to="/help/articles/$slug" params={{ slug: entry.slug }} className="block rounded-xl bg-card px-4 py-3 text-sm font-semibold shadow-xs hover:text-link">{entry.title}</Link>
               </li>
             ))}
           </ul>

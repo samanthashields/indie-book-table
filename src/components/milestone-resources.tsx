@@ -13,7 +13,7 @@ function ResourceLink({ resource }: { resource: Resource }) {
   if (!resource.url) return null;
   if (!url.data) return <p className="mt-1 text-xs text-muted-foreground">Preparing link…</p>;
   return (
-    <a href={url.data} target="_blank" rel="noreferrer" className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-primary underline-offset-2 hover:underline">
+    <a href={url.data} target="_blank" rel="noreferrer" className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-link underline-offset-2 hover:underline">
       <Link2 className="size-3" />Open
     </a>
   );

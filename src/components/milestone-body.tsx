@@ -73,7 +73,7 @@ export function RequirementAction({
   return (
     <div className="rounded-2xl border border-teal/40 bg-teal/10 p-5">
       <div className="flex items-start gap-4">
-        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-card text-primary shadow-xs"><Icon className="size-5" /></span>
+        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-card text-link shadow-xs"><Icon className="size-5" /></span>
         <div className="min-w-0 flex-1">
           <p className="font-semibold">{copy.title}</p>
           <p className="mt-1 text-sm text-muted-foreground">{copy.body}</p>
@@ -142,7 +142,7 @@ function NoteAttachment({ path }: { path: string }) {
   const url = useFileUrl(path);
   const name = path.split("/").pop() ?? "attachment";
   if (!url.data) return <p className="mt-2 text-xs text-muted-foreground">Preparing attachment…</p>;
-  return <a href={url.data} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-2 text-xs font-semibold text-primary underline-offset-2 hover:underline"><Paperclip className="size-3" />{name.replace(/^\d+-/, "")}</a>;
+  return <a href={url.data} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-2 text-xs font-semibold text-link underline-offset-2 hover:underline"><Paperclip className="size-3" />{name.replace(/^\d+-/, "")}</a>;
 }
 
 export function MilestoneBody({ bookId, milestone: initial, phaseName, compact = false }: { bookId: string; milestone: Milestone; phaseName: string; compact?: boolean }) {
@@ -273,7 +273,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
                   </select>
                 ) : (
                   <p className="mt-2 text-sm font-normal text-muted-foreground">
-                    No collaborators yet. <Link to="/books/$bookId/team" params={{ bookId }} className="font-semibold text-primary underline-offset-2 hover:underline">Invite one from the Team page</Link>.
+                    No collaborators yet. <Link to="/books/$bookId/team" params={{ bookId }} className="font-semibold text-link underline-offset-2 hover:underline">Invite one from the Team page</Link>.
                   </p>
                 )}
               </label>
@@ -306,9 +306,9 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
             <h3 className="font-serif text-2xl font-semibold">About this milestone</h3>
             <p className="mt-3 max-w-2xl leading-7 text-muted-foreground">{milestone.description || "No description yet."}</p>
             <div className="mt-5 grid gap-4 sm:grid-cols-3">
-              <div className="rounded-xl bg-inkblue/8 p-3"><UserRound className="mb-2 size-4 text-inkblue" /><p className="text-xs text-muted-foreground">Owner</p><p className="text-sm font-semibold">{ownerDisplay(milestone.ownerKind, milestone.ownerCollaboratorId, roster)}</p></div>
+              <div className="rounded-xl bg-inkblue/8 p-3"><UserRound className="mb-2 size-4 text-text-inkblue" /><p className="text-xs text-muted-foreground">Owner</p><p className="text-sm font-semibold">{ownerDisplay(milestone.ownerKind, milestone.ownerCollaboratorId, roster)}</p></div>
               <div className="rounded-xl bg-amber/15 p-3"><CalendarDays className="mb-2 size-4 text-amber" /><p className="text-xs text-muted-foreground">Due date</p><p className="text-sm font-semibold">{milestone.due ?? "Not set"}</p></div>
-              <div className="rounded-xl bg-leaf/15 p-3"><Check className="mb-2 size-4 text-leaf" /><p className="text-xs text-muted-foreground">Approval</p><p className="text-sm font-semibold">{milestone.approval ? "Required" : "Not required"}</p></div>
+              <div className="rounded-xl bg-leaf/15 p-3"><Check className="mb-2 size-4 text-text-leaf" /><p className="text-xs text-muted-foreground">Approval</p><p className="text-sm font-semibold">{milestone.approval ? "Required" : "Not required"}</p></div>
               {milestone.track && <div className="rounded-xl bg-secondary p-3"><p className="text-xs text-muted-foreground">Track</p><p className="text-sm font-semibold">{milestone.track}</p></div>}
               {milestone.provision && <div className="rounded-xl bg-secondary p-3"><p className="text-xs text-muted-foreground">Provision</p><p className="text-sm font-semibold">{provisionLabel[milestone.provision]}</p></div>}
             </div>
@@ -339,7 +339,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
               </ul>
             )}
             <Textarea className="mt-3 min-h-28" placeholder="Add a note for yourself or your collaborator" value={note} onChange={(event) => setNote(event.target.value)} />
-            {attachment && <p className="mt-2 flex items-center gap-2 text-xs font-semibold text-primary"><Paperclip className="size-3" />{attachment.name} will be saved with this note</p>}
+            {attachment && <p className="mt-2 flex items-center gap-2 text-xs font-semibold text-link"><Paperclip className="size-3" />{attachment.name} will be saved with this note</p>}
             <div className="mt-3 flex flex-wrap gap-2">
               <Button variant="outline" type="button" onClick={() => noteFile.current?.click()}><Paperclip />Attach file</Button>
               <input ref={noteFile} type="file" className="sr-only" onChange={(event) => void pickNoteFile(event.target.files?.[0])} />
@@ -354,7 +354,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
               <Button className="mt-4" variant="outline" asChild><Link to="/books/$bookId/team" params={{ bookId }}><UserRound />Manage collaborators</Link></Button>
             </div>
             <div className="rounded-2xl border border-border bg-paper p-5">
-              <div className="flex items-center gap-2"><MessageSquare className="size-4 text-inkblue" /><h3 className="font-semibold">Recent activity</h3></div>
+              <div className="flex items-center gap-2"><MessageSquare className="size-4 text-text-inkblue" /><h3 className="font-semibold">Recent activity</h3></div>
               <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground"><FileText className="size-4" />{(notes.data ?? []).length > 0 ? `${(notes.data ?? []).length} note${(notes.data ?? []).length === 1 ? "" : "s"} on this milestone.` : "Activity on this milestone will appear here."}</p>
             </div>
           </section>

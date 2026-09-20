@@ -143,10 +143,10 @@ const GROUND: Record<PaperTone, string> = {
 };
 
 const PANEL: Record<FlyerColor, string> = {
-  lime: "bg-leaf text-cocoa",
+  lime: "bg-leaf text-ink",
   red: "bg-clay text-card",
-  yellow: "bg-amber text-cocoa",
-  sky: "bg-teal text-cocoa",
+  yellow: "bg-amber text-ink",
+  sky: "bg-teal text-ink",
   pink: "bg-clay/60 text-cocoa",
   purple: "bg-inkblue text-card",
   orange: "bg-clay/80 text-cocoa",

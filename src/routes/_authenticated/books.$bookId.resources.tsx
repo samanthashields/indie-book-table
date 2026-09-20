@@ -31,7 +31,7 @@ function ResourceRow({ resource, milestoneLabel, onRemove }: { resource: Resourc
         <p className="text-sm font-semibold">{resource.label}</p>
         <p className="text-xs text-muted-foreground">{resourceKindLabel[resource.kind]}{milestoneLabel ? ` — ${milestoneLabel}` : ""}</p>
         {resource.url && (url.data ? (
-          <a href={url.data} target="_blank" rel="noreferrer" className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-primary underline-offset-2 hover:underline">
+          <a href={url.data} target="_blank" rel="noreferrer" className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-link underline-offset-2 hover:underline">
             <Link2 className="size-3" />Open
           </a>
         ) : (
@@ -147,7 +147,7 @@ function ResourcesPage() {
       </section>
 
       <p className="mt-8 text-sm text-muted-foreground">
-        <Link to="/books/$bookId" params={{ bookId }} className="font-semibold text-primary underline-offset-2 hover:underline">Back to the book overview</Link>
+        <Link to="/books/$bookId" params={{ bookId }} className="font-semibold text-link underline-offset-2 hover:underline">Back to the book overview</Link>
       </p>
     </AppShell>
   );

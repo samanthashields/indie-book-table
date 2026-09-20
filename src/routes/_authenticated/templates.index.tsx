@@ -76,7 +76,7 @@ function Templates() {
                     </div>
                     <div className="flex flex-col">
                       <ul className="mt-5 space-y-2 text-sm lg:mt-0">
-                        {(template.details.highlights ?? []).map((highlight) => <li key={highlight} className="flex gap-2"><Check className="size-4 shrink-0 text-leaf" />{highlight}</li>)}
+                        {(template.details.highlights ?? []).map((highlight) => <li key={highlight} className="flex gap-2"><Check className="size-4 shrink-0 text-text-leaf" />{highlight}</li>)}
                       </ul>
                       <div className="mt-6 flex flex-wrap gap-3">
                         <Button variant="outline" asChild><Link to="/templates/$templateId" params={{ templateId: template.id }}><Eye />Preview</Link></Button>

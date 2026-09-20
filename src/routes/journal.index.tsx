@@ -66,7 +66,7 @@ function JournalIndex() {
       <div className="mt-8 grid gap-4 md:grid-cols-2">
         {data.posts.map((post) => (
           <article key={post.id} className="rounded-2xl border border-border/70 bg-card p-6 transition-shadow hover:shadow-md">
-            <p className="text-sm font-semibold text-inkblue">
+            <p className="text-sm font-semibold text-text-inkblue">
               {formatDate(post.published_at)}
             </p>
             <h2 className="mt-2 font-serif text-2xl leading-tight">
@@ -78,7 +78,7 @@ function JournalIndex() {
             <Link
               to="/journal/$slug"
               params={{ slug: post.slug }}
-              className="mt-4 inline-block text-sm font-semibold text-primary hover:underline"
+              className="mt-4 inline-block text-sm font-semibold text-link hover:underline"
             >
               Read the post
             </Link>

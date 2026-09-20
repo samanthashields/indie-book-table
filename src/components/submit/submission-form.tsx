@@ -64,7 +64,7 @@ function Choice<T extends string>({
           className={cn(
             "rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
             value === option.value
-              ? "border-cocoa bg-cocoa text-paper"
+              ? "border-inverse bg-inverse text-on-inverse"
               : "border-border bg-card text-muted-foreground hover:text-foreground",
           )}
         >
@@ -386,7 +386,7 @@ export function SubmissionForm({
               <div className="min-w-0">
                 <h3 className="font-serif text-lg">{values.title || "Untitled"}</h3>
                 <p className="text-sm text-muted-foreground">by {values.pen_name || values.author_name || "you"}</p>
-                <p className="mt-2 text-sm font-semibold text-inkblue">
+                <p className="mt-2 text-sm font-semibold text-text-inkblue">
                   {values.genre || "Indie"} · {AUDIENCE_OPTIONS.find((a) => a.value === values.target_audience)?.label}
                 </p>
                 <p className="mt-2 text-sm">{values.hook}</p>

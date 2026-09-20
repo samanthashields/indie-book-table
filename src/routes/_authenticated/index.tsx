@@ -88,7 +88,7 @@ function BookRow({ book, submission, onDelete }: { book: BookSummary; submission
         <BookCover src={book.coverUrl} title={book.title} className="w-20 shrink-0" fallbackClassName="text-3xl" />
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="font-serif text-2xl font-normal group-hover:text-primary">{book.title}</h3>
+            <h3 className="font-serif text-2xl font-normal group-hover:text-link">{book.title}</h3>
             <StatusPill tone={bookStatusTone(book.shelfStatus)}>{bookStatusLabel(book.shelfStatus)}</StatusPill>
             {book.hasCycle && <StatusPill tone={book.progress > 60 ? "warm" : "good"}>{book.status}</StatusPill>}
             <NeedsFollowUpPill book={book} />
@@ -267,7 +267,7 @@ function Index() {
         <section className="mb-10 grid gap-3 rounded-2xl border border-border bg-card p-2 shadow-xs sm:grid-cols-3" aria-label="Publishing priorities">
           <div className="rounded-xl bg-destructive/8 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><CircleAlert className="size-4 text-destructive" />Book ideas</div><p className="mt-1 text-2xl font-semibold">{ideas.length}</p></div>
           <div className="rounded-xl bg-accent/20 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><CalendarDays className="size-4" />Active cycles</div><p className="mt-1 text-2xl font-semibold">{cycles.length}</p></div>
-          <div className="rounded-xl bg-chart-3/15 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><Clock3 className="size-4 text-primary" />Pending action</div><p className="mt-1 text-2xl font-semibold">{pending}</p></div>
+          <div className="rounded-xl bg-chart-3/15 px-4 py-4"><div className="flex items-center gap-2 text-sm font-semibold"><Clock3 className="size-4 text-link" />Pending action</div><p className="mt-1 text-2xl font-semibold">{pending}</p></div>
         </section>
       )}
 
@@ -285,7 +285,7 @@ function Index() {
         </div>
       ) : mine.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-paper p-10 text-center">
-          <BookOpen className="mx-auto mb-4 size-8 text-primary" />
+          <BookOpen className="mx-auto mb-4 size-8 text-link" />
           <h3 className="font-serif text-2xl font-normal">Your first book starts here</h3>
           <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">Save an idea now and come back to it, or start a full book cycle from a template, from scratch, or with Pen.</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">

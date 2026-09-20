@@ -51,7 +51,7 @@ function TourScreen({ step, index, count }: { step: WorkshopTourStep; index: num
     <>
       <Media kind={step.media_kind} value={step.media_value} label={step.title} />
       <DialogHeader>
-        <p className="text-sm font-semibold text-primary">{index + 1} of {count}</p>
+        <p className="text-sm font-semibold text-link">{index + 1} of {count}</p>
         <DialogTitle className="font-serif text-3xl font-normal">{step.title}</DialogTitle>
         <DialogDescription className="whitespace-pre-line text-base leading-7">{step.body}</DialogDescription>
       </DialogHeader>

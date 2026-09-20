@@ -50,7 +50,7 @@ function Timeline({ step, className }: { step: number; className?: string | unde
           <span
             className={cn(
               "flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold",
-              index < step && "bg-teal/15 text-primary",
+              index < step && "bg-teal/15 text-link",
               index === step && "bg-primary text-primary-foreground",
               index > step && "bg-muted text-muted-foreground",
             )}
