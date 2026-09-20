@@ -147,6 +147,7 @@ function NoteAttachment({ path }: { path: string }) {
 
 export function MilestoneBody({ bookId, milestone: initial, phaseName, compact = false }: { bookId: string; milestone: Milestone; phaseName: string; compact?: boolean }) {
   const [milestone, setMilestone] = useState<Milestone>(initial);
+  const [saved, setSaved] = useState<Milestone>(initial);
   const [editing, setEditing] = useState(false);
   const [note, setNote] = useState("");
   const [attachment, setAttachment] = useState<{ path: string; name: string } | null>(null);
@@ -206,12 +207,13 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
           requirement: milestone.requirement,
           track: milestone.track,
           provision: milestone.provision,
-          status: milestone.status,
+          // Only send the status when it changed, so an unrelated edit does not reset the completion date.
+          ...(milestone.status !== saved.status ? { status: milestone.status } : {}),
           dueIso: milestone.dueIso ?? "",
           approval: Boolean(milestone.approval),
         },
       },
-      { onSuccess: () => { setEditing(false); toast.success("Milestone saved"); }, onError: () => toast.error("Couldn’t save the milestone") },
+      { onSuccess: () => { setSaved(milestone); setEditing(false); toast.success("Milestone saved"); }, onError: () => toast.error("Couldn’t save the milestone") },
     );
   };
 
@@ -219,6 +221,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
     // An automatic completion (an upload, a linked file) must not overwrite one the author already made.
     if (source === "auto" && milestone.status === "Complete") return;
     update({ status: "Complete" });
+    setSaved((current) => ({ ...current, status: "Complete" }));
     completeMilestone.mutate(
       { id: milestone.id, source },
       { onSuccess: () => toast.success("Milestone complete"), onError: () => toast.error("Couldn’t update the milestone") },
@@ -236,7 +239,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
           {milestone.status !== "Complete" && !editing && (
             <Button variant="secondary" disabled={completeMilestone.isPending} onClick={() => markComplete("manual")}><CheckCircle2 />Mark as complete</Button>
           )}
-          <Button variant={editing ? "secondary" : "outline"} onClick={() => setEditing((value) => !value)}><Pencil />{editing ? "Cancel edit" : "Edit milestone"}</Button>
+          <Button variant={editing ? "secondary" : "outline"} onClick={() => { if (editing) setMilestone(saved); setEditing((value) => !value); }}><Pencil />{editing ? "Cancel edit" : "Edit milestone"}</Button>
         </div>
       </div>
 
@@ -298,7 +301,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
             </label>
           </div>
           <label className="flex items-center gap-3 text-sm font-semibold"><input type="checkbox" className="size-4 accent-[var(--teal)]" checked={Boolean(milestone.approval)} onChange={(event) => update({ approval: event.target.checked })} />Approval required</label>
-          <div className="flex gap-3"><Button type="submit" disabled={updateMilestone.isPending}>Save milestone</Button><Button type="button" variant="outline" onClick={() => { setMilestone(initial); setEditing(false); }}>Discard changes</Button></div>
+          <div className="flex gap-3"><Button type="submit" disabled={updateMilestone.isPending}>Save milestone</Button><Button type="button" variant="outline" onClick={() => { setMilestone(saved); setEditing(false); }}>Discard changes</Button></div>
         </form>
       ) : (
         <>
