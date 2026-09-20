@@ -306,9 +306,9 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
             <h3 className="font-serif text-2xl font-semibold">About this milestone</h3>
             <p className="mt-3 max-w-2xl leading-7 text-muted-foreground">{milestone.description || "No description yet."}</p>
             <div className="mt-5 grid gap-4 sm:grid-cols-3">
-              <div className="rounded-xl bg-inkblue/8 p-3"><UserRound className="mb-2 size-4 text-inkblue" /><p className="text-xs text-muted-foreground">Owner</p><p className="text-sm font-semibold">{ownerDisplay(milestone.ownerKind, milestone.ownerCollaboratorId, roster)}</p></div>
+              <div className="rounded-xl bg-inkblue/8 p-3"><UserRound className="mb-2 size-4 text-text-inkblue" /><p className="text-xs text-muted-foreground">Owner</p><p className="text-sm font-semibold">{ownerDisplay(milestone.ownerKind, milestone.ownerCollaboratorId, roster)}</p></div>
               <div className="rounded-xl bg-amber/15 p-3"><CalendarDays className="mb-2 size-4 text-amber" /><p className="text-xs text-muted-foreground">Due date</p><p className="text-sm font-semibold">{milestone.due ?? "Not set"}</p></div>
-              <div className="rounded-xl bg-leaf/15 p-3"><Check className="mb-2 size-4 text-leaf" /><p className="text-xs text-muted-foreground">Approval</p><p className="text-sm font-semibold">{milestone.approval ? "Required" : "Not required"}</p></div>
+              <div className="rounded-xl bg-leaf/15 p-3"><Check className="mb-2 size-4 text-text-leaf" /><p className="text-xs text-muted-foreground">Approval</p><p className="text-sm font-semibold">{milestone.approval ? "Required" : "Not required"}</p></div>
               {milestone.track && <div className="rounded-xl bg-secondary p-3"><p className="text-xs text-muted-foreground">Track</p><p className="text-sm font-semibold">{milestone.track}</p></div>}
               {milestone.provision && <div className="rounded-xl bg-secondary p-3"><p className="text-xs text-muted-foreground">Provision</p><p className="text-sm font-semibold">{provisionLabel[milestone.provision]}</p></div>}
             </div>
@@ -354,7 +354,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
               <Button className="mt-4" variant="outline" asChild><Link to="/books/$bookId/team" params={{ bookId }}><UserRound />Manage collaborators</Link></Button>
             </div>
             <div className="rounded-2xl border border-border bg-paper p-5">
-              <div className="flex items-center gap-2"><MessageSquare className="size-4 text-inkblue" /><h3 className="font-semibold">Recent activity</h3></div>
+              <div className="flex items-center gap-2"><MessageSquare className="size-4 text-text-inkblue" /><h3 className="font-semibold">Recent activity</h3></div>
               <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground"><FileText className="size-4" />{(notes.data ?? []).length > 0 ? `${(notes.data ?? []).length} note${(notes.data ?? []).length === 1 ? "" : "s"} on this milestone.` : "Activity on this milestone will appear here."}</p>
             </div>
           </section>

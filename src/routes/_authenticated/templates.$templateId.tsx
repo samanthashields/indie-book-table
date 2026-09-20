@@ -45,7 +45,7 @@ function TemplatePreview() {
       <section className="mb-9 rounded-2xl border border-border bg-card p-6 shadow-xs">
         <h2 className="font-serif text-2xl font-normal">What makes this path different</h2>
         <ul className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
-          {(template.details.highlights ?? []).map((highlight) => <li key={highlight} className="flex gap-2"><Check className="size-4 shrink-0 text-leaf" />{highlight}</li>)}
+          {(template.details.highlights ?? []).map((highlight) => <li key={highlight} className="flex gap-2"><Check className="size-4 shrink-0 text-text-leaf" />{highlight}</li>)}
         </ul>
       </section>
 

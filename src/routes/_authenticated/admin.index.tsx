@@ -52,7 +52,7 @@ function AdminDashboard() {
   return (
     <div className="space-y-8">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="Accounts" value={stats.data.people} icon={Users} tint="bg-inkblue/12 text-inkblue" />
+        <Stat label="Accounts" value={stats.data.people} icon={Users} tint="bg-inkblue/12 text-text-inkblue" />
         <Stat label="Active book cycles" value={stats.data.active} icon={BookOpen} tint="bg-teal/20 text-link" />
         <Stat label="Books published" value={stats.data.published} icon={CheckCircle2} tint="bg-leaf/25 text-foreground" />
         <Stat label="Global templates" value={stats.data.usage.length} icon={LayoutTemplate} tint="bg-amber/25 text-foreground" />

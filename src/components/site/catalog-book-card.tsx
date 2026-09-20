@@ -11,7 +11,7 @@ const tagTone: Record<string, string> = {
   hidden_gem: "bg-teal/25 text-cocoa",
   needs_love: "bg-clay/25 text-cocoa",
   spicy: "bg-destructive/15 text-destructive",
-  preorder: "bg-inkblue/15 text-inkblue",
+  preorder: "bg-inkblue/15 text-text-inkblue",
   item: "bg-secondary text-foreground",
 };
 
@@ -88,7 +88,7 @@ export function CatalogBookCard({
               {book.author_name}
             </Link>
           </p>
-          <p className="mt-2 text-sm font-semibold text-inkblue">
+          <p className="mt-2 text-sm font-semibold text-text-inkblue">
             {book.genre ?? "Indie"} · {AUDIENCE_LABELS[book.target_audience] ?? book.target_audience}
           </p>
         </div>

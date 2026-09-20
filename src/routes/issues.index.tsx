@@ -58,7 +58,7 @@ function IssuesPage() {
       <section className="overflow-hidden rounded-3xl border border-border/70 bg-paper">
         <div className="grid items-stretch gap-0 md:grid-cols-[1.05fr_0.95fr]">
           <div className="p-8 md:p-12">
-            <p className="text-sm font-semibold text-inkblue">
+            <p className="text-sm font-semibold text-text-inkblue">
               {current.issue ? current.issue.display_label : "Coming soon"}
             </p>
             <h1 className="mt-3 font-serif text-4xl leading-tight md:text-5xl">The issues</h1>

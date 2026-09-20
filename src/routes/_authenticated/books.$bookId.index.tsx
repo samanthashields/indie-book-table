@@ -74,8 +74,8 @@ function BookOverview() {
         <div><p className="text-sm text-muted-foreground">Overall progress</p><p className="mt-1 font-serif text-4xl font-normal">{progress}%</p><Progress value={progress} className="mt-3" /></div>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
           <div className="rounded-xl bg-amber/15 p-4"><CalendarDays className="mb-2 size-4 text-amber" /><p className="text-xs text-muted-foreground">Target publication</p><p className="font-semibold">{target}</p></div>
-          <div className="rounded-xl bg-teal/15 p-4"><Clock3 className="mb-2 size-4 text-teal" /><p className="text-xs text-muted-foreground">Next action</p><p className="font-semibold">{next?.name ?? "All done"}</p></div>
-          <div className="rounded-xl bg-leaf/18 p-4"><Users className="mb-2 size-4 text-leaf" /><p className="text-xs text-muted-foreground">Team</p><p className="font-semibold">{collaboratorCount === 0 ? "Just you" : `${collaboratorCount} collaborator${collaboratorCount === 1 ? "" : "s"}`}</p></div>
+          <div className="rounded-xl bg-teal/15 p-4"><Clock3 className="mb-2 size-4 text-text-teal" /><p className="text-xs text-muted-foreground">Next action</p><p className="font-semibold">{next?.name ?? "All done"}</p></div>
+          <div className="rounded-xl bg-leaf/18 p-4"><Users className="mb-2 size-4 text-text-leaf" /><p className="text-xs text-muted-foreground">Team</p><p className="font-semibold">{collaboratorCount === 0 ? "Just you" : `${collaboratorCount} collaborator${collaboratorCount === 1 ? "" : "s"}`}</p></div>
         </div>
       </section>
 

@@ -106,7 +106,7 @@ function Cycles() {
             return (
               <section key={section.key}>
                 <div className="mb-4 flex items-center gap-3">
-                  <span className="grid size-9 place-items-center rounded-xl bg-teal/15 text-teal"><Icon className="size-5" /></span>
+                  <span className="grid size-9 place-items-center rounded-xl bg-teal/15 text-text-teal"><Icon className="size-5" /></span>
                   <div>
                     <h2 className="font-serif text-2xl font-normal">{section.title} <span className="text-muted-foreground">({items.length})</span></h2>
                     <p className="text-sm text-muted-foreground">{section.blurb}</p>
