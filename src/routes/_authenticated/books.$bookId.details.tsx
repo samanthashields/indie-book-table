@@ -11,7 +11,7 @@ import { useBookTree, useUpdateBook } from "@/lib/book-db";
 import { BOOK_STATUSES } from "@/lib/book-status";
 
 export const Route = createFileRoute("/_authenticated/books/$bookId/details")({ head: () => ({ meta: [
-  { title: "Book Details — Book Cycles" }, { name: "description", content: "Edit the publishing, audience, format, and distribution details for your book." }, { property: "og:title", content: "Book Details — Book Cycles" }, { property: "og:description", content: "Edit the publishing, audience, format, and distribution details for your book." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
+  { title: "Book Details — The Indie Book Table" }, { name: "description", content: "Edit the publishing, audience, format, and distribution details for your book." }, { property: "og:title", content: "Book Details — The Indie Book Table" }, { property: "og:description", content: "Edit the publishing, audience, format, and distribution details for your book." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
 ] }), component: BookDetails });
 
 const Field = ({ label, name, value, onChange, type = "text" }: { label: string; name: string; value: string; onChange: (name: string, value: string) => void; type?: string }) => (

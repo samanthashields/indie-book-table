@@ -5,10 +5,10 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   head: () => ({ meta: [
-    { title: "Admin dashboard — Book Cycles" },
-    { name: "description", content: "Sign-ups, active book cycles, published books and template usage across Book Cycles." },
-    { property: "og:title", content: "Admin dashboard — Book Cycles" },
-    { property: "og:description", content: "Sign-ups, active book cycles, published books and template usage across Book Cycles." },
+    { title: "Admin dashboard — The Indie Book Table" },
+    { name: "description", content: "Sign-ups, active book cycles, published books and template usage across The Indie Book Table." },
+    { property: "og:title", content: "Admin dashboard — The Indie Book Table" },
+    { property: "og:description", content: "Sign-ups, active book cycles, published books and template usage across The Indie Book Table." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
   ] }),

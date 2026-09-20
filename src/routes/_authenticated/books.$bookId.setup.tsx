@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/books/$bookId/setup")({
   head: () => ({ meta: [
-    { title: "Setup Tasks — Book Cycles" },
+    { title: "Setup Tasks — The Indie Book Table" },
     { name: "description", content: "The strategic decisions to make before and around production." },
-    { property: "og:title", content: "Setup Tasks — Book Cycles" },
+    { property: "og:title", content: "Setup Tasks — The Indie Book Table" },
     { property: "og:description", content: "The strategic decisions to make before and around production." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },

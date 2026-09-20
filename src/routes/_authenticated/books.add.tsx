@@ -11,9 +11,9 @@ import { BOOK_STATUSES } from "@/lib/book-status";
 
 export const Route = createFileRoute("/_authenticated/books/add")({
   head: () => ({ meta: [
-    { title: "Add a Book — Book Cycles" },
+    { title: "Add a Book — The Indie Book Table" },
     { name: "description", content: "Save a book idea to your shelf and start its publishing cycle whenever you're ready." },
-    { property: "og:title", content: "Add a Book — Book Cycles" },
+    { property: "og:title", content: "Add a Book — The Indie Book Table" },
     { property: "og:description", content: "Save a book idea to your shelf and start its publishing cycle whenever you're ready." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },

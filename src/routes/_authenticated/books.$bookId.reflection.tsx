@@ -15,7 +15,7 @@ import { syncChallenges } from "@/lib/challenges.functions";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/books/$bookId/reflection")({ head: () => ({ meta: [
-  { title: "Post-Launch Reflection — Book Cycles" }, { name: "description", content: "Reflect on your book launch and decide what comes next." }, { property: "og:title", content: "Post-Launch Reflection — Book Cycles" }, { property: "og:description", content: "Reflect on your book launch and decide what comes next." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
+  { title: "Post-Launch Reflection — The Indie Book Table" }, { name: "description", content: "Reflect on your book launch and decide what comes next." }, { property: "og:title", content: "Post-Launch Reflection — The Indie Book Table" }, { property: "og:description", content: "Reflect on your book launch and decide what comes next." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
 ] }), component: Reflection });
 
 /**

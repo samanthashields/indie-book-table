@@ -4,9 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin/activity")({
   head: () => ({ meta: [
-    { title: "Activity log — Book Cycles admin" },
+    { title: "Activity log — The Indie Book Table admin" },
     { name: "description", content: "Everything happening across book cycles, newest first." },
-    { property: "og:title", content: "Activity log — Book Cycles admin" },
+    { property: "og:title", content: "Activity log — The Indie Book Table admin" },
     { property: "og:description", content: "Everything happening across book cycles, newest first." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },

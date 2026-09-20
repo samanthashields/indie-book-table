@@ -99,7 +99,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
 
       <footer className="border-t border-border/60 bg-secondary/60">
         <div className="mx-auto flex w-full max-w-[1120px] flex-col gap-4 px-5 py-8 text-sm text-muted-foreground md:flex-row md:flex-wrap md:items-center md:justify-between md:px-8">
-          <p>The Table — a monthly issue of independent books, set by the Book Cycles editors.</p>
+          <p>The Table — a monthly issue of independent books, set by The Indie Book Table editors.</p>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             <Link to="/table" className="hover:text-foreground">The Table</Link>
             <Link to="/issues" className="hover:text-foreground">Issues</Link>

@@ -11,7 +11,7 @@ import { useDeleteAuthorTemplate, useSaveAuthorTemplate, useTemplates } from "@/
 import { templateCover } from "@/lib/template-covers";
 
 export const Route = createFileRoute("/_authenticated/templates/")({ head: () => ({ meta: [
-  { title: "Book Cycle Templates — Book Cycles" }, { name: "description", content: "Start with a genre-aware publishing plan, or build and save your own." }, { property: "og:title", content: "Book Cycle Templates — Book Cycles" }, { property: "og:description", content: "Start with a genre-aware publishing plan, or build and save your own." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
+  { title: "Book Cycle Templates — The Indie Book Table" }, { name: "description", content: "Start with a genre-aware publishing plan, or build and save your own." }, { property: "og:title", content: "Book Cycle Templates — The Indie Book Table" }, { property: "og:description", content: "Start with a genre-aware publishing plan, or build and save your own." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
 ] }), component: Templates });
 
 function Templates() {

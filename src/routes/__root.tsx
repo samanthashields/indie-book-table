@@ -92,10 +92,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       // Kept out of search engines while the coming-soon gate is up — remove at launch.
       { name: "robots", content: "noindex, nofollow" },
-      { title: "Book Cycles" },
+      { title: "The Indie Book Table" },
       { name: "description", content: "A guided publishing workspace for independent authors." },
-      { name: "author", content: "Book Cycles" },
-      { property: "og:title", content: "Book Cycles" },
+      { name: "author", content: "The Indie Book Table" },
+      { property: "og:title", content: "The Indie Book Table" },
       { property: "og:description", content: "A guided publishing workspace for independent authors." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
