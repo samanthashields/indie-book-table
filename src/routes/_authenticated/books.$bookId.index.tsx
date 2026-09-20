@@ -4,6 +4,7 @@ import { CalendarDays, CheckCircle2, ChevronDown, Circle, Clock3, FileText, Fold
 import { AppShell } from "@/components/app-shell";
 import { MilestoneBody } from "@/components/milestone-body";
 import { MilestoneDisclosure } from "@/components/milestone-disclosure";
+import { DeleteCycleSection } from "@/components/delete-cycle";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -134,6 +135,8 @@ function BookOverview() {
           })}
         </div>
       </section>
+
+      <DeleteCycleSection bookId={bookId} authorId={book.author_id} title={book.title} total={allMilestones.length} done={doneCount} />
 
       <Sheet open={Boolean(drawer)} onOpenChange={(next) => { if (!next) setDrawer(null); }}>
         <SheetContent side="right" dim={false} className="w-full overflow-y-auto border-l-2 shadow-2xl sm:max-w-xl">
