@@ -35,9 +35,8 @@ const needsFollowUpTone: Record<NeedsFollowUp, "neutral" | "good" | "warm" | "da
 function BookOverview() {
   const { bookId } = Route.useParams();
   const { data, isLoading } = useBookTree(bookId);
-  const [open, setOpen] = useState<string[]>(["editing"]);
+  const [manualOpen, setManualOpen] = useState<string[] | null>(null);
   const [drawer, setDrawer] = useState<{ milestone: Milestone; phaseName: string } | null>(null);
-  const toggle = (id: string) => setOpen((current) => current.includes(id) ? current.filter((value) => value !== id) : [...current, id]);
 
   if (isLoading) return <AppShell><p className="text-sm text-muted-foreground">Loading your book…</p></AppShell>;
   if (!data) return <AppShell><p className="text-sm text-muted-foreground">This book isn’t available for your account.</p></AppShell>;
@@ -48,6 +47,12 @@ function BookOverview() {
   const progress = allMilestones.length ? Math.round((doneCount / allMilestones.length) * 100) : 0;
   const next = allMilestones.find((milestone) => milestone.status === "In progress") ?? allMilestones.find((milestone) => milestone.status !== "Complete");
   const target = formatDate(book.target_publication_date) || "No target date";
+
+  // Open the phase holding the next milestone until the author opens or closes a phase themselves.
+  const visiblePhases = phases.filter((phase) => !phase.hidden);
+  const nextPhase = visiblePhases.find((phase) => phase.milestones.some((milestone) => milestone.id === next?.id)) ?? visiblePhases.find((phase) => phase.milestones.some((milestone) => milestone.status !== "Complete"));
+  const open = manualOpen ?? (nextPhase ? [nextPhase.id] : []);
+  const toggle = (id: string) => setManualOpen(open.includes(id) ? open.filter((value) => value !== id) : [...open, id]);
 
   return (
     <AppShell>
