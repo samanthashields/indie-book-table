@@ -4,7 +4,7 @@ import { CalendarDays, CheckCircle2, ChevronDown, Circle, Clock3, FileText, Fold
 import { AppShell } from "@/components/app-shell";
 import { MilestoneBody } from "@/components/milestone-body";
 import { MilestoneDisclosure } from "@/components/milestone-disclosure";
-import { DeleteCycleSection } from "@/components/delete-cycle";
+import { DeleteCycleButton, DeleteCycleSection } from "@/components/delete-cycle";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -73,6 +73,7 @@ function BookOverview() {
           <Button variant="outline" asChild><Link to="/books/$bookId/team" params={{ bookId }}><Users />Collaborators</Link></Button>
           <Button variant="outline" asChild><Link to="/books/$bookId/resources" params={{ bookId }}><FolderOpen />Resources</Link></Button>
           <Button variant={book.status !== "complete" ? "secondary" : "outline"} asChild><Link to="/books/$bookId/reflection" params={{ bookId }}><FileText />{book.status !== "complete" ? "End book cycle & reflect" : "Reflection"}</Link></Button>
+          <DeleteCycleButton bookId={bookId} authorId={book.author_id} title={book.title} total={allMilestones.length} done={doneCount} />
         </div>
       </header>
 
