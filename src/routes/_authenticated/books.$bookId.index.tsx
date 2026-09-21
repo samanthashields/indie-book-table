@@ -5,6 +5,7 @@ import { AppShell } from "@/components/app-shell";
 import { MilestoneBody } from "@/components/milestone-body";
 import { MilestoneDisclosure } from "@/components/milestone-disclosure";
 import { DeleteCycleButton, DeleteCycleSection } from "@/components/delete-cycle";
+import { SetupTasksSection } from "@/components/setup-tasks-section";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -85,6 +86,8 @@ function BookOverview() {
           <div className="rounded-xl bg-leaf/18 p-4"><Users className="mb-2 size-4 text-text-leaf" /><p className="text-xs text-muted-foreground">Team</p><p className="font-semibold">{collaboratorCount === 0 ? "Just you" : `${collaboratorCount} collaborator${collaboratorCount === 1 ? "" : "s"}`}</p></div>
         </div>
       </section>
+
+      <SetupTasksSection bookId={bookId} authorId={book.author_id} book={book} />
 
       {timeline.warnings.length > 0 && <p className="mb-6 rounded-2xl border border-clay/40 bg-clay/12 p-5 text-sm leading-6">{timeline.warnings[0]}</p>}
 
