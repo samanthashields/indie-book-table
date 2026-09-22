@@ -8,9 +8,9 @@ import type { WishlistEntry } from "@/lib/wishlist";
 import { cn } from "@/lib/utils";
 
 /**
- * A book-fair poster card: cover art with sticker badges on a floating panel,
- * title block and price pills underneath. `large` lays the card out sideways
- * so a grid can feature one book without a separate template.
+ * A catalog-style book card: cover art with ribbon-tag badges, title block
+ * and price tags underneath. `large` lays the card out sideways so a grid
+ * can feature one book without a separate template.
  */
 export function ListingRow({
   book,
@@ -33,12 +33,12 @@ export function ListingRow({
   return (
     <article
       className={cn(
-        "poster-panel relative h-full bg-card p-4 sm:p-5",
+        "relative h-full rounded-2xl border-2 border-ink bg-card p-4 sm:p-5",
         large && "sm:grid sm:grid-cols-[minmax(0,11rem)_1fr] sm:gap-5",
       )}
     >
       {typeof listingNumber === "number" && (
-        <span className="absolute -left-2 -top-3 z-10 flex size-9 items-center justify-center rounded-full bg-cocoa text-[0.85rem] font-black text-paper shadow-[0_6px_14px_-6px_var(--cocoa)]">
+        <span className="absolute -left-2 -top-3 z-10 flex size-9 items-center justify-center rounded-full border-2 border-ink bg-primary text-[0.85rem] font-black text-primary-foreground">
           {listingNumber}
         </span>
       )}
@@ -48,7 +48,7 @@ export function ListingRow({
           to="/table/books/$bookId"
           params={{ bookId: book.id }}
           aria-label={`View ${book.title} by ${book.author_name}`}
-          className="group relative block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cocoa"
+          className="group relative block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
         >
           {book.cover_image_url ? (
             <img
@@ -57,10 +57,10 @@ export function ListingRow({
               loading="lazy"
               width={672}
               height={992}
-              className="aspect-[2/3] w-full rounded-xl object-cover shadow-[0_14px_30px_-16px_var(--cocoa)] transition-transform duration-300 group-hover:-translate-y-1"
+              className="aspect-[2/3] w-full rounded-lg border-2 border-ink object-cover transition-transform duration-300 group-hover:-translate-y-1"
             />
           ) : (
-            <span className="flex aspect-[2/3] w-full items-center justify-center rounded-xl bg-paper p-4 text-center font-heading text-lg text-cocoa/60">
+            <span className="flex aspect-[2/3] w-full items-center justify-center rounded-lg border-2 border-ink bg-amber-soft p-4 text-center font-heading text-lg text-ink/70">
               {book.title}
             </span>
           )}
@@ -72,7 +72,7 @@ export function ListingRow({
       <div>
         <h3
           className={cn(
-            "mt-3 font-heading font-bold leading-tight text-cocoa sm:mt-0",
+            "mt-3 font-heading font-semibold leading-tight text-foreground sm:mt-0",
             large ? "text-2xl" : "text-lg sm:mt-3",
           )}
         >
@@ -80,7 +80,7 @@ export function ListingRow({
             {book.title}
           </Link>
         </h3>
-        <p className="mt-0.5 text-[0.78rem] font-bold uppercase tracking-[0.08em] text-cocoa/70">
+        <p className="mt-0.5 text-[0.78rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
           <Link
             to="/table/authors/$authorId"
             params={{ authorId: book.author_id }}
@@ -91,12 +91,12 @@ export function ListingRow({
         </p>
 
         {book.hook && (
-          <p className={cn("mt-2 leading-snug text-cocoa/80", large ? "text-[0.95rem]" : "text-[0.82rem]")}>
+          <p className={cn("mt-2 leading-snug text-foreground/80", large ? "text-[0.95rem]" : "text-[0.82rem]")}>
             {book.hook}
           </p>
         )}
 
-        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5">
+        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
           {ebook && !isItem && <PricePill format="ebook" amount={ebook} />}
           {print && <PricePill format={isItem ? "item" : "print"} amount={print} />}
         </div>
@@ -109,7 +109,7 @@ export function ListingRow({
                   href={link.url}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="inline-block rounded-full bg-amber px-3 py-1 text-[0.62rem] font-black uppercase tracking-[0.12em] text-cocoa"
+                  className="inline-block rounded-md bg-ink px-3 py-1 text-[0.62rem] font-bold uppercase tracking-[0.12em] text-card"
                 >
                   {link.platform_label}
                 </a>
