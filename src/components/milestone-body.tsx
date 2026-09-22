@@ -233,7 +233,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
       <div className="flex flex-col gap-4 border-b border-border/70 pb-6">
         <div className="min-w-0">
           <div className="mb-3 flex flex-wrap gap-2"><StatusPill>{phaseName}</StatusPill><StatusPill tone={milestone.status === "Complete" ? "good" : milestone.status === "Blocked" ? "danger" : "warm"}>{milestone.status}</StatusPill></div>
-          <h2 className={compact ? "font-serif text-3xl font-normal" : "font-serif text-4xl font-normal md:text-5xl"}>{milestone.name}</h2>
+          <h2 className={compact ? "font-heading text-3xl font-normal" : "font-heading text-4xl font-normal md:text-5xl"}>{milestone.name}</h2>
         </div>
         <div className="flex flex-wrap gap-2">
           {milestone.status !== "Complete" && !editing && (
@@ -306,7 +306,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
       ) : (
         <>
           <section>
-            <h3 className="font-serif text-2xl font-semibold">About this milestone</h3>
+            <h3 className="font-heading text-2xl font-semibold">About this milestone</h3>
             <p className="mt-3 max-w-2xl leading-7 text-muted-foreground">{milestone.description || "No description yet."}</p>
             <div className="mt-5 grid gap-4 sm:grid-cols-3">
               <div className="rounded-xl bg-inkblue/8 p-3"><UserRound className="mb-2 size-4 text-text-inkblue" /><p className="text-xs text-muted-foreground">Owner</p><p className="text-sm font-semibold">{ownerDisplay(milestone.ownerKind, milestone.ownerCollaboratorId, roster)}</p></div>
@@ -317,7 +317,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
             </div>
           </section>
           <section>
-            <h3 className="mb-3 font-serif text-2xl font-semibold">Requirement</h3>
+            <h3 className="mb-3 font-heading text-2xl font-semibold">Requirement</h3>
             <RequirementAction
               bookId={bookId}
               type={milestone.requirement}
@@ -329,7 +329,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
           <MilestoneChecklistPanel bookId={bookId} milestoneId={milestone.id} />
           <MilestoneResources bookId={bookId} milestoneId={milestone.id} />
           <section>
-            <h3 className="font-serif text-2xl font-semibold">Notes and attachments</h3>
+            <h3 className="font-heading text-2xl font-semibold">Notes and attachments</h3>
             {(notes.data ?? []).length > 0 && (
               <ul className="mt-3 space-y-2">
                 {(notes.data ?? []).map((entry) => (
@@ -352,7 +352,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
           </section>
           <section className="grid gap-5 sm:grid-cols-2">
             <div className="rounded-2xl border border-border bg-card p-5 shadow-xs">
-              <h3 className="font-serif text-xl font-normal">Collaborator view</h3>
+              <h3 className="font-heading text-xl font-normal">Collaborator view</h3>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">Collaborators you invite see the description, files, due date, and notes for the milestones assigned to them — not your full book cycle.</p>
               <Button className="mt-4" variant="outline" asChild><Link to="/books/$bookId/team" params={{ bookId }}><UserRound />Manage collaborators</Link></Button>
             </div>

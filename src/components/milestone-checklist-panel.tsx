@@ -87,7 +87,7 @@ export function MilestoneChecklistPanel({ bookId, milestoneId }: { bookId: strin
   return (
     <section>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h3 className="font-serif text-2xl font-semibold">Your steps</h3>
+        <h3 className="font-heading text-2xl font-semibold">Your steps</h3>
         {list.length > 0 && (
           <p className="text-sm font-semibold text-muted-foreground">
             {done} of {list.length} done

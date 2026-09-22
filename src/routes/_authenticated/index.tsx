@@ -99,7 +99,7 @@ function BookRow({ book, submission, onDelete }: { book: BookSummary; submission
         <BookCover src={book.coverUrl} title={book.title} className="w-20 shrink-0" fallbackClassName="text-3xl" />
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="font-serif text-2xl font-normal group-hover:text-link">{book.title}</h3>
+            <h3 className="font-heading text-2xl font-normal group-hover:text-link">{book.title}</h3>
             <StatusPill tone={bookStatusTone(book.shelfStatus)}>{bookStatusLabel(book.shelfStatus)}</StatusPill>
             {book.hasCycle && <StatusPill tone={book.progress > 60 ? "warm" : "good"}>{book.status}</StatusPill>}
             <NeedsFollowUpPill book={book} />
@@ -286,18 +286,18 @@ function Index() {
       {isLoading ? (
         <div className="space-y-10">
           <section>
-            <div className="mb-4 flex items-baseline justify-between"><h2 className="font-serif text-2xl font-semibold">In a book cycle</h2><Skeleton className="h-4 w-16" /></div>
+            <div className="mb-4 flex items-baseline justify-between"><h2 className="font-heading text-2xl font-semibold">In a book cycle</h2><Skeleton className="h-4 w-16" /></div>
             <BookGroupSkeleton view={view} />
           </section>
           <section>
-            <div className="mb-4 flex items-baseline justify-between"><h2 className="flex items-center gap-2 font-serif text-2xl font-semibold"><Lightbulb className="size-5 text-amber" />Ideas and drafts</h2><Skeleton className="h-4 w-16" /></div>
+            <div className="mb-4 flex items-baseline justify-between"><h2 className="flex items-center gap-2 font-heading text-2xl font-semibold"><Lightbulb className="size-5 text-amber" />Ideas and drafts</h2><Skeleton className="h-4 w-16" /></div>
             <BookGroupSkeleton view={view} />
           </section>
         </div>
       ) : mine.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-paper p-10 text-center">
           <BookOpen className="mx-auto mb-4 size-8 text-link" />
-          <h3 className="font-serif text-2xl font-normal">Your first book starts here</h3>
+          <h3 className="font-heading text-2xl font-normal">Your first book starts here</h3>
           <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">Save an idea now and come back to it, or start a full book cycle from a template, from scratch, or with Pen.</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Button variant="outline" onClick={() => void navigate({ to: "/books/add" })}><Plus />Add a book</Button>
@@ -307,7 +307,7 @@ function Index() {
       ) : (
         <div className="space-y-10">
           <section>
-            <div className="mb-4 flex items-baseline justify-between"><h2 className="font-serif text-2xl font-semibold">In a book cycle</h2><span className="text-sm text-muted-foreground">{cycles.length} books</span></div>
+            <div className="mb-4 flex items-baseline justify-between"><h2 className="font-heading text-2xl font-semibold">In a book cycle</h2><span className="text-sm text-muted-foreground">{cycles.length} books</span></div>
             {cycles.length === 0 ? (
               <p className="rounded-2xl border border-dashed border-border bg-paper p-6 text-sm text-muted-foreground">No cycles running yet. Open a book below and choose “Create book cycle” when you’re ready.</p>
             ) : (
@@ -316,7 +316,7 @@ function Index() {
           </section>
 
           <section>
-            <div className="mb-4 flex items-baseline justify-between"><h2 className="flex items-center gap-2 font-serif text-2xl font-semibold"><Lightbulb className="size-5 text-amber" />Ideas and drafts</h2><span className="text-sm text-muted-foreground">{ideas.length} books</span></div>
+            <div className="mb-4 flex items-baseline justify-between"><h2 className="flex items-center gap-2 font-heading text-2xl font-semibold"><Lightbulb className="size-5 text-amber" />Ideas and drafts</h2><span className="text-sm text-muted-foreground">{ideas.length} books</span></div>
             {ideas.length === 0 ? (
               <p className="rounded-2xl border border-dashed border-border bg-paper p-6 text-sm text-muted-foreground">Nothing waiting in the wings. Add a book to keep an idea safe until it’s ready.</p>
             ) : (

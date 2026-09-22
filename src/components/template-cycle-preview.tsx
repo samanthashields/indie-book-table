@@ -41,7 +41,7 @@ export function TemplateCyclePreview({
               {genre && <StatusPill tone="warm">{genre}</StatusPill>}
               <StatusPill>{visible.length} phases</StatusPill>
             </div>
-            <h2 className="font-serif text-3xl font-normal">{title}</h2>
+            <h2 className="font-heading text-3xl font-normal">{title}</h2>
             {description && <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{description}</p>}
           </div>
           <Button className="shrink-0" onClick={onUse}>Use this template</Button>
@@ -69,7 +69,7 @@ export function TemplateCyclePreview({
                 <button type="button" onClick={() => toggle(phase.id)} aria-expanded={expanded} className="flex w-full items-start gap-3 p-5 text-left">
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="font-serif text-2xl font-normal">{phase.name}</h3>
+                      <h3 className="font-heading text-2xl font-normal">{phase.name}</h3>
                       <StatusPill>{phase.mode}</StatusPill>
                     </div>
                     <p className="mt-1 text-sm text-muted-foreground">{phase.summary}</p>

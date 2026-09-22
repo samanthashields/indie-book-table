@@ -96,7 +96,7 @@ export function DeleteCycleSection({
 
   return (
     <section className="mt-12 rounded-2xl border border-destructive/30 bg-destructive/5 p-6">
-      <h2 className="font-serif text-2xl font-normal">Delete this book cycle</h2>
+      <h2 className="font-heading text-2xl font-normal">Delete this book cycle</h2>
       <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">
         Remove this plan without deleting the book. “{title}” stays on your shelf and you can start a new cycle whenever you like.
         To keep a record of how it went, use “End book cycle &amp; reflect” instead.

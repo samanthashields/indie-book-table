@@ -14,7 +14,7 @@ function ChallengeCard({ challenge }: { challenge: ChallengeProgress }) {
     <li className={cn("rounded-2xl border p-5 shadow-xs", challenge.completed ? "border-primary/30 bg-card" : "border-border bg-card")}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="font-serif text-xl font-normal">{challenge.title}</h3>
+          <h3 className="font-heading text-xl font-normal">{challenge.title}</h3>
           <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground"><CalendarRange className="size-3.5" />{monthLabel(challenge.challengeMonth)}</p>
         </div>
         {decoration && (
@@ -44,7 +44,7 @@ export function ChallengeList({ challenges }: { challenges: ChallengeProgress[] 
 
   return (
     <section aria-label="Seasonal challenges">
-      <h2 className="font-serif text-2xl font-semibold">Challenges this month</h2>
+      <h2 className="font-heading text-2xl font-semibold">Challenges this month</h2>
       {running.length === 0 ? (
         <p className="mt-4 rounded-2xl border border-dashed border-border bg-paper p-6 text-sm text-muted-foreground">
           No challenge is running this month. New ones appear here when they open.

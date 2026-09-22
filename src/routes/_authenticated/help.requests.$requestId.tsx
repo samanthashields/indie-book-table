@@ -194,7 +194,7 @@ function FeatureRequestDetail() {
           </section>
 
           <section className="rounded-2xl border border-border bg-card p-6 shadow-xs">
-            <h2 className="font-serif text-2xl font-normal">Updates</h2>
+            <h2 className="font-heading text-2xl font-normal">Updates</h2>
             {timeline.isLoading && <p className="mt-2 text-sm text-muted-foreground">Loading updates…</p>}
             <ol className="mt-4 space-y-4 border-l-2 border-border pl-5">
               {entries.map((entry, index) => (

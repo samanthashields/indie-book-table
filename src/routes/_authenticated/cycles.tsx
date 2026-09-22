@@ -42,7 +42,7 @@ function CycleRow({ book }: { book: BookSummary }) {
       <BookCover src={book.coverUrl} title={book.title} className="w-16 shrink-0" fallbackClassName="text-2xl" />
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
-          <h3 className="font-serif text-2xl font-normal group-hover:text-link">{book.title}</h3>
+          <h3 className="font-heading text-2xl font-normal group-hover:text-link">{book.title}</h3>
           <StatusPill tone={book.status.toLowerCase() === "complete" ? "good" : "warm"}>{book.status}</StatusPill>
         </div>
         <p className="mt-1 text-sm text-muted-foreground">{book.genre}, by {book.author}</p>
@@ -94,7 +94,7 @@ function Cycles() {
         <p className="text-sm text-muted-foreground">Loading your cycles…</p>
       ) : cycles.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-paper p-10 text-center">
-          <p className="font-serif text-2xl font-normal">No cycles yet</p>
+          <p className="font-heading text-2xl font-normal">No cycles yet</p>
           <p className="mt-2 text-sm text-muted-foreground">Pick a book from your shelf and start its cycle when you are ready.</p>
           <Button className="mt-5" asChild><Link to="/">Go to My Books</Link></Button>
         </div>
@@ -109,7 +109,7 @@ function Cycles() {
                 <div className="mb-4 flex items-center gap-3">
                   <span className="grid size-9 place-items-center rounded-xl bg-teal/15 text-text-teal"><Icon className="size-5" /></span>
                   <div>
-                    <h2 className="font-serif text-2xl font-normal">{section.title} <span className="text-muted-foreground">({items.length})</span></h2>
+                    <h2 className="font-heading text-2xl font-normal">{section.title} <span className="text-muted-foreground">({items.length})</span></h2>
                     <p className="text-sm text-muted-foreground">{section.blurb}</p>
                   </div>
                 </div>

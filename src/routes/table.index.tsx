@@ -69,7 +69,7 @@ function TableHomePage() {
             <span className="inline-flex rounded-full bg-amber/25 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cocoa">
               The Indie Author Table
             </span>
-            <h1 className="mt-4 font-serif text-4xl leading-tight md:text-5xl">
+            <h1 className="mt-4 font-heading text-4xl leading-tight md:text-5xl">
               {value("table.home.hero.title")}
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">{value("table.home.hero.subtitle")}</p>
@@ -118,7 +118,7 @@ function TableHomePage() {
 
       <section className="mt-12 grid items-center gap-8 rounded-3xl border border-border/70 bg-sage/15 p-8 md:grid-cols-[1fr_320px] md:p-12">
         <div>
-          <h2 className="font-serif text-3xl">{value("table.home.welcome.title")}</h2>
+          <h2 className="font-heading text-3xl">{value("table.home.welcome.title")}</h2>
           <p className="mt-4 text-lg leading-relaxed text-foreground/85">
             {value("table.home.welcome.body")}
           </p>
@@ -138,14 +138,14 @@ function TableHomePage() {
 
       {steps.length > 0 && (
         <section className="mt-12">
-          <h2 className="font-serif text-3xl">How it works</h2>
+          <h2 className="font-heading text-3xl">How it works</h2>
           <ol className="mt-6 grid gap-4 md:grid-cols-3">
             {steps.map((step, index) => (
               <li
                 key={step}
                 className="rounded-2xl border border-border/70 bg-card p-6 shadow-xs"
               >
-                <span className="grid size-9 place-items-center rounded-full bg-teal/25 font-serif text-lg text-cocoa">
+                <span className="grid size-9 place-items-center rounded-full bg-teal/25 font-heading text-lg text-cocoa">
                   {index + 1}
                 </span>
                 <p className="mt-3 leading-relaxed">{step}</p>
@@ -157,7 +157,7 @@ function TableHomePage() {
 
       <section className="mt-12 grid gap-6 md:grid-cols-2">
         <div className="rounded-3xl border border-border/70 bg-amber/15 p-8">
-          <h2 className="font-serif text-3xl">{value("table.home.submit.title")}</h2>
+          <h2 className="font-heading text-3xl">{value("table.home.submit.title")}</h2>
           <p className="mt-3 text-lg leading-relaxed text-foreground/85">
             {value("table.home.submit.body")}
           </p>
@@ -169,7 +169,7 @@ function TableHomePage() {
           <p className="text-sm font-semibold text-text-inkblue">
             {current.issue ? current.issue.display_label : "Next issue"}
           </p>
-          <h2 className="mt-2 font-serif text-3xl">
+          <h2 className="mt-2 font-heading text-3xl">
             {current.issue ? "This month's issue is out" : "The first issue is on its way"}
           </h2>
           <p className="mt-3 text-muted-foreground">

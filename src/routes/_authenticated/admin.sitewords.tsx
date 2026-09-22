@@ -30,7 +30,7 @@ function AdminSiteWords() {
 
   return (
     <section className="max-w-3xl rounded-2xl border border-border bg-card p-6">
-      <h2 className="font-serif text-2xl font-normal">Other site words</h2>
+      <h2 className="font-heading text-2xl font-normal">Other site words</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         Copy that doesn’t belong to the Table homepage or the mission page — the Journal and the submission form.
       </p>

@@ -37,7 +37,7 @@ export function SubscribeGateModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md gap-0 overflow-hidden p-0">
         <div className="border-b border-border/70 bg-amber/20 px-6 py-5">
-          <DialogTitle className="max-w-[80%] font-serif text-2xl font-normal leading-tight">
+          <DialogTitle className="max-w-[80%] font-heading text-2xl font-normal leading-tight">
             Want to take your list with you?
           </DialogTitle>
           <DialogDescription className="mt-2 text-sm text-muted-foreground">

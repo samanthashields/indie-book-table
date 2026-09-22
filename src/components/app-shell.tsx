@@ -226,7 +226,7 @@ export function AppShell({
           <div className="fixed inset-0 bg-foreground/30" onClick={() => setNavOpen(false)} />
           <div className="fixed inset-y-0 right-0 flex w-72 max-w-[85vw] flex-col overflow-y-auto border-l border-border bg-card p-4 shadow-lg">
             <div className="mb-4 flex h-11 items-center justify-between">
-              <span className="font-serif text-lg font-normal">Menu</span>
+              <span className="font-heading text-lg font-normal">Menu</span>
               <Button
                 variant="ghost"
                 size="icon"

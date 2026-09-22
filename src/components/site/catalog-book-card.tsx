@@ -29,7 +29,7 @@ export function CatalogCoverArt({ book, className }: { book: CatalogBook; classN
   return (
     <span
       className={cn(
-        "grid aspect-[2/3] w-full place-items-center overflow-hidden hyphens-auto break-words rounded-xl bg-teal/15 p-2 text-center font-serif text-sm leading-tight text-cocoa shadow-sm",
+        "grid aspect-[2/3] w-full place-items-center overflow-hidden hyphens-auto break-words rounded-xl bg-teal/15 p-2 text-center font-heading text-sm leading-tight text-cocoa shadow-sm",
         className,
       )}
       aria-hidden="true"
@@ -73,7 +73,7 @@ export function CatalogBookCard({
               Spotlight
             </span>
           )}
-          <h3 className="font-serif text-lg leading-tight">
+          <h3 className="font-heading text-lg leading-tight">
             <Link to="/table/books/$bookId" params={{ bookId: book.id }} className="hover:underline">
               {book.title}
             </Link>

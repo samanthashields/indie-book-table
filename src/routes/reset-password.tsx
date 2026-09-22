@@ -47,18 +47,18 @@ function ResetPassword() {
         {done ? (
           <div className="text-center">
             <span className="mx-auto mb-4 grid size-14 place-items-center rounded-full bg-leaf/25"><CheckCircle2 className="size-6" /></span>
-            <h1 className="font-serif text-3xl font-normal">Password updated</h1>
+            <h1 className="font-heading text-3xl font-normal">Password updated</h1>
             <p className="mt-2 text-sm text-muted-foreground">Taking you back to your books…</p>
           </div>
         ) : !isRecovery ? (
           <>
-            <h1 className="font-serif text-3xl font-normal">Open your reset link</h1>
+            <h1 className="font-heading text-3xl font-normal">Open your reset link</h1>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">This page only works from the password-reset link we emailed you. Request a new one if yours has expired.</p>
             <Button asChild className="mt-6 w-full"><Link to="/auth">Request a reset link</Link></Button>
           </>
         ) : (
           <>
-            <h1 className="font-serif text-3xl font-normal">Choose a new password</h1>
+            <h1 className="font-heading text-3xl font-normal">Choose a new password</h1>
             <p className="mt-2 text-sm text-muted-foreground">Pick something you'll remember on deadline day.</p>
             <form className="mt-6 space-y-4" onSubmit={(event) => { event.preventDefault(); void submit(); }}>
               <label className="block text-sm font-semibold">New password<Input type="password" required className="mt-2" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="new-password" /></label>

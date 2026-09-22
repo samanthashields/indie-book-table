@@ -123,7 +123,7 @@ function AdminTemplates() {
   return (
     <div className="space-y-8">
       <section className="rounded-2xl border border-border bg-paper p-6">
-        <h2 className="font-serif text-2xl font-normal">New template</h2>
+        <h2 className="font-heading text-2xl font-normal">New template</h2>
         <form className="mt-4 grid gap-4 md:grid-cols-[1.2fr_1fr_auto] md:items-end" onSubmit={(event) => { event.preventDefault(); if (draft.title.trim()) create.mutate(); }}>
           <label className="block text-sm font-semibold">Title<Input className="mt-2" value={draft.title} onChange={(event) => setDraft({ ...draft, title: event.target.value })} placeholder="Children's picture book" required /></label>
           <label className="block text-sm font-semibold">Genre<Input className="mt-2" value={draft.genre} onChange={(event) => setDraft({ ...draft, genre: event.target.value })} placeholder="Children's" /></label>
@@ -133,7 +133,7 @@ function AdminTemplates() {
       </section>
 
       <section>
-        <h2 className="mb-4 font-serif text-2xl font-normal">All templates</h2>
+        <h2 className="mb-4 font-heading text-2xl font-normal">All templates</h2>
         {templates.isLoading ? (
           <p className="text-sm text-muted-foreground">Loading templates…</p>
         ) : (templates.data ?? []).length === 0 ? (
@@ -149,7 +149,7 @@ function AdminTemplates() {
                       {template.archived && <StatusPill tone="danger">Archived</StatusPill>}
                       {template.genre && <StatusPill>{template.genre}</StatusPill>}
                     </div>
-                    <p className="font-serif text-xl">{template.title}</p>
+                    <p className="font-heading text-xl">{template.title}</p>
                     {template.description && <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{template.description}</p>}
                   </div>
                   <div className="flex flex-wrap items-center gap-2">

@@ -59,7 +59,7 @@ export function MilestoneResources({ bookId, milestoneId }: { bookId: string; mi
 
   return (
     <section>
-      <h3 className="font-serif text-2xl font-semibold">Resources</h3>
+      <h3 className="font-heading text-2xl font-semibold">Resources</h3>
       <p className="mt-1 text-sm text-muted-foreground">Working files and reference links for this milestone specifically — rolls up into the book's Resources page.</p>
 
       {list.length > 0 && (

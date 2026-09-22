@@ -17,7 +17,7 @@ export function CoverBlock({
   return (
     <div className="flex min-h-[min(70rem,calc(100vh-14rem))] flex-col justify-center">
       <div className="poster-slant rounded-2xl bg-cocoa py-4 text-center">
-        <p className="poster-unslant font-serif text-[2.1rem] font-black uppercase leading-none tracking-[0.08em] text-paper sm:text-[3.4rem]">
+        <p className="poster-unslant font-heading text-[2.1rem] font-black uppercase leading-none tracking-[0.08em] text-paper sm:text-[3.4rem]">
           The Indie Book Table
         </p>
       </div>
@@ -29,10 +29,10 @@ export function CoverBlock({
 
       <div className="mt-8 grid items-center gap-8 sm:grid-cols-[1.1fr_0.9fr]">
         <div className="text-left">
-          <h1 className="font-serif text-5xl leading-[0.95] text-cocoa sm:text-7xl">
+          <h1 className="font-heading text-5xl leading-[0.95] text-cocoa sm:text-7xl">
             {theme.cover_headline ?? data.issue?.display_label ?? "The Table"}
           </h1>
-          <p className="mt-5 max-w-md font-serif text-lg italic leading-relaxed text-cocoa/80">
+          <p className="mt-5 max-w-md font-heading text-lg italic leading-relaxed text-cocoa/80">
             {theme.cover_tagline ??
               "A hand-curated flyer of independently published books. Flip through and find your next read."}
           </p>

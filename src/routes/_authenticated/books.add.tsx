@@ -47,7 +47,7 @@ function AddBook() {
       <PageHeading title="Add a book" description="Keep the idea safe now. You can fill in the rest of the details, and start a cycle, at any time." />
       <form className="max-w-3xl space-y-6" onSubmit={(event) => { event.preventDefault(); save("shelf"); }}>
         <section className="rounded-2xl border border-border bg-paper p-6 shadow-xs">
-          <h2 className="mb-5 font-serif text-2xl font-normal">The book</h2>
+          <h2 className="mb-5 font-heading text-2xl font-normal">The book</h2>
           <div className="grid gap-5 md:grid-cols-2">
             <label className="block text-sm font-semibold md:col-span-2">Working title<Input className="mt-2" required value={form.title} onChange={(event) => set("title", event.target.value)} placeholder="The working title of your book" /></label>
             <label className="block text-sm font-semibold">Subtitle<Input className="mt-2" value={form.subtitle} onChange={(event) => set("subtitle", event.target.value)} /></label>

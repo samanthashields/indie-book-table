@@ -55,7 +55,7 @@ function AdminLayout() {
     return (
       <AppShell>
         <div className="mx-auto max-w-xl rounded-2xl border border-border bg-card p-8 text-center shadow-xs">
-          <h1 className="font-serif text-3xl font-normal">The admin area is for editors</h1>
+          <h1 className="font-heading text-3xl font-normal">The admin area is for editors</h1>
           <p className="mt-3 text-sm text-muted-foreground">
             You're signed in as <span className="font-semibold text-foreground">{label}</span>, which can
             write book cycles, submit books to The Table and read the Journal — but not curate issues or

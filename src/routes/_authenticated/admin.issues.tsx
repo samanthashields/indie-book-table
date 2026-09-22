@@ -131,7 +131,7 @@ function AdminIssues() {
         <div className="space-y-8">
           <header className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card p-5">
             <div>
-              <h2 className="font-serif text-3xl font-normal">{issue.display_label}</h2>
+              <h2 className="font-heading text-3xl font-normal">{issue.display_label}</h2>
               <StatusPill tone={issue.status === "published" ? "good" : "warm"}>{issue.status === "published" ? "Published" : "Draft"}</StatusPill>
             </div>
             <Button asChild variant="outline">
@@ -167,7 +167,7 @@ function AdminIssues() {
             <TabsContent value="setup" className="space-y-8">
           <div className="rounded-2xl border border-border bg-card p-5">
 
-            <h3 className="font-serif text-2xl font-normal">Cover words</h3>
+            <h3 className="font-heading text-2xl font-normal">Cover words</h3>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <label className="block text-sm font-semibold">
                 Headline
@@ -196,7 +196,7 @@ function AdminIssues() {
           </div>
 
           <div className="rounded-2xl border border-border bg-card p-5">
-            <h3 className="font-serif text-2xl font-normal">Sections</h3>
+            <h3 className="font-heading text-2xl font-normal">Sections</h3>
             <div className="mt-3 flex flex-wrap gap-3">
               <Input className="max-w-64" placeholder="Add a section, e.g. Cosy Fantasy" value={newCategory} onChange={(e) => setNewCategory(e.target.value)} />
               <Button
@@ -221,7 +221,7 @@ function AdminIssues() {
                 return (
                   <div key={category}>
                     <div className="flex flex-wrap items-center gap-3">
-                      <h4 className="font-serif text-xl">{category}</h4>
+                      <h4 className="font-heading text-xl">{category}</h4>
                       <StatusPill tone={quota && picks.length > quota.quota ? "danger" : "neutral"}>
                         {picks.length}/{quota?.quota ?? "–"} slots
                       </StatusPill>

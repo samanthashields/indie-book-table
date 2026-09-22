@@ -78,7 +78,7 @@ function SubmissionCard({ book, view }: { book: SubmissionRow; view: CollectionV
   const coverImage = cover.data ? (
     <img src={cover.data} alt={`Cover of ${book.title}`} className="aspect-[2/3] w-full rounded-lg object-cover shadow-sm" loading="lazy" />
   ) : (
-    <span className="grid aspect-[2/3] w-full place-items-center rounded-lg bg-teal/15 p-2 text-center font-serif text-sm text-cocoa shadow-sm">{book.title}</span>
+    <span className="grid aspect-[2/3] w-full place-items-center rounded-lg bg-teal/15 p-2 text-center font-heading text-sm text-cocoa shadow-sm">{book.title}</span>
   );
 
   const pills = (
@@ -138,7 +138,7 @@ function SubmissionCard({ book, view }: { book: SubmissionRow; view: CollectionV
       <div className="min-w-0 flex-1 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-x-10">
         <div>
           {pills}
-          <h2 className="mt-2 font-serif text-2xl font-normal">{book.title}</h2>
+          <h2 className="mt-2 font-heading text-2xl font-normal">{book.title}</h2>
           {notes}
         </div>
         <div className="lg:pt-1">{progress}</div>
@@ -162,7 +162,7 @@ function SubmissionsPage() {
         <p className="text-sm text-muted-foreground">Loading your submissions…</p>
       ) : books.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-paper p-10 text-center">
-          <h2 className="font-serif text-2xl font-normal">Nothing sent yet</h2>
+          <h2 className="font-heading text-2xl font-normal">Nothing sent yet</h2>
           <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">When your book is out in the world, submit it and the editors will consider it for an upcoming issue of The Table.</p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <Button asChild><Link to="/submit">Submit your first book</Link></Button>

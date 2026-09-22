@@ -136,7 +136,7 @@ function AuthPage() {
           <span className="mx-auto mb-5 grid size-14 place-items-center rounded-full bg-teal/15">
             <Mail className="size-6 text-text-teal" />
           </span>
-          <h1 className="font-serif text-3xl font-normal">Check your email</h1>
+          <h1 className="font-heading text-3xl font-normal">Check your email</h1>
           <p className="mt-3 text-sm leading-6 text-muted-foreground">
             We sent a confirmation link to <strong>{email}</strong>. Open it to finish creating your
             account.
@@ -165,7 +165,7 @@ function AuthPage() {
         </Link>
 
         <div>
-          <h2 className="font-serif text-5xl font-normal leading-tight">
+          <h2 className="font-heading text-5xl font-normal leading-tight">
             Every great book deserves a plan.
           </h2>
           <p className="mt-4 max-w-md leading-7 text-muted-foreground">
@@ -235,7 +235,7 @@ function AuthPage() {
             ))}
           </div>
 
-          <h1 className="font-serif text-3xl font-normal">
+          <h1 className="font-heading text-3xl font-normal">
             {mode === "signin" ? "Author's Workshop Sign In" : "Author's Workshop Sign Up"}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">

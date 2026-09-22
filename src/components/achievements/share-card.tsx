@@ -29,7 +29,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
       <div className="relative flex h-full flex-col justify-between p-12">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.3em] text-paper/80">The Indie Book Table</p>
-          <h1 className="mt-2 font-serif text-5xl text-paper">{authorName}</h1>
+          <h1 className="mt-2 font-heading text-5xl text-paper">{authorName}</h1>
           <p className="mt-2 text-lg text-paper/90">{books.length} {books.length === 1 ? "book published" : "books published"}</p>
         </div>
 
@@ -39,7 +39,7 @@ export const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(function Sha
             return url ? (
               <img key={book.id} src={url} alt="" className="h-56 w-36 rounded-lg object-cover shadow-lg" />
             ) : (
-              <span key={book.id} className="grid h-56 w-36 place-items-center rounded-lg bg-teal/70 font-serif text-5xl text-paper shadow-lg">
+              <span key={book.id} className="grid h-56 w-36 place-items-center rounded-lg bg-teal/70 font-heading text-5xl text-paper shadow-lg">
                 {book.title.charAt(0)}
               </span>
             );

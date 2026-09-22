@@ -26,7 +26,7 @@ export function HeroBlock({
   return (
     <div className="mx-auto max-w-4xl">
       <div className="poster-slant rounded-2xl bg-cocoa px-6 py-4 text-center">
-        <p className="poster-unslant font-serif text-2xl font-black uppercase tracking-[0.12em] text-paper sm:text-4xl">
+        <p className="poster-unslant font-heading text-2xl font-black uppercase tracking-[0.12em] text-paper sm:text-4xl">
           Spotlight pick
         </p>
         <p className="poster-unslant mt-1 text-[0.6rem] font-black uppercase tracking-[0.3em] text-paper/70">
@@ -60,7 +60,7 @@ export function HeroBlock({
                 className="mx-auto aspect-[2/3] max-h-[38vh] w-full rounded-2xl object-cover shadow-[0_24px_50px_-22px_var(--cocoa)] transition-transform duration-300 group-hover:-translate-y-1 sm:max-h-[42vh] sm:w-auto"
               />
             ) : (
-              <span className="flex aspect-[2/3] w-full items-center justify-center rounded-2xl bg-paper p-4 text-center font-serif text-xl text-cocoa/70">
+              <span className="flex aspect-[2/3] w-full items-center justify-center rounded-2xl bg-paper p-4 text-center font-heading text-xl text-cocoa/70">
                 {book.title}
               </span>
             )}
@@ -69,7 +69,7 @@ export function HeroBlock({
         </div>
 
         <div>
-          <h3 className="font-serif text-3xl leading-tight text-cocoa sm:text-4xl">
+          <h3 className="font-heading text-3xl leading-tight text-cocoa sm:text-4xl">
             <Link to="/table/books/$bookId" params={{ bookId: book.id }} className="hover:underline">
               {book.title}
             </Link>

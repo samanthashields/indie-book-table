@@ -32,7 +32,7 @@ export function AuthorBlock({
   return (
     <div className="mx-auto max-w-3xl">
       <div className="poster-slant rounded-2xl bg-cocoa px-6 py-4 text-center">
-        <p className="poster-unslant font-serif text-2xl font-black uppercase tracking-[0.12em] text-paper sm:text-4xl">
+        <p className="poster-unslant font-heading text-2xl font-black uppercase tracking-[0.12em] text-paper sm:text-4xl">
           Meet the author
         </p>
       </div>
@@ -48,12 +48,12 @@ export function AuthorBlock({
         ) : (
         <span
           aria-hidden="true"
-          className="mx-auto grid size-24 place-items-center rounded-full border-[3px] border-cocoa bg-amber font-serif text-3xl font-black text-cocoa shadow-[3px_4px_0_0_var(--cocoa)]"
+          className="mx-auto grid size-24 place-items-center rounded-full border-[3px] border-cocoa bg-amber font-heading text-3xl font-black text-cocoa shadow-[3px_4px_0_0_var(--cocoa)]"
         >
           {initialsOf(authorName)}
         </span>
         )}
-        <h3 className="mt-4 font-serif text-3xl font-black text-cocoa sm:text-4xl">
+        <h3 className="mt-4 font-heading text-3xl font-black text-cocoa sm:text-4xl">
           <Link to="/table/authors/$authorId" params={{ authorId }} className="hover:underline">
             {authorName}
           </Link>
@@ -82,7 +82,7 @@ export function AuthorBlock({
                   className="aspect-[2/3] w-full rounded-lg object-cover shadow-[0_10px_22px_-12px_var(--cocoa)] transition-transform duration-300 group-hover:-translate-y-1"
                 />
               ) : (
-                <span className="flex aspect-[2/3] w-full items-center justify-center rounded-lg bg-paper p-2 text-center font-serif text-[0.72rem] text-cocoa/60">
+                <span className="flex aspect-[2/3] w-full items-center justify-center rounded-lg bg-paper p-2 text-center font-heading text-[0.72rem] text-cocoa/60">
                   {book.title}
                 </span>
               )}

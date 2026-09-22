@@ -50,7 +50,7 @@ function AdminReleases() {
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       <section className="space-y-4 rounded-2xl border-2 border-sun/50 bg-sun/10 p-6">
-        <h2 className="font-serif text-2xl font-normal">{draft.id ? "Edit update" : "New update"}</h2>
+        <h2 className="font-heading text-2xl font-normal">{draft.id ? "Edit update" : "New update"}</h2>
         <Input placeholder="Title" aria-label="Update title" value={draft.title} onChange={(event) => setDraft({ ...draft, title: event.target.value })} />
         <div className="grid gap-3 sm:grid-cols-2">
           <Input placeholder="Label (New, Fixed…)" aria-label="Label" value={draft.label} onChange={(event) => setDraft({ ...draft, label: event.target.value })} />
@@ -69,7 +69,7 @@ function AdminReleases() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="font-serif text-2xl font-normal">All updates</h2>
+        <h2 className="font-heading text-2xl font-normal">All updates</h2>
         {releases.isLoading && <p className="text-sm text-muted-foreground">Loading updates…</p>}
         {(releases.data ?? []).map((note) => (
           <article key={note.id} className="rounded-2xl border border-border bg-card p-5 shadow-xs">
@@ -78,7 +78,7 @@ function AdminReleases() {
               <StatusPill tone={note.status === "published" ? "good" : "warm"}>{note.status === "published" ? "Published" : "Draft"}</StatusPill>
               <span className="text-xs text-muted-foreground">{new Date(note.released_on).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</span>
             </div>
-            <h3 className="mt-2 font-serif text-xl font-normal">{note.title}</h3>
+            <h3 className="mt-2 font-heading text-xl font-normal">{note.title}</h3>
             <div className="mt-2 text-sm"><MarkdownText body={note.body} /></div>
             <div className="mt-3 flex gap-2">
               <Button size="sm" variant="outline" onClick={() => edit(note)}>Edit</Button>

@@ -65,7 +65,7 @@ function BookOverview() {
             {book.genre && <StatusPill tone="warm">{book.genre}</StatusPill>}
             {needsFollowUp !== "on_track" && <StatusPill tone={needsFollowUpTone[needsFollowUp]}>{needsFollowUpLabel[needsFollowUp]}</StatusPill>}
           </div>
-          <h1 className="font-serif text-4xl font-normal md:text-5xl">{book.title}</h1>
+          <h1 className="font-heading text-4xl font-normal md:text-5xl">{book.title}</h1>
           <p className="mt-1 text-muted-foreground">by {book.pen_name || "you"}</p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -79,7 +79,7 @@ function BookOverview() {
       </header>
 
       <section className="mb-10 grid gap-6 rounded-2xl border border-border bg-card p-6 shadow-xs md:grid-cols-[1fr_2fr]">
-        <div><p className="text-sm text-muted-foreground">Overall progress</p><p className="mt-1 font-serif text-4xl font-normal">{progress}%</p><Progress value={progress} className="mt-3" /></div>
+        <div><p className="text-sm text-muted-foreground">Overall progress</p><p className="mt-1 font-heading text-4xl font-normal">{progress}%</p><Progress value={progress} className="mt-3" /></div>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
           <div className="rounded-xl bg-amber/15 p-4"><CalendarDays className="mb-2 size-4 text-amber" /><p className="text-xs text-muted-foreground">Target publication</p><p className="font-semibold">{target}</p></div>
           <div className="rounded-xl bg-teal/15 p-4"><Clock3 className="mb-2 size-4 text-text-teal" /><p className="text-xs text-muted-foreground">Next action</p><p className="font-semibold">{next?.name ?? "All done"}</p></div>
@@ -93,7 +93,7 @@ function BookOverview() {
 
       <section>
         <div className="mb-5">
-          <h2 className="font-serif text-3xl font-normal">Your publishing path</h2>
+          <h2 className="font-heading text-3xl font-normal">Your publishing path</h2>
           <p className="mt-1 text-sm text-muted-foreground">Six phases from private manuscript to published book, paced around {target}.</p>
         </div>
         <div className="relative space-y-4 before:absolute before:bottom-8 before:left-5 before:top-7 before:w-px before:bg-border">
@@ -110,7 +110,7 @@ function BookOverview() {
                   <button onClick={() => toggle(phase.id)} aria-expanded={expanded} className="flex w-full items-start gap-3 p-5 text-left">
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="font-serif text-2xl font-normal">{phase.name}</h3>
+                        <h3 className="font-heading text-2xl font-normal">{phase.name}</h3>
                         <StatusPill>{phase.mode}</StatusPill>
                       </div>
                       <p className="mt-1 text-sm text-muted-foreground">{phase.summary}</p>

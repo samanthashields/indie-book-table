@@ -110,7 +110,7 @@ function FeatureRequestsBoard() {
 
       {showForm && (
         <section className="mb-8 space-y-4 rounded-2xl border-2 border-sun/50 bg-sun/10 p-6">
-          <h2 className="font-serif text-2xl font-normal">Your idea</h2>
+          <h2 className="font-heading text-2xl font-normal">Your idea</h2>
           <Input placeholder="One line — what should it do?" aria-label="Title" value={title} onChange={(event) => setTitle(event.target.value)} />
           <Textarea rows={6} placeholder="What are you trying to get done, and where does the workshop get in the way today?" aria-label="Details" value={body} onChange={(event) => setBody(event.target.value)} />
           <FeatureRequestFields
@@ -130,7 +130,7 @@ function FeatureRequestsBoard() {
 
       {mine.length > 0 && (
         <section className="mb-8 rounded-2xl border border-border bg-card p-5 shadow-xs">
-          <h2 className="font-serif text-xl font-normal">Waiting for review</h2>
+          <h2 className="font-heading text-xl font-normal">Waiting for review</h2>
           <p className="text-xs text-muted-foreground">Only you and the team can see these until they’re posted to the board.</p>
           <ul className="mt-3 space-y-2">
             {mine.map((request) => (
@@ -176,7 +176,7 @@ function FeatureRequestsBoard() {
                 <span className="text-sm font-semibold">{request.vote_count}</span>
               </button>
               <div className="min-w-0 flex-1">
-                <Link to="/help/requests/$requestId" params={{ requestId: request.id }} className="font-serif text-xl font-normal hover:underline">
+                <Link to="/help/requests/$requestId" params={{ requestId: request.id }} className="font-heading text-xl font-normal hover:underline">
                   {request.title}
                 </Link>
                 <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{request.body}</p>

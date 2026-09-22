@@ -113,7 +113,7 @@ function CoverField({
           className="aspect-[2/3] w-28 rounded-xl object-cover shadow-sm"
         />
       ) : (
-        <span className="grid aspect-[2/3] w-28 place-items-center rounded-xl bg-teal/15 font-serif text-4xl text-cocoa">
+        <span className="grid aspect-[2/3] w-28 place-items-center rounded-xl bg-teal/15 font-heading text-4xl text-cocoa">
           {title.charAt(0) || "?"}
         </span>
       )}
@@ -381,10 +381,10 @@ export function SubmissionForm({
               {coverUrl.data ? (
                 <img src={coverUrl.data} alt={`Cover of ${values.title}`} className="aspect-[2/3] w-24 rounded-xl object-cover" />
               ) : (
-                <span className="grid aspect-[2/3] w-24 place-items-center rounded-xl bg-teal/15 p-2 text-center font-serif text-sm text-cocoa">{values.title || "Your book"}</span>
+                <span className="grid aspect-[2/3] w-24 place-items-center rounded-xl bg-teal/15 p-2 text-center font-heading text-sm text-cocoa">{values.title || "Your book"}</span>
               )}
               <div className="min-w-0">
-                <h3 className="font-serif text-lg">{values.title || "Untitled"}</h3>
+                <h3 className="font-heading text-lg">{values.title || "Untitled"}</h3>
                 <p className="text-sm text-muted-foreground">by {values.pen_name || values.author_name || "you"}</p>
                 <p className="mt-2 text-sm font-semibold text-text-inkblue">
                   {values.genre || "Indie"} · {AUDIENCE_OPTIONS.find((a) => a.value === values.target_audience)?.label}

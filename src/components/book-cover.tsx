@@ -7,7 +7,7 @@ export function BookCover({ src, title, className, fallbackClassName }: { src: s
     return <img src={resolved.data} alt={`Cover artwork for ${title}`} width={768} height={1152} loading="lazy" className={cn("aspect-[2/3] rounded-lg object-cover shadow-sm", className)} />;
   }
   return (
-    <span className={cn("grid aspect-[2/3] place-items-center rounded-lg bg-teal/15 font-serif text-link shadow-sm", className, fallbackClassName)} aria-hidden="true">
+    <span className={cn("grid aspect-[2/3] place-items-center rounded-lg bg-teal/15 font-heading text-link shadow-sm", className, fallbackClassName)} aria-hidden="true">
       {title.charAt(0) || "?"}
     </span>
   );

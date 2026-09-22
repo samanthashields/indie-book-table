@@ -39,7 +39,7 @@ function AdminHelp() {
       <section className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="font-serif text-2xl font-normal">Help articles</h2>
+            <h2 className="font-heading text-2xl font-normal">Help articles</h2>
             <p className="text-sm text-muted-foreground">Everything in the author-facing Help Center.</p>
           </div>
           <Button asChild><Link to="/admin/help/$articleId" params={{ articleId: "new" }}><Plus />New article</Link></Button>
@@ -73,7 +73,7 @@ function AdminHelp() {
       </section>
 
       <section className="rounded-2xl border border-border bg-card p-5 shadow-xs">
-        <h2 className="font-serif text-xl font-normal">Topics</h2>
+        <h2 className="font-heading text-xl font-normal">Topics</h2>
         <ul className="mt-3 space-y-2">
           {(categories.data ?? []).map((category) => (
             <li key={category.id} className="flex items-center gap-2 rounded-xl border border-border/70 px-3 py-2">

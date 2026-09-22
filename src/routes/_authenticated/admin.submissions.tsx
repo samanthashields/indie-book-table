@@ -118,7 +118,7 @@ function Row({ book, onChanged }: { book: AdminSubmission; onChanged: () => void
       {cover.data ? (
         <img src={cover.data} alt={`Cover of ${book.title}`} className="aspect-[2/3] w-20 shrink-0 rounded-xl object-cover" loading="lazy" />
       ) : (
-        <span className="grid aspect-[2/3] w-20 shrink-0 place-items-center rounded-xl bg-teal/15 text-center font-serif text-cocoa">{book.title.charAt(0)}</span>
+        <span className="grid aspect-[2/3] w-20 shrink-0 place-items-center rounded-xl bg-teal/15 text-center font-heading text-cocoa">{book.title.charAt(0)}</span>
       )}
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
@@ -129,7 +129,7 @@ function Row({ book, onChanged }: { book: AdminSubmission; onChanged: () => void
           {book.explicit_content && <StatusPill tone="danger">Explicit</StatusPill>}
           {book.times_featured_count > 0 && <StatusPill>Featured {book.times_featured_count}×</StatusPill>}
         </div>
-        <h2 className="mt-2 font-serif text-2xl font-normal">{book.title}</h2>
+        <h2 className="mt-2 font-heading text-2xl font-normal">{book.title}</h2>
         <p className="text-sm text-muted-foreground">
           {book.pen_name || book.catalog_authors?.name} · {book.catalog_authors?.email} · {book.genre || "No genre given"}
         </p>

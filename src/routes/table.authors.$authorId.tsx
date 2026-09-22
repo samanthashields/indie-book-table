@@ -37,7 +37,7 @@ export const Route = createFileRoute("/table/authors/$authorId")({
   },
   notFoundComponent: () => (
     <PublicShell>
-      <h1 className="font-serif text-3xl">We couldn't find that author</h1>
+      <h1 className="font-heading text-3xl">We couldn't find that author</h1>
       <Link to="/table" className="mt-4 inline-block underline">
         Back to The Table
       </Link>
@@ -62,7 +62,7 @@ function AuthorPage() {
       </nav>
 
       <header className="mt-4 rounded-3xl border border-border/70 bg-teal/12 p-8">
-        <h1 className="font-serif text-4xl">{shelf.author.name}</h1>
+        <h1 className="font-heading text-4xl">{shelf.author.name}</h1>
         {shelf.author.bio && <p className="mt-3 max-w-2xl text-muted-foreground">{shelf.author.bio}</p>}
         <div className="mt-4 flex flex-wrap gap-3 text-sm font-semibold">
           {shelf.author.website && (
@@ -82,7 +82,7 @@ function AuthorPage() {
       </header>
 
       <section className="mt-10">
-        <h2 className="font-serif text-2xl">On the table</h2>
+        <h2 className="font-heading text-2xl">On the table</h2>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           {shelf.books.map((book) => (
             <CatalogBookCard key={book.id} book={book} />

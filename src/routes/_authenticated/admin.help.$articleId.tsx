@@ -87,7 +87,7 @@ function HelpArticleEditor() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-4 rounded-2xl border border-border bg-card p-5">
-          <h2 className="font-serif text-2xl font-normal">{isNew ? "New help article" : "Edit article"}</h2>
+          <h2 className="font-heading text-2xl font-normal">{isNew ? "New help article" : "Edit article"}</h2>
           <Input placeholder="Title" aria-label="Article title" value={draft.title} onChange={(event) => setDraft({ ...draft, title: event.target.value, slug: draft.slug || slugify(event.target.value) })} />
           <Input placeholder="web-address-slug" aria-label="Article slug" value={draft.slug} onChange={(event) => setDraft({ ...draft, slug: event.target.value })} />
           <Textarea rows={2} placeholder="One-line summary" aria-label="Article summary" value={draft.summary} onChange={(event) => setDraft({ ...draft, summary: event.target.value })} />
@@ -123,7 +123,7 @@ function HelpArticleEditor() {
 
         <div className="rounded-2xl border border-border bg-paper p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Preview</p>
-          <h3 className="mt-3 font-serif text-3xl">{draft.title || "Untitled article"}</h3>
+          <h3 className="mt-3 font-heading text-3xl">{draft.title || "Untitled article"}</h3>
           {draft.summary && <p className="mt-2 text-sm text-muted-foreground">{draft.summary}</p>}
           <div className="mt-4"><MarkdownText body={draft.body} /></div>
         </div>

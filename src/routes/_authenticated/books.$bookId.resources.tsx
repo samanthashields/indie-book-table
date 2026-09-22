@@ -93,7 +93,7 @@ function ResourcesPage() {
       />
 
       <section className="rounded-2xl border border-border bg-paper p-6 shadow-xs">
-        <h2 className="font-serif text-2xl font-normal">Add a book-level resource</h2>
+        <h2 className="font-heading text-2xl font-normal">Add a book-level resource</h2>
         <p className="mt-2 text-sm text-muted-foreground">Not tied to one milestone — comps, style guides, vendor lists, anything worth keeping with the whole cycle.</p>
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <select className="h-10 rounded-xl border border-input bg-card px-3 text-sm" aria-label="Resource kind" value={kind} onChange={(event) => setKind(event.target.value as ResourceKind)}>
@@ -115,7 +115,7 @@ function ResourcesPage() {
       </section>
 
       <section className="mt-8">
-        <h2 className="mb-4 font-serif text-2xl font-normal">Book-level</h2>
+        <h2 className="mb-4 font-heading text-2xl font-normal">Book-level</h2>
         {bookLevel.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-border bg-card p-8 text-center">
             <FolderOpen className="mx-auto size-6 text-muted-foreground" />
@@ -129,7 +129,7 @@ function ResourcesPage() {
       </section>
 
       <section className="mt-8">
-        <h2 className="mb-4 font-serif text-2xl font-normal">From your milestones</h2>
+        <h2 className="mb-4 font-heading text-2xl font-normal">From your milestones</h2>
         {milestoneScoped.length === 0 ? (
           <p className="text-sm text-muted-foreground">Resources you add to a specific milestone show up here too.</p>
         ) : (

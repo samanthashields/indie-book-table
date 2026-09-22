@@ -36,7 +36,7 @@ function HelpCategoryPage() {
         {list.map((article) => (
           <li key={article.id}>
             <Link to="/help/articles/$slug" params={{ slug: article.slug }} className="block rounded-2xl border border-border bg-card p-5 shadow-xs transition-colors hover:border-primary">
-              <p className="font-serif text-xl font-normal">{article.title}</p>
+              <p className="font-heading text-xl font-normal">{article.title}</p>
               {article.summary && <p className="mt-1 text-sm text-muted-foreground">{article.summary}</p>}
             </Link>
           </li>

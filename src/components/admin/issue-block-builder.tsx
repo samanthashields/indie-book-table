@@ -195,7 +195,7 @@ export function IssueBlockBuilder({ issueId }: { issueId: string }) {
     <div className="rounded-2xl border border-border bg-card p-5">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 sm:flex sm:flex-wrap sm:justify-between">
         <div className="min-w-0">
-          <h3 className="font-serif text-2xl font-normal">Flyer pages</h3>
+          <h3 className="font-heading text-2xl font-normal">Flyer pages</h3>
           <p className="mt-1 text-sm text-muted-foreground">
             Arrange the pages of this issue. With no blocks here the flyer lays itself out from the lineup.
           </p>

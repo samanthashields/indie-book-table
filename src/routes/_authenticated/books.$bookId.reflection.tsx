@@ -156,7 +156,7 @@ function Reflection() {
         <div className="mb-8 rounded-2xl border border-accent/50 bg-accent/20 p-6 shadow-xs md:p-8">
           {justEnded ? (
             <>
-              <div className="flex items-center gap-2">{celebrating && <PartyPopper className="size-7 text-chart-1" />}<p className="font-serif text-3xl font-normal">{celebrating ? "Congratulations — your book is out in the world" : "Your book cycle is closed"}</p></div>
+              <div className="flex items-center gap-2">{celebrating && <PartyPopper className="size-7 text-chart-1" />}<p className="font-heading text-3xl font-normal">{celebrating ? "Congratulations — your book is out in the world" : "Your book cycle is closed"}</p></div>
               <p className="mt-2 max-w-2xl text-muted-foreground">
                 {celebrating
                   ? total > 0 ? `That makes ${total} published ${total === 1 ? "book" : "books"} on your table.` : "Your book now has a place on your table."
@@ -167,7 +167,7 @@ function Reflection() {
           ) : (
             <>
               <PartyPopper className="mb-4 size-7 text-chart-1" />
-              <p className="font-serif text-3xl font-normal">You made a book.</p>
+              <p className="font-heading text-3xl font-normal">You made a book.</p>
               <p className="mt-2 max-w-2xl text-muted-foreground">Take a quiet moment to mark what happened before you decide what comes next.</p>
             </>
           )}
@@ -177,7 +177,7 @@ function Reflection() {
 
       {!isEnded && !justEnded && (
         <section className="mb-6 max-w-3xl rounded-2xl border border-teal/40 bg-teal/10 p-6">
-          <h2 className="font-serif text-2xl font-normal">End this book cycle</h2>
+          <h2 className="font-heading text-2xl font-normal">End this book cycle</h2>
           <p className="mt-1 text-sm text-muted-foreground">When you're ready to close it out — whether it published or not.</p>
           <div className="mt-4 space-y-5">
             <section>
@@ -215,7 +215,7 @@ function Reflection() {
 
       {(isEnded || justEnded) && endAnswers.length > 0 && (
         <section className="mb-6 max-w-3xl rounded-2xl border border-teal/40 bg-teal/10 p-6">
-          <h2 className="font-serif text-2xl font-normal">End of Cycle Details</h2>
+          <h2 className="font-heading text-2xl font-normal">End of Cycle Details</h2>
           <dl className="mt-4 space-y-3">
             {endAnswers.map((entry) => (
               <div key={entry.prompt}>

@@ -36,7 +36,7 @@ export function SectionBanner({
       )}
     >
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-        <h2 className="font-serif text-[1.9rem] font-black uppercase leading-none tracking-[0.02em] sm:text-5xl">
+        <h2 className="font-heading text-[1.9rem] font-black uppercase leading-none tracking-[0.02em] sm:text-5xl">
           {category}
         </h2>
         {typeof count === "number" && (

@@ -82,7 +82,7 @@ function HelpCenter() {
       {latest.length > 0 && (
         <section className="mb-8 rounded-2xl border-2 border-teal/40 bg-teal/10 p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="flex items-center gap-2 font-serif text-2xl font-normal"><Sparkles className="size-5" />What’s new</h2>
+            <h2 className="flex items-center gap-2 font-heading text-2xl font-normal"><Sparkles className="size-5" />What’s new</h2>
             <Button variant="ghost" size="sm" asChild><Link to="/help/releases">All release notes</Link></Button>
           </div>
           <ul className="mt-4 grid gap-3 md:grid-cols-3">
@@ -102,7 +102,7 @@ function HelpCenter() {
       )}
 
       <section>
-        <h2 className="font-serif text-2xl font-normal">Browse by topic</h2>
+        <h2 className="font-heading text-2xl font-normal">Browse by topic</h2>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           {(categories.data ?? []).map((category) => {
             const count = published.filter((article) => article.category_id === category.id).length;
@@ -113,7 +113,7 @@ function HelpCenter() {
                 params={{ categorySlug: category.slug }}
                 className="rounded-2xl border border-border bg-card p-5 shadow-xs transition-colors hover:border-primary"
               >
-                <h3 className="font-serif text-xl font-normal">{category.name}</h3>
+                <h3 className="font-heading text-xl font-normal">{category.name}</h3>
                 {category.description && <p className="mt-1 text-sm text-muted-foreground">{category.description}</p>}
                 <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">{count} {count === 1 ? "article" : "articles"}</p>
               </Link>

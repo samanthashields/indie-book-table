@@ -63,7 +63,7 @@ function Templates() {
       ) : (
         <div className="space-y-12">
           <section>
-            <h2 className="mb-5 font-serif text-2xl font-semibold">Genre templates</h2>
+            <h2 className="mb-5 font-heading text-2xl font-semibold">Genre templates</h2>
             <div className={view === "grid" ? "grid gap-6 lg:grid-cols-2" : "space-y-4"}>
               {globals.map((template, index) => (
                 <article key={template.id} className={`grid overflow-hidden rounded-2xl border border-border bg-card shadow-xs transition-shadow hover:shadow-md ${view === "list" ? "sm:grid-cols-[110px_1fr]" : "sm:grid-cols-[140px_1fr]"}`}>
@@ -71,7 +71,7 @@ function Templates() {
                   <div className={`bg-card p-6 ${view === "list" ? "lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:gap-x-10" : ""}`}>
                     <div>
                       <div className="mb-3 flex flex-wrap gap-2"><StatusPill tone={index === 0 ? "warm" : "good"}>{template.genre}</StatusPill><StatusPill>{template.phases.length} phases</StatusPill></div>
-                      <h3 className="font-serif text-3xl font-normal">{template.title}</h3>
+                      <h3 className="font-heading text-3xl font-normal">{template.title}</h3>
                       <p className="mt-2 text-sm leading-6 text-muted-foreground">{template.description}</p>
                     </div>
                     <div className="flex flex-col">
@@ -91,7 +91,7 @@ function Templates() {
           </section>
 
           <section>
-            <div className="mb-5 flex items-baseline justify-between"><h2 className="font-serif text-2xl font-semibold">My templates</h2><span className="text-sm text-muted-foreground">{mine.length} saved</span></div>
+            <div className="mb-5 flex items-baseline justify-between"><h2 className="font-heading text-2xl font-semibold">My templates</h2><span className="text-sm text-muted-foreground">{mine.length} saved</span></div>
             {mine.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-border bg-paper p-8 text-center">
                 <p className="text-sm leading-6 text-muted-foreground">You haven’t saved a template yet. Copy a genre template and change it, or build one from an empty set of phases.</p>
@@ -103,7 +103,7 @@ function Templates() {
                   <article key={template.id} className={`rounded-2xl border border-border bg-card p-6 shadow-xs ${view === "list" ? "sm:flex sm:items-center sm:justify-between sm:gap-8" : ""}`}>
                     <div className="min-w-0">
                       <div className="mb-3 flex flex-wrap gap-2">{template.genre && <StatusPill tone="warm">{template.genre}</StatusPill>}<StatusPill>{template.phases.length} phases</StatusPill></div>
-                      <h3 className="font-serif text-2xl font-normal">{template.title}</h3>
+                      <h3 className="font-heading text-2xl font-normal">{template.title}</h3>
                       <p className="mt-2 text-sm leading-6 text-muted-foreground">{template.description}</p>
                     </div>
                     <div className={`flex flex-wrap gap-3 ${view === "list" ? "mt-5 sm:mt-0 sm:shrink-0" : "mt-5"}`}>

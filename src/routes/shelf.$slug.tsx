@@ -43,7 +43,7 @@ function SharedShelf() {
   return (
     <PublicShell>
       <div className="mx-auto max-w-4xl px-4 py-12">
-        <h1 className="font-serif text-4xl font-normal">{share.authorName ?? "An author"}’s writing table</h1>
+        <h1 className="font-heading text-4xl font-normal">{share.authorName ?? "An author"}’s writing table</h1>
         <p className="mt-2 text-sm text-muted-foreground">{share.bookCount} published {share.bookCount === 1 ? "book" : "books"}.</p>
         <img src={imageUrl} alt={`${share.authorName ?? "An author"}'s writing table with their published books`} width={1200} height={630} className="mt-6 w-full rounded-2xl border border-border shadow-sm" />
         <div className="mt-8">
