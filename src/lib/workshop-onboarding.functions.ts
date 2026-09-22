@@ -108,3 +108,18 @@ export const reorderWorkshopTourSteps = createServerFn({ method: "POST" })
     if (failed?.error) throw new Error(failed.error.message);
     return { ok: true };
   });
+
+/** Signs a private onboarding media path for any signed-in author. */
+export const signOnboardingMedia = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) =>
+    z.object({ path: z.string().trim().min(1).max(1000) }).parse(input),
+  )
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: signed, error } = await supabaseAdmin.storage
+      .from("onboarding-media")
+      .createSignedUrl(data.path, 60 * 60);
+    if (error) throw new Error(error.message);
+    return { url: signed.signedUrl };
+  });
