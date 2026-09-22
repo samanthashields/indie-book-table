@@ -57,7 +57,7 @@ function TemplatePreview() {
             return (
               <article key={phase.id} className="grid grid-cols-[42px_minmax(0,1fr)] gap-4">
                 <span className={`grid size-10 place-items-center rounded-full border-2 font-semibold ${style.marker}`}>{index + 1}</span>
-                <div className={`rounded-2xl border border-border p-5 ${style.soft}`}>
+                <div className={`rounded-2xl border border-border bg-card p-5`}>
                   <div className="flex flex-wrap items-center gap-2"><h3 className="font-serif text-2xl font-normal">{phase.name}</h3><StatusPill>{phase.mode}</StatusPill></div>
                   <p className="mt-1 text-sm text-muted-foreground">{phase.summary}</p>
                   <MilestoneDisclosure items={phase.milestones} className="mt-4 space-y-2" renderItem={(milestone, milestoneIndex) => (

@@ -64,7 +64,7 @@ export function PhaseEditor({ phases, onChange }: { phases: TemplatePhase[]; onC
         return (
           <article key={phase.id} className={`grid grid-cols-[42px_minmax(0,1fr)] gap-4 ${phase.hidden ? "opacity-50" : ""}`}>
             <span className={`grid size-10 place-items-center rounded-full border-2 font-semibold ${style.marker}`}>{index + 1}</span>
-            <div className={`rounded-2xl border border-border p-5 ${style.soft}`}>
+            <div className={`rounded-2xl border border-border bg-card p-5`}>
               <div className="flex flex-wrap items-start gap-3">
                 <div className="min-w-[220px] flex-1 space-y-2">
                   <Input aria-label="Phase name" value={phase.name} onChange={(event) => patchPhase(phase.id, { name: event.target.value })} />
