@@ -26,11 +26,11 @@ export function FanOutBlock({
   onCircle?: (entry: WishlistEntry) => void;
 }) {
   return (
-    <section className="poster-panel mt-6 bg-card p-6 sm:p-9">
-      <p className="text-center text-[0.62rem] font-black uppercase tracking-[0.3em] text-cocoa/60">
+    <section className="mt-6 rounded-2xl border-2 border-ink bg-card p-6 sm:p-9">
+      <p className="text-center text-[0.62rem] font-black uppercase tracking-[0.3em] text-muted-foreground">
         {heading || "More from one author"}
       </p>
-      <h3 className="mt-1 text-center font-heading text-2xl font-black text-cocoa sm:text-3xl">
+      <h3 className="mt-1 text-center font-heading text-2xl font-bold text-foreground sm:text-3xl">
         <Link to="/table/authors/$authorId" params={{ authorId }} className="hover:underline">
           {authorName}
         </Link>
@@ -49,7 +49,7 @@ export function FanOutBlock({
                 to="/table/books/$bookId"
                 params={{ bookId: book.id }}
                 aria-label={`View ${book.title} by ${book.author_name}`}
-                className="group relative block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cocoa"
+                className="group relative block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
               >
                 {book.cover_image_url ? (
                   <img
@@ -58,10 +58,10 @@ export function FanOutBlock({
                     loading="lazy"
                     width={320}
                     height={480}
-                    className="aspect-[2/3] w-32 rounded-xl object-cover shadow-[0_16px_34px_-16px_var(--cocoa)] transition-transform duration-300 group-hover:-translate-y-1.5 sm:w-40"
+                    className="aspect-[2/3] w-32 rounded-lg border-2 border-ink object-cover transition-transform duration-300 group-hover:-translate-y-1.5 sm:w-40"
                   />
                 ) : (
-                  <span className="flex aspect-[2/3] w-32 items-center justify-center rounded-xl bg-paper p-3 text-center font-heading text-sm text-cocoa/60 sm:w-40">
+                  <span className="flex aspect-[2/3] w-32 items-center justify-center rounded-lg border-2 border-ink bg-amber-soft p-3 text-center font-heading text-sm text-ink/70 sm:w-40">
                     {book.title}
                   </span>
                 )}
@@ -80,19 +80,19 @@ export function FanOutBlock({
           return (
             <li
               key={book.id}
-              className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-dashed border-cocoa/25 pb-2"
+              className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-dashed border-border pb-2"
             >
               <span>
                 <Link
                   to="/table/books/$bookId"
                   params={{ bookId: book.id }}
-                  className="font-heading text-base font-bold text-cocoa hover:underline"
+                  className="font-heading text-base font-semibold text-foreground hover:underline"
                 >
                   {book.title}
                 </Link>
-                {book.hook && <span className="block text-[0.8rem] text-cocoa/75">{book.hook}</span>}
+                {book.hook && <span className="block text-[0.8rem] text-muted-foreground">{book.hook}</span>}
               </span>
-              <span className="flex items-center gap-3">
+              <span className="flex items-center gap-2">
                 {ebook && <PricePill format="ebook" amount={ebook} />}
                 {print && <PricePill format="print" amount={print} />}
               </span>
