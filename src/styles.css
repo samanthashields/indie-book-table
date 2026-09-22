@@ -29,6 +29,13 @@
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
   --color-background: var(--background);
+  --color-font-heading: var(--font-heading);
+  --color-primary-soft: var(--primary-soft);
+  --color-amber-soft: var(--amber-soft);
+  --color-leaf-soft: var(--leaf-soft);
+  --color-teal-soft: var(--teal-soft);
+  --color-clay-soft: var(--clay-soft);
+  --color-inkblue-soft: var(--inkblue-soft);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -82,23 +89,30 @@
 
 :root, .light {
   --radius: 1rem;
-  --background: oklch(0.985 0.006 76);
-  --foreground: oklch(0.29 0.045 37);
+  --font-heading: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --primary-soft: oklch(0.9 0.02 238);
+  --amber-soft: oklch(0.94 0.03 85);
+  --leaf-soft: oklch(0.93 0.03 118);
+  --teal-soft: oklch(0.92 0.02 190);
+  --clay-soft: oklch(0.91 0.03 45);
+  --inkblue-soft: oklch(0.9 0.02 240);
+  --background: oklch(0.985 0.002 260);
+  --foreground: oklch(0.18 0.006 260);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.29 0.045 37);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.29 0.045 37);
   --primary: oklch(0.56 0.085 238);
   --primary-foreground: oklch(0.99 0.004 76);
-  --secondary: oklch(0.94 0.018 76);
+  --secondary: oklch(0.96 0.003 260);
   --secondary-foreground: oklch(0.29 0.045 37);
-  --muted: oklch(0.955 0.012 76);
-  --muted-foreground: oklch(0.48 0.028 37);
+  --muted: oklch(0.96 0.003 260);
+  --muted-foreground: oklch(0.5 0.006 260);
   --accent: oklch(0.79 0.12 93);
   --accent-foreground: oklch(0.29 0.045 37);
   --destructive: oklch(0.55 0.15 28);
   --destructive-foreground: oklch(0.99 0.004 76);
-  --border: oklch(0.9 0.015 76);
+  --border: oklch(0.9 0.004 260);
   --input: oklch(0.88 0.018 76);
   --ring: oklch(0.56 0.085 238);
   --chart-1: oklch(0.76 0.13 82);
@@ -106,7 +120,7 @@
   --chart-3: oklch(0.76 0.09 194);
   --chart-4: oklch(0.56 0.085 238);
   --chart-5: oklch(0.29 0.045 37);
-  --sidebar: oklch(0.94 0.018 76);
+  --sidebar: oklch(1 0 0);
   --sidebar-foreground: oklch(0.29 0.045 37);
   --sidebar-primary: oklch(0.56 0.085 238);
   --sidebar-primary-foreground: oklch(0.99 0.004 76);
@@ -117,7 +131,7 @@
   --amber: oklch(0.79 0.12 87);
   --leaf: oklch(0.81 0.13 118);
   --teal: oklch(0.75 0.083 190);
-  --paper: oklch(0.93 0.017 76);
+  --paper: oklch(0.96 0.003 260);
   --inkblue: oklch(0.55 0.075 240);
   --cocoa: oklch(0.28 0.035 32);
   --clay: oklch(0.64 0.115 45);
