@@ -1,4 +1,4 @@
-/** Price printed the way the paper flyer does it: icon chip + heavy amount. */
+/** Price shown as a small rotated burst, matching the catalog card style. */
 export function PricePill({
   format,
   amount,
@@ -7,21 +7,17 @@ export function PricePill({
   amount: string;
 }) {
   const spec = {
-    ebook: { icon: "📘", chip: "bg-teal text-ink", label: "eBook" },
-    print: { icon: "📕", chip: "bg-clay/70 text-cocoa", label: "Physical book" },
-    item: { icon: "🛍", chip: "bg-clay/80 text-cocoa", label: "Item" },
+    ebook: { label: "eBook", chip: "bg-teal text-ink" },
+    print: { label: "Print", chip: "bg-clay text-ink" },
+    item: { label: "Item", chip: "bg-clay text-ink" },
   }[format];
 
   return (
-    <span className="inline-flex items-center gap-1.5">
-      <span
-        aria-hidden="true"
-        className={`inline-flex size-6 items-center justify-center rounded-full border-2 border-cocoa text-[0.72rem] leading-none ${spec.chip}`}
-      >
-        {spec.icon}
-      </span>
-      <span className="sr-only">{spec.label}: </span>
-      <span className="text-[0.9rem] font-bold leading-none text-cocoa">{amount}</span>
+    <span
+      className={`inline-flex -rotate-2 items-center gap-1.5 rounded-md border-2 border-ink px-2.5 py-1 text-[0.72rem] font-bold leading-none ${spec.chip}`}
+    >
+      <span className="text-[0.6rem] font-black uppercase tracking-[0.08em] opacity-80">{spec.label}</span>
+      {amount}
     </span>
   );
 }

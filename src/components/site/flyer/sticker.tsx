@@ -2,9 +2,8 @@ import { tagSpec } from "@/lib/flyer-tags";
 import { cn } from "@/lib/utils";
 
 /**
- * Illustrated badges that sit on the corner of a cover, like stickers on a
- * school flyer: slightly rotated, soft shadow, icon only. The legend on the
- * cover page explains what each one means.
+ * Ribbon-style tags on the corner of a cover, matching the catalog card's
+ * badge treatment: a small rotated rectangle rather than a circular sticker.
  */
 export function CoverStickers({
   tags,
@@ -31,9 +30,9 @@ export function CoverStickers({
           key={spec.value}
           title={spec.label}
           className={cn(
-            "inline-flex size-8 items-center justify-center rounded-full border-2 border-cocoa text-[0.95rem] leading-none shadow-[2px_3px_0_0_var(--cocoa)]",
+            "inline-flex items-center gap-1 rounded-md border-2 border-ink px-2 py-1 text-[0.62rem] font-bold uppercase tracking-[0.06em] leading-none shadow-sm",
             spec.chip,
-            index % 2 === 0 ? "-rotate-[7deg]" : "rotate-[6deg]",
+            index % 2 === 0 ? "-rotate-3" : "rotate-2",
           )}
         >
           {spec.icon}
