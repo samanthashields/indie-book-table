@@ -14,18 +14,18 @@ export function PageNav({
   labels: string[];
 }) {
   return (
-    <div className="panel-outline-thin sticky bottom-3 z-30 mt-6 flex items-center justify-between gap-3 bg-card/95 px-3 py-2 backdrop-blur supports-[backdrop-filter]:bg-card/85">
+    <div className="sticky bottom-3 z-30 mt-6 flex items-center justify-between gap-3 rounded-xl border-2 border-ink bg-card/95 px-3 py-2 backdrop-blur supports-[backdrop-filter]:bg-card/85">
       <button
         type="button"
         onClick={onPrev}
         disabled={index === 0}
-        className="panel-outline-thin inline-flex items-center gap-2 bg-card px-4 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.1em] text-cocoa transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:translate-y-0"
+        className="inline-flex items-center gap-2 rounded-md border-2 border-ink bg-card px-4 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.1em] text-foreground transition-colors hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-card"
       >
         <span aria-hidden="true">←</span> Back
       </button>
 
       <div className="flex min-w-0 flex-col items-center gap-1.5">
-        <p className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-cocoa sm:text-[0.65rem] sm:tracking-[0.2em]">
+        <p className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-foreground sm:text-[0.65rem] sm:tracking-[0.2em]">
           <span className="hidden sm:inline">Page </span>
           {index + 1} of {total}
         </p>
@@ -37,8 +37,8 @@ export function PageNav({
               onClick={() => onJump(i)}
               aria-label={`Go to page ${i + 1}: ${label}`}
               aria-current={i === index ? "page" : undefined}
-              className={`h-3 w-3 border-2 border-cocoa transition-colors ${
-                i === index ? "bg-clay" : "bg-card hover:bg-amber"
+              className={`h-2.5 w-2.5 rounded-sm border-2 border-ink transition-colors ${
+                i === index ? "bg-primary" : "bg-card hover:bg-secondary"
               }`}
             />
           ))}
@@ -49,7 +49,7 @@ export function PageNav({
         type="button"
         onClick={onNext}
         disabled={index === total - 1}
-        className="panel-outline-thin inline-flex items-center gap-2 bg-card px-4 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.1em] text-cocoa transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:translate-y-0"
+        className="inline-flex items-center gap-2 rounded-md border-2 border-ink bg-card px-4 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.1em] text-foreground transition-colors hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-card"
       >
         Next <span aria-hidden="true">→</span>
       </button>
@@ -57,7 +57,7 @@ export function PageNav({
   );
 }
 
-/** Dog-eared paper corner in the bottom-right of the page: tap to turn. */
+/** Corner control in the bottom-right of the page: tap to turn. */
 export function CornerTurn({ onNext, disabled }: { onNext: () => void; disabled: boolean }) {
   return (
     <button
@@ -65,14 +65,11 @@ export function CornerTurn({ onNext, disabled }: { onNext: () => void; disabled:
       onClick={onNext}
       disabled={disabled}
       aria-label="Turn to the next page"
-      className="group absolute bottom-0 right-0 h-20 w-20 disabled:pointer-events-none disabled:opacity-0"
+      className="group absolute bottom-3 right-3 flex items-center gap-1.5 rounded-md border-2 border-ink bg-amber px-3 py-1.5 text-[0.6rem] font-bold uppercase tracking-[0.12em] text-ink transition-transform disabled:pointer-events-none disabled:opacity-0"
     >
-      <span
-        aria-hidden="true"
-        className="absolute bottom-0 right-0 h-full w-full bg-gradient-to-tl from-amber to-card [clip-path:polygon(100%_35%,100%_100%,35%_100%)] transition-transform duration-300 group-hover:scale-110"
-      />
-      <span className="absolute bottom-2 right-2 text-[0.55rem] font-bold uppercase tracking-[0.12em] text-cocoa">
-        Turn
+      Turn
+      <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">
+        →
       </span>
     </button>
   );

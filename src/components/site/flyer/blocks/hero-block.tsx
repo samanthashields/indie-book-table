@@ -6,7 +6,7 @@ import { TagChips } from "../tag-chips";
 import { CircleToggle } from "@/components/site/circle-toggle";
 import type { WishlistEntry } from "@/lib/wishlist";
 
-/** Full-page spotlight: the issue's featured book, set like a fair poster. */
+/** Full-page spotlight: the issue's featured book, set like a catalog page. */
 export function HeroBlock({
   book,
   category,
@@ -25,30 +25,26 @@ export function HeroBlock({
 
   return (
     <div className="mx-auto max-w-4xl">
-      <div className="poster-slant rounded-2xl bg-cocoa px-6 py-4 text-center">
-        <p className="poster-unslant font-heading text-2xl font-black uppercase tracking-[0.12em] text-paper sm:text-4xl">
+      <div className="rounded-2xl border-2 border-ink bg-ink px-6 py-4 text-center">
+        <p className="font-heading text-2xl font-black uppercase tracking-[0.12em] text-on-ink sm:text-4xl">
           Spotlight pick
         </p>
-        <p className="poster-unslant mt-1 text-[0.6rem] font-black uppercase tracking-[0.3em] text-paper/70">
-          {category}
-        </p>
+        <p className="mt-1 text-[0.6rem] font-black uppercase tracking-[0.3em] text-on-ink/70">{category}</p>
       </div>
 
-      <div className="poster-panel relative mt-6 grid items-center gap-6 bg-card p-5 sm:grid-cols-[minmax(0,15rem)_1fr] sm:p-7">
+      <div className="relative mt-6 grid items-center gap-6 rounded-2xl border-2 border-ink bg-card p-5 sm:grid-cols-[minmax(0,15rem)_1fr] sm:p-7">
         <span
           aria-hidden="true"
-          className="starburst absolute -right-4 -top-8 flex size-24 rotate-[8deg] items-center justify-center bg-amber text-center text-[0.6rem] font-black uppercase leading-tight tracking-[0.08em] text-cocoa"
+          className="absolute -right-4 -top-6 flex -rotate-6 items-center rounded-md border-2 border-ink bg-amber px-3 py-1.5 text-[0.62rem] font-black uppercase tracking-[0.08em] text-ink"
         >
-          Don&rsquo;t
-          <br />
-          miss!
+          Don&rsquo;t miss!
         </span>
 
         <div className="relative">
           <Link
             to="/table/books/$bookId"
             params={{ bookId: book.id }}
-            className="group relative block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cocoa"
+            className="group relative block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
           >
             {book.cover_image_url ? (
               <img
@@ -57,10 +53,10 @@ export function HeroBlock({
                 loading="lazy"
                 width={672}
                 height={992}
-                className="mx-auto aspect-[2/3] max-h-[38vh] w-full rounded-2xl object-cover shadow-[0_24px_50px_-22px_var(--cocoa)] transition-transform duration-300 group-hover:-translate-y-1 sm:max-h-[42vh] sm:w-auto"
+                className="mx-auto aspect-[2/3] max-h-[38vh] w-full rounded-xl border-2 border-ink object-cover transition-transform duration-300 group-hover:-translate-y-1 sm:max-h-[42vh] sm:w-auto"
               />
             ) : (
-              <span className="flex aspect-[2/3] w-full items-center justify-center rounded-2xl bg-paper p-4 text-center font-heading text-xl text-cocoa/70">
+              <span className="flex aspect-[2/3] w-full items-center justify-center rounded-xl border-2 border-ink bg-amber-soft p-4 text-center font-heading text-xl text-ink/70">
                 {book.title}
               </span>
             )}
@@ -69,12 +65,12 @@ export function HeroBlock({
         </div>
 
         <div>
-          <h3 className="font-heading text-3xl leading-tight text-cocoa sm:text-4xl">
+          <h3 className="font-heading text-3xl font-semibold leading-tight text-foreground sm:text-4xl">
             <Link to="/table/books/$bookId" params={{ bookId: book.id }} className="hover:underline">
               {book.title}
             </Link>
           </h3>
-          <p className="mt-1 text-sm font-bold uppercase tracking-[0.08em] text-cocoa/75">
+          <p className="mt-1 text-sm font-semibold uppercase tracking-[0.08em] text-muted-foreground">
             <Link
               to="/table/authors/$authorId"
               params={{ authorId: book.author_id }}
@@ -85,11 +81,11 @@ export function HeroBlock({
           </p>
           <TagChips tags={book.tags} className="mt-2" />
 
-          <p className="mt-4 max-w-prose text-[0.95rem] leading-relaxed text-cocoa/85">
+          <p className="mt-4 max-w-prose text-[0.95rem] leading-relaxed text-foreground/85">
             {hook || book.spotlight_blurb || book.hook}
           </p>
 
-          <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
+          <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
             {ebook && <PricePill format="ebook" amount={ebook} />}
             {print && <PricePill format="print" amount={print} />}
           </div>
@@ -102,7 +98,7 @@ export function HeroBlock({
                     href={link.url}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="inline-block rounded-full bg-cocoa px-4 py-1.5 text-[0.65rem] font-black uppercase tracking-[0.12em] text-paper"
+                    className="inline-block rounded-md bg-ink px-4 py-1.5 text-[0.65rem] font-black uppercase tracking-[0.12em] text-card"
                   >
                     {link.platform_label}
                   </a>
