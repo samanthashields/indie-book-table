@@ -1,13 +1,13 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
-  MessageCircle,
   BookOpen,
-  Library,
+  ChevronDown,
   LifeBuoy,
+  Library,
   LogOut,
   Menu,
+  MessageCircle,
   Newspaper,
-  PanelLeftClose,
   Send,
   Shield,
   Sparkles,
@@ -19,6 +19,14 @@ import {
 import { useEffect, useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { PenLauncher } from "@/components/pen/pen-launcher";
 import { NotificationBell } from "@/components/notification-bell";
 import { WorkshopOnboarding } from "@/components/workshop-onboarding";
@@ -28,17 +36,23 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import falconAsset from "@/assets/falcon.svg.asset.json";
 
-const nav = [
+const primaryNav = [
   { label: "My Books", to: "/" as const, icon: Library },
   { label: "My Cycles", to: "/cycles" as const, icon: Sparkles },
-  { label: "My Table", to: "/my-table" as const, icon: Trophy },
-  { label: "Collaborations", to: "/collaborations" as const, icon: Users },
   { label: "Templates", to: "/templates" as const, icon: BookOpen },
-  { label: "My Submissions", to: "/submissions" as const, icon: Send },
   { label: "Pen", to: "/pen" as const, icon: MessageCircle },
   { label: "The Table", to: "/table" as const, icon: Utensils },
+  { label: "Help Center", to: "/help" as const, icon: LifeBuoy },
+];
+
+const moreNav = [
+  { label: "My Table", to: "/my-table" as const, icon: Trophy },
+  { label: "Collaborations", to: "/collaborations" as const, icon: Users },
+  { label: "My Submissions", to: "/submissions" as const, icon: Send },
   { label: "Journal", to: "/journal" as const, icon: Newspaper },
 ];
+
+const allNav = [...primaryNav, ...moreNav];
 
 export function AppShell({
   children,
@@ -50,11 +64,7 @@ export function AppShell({
   showPenLauncher?: boolean;
 }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
-  const inAdmin = pathname === "/admin" || pathname.startsWith("/admin/");
   const [navOpen, setNavOpen] = useState(false);
-  // The Admin panel has its own section nav, so give it the room: collapse on
-  // entering Admin, expand on leaving. The manual toggle still works in between.
-  const [collapsed, setCollapsed] = useState(inAdmin);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const user = useCurrentUser();
@@ -72,9 +82,8 @@ export function AppShell({
   const accountLabel = "Author";
   const userId = user.data?.id;
 
-  useEffect(() => {
-    setCollapsed(inAdmin);
-  }, [inAdmin]);
+  const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
+  const moreActive = moreNav.some((item) => isActive(item.to));
 
   useEffect(() => {
     if (!userId) return;
@@ -94,98 +103,177 @@ export function AppShell({
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground lg:flex lg:gap-4 lg:p-4">
-      <aside
-        className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-sidebar-border bg-sidebar p-4 shadow-lg transition-all duration-200 lg:sticky lg:top-4 lg:z-auto lg:h-[calc(100vh-2rem)] lg:shrink-0 lg:translate-x-0 lg:rounded-2xl lg:border lg:shadow-xs",
-          !navOpen && "-translate-x-full",
-          collapsed && "lg:w-[76px]",
-        )}
-      >
-        <div className="mb-8 flex h-11 items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 overflow-hidden">
-            <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary/10">
-              <img
-                src={falconAsset.url}
-                alt=""
-                width={2000}
-                height={2000}
-                className="size-7 object-contain"
-              />
-            </span>
-            {!collapsed && (
-              <span className="font-serif text-xl font-normal">Author’s Workshop</span>
-            )}
-          </Link>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden"
-            onClick={() => setNavOpen(false)}
-            aria-label="Close navigation"
-          >
-            <X />
-          </Button>
-        </div>
-        <nav className="space-y-1">
-          {nav.map(({ label, to, icon: Icon }) => {
-            const active = to === "/" ? pathname === "/" : pathname.startsWith(to);
-            return (
-              <Link
-                key={label}
-                to={to}
-                onClick={() => setNavOpen(false)}
-                className={cn(
-                  "flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition-colors",
-                  active
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                    : "text-muted-foreground hover:bg-card/70 hover:text-sidebar-accent-foreground",
-                )}
-              >
-                <Icon className="size-5 shrink-0" />
-                {!collapsed && label}
-              </Link>
-            );
-          })}
-          <Link
-            to="/help"
-            onClick={() => setNavOpen(false)}
-            className={cn(
-              "flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition-colors",
-              pathname.startsWith("/help")
-                ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                : "text-muted-foreground hover:bg-card/70 hover:text-sidebar-accent-foreground",
-            )}
-          >
-            <LifeBuoy className="size-5 shrink-0" />
-            {!collapsed && "Help Center"}
-          </Link>
-          {isAdmin && (
-            <Link
-              to="/admin"
-              onClick={() => setNavOpen(false)}
-              className={cn(
-                "flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-semibold transition-colors",
-                pathname.startsWith("/admin")
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                  : "text-muted-foreground hover:bg-card/70 hover:text-sidebar-accent-foreground",
-              )}
-            >
-              <Shield className="size-5 shrink-0" />
-              {!collapsed && "Admin"}
-            </Link>
-          )}
-        </nav>
-        <div className="mt-auto space-y-2">
-          <div className="border-t border-sidebar-border pt-4">
-            <div className={cn("flex items-center gap-3", collapsed && "justify-center")}>
-              <span
-                className="grid size-9 shrink-0 place-items-center rounded-full bg-accent text-sm font-semibold text-accent-foreground"
-                title={collapsed ? displayName : undefined}
-              >
-                {initials}
+    <div className="min-h-screen bg-background text-foreground">
+      <header className="sticky top-0 z-40 border-b border-border bg-card">
+        <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between gap-4 px-4 md:px-8">
+          <div className="flex min-w-0 items-center gap-6">
+            <Link to="/" className="flex shrink-0 items-center gap-2.5">
+              <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-primary/10">
+                <img
+                  src={falconAsset.url}
+                  alt=""
+                  width={2000}
+                  height={2000}
+                  className="size-5 object-contain"
+                />
               </span>
-              {!collapsed && (
+              <span className="hidden font-serif text-lg font-normal sm:inline">
+                Author’s Workshop
+              </span>
+            </Link>
+            <nav className="hidden items-center gap-1 lg:flex">
+              {primaryNav.map(({ label, to }) => (
+                <Link
+                  key={label}
+                  to={to}
+                  className={cn(
+                    "rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
+                    isActive(to)
+                      ? "bg-secondary text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  {label}
+                </Link>
+              ))}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className={cn(
+                      "flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
+                      moreActive
+                        ? "bg-secondary text-foreground"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    More
+                    <ChevronDown className="size-3.5" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
+                  {moreNav.map(({ label, to, icon: Icon }) => (
+                    <DropdownMenuItem key={label} asChild>
+                      <Link to={to}>
+                        <Icon className="size-4" />
+                        {label}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </nav>
+          </div>
+
+          <div className="flex shrink-0 items-center gap-1">
+            <NotificationBell />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  aria-label="Account menu"
+                  className="grid size-9 shrink-0 place-items-center rounded-full bg-accent text-sm font-semibold text-accent-foreground"
+                >
+                  {initials}
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-60">
+                <DropdownMenuLabel>
+                  <p className="truncate text-sm font-semibold" title={displayName}>
+                    {displayName}
+                  </p>
+                  <p className="truncate text-xs font-normal text-muted-foreground">
+                    {isAdmin ? "Editor" : accountLabel} · {planLabel}
+                  </p>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <div className="px-2 py-1.5">
+                  <ThemeToggle className="w-full" />
+                </div>
+                {isAdmin && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin">
+                        <Shield className="size-4" />
+                        Admin
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={() => void handleSignOut()}>
+                  <LogOut className="size-4" />
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden"
+              onClick={() => setNavOpen(true)}
+              aria-label="Open navigation"
+            >
+              <Menu />
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {navOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div className="fixed inset-0 bg-foreground/30" onClick={() => setNavOpen(false)} />
+          <div className="fixed inset-y-0 right-0 flex w-72 max-w-[85vw] flex-col overflow-y-auto border-l border-border bg-card p-4 shadow-lg">
+            <div className="mb-4 flex h-11 items-center justify-between">
+              <span className="font-serif text-lg font-normal">Menu</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setNavOpen(false)}
+                aria-label="Close navigation"
+              >
+                <X />
+              </Button>
+            </div>
+            <nav className="space-y-1">
+              {allNav.map(({ label, to, icon: Icon }) => (
+                <Link
+                  key={label}
+                  to={to}
+                  onClick={() => setNavOpen(false)}
+                  className={cn(
+                    "flex h-11 items-center gap-3 rounded-lg px-3 text-sm font-semibold transition-colors",
+                    isActive(to)
+                      ? "bg-secondary text-foreground"
+                      : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground",
+                  )}
+                >
+                  <Icon className="size-5 shrink-0" />
+                  {label}
+                </Link>
+              ))}
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  onClick={() => setNavOpen(false)}
+                  className={cn(
+                    "flex h-11 items-center gap-3 rounded-lg px-3 text-sm font-semibold transition-colors",
+                    isActive("/admin")
+                      ? "bg-secondary text-foreground"
+                      : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground",
+                  )}
+                >
+                  <Shield className="size-5 shrink-0" />
+                  Admin
+                </Link>
+              )}
+            </nav>
+            <div className="mt-auto space-y-3 border-t border-border pt-4">
+              <div className="flex items-center gap-3">
+                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-accent text-sm font-semibold text-accent-foreground">
+                  {initials}
+                </span>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium" title={displayName}>
                     {displayName}
@@ -194,70 +282,26 @@ export function AppShell({
                     {isAdmin ? "Editor" : accountLabel} · {planLabel}
                   </p>
                 </div>
-              )}
-            </div>
-            {!collapsed && (
-              <div className="mt-3 flex flex-wrap items-center gap-1">
-                <ThemeToggle className="mb-2 w-full" />
-                <NotificationBell className="shrink-0" />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="flex-1 justify-start text-muted-foreground"
-                  onClick={() => void handleSignOut()}
-                >
-                  <LogOut className="size-4" />
-                  Sign out
-                </Button>
               </div>
-            )}
-          </div>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            className="hidden w-full justify-start lg:flex"
-            onClick={() => setCollapsed((value) => !value)}
-          >
-            <PanelLeftClose className={cn(collapsed && "rotate-180")} />
-            {!collapsed && "Collapse"}
-          </Button>
-        </div>
-      </aside>
-      {navOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-foreground/30 lg:hidden"
-          onClick={() => setNavOpen(false)}
-        />
-      )}
-      <div className="min-w-0 flex-1 lg:flex">
-        <div className="min-w-0 flex-1">
-          <header className="flex h-16 items-center justify-between border-b border-border/60 bg-card/80 px-4 backdrop-blur lg:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setNavOpen(true)}
-              aria-label="Open navigation"
-            >
-              <Menu />
-            </Button>
-            <span className="font-serif text-lg font-semibold">Author’s Workshop</span>
-            <div className="flex items-center gap-1">
-              <NotificationBell />
+              <ThemeToggle className="w-full" />
               <Button
                 variant="ghost"
-                size="icon"
+                size="sm"
+                className="w-full justify-start text-muted-foreground"
                 onClick={() => void handleSignOut()}
-                aria-label="Sign out"
               >
-                <LogOut />
+                <LogOut className="size-4" />
+                Sign out
               </Button>
             </div>
-          </header>
-          <main className="mx-auto w-full max-w-[1120px] px-5 py-8 md:px-8 lg:px-8 lg:py-10">
-            {children}
-          </main>
+          </div>
         </div>
+      )}
+
+      <div className="flex-1">
+        <main className="mx-auto w-full max-w-[1120px] px-5 py-8 md:px-8 lg:px-8 lg:py-10">
+          {children}
+        </main>
         {showPenLauncher && <PenLauncher context={coachContext} />}
       </div>
       <WorkshopOnboarding />
