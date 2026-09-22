@@ -62,7 +62,7 @@ export async function uploadOnboardingMedia(file: File) {
 
 export async function resolveOnboardingMedia(path: string) {
   if (!path || /^https?:\/\//.test(path)) return path;
-  const { data, error } = await supabase.storage.from("onboarding-media").createSignedUrl(path, 60 * 60);
-  if (error) throw error;
-  return data.signedUrl;
+  const { signOnboardingMedia } = await import("@/lib/workshop-onboarding.functions");
+  const { url } = await signOnboardingMedia({ data: { path } });
+  return url;
 }
