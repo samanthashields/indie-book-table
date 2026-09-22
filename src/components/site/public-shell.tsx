@@ -46,15 +46,15 @@ export function PublicShell({ children }: { children: ReactNode }) {
               <Link
                 key={link.to}
                 to={link.to}
-                className="rounded-full px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-                activeProps={{ className: "rounded-full px-3 py-2 bg-secondary text-foreground" }}
+                className="rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                activeProps={{ className: "rounded-lg px-3 py-2 bg-secondary text-foreground" }}
               >
                 {link.label}
               </Link>
             ))}
             <Link
               to={signedIn ? "/" : "/auth"}
-              className="ml-2 rounded-full bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
+              className="ml-2 rounded-lg bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
             >
               {signedIn ? "Author's Workshop" : "Sign in"}
             </Link>
@@ -65,7 +65,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
             onClick={() => setMenuOpen((open) => !open)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
-            className="grid size-11 shrink-0 place-items-center rounded-full text-foreground transition-colors hover:bg-secondary md:hidden"
+            className="grid size-11 shrink-0 place-items-center rounded-lg text-foreground transition-colors hover:bg-secondary md:hidden"
           >
             {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
@@ -87,7 +87,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
             <Link
               to={signedIn ? "/" : "/auth"}
               onClick={() => setMenuOpen(false)}
-              className="mt-2 flex h-12 items-center justify-center rounded-full bg-primary px-4 text-primary-foreground"
+              className="mt-2 flex h-12 items-center justify-center rounded-lg bg-primary px-4 text-primary-foreground"
             >
               {signedIn ? "Author's Workshop" : "Sign in"}
             </Link>
