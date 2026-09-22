@@ -57,24 +57,12 @@ export const removeTableShare = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-/** Public lookup used by the shared page. */
+/** Public lookup used by the shared page; reads one row by slug through the private channel. */
 export const getTableShare = createServerFn({ method: "GET" })
-  .inputValidator((input: { slug: string }) => input)
+  .inputValidator((input: { slug: string }) => ({ slug: String(input.slug).slice(0, 64) }))
   .handler(async ({ data }): Promise<TableShare | null> => {
-    const { createClient } = await import("@supabase/supabase-js");
-    const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
-    const client = createClient(process.env["SUPABASE_URL"]!, key, {
-      auth: { persistSession: false, autoRefreshToken: false },
-      global: {
-        fetch: (input: RequestInfo | URL, init?: RequestInit) => {
-          const headers = new Headers(init?.headers);
-          if (key.startsWith("sb_") && headers.get("Authorization") === `Bearer ${key}`) headers.delete("Authorization");
-          headers.set("apikey", key);
-          return fetch(input, { ...init, headers });
-        },
-      },
-    });
-    const { data: row } = await client
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: row } = await supabaseAdmin
       .from("table_shares")
       .select("slug, author_name, book_count, updated_at")
       .eq("slug", data.slug)
