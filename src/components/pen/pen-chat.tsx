@@ -121,7 +121,7 @@ function SaveStepsButton({
       type="button"
       onClick={() => void save()}
       disabled={add.isPending || saved}
-      className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-leaf/50 bg-leaf/20 px-3 py-1.5 text-xs font-semibold transition-colors hover:bg-leaf/35 disabled:opacity-60"
+      className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-leaf/50 bg-leaf/20 px-3 py-1.5 text-xs font-semibold transition-colors hover:bg-leaf/35 disabled:opacity-60"
     >
       <ListChecks className="size-3.5" />
       {saved ? "Saved to your checklist" : `Save ${steps.length} steps to this milestone`}
@@ -253,7 +253,7 @@ export function PenChat({
                               key={question}
                               type="button"
                               onClick={() => send(question)}
-                              className="rounded-full border border-amber/60 bg-amber/20 px-3 py-1.5 text-left text-xs font-semibold transition-colors hover:bg-amber/35"
+                              className="rounded-md border border-amber/60 bg-amber/20 px-3 py-1.5 text-left text-xs font-semibold transition-colors hover:bg-amber/35"
                             >
                               {question}
                             </button>
@@ -289,7 +289,7 @@ export function PenChat({
                     key={suggestion}
                     type="button"
                     onClick={() => send(suggestion)}
-                    className="rounded-full border border-teal/45 bg-teal/12 px-3 py-1.5 text-left text-xs font-semibold transition-colors hover:bg-teal/25"
+                    className="rounded-md border border-teal/45 bg-teal/12 px-3 py-1.5 text-left text-xs font-semibold transition-colors hover:bg-teal/25"
                   >
                     {suggestion}
                   </button>

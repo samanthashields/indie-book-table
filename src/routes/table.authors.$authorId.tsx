@@ -70,13 +70,13 @@ function AuthorPage() {
               href={shelf.author.website}
               target="_blank"
               rel="noreferrer noopener"
-              className="rounded-full bg-card px-4 py-2 hover:bg-secondary"
+              className="rounded-md bg-card px-4 py-2 hover:bg-secondary"
             >
               Website
             </a>
           )}
           {shelf.author.instagram_handle && (
-            <span className="rounded-full bg-card px-4 py-2">{shelf.author.instagram_handle}</span>
+            <span className="rounded-md bg-card px-4 py-2">{shelf.author.instagram_handle}</span>
           )}
         </div>
       </header>

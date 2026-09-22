@@ -23,14 +23,14 @@ export function PenQuickActions({
           type="button"
           disabled={disabled ?? false}
           onClick={() => onPick(action.prompt)}
-          className="rounded-full border border-teal/45 bg-teal/12 px-3 py-1.5 text-xs font-semibold transition-colors hover:bg-teal/25 disabled:opacity-50"
+          className="rounded-md border border-teal/45 bg-teal/12 px-3 py-1.5 text-xs font-semibold transition-colors hover:bg-teal/25 disabled:opacity-50"
         >
           {action.label}
         </button>
       ))}
       <Link
         to="/pen/buttons"
-        className="inline-flex items-center gap-1.5 rounded-full px-2 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground"
+        className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:text-foreground"
         title="Choose your own quick buttons"
       >
         <Settings2 className="size-3.5" />

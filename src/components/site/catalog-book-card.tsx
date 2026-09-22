@@ -69,7 +69,7 @@ export function CatalogBookCard({
         </div>
         <div className="min-w-0">
           {book.is_spotlight && (
-            <span className="mb-1 inline-block rounded-full bg-amber px-2 py-0.5 text-[11px] font-semibold text-ink">
+            <span className="mb-1 inline-block rounded-md bg-amber px-2 py-0.5 text-[11px] font-semibold text-ink">
               Spotlight
             </span>
           )}
@@ -100,18 +100,18 @@ export function CatalogBookCard({
         {book.tags.map((tag) => (
           <span
             key={tag}
-            className={cn("rounded-full px-2 py-1 font-semibold", tagTone[tag] ?? "bg-secondary text-foreground")}
+            className={cn("rounded-md px-2 py-1 font-semibold", tagTone[tag] ?? "bg-secondary text-foreground")}
           >
             {TAG_LABELS[tag] ?? tag}
           </span>
         ))}
         {book.ebook_price != null && (
-          <span className="rounded-full bg-leaf/25 px-2 py-1 font-semibold text-cocoa">
+          <span className="rounded-md bg-leaf/25 px-2 py-1 font-semibold text-cocoa">
             eBook ${book.ebook_price.toFixed(2)}
           </span>
         )}
         {book.print_price != null && (
-          <span className="rounded-full bg-teal/25 px-2 py-1 font-semibold text-cocoa">
+          <span className="rounded-md bg-teal/25 px-2 py-1 font-semibold text-cocoa">
             Print ${book.print_price.toFixed(2)}
           </span>
         )}

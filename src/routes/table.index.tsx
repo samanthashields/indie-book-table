@@ -66,7 +66,7 @@ function TableHomePage() {
       <section className="overflow-hidden rounded-3xl border border-border/70 bg-paper">
         <div className="grid items-center gap-0 md:grid-cols-[1.05fr_1fr]">
           <div className="p-8 md:p-12">
-            <span className="inline-flex rounded-full bg-amber/25 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cocoa">
+            <span className="inline-flex rounded-md bg-amber/25 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cocoa">
               The Indie Author Table
             </span>
             <h1 className="mt-4 font-heading text-4xl leading-tight md:text-5xl">

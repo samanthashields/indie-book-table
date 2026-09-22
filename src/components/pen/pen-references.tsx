@@ -65,7 +65,7 @@ export function PenReferenceChips({ references }: { references: PenReference[] }
     <div className="mt-2 flex flex-wrap gap-2">
       {references.map((reference, index) => {
         const className =
-          "inline-flex items-center gap-1.5 rounded-full border border-border bg-paper px-3 py-1 text-xs font-semibold transition-colors hover:bg-amber/25";
+          "inline-flex items-center gap-1.5 rounded-md border border-border bg-paper px-3 py-1 text-xs font-semibold transition-colors hover:bg-amber/25";
 
         if (reference.kind === "milestone") {
           return (

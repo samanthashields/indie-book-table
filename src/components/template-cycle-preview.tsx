@@ -74,7 +74,7 @@ export function TemplateCyclePreview({
                     </div>
                     <p className="mt-1 text-sm text-muted-foreground">{phase.summary}</p>
                     <div className="mt-3 flex flex-wrap items-center gap-2">
-                      <span className={cn("rounded-full border px-3 py-1 text-xs font-semibold", style.chip)}>{count} {count === 1 ? "milestone" : "milestones"}</span>
+                      <span className={cn("rounded-md border px-3 py-1 text-xs font-semibold", style.chip)}>{count} {count === 1 ? "milestone" : "milestones"}</span>
                     </div>
                   </div>
                   <ChevronDown className={cn("mt-1 size-5 shrink-0 text-muted-foreground transition-transform duration-200", expanded && "rotate-180")} />
