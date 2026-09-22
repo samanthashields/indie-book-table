@@ -39,7 +39,7 @@ export function CycleBuilder({ title, description, phases: initial, initialTitle
   return (
     <section className="space-y-6">
       <div className="rounded-2xl border border-border bg-paper p-6">
-        <h2 className="font-serif text-3xl font-normal">{title}</h2>
+        <h2 className="font-heading text-3xl font-normal">{title}</h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{description}</p>
         <div className="mt-5 grid gap-5 sm:grid-cols-2">
           <label className="block text-sm font-semibold">Working title<Input className="mt-2" value={bookTitle} placeholder="The working title of your book" onChange={(event) => setBookTitle(event.target.value)} /></label>
@@ -54,7 +54,7 @@ export function CycleBuilder({ title, description, phases: initial, initialTitle
             <article key={phase.id} className="grid grid-cols-[42px_minmax(0,1fr)] gap-4">
               <span className={`grid size-10 place-items-center rounded-full border-2 font-semibold ${style.marker}`}>{index + 1}</span>
               <div className={`rounded-2xl border border-border bg-card p-5`}>
-                <div className="flex flex-wrap items-center gap-2"><h3 className="font-serif text-2xl font-normal">{phase.name}</h3><StatusPill>{phase.mode}</StatusPill></div>
+                <div className="flex flex-wrap items-center gap-2"><h3 className="font-heading text-2xl font-normal">{phase.name}</h3><StatusPill>{phase.mode}</StatusPill></div>
                 <p className="mt-1 text-sm text-muted-foreground">{phase.summary}</p>
                 <MilestoneDisclosure items={phase.milestones} expandOnGrowth className="mt-4 space-y-3" renderItem={(milestone, milestoneIndex) => (
                     <li key={milestone.localId} className="space-y-2 rounded-xl bg-card p-4 shadow-xs">

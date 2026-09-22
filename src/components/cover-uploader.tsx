@@ -47,7 +47,7 @@ export function CoverUploader({
       {preview.data ? (
         <img src={preview.data} alt={`Current cover artwork for ${title}`} width={768} height={1152} className="aspect-[2/3] w-32 rounded-xl object-cover shadow-sm" />
       ) : (
-        <span className="grid aspect-[2/3] w-32 place-items-center rounded-xl bg-teal/15 font-serif text-5xl text-link shadow-sm">{title.charAt(0) || "?"}</span>
+        <span className="grid aspect-[2/3] w-32 place-items-center rounded-xl bg-teal/15 font-heading text-5xl text-link shadow-sm">{title.charAt(0) || "?"}</span>
       )}
       <div className="min-w-0">
         <p className="text-sm leading-6 text-muted-foreground">Upload the cover you want to show across your book cycle. A working sketch is fine — you can replace it any time.</p>

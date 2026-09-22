@@ -37,7 +37,7 @@ export const Route = createFileRoute("/journal/$slug")({
   },
   notFoundComponent: () => (
     <PublicShell>
-      <h1 className="font-serif text-3xl">That post isn't here</h1>
+      <h1 className="font-heading text-3xl">That post isn't here</h1>
       <Link to="/journal" className="mt-4 inline-block underline">
         Back to the Journal
       </Link>
@@ -60,7 +60,7 @@ function JournalPostPage() {
             Journal
           </Link>
         </nav>
-        <h1 className="mt-4 font-serif text-4xl leading-tight">{post.title}</h1>
+        <h1 className="mt-4 font-heading text-4xl leading-tight">{post.title}</h1>
         {post.published_at && (
           <p className="mt-2 text-sm text-muted-foreground">
             {new Date(post.published_at).toLocaleDateString(undefined, {

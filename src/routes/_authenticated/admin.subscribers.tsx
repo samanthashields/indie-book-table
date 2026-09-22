@@ -116,7 +116,7 @@ function WelcomeEmailPanel() {
     <section className="rounded-2xl border border-border bg-card p-6 shadow-xs">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h2 className="font-serif text-2xl font-normal">Welcome email</h2>
+          <h2 className="font-heading text-2xl font-normal">Welcome email</h2>
           <p className="mt-1 max-w-prose text-sm text-muted-foreground">
             Sent once to each new signup, the moment they join.
           </p>
@@ -235,7 +235,7 @@ function AdminSubscribers() {
       <section className="rounded-2xl border border-border bg-card p-6 shadow-xs">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="font-serif text-2xl font-normal">Community list</h2>
+            <h2 className="font-heading text-2xl font-normal">Community list</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               {total} {total === 1 ? "person has" : "people have"} joined · {recent} in the last 30 days
             </p>

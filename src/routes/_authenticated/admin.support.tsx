@@ -60,7 +60,7 @@ function AdminSupport() {
   return (
     <div className="grid gap-6 lg:grid-cols-[340px_minmax(0,1fr)]">
       <section className="space-y-2">
-        <h2 className="font-serif text-2xl font-normal">Support requests</h2>
+        <h2 className="font-heading text-2xl font-normal">Support requests</h2>
         {tickets.isLoading && <p className="text-sm text-muted-foreground">Loading requests…</p>}
         {(tickets.data ?? []).map((ticket) => (
           <button
@@ -86,7 +86,7 @@ function AdminSupport() {
         {active && (
           <>
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h2 className="font-serif text-2xl font-normal">{active.subject}</h2>
+              <h2 className="font-heading text-2xl font-normal">{active.subject}</h2>
               <label className="text-sm font-semibold">
                 Status
                 <select

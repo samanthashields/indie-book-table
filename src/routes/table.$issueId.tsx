@@ -52,7 +52,7 @@ export const Route = createFileRoute("/table/$issueId")({
   },
   notFoundComponent: () => (
     <PublicShell>
-      <h1 className="font-serif text-3xl">No such issue</h1>
+      <h1 className="font-heading text-3xl">No such issue</h1>
       <p className="mt-3 text-muted-foreground">This issue isn't published — or never existed.</p>
       <Link to="/table" className="mt-4 inline-block underline">
         Browse published issues
@@ -123,7 +123,7 @@ function IssueBody({ data }: { data: IssueData }) {
 
       <header className="mt-4 rounded-3xl border border-border/70 bg-amber/15 p-8 md:p-10">
         <p className="text-sm font-semibold text-text-inkblue">Issue</p>
-        <h1 className="mt-2 font-serif text-4xl">{issue?.cover_headline ?? issue?.display_label}</h1>
+        <h1 className="mt-2 font-heading text-4xl">{issue?.cover_headline ?? issue?.display_label}</h1>
         {issue?.cover_tagline && (
           <p className="mt-3 max-w-2xl text-lg text-cocoa/80">{issue.cover_tagline}</p>
         )}
@@ -139,7 +139,7 @@ function IssueBody({ data }: { data: IssueData }) {
       {data.categories.map((category) => (
         <section key={category.category} className="mt-10">
           <div className="flex items-baseline gap-3">
-            <h2 className="font-serif text-2xl">{category.category}</h2>
+            <h2 className="font-heading text-2xl">{category.category}</h2>
             <span className="text-sm text-muted-foreground">{category.books.length} books</span>
           </div>
           <div className="mt-4 grid gap-4 md:grid-cols-2">

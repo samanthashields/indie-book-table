@@ -161,7 +161,7 @@ function PostEditor() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-4 rounded-2xl border border-border bg-card p-5">
-          <h2 className="font-serif text-2xl font-normal">{isNew ? "New journal post" : "Edit post"}</h2>
+          <h2 className="font-heading text-2xl font-normal">{isNew ? "New journal post" : "Edit post"}</h2>
           <Input placeholder="Title" aria-label="Post title" value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value, slug: draft.slug || slugify(e.target.value) })} />
           <Input placeholder="web-address-slug" aria-label="Post slug" value={draft.slug} onChange={(e) => setDraft({ ...draft, slug: e.target.value })} />
           <Textarea rows={2} placeholder="Short teaser" aria-label="Post excerpt" value={draft.excerpt} onChange={(e) => setDraft({ ...draft, excerpt: e.target.value })} />
@@ -202,7 +202,7 @@ function PostEditor() {
 
         <div className="rounded-2xl border border-border bg-paper p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Preview</p>
-          <h3 className="mt-3 font-serif text-3xl">{draft.title || "Untitled post"}</h3>
+          <h3 className="mt-3 font-heading text-3xl">{draft.title || "Untitled post"}</h3>
           <MarkdownText body={draft.body || "_Nothing written yet._"} className="mt-4 text-[0.98rem] leading-relaxed text-foreground/85" />
         </div>
       </div>

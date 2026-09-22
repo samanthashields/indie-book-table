@@ -45,12 +45,12 @@ export function MarkdownText({ body, className }: { body: string; className?: st
           );
         }
 
-        if (trimmed.startsWith("### ")) return <h3 key={key} className="mt-8 font-serif text-2xl">{inline(trimmed.slice(4), key)}</h3>;
-        if (trimmed.startsWith("## ")) return <h2 key={key} className="mt-8 font-serif text-3xl">{inline(trimmed.slice(3), key)}</h2>;
-        if (trimmed.startsWith("# ")) return <h2 key={key} className="mt-8 font-serif text-4xl">{inline(trimmed.slice(2), key)}</h2>;
+        if (trimmed.startsWith("### ")) return <h3 key={key} className="mt-8 font-heading text-2xl">{inline(trimmed.slice(4), key)}</h3>;
+        if (trimmed.startsWith("## ")) return <h2 key={key} className="mt-8 font-heading text-3xl">{inline(trimmed.slice(3), key)}</h2>;
+        if (trimmed.startsWith("# ")) return <h2 key={key} className="mt-8 font-heading text-4xl">{inline(trimmed.slice(2), key)}</h2>;
         if (trimmed.startsWith("> ")) {
           return (
-            <blockquote key={key} className="my-6 border-l-4 border-primary/40 pl-4 font-serif text-xl italic text-foreground/80">
+            <blockquote key={key} className="my-6 border-l-4 border-primary/40 pl-4 font-heading text-xl italic text-foreground/80">
               {inline(trimmed.replace(/^> ?/gm, ""), key)}
             </blockquote>
           );

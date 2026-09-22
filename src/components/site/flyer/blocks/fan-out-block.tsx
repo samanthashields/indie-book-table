@@ -30,7 +30,7 @@ export function FanOutBlock({
       <p className="text-center text-[0.62rem] font-black uppercase tracking-[0.3em] text-cocoa/60">
         {heading || "More from one author"}
       </p>
-      <h3 className="mt-1 text-center font-serif text-2xl font-black text-cocoa sm:text-3xl">
+      <h3 className="mt-1 text-center font-heading text-2xl font-black text-cocoa sm:text-3xl">
         <Link to="/table/authors/$authorId" params={{ authorId }} className="hover:underline">
           {authorName}
         </Link>
@@ -61,7 +61,7 @@ export function FanOutBlock({
                     className="aspect-[2/3] w-32 rounded-xl object-cover shadow-[0_16px_34px_-16px_var(--cocoa)] transition-transform duration-300 group-hover:-translate-y-1.5 sm:w-40"
                   />
                 ) : (
-                  <span className="flex aspect-[2/3] w-32 items-center justify-center rounded-xl bg-paper p-3 text-center font-serif text-sm text-cocoa/60 sm:w-40">
+                  <span className="flex aspect-[2/3] w-32 items-center justify-center rounded-xl bg-paper p-3 text-center font-heading text-sm text-cocoa/60 sm:w-40">
                     {book.title}
                   </span>
                 )}
@@ -86,7 +86,7 @@ export function FanOutBlock({
                 <Link
                   to="/table/books/$bookId"
                   params={{ bookId: book.id }}
-                  className="font-serif text-base font-bold text-cocoa hover:underline"
+                  className="font-heading text-base font-bold text-cocoa hover:underline"
                 >
                   {book.title}
                 </Link>

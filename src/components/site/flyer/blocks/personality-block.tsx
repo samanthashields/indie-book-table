@@ -14,7 +14,7 @@ export function PersonalityBlock({
   return (
     <div className="mx-auto max-w-3xl">
       <div className="poster-slant rounded-2xl bg-cocoa px-6 py-4 text-center">
-        <p className="poster-unslant font-serif text-2xl font-black uppercase tracking-[0.12em] text-paper sm:text-4xl">
+        <p className="poster-unslant font-heading text-2xl font-black uppercase tracking-[0.12em] text-paper sm:text-4xl">
           {heading}
         </p>
       </div>

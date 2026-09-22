@@ -60,7 +60,7 @@ export function ListingRow({
               className="aspect-[2/3] w-full rounded-xl object-cover shadow-[0_14px_30px_-16px_var(--cocoa)] transition-transform duration-300 group-hover:-translate-y-1"
             />
           ) : (
-            <span className="flex aspect-[2/3] w-full items-center justify-center rounded-xl bg-paper p-4 text-center font-serif text-lg text-cocoa/60">
+            <span className="flex aspect-[2/3] w-full items-center justify-center rounded-xl bg-paper p-4 text-center font-heading text-lg text-cocoa/60">
               {book.title}
             </span>
           )}
@@ -72,7 +72,7 @@ export function ListingRow({
       <div>
         <h3
           className={cn(
-            "mt-3 font-serif font-bold leading-tight text-cocoa sm:mt-0",
+            "mt-3 font-heading font-bold leading-tight text-cocoa sm:mt-0",
             large ? "text-2xl" : "text-lg sm:mt-3",
           )}
         >

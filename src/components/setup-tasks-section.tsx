@@ -55,7 +55,7 @@ function SetupTasksPanel({ bookId, userId, book }: { bookId: string; userId: str
     <section className="mb-10 rounded-2xl border border-border bg-card shadow-xs" aria-labelledby="setup-tasks-heading">
       <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-5">
         <div className="min-w-0">
-          <h2 id="setup-tasks-heading" className="font-serif text-2xl font-normal">Your setup tasks</h2>
+          <h2 id="setup-tasks-heading" className="font-heading text-2xl font-normal">Your setup tasks</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             {list.length > 0 ? `${done} of ${list.length} done. ` : ""}The decisions worth settling before and around production.
           </p>

@@ -84,7 +84,7 @@ function AdminFeatureRequests() {
   return (
     <div className="grid gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
       <section className="space-y-3">
-        <h2 className="font-serif text-2xl font-normal">Feature requests</h2>
+        <h2 className="font-heading text-2xl font-normal">Feature requests</h2>
         <Select value={filter} onValueChange={(value) => setFilter(value as Filter)}>
           <SelectTrigger aria-label="Filter ideas"><SelectValue /></SelectTrigger>
           <SelectContent>
@@ -119,7 +119,7 @@ function AdminFeatureRequests() {
         {!active && <p className="text-sm text-muted-foreground">Pick an idea to review it.</p>}
         {active && (
           <div className="space-y-4">
-            <h3 className="font-serif text-2xl font-normal">{active.title}</h3>
+            <h3 className="font-heading text-2xl font-normal">{active.title}</h3>
             {active.area && <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{active.area}</p>}
             <p className="whitespace-pre-wrap text-sm">{active.body}</p>
 

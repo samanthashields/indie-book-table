@@ -29,7 +29,7 @@ export function AuthorTable({ books, decorations = [] }: { books: PublishedBook[
       <div className="border-t border-border bg-paper p-5 sm:p-7">
         {books.length === 0 ? (
           <div className="text-center">
-            <h3 className="font-serif text-2xl font-normal">The table is set, waiting for your first book</h3>
+            <h3 className="font-heading text-2xl font-normal">The table is set, waiting for your first book</h3>
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
               When you end a book cycle and say the book was published, it takes its place here for good.
             </p>

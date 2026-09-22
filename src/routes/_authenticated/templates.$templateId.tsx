@@ -36,21 +36,21 @@ function TemplatePreview() {
         <img src={templateCover(template.details.illustrated)} alt={`Cover artwork for the ${template.title}`} width={768} height={1152} className="aspect-[2/3] w-28 rounded-lg object-cover shadow-sm" />
         <div className="min-w-0">
           <div className="mb-3 flex flex-wrap gap-2"><StatusPill tone="warm">{template.genre}</StatusPill><StatusPill>{template.phases.length} phases</StatusPill>{template.details.illustrated && <StatusPill tone="good">Illustrator track</StatusPill>}</div>
-          <h1 className="font-serif text-4xl font-normal md:text-5xl">{template.title}</h1>
+          <h1 className="font-heading text-4xl font-normal md:text-5xl">{template.title}</h1>
           <p className="mt-2 max-w-2xl text-muted-foreground">{template.description}</p>
         </div>
         <Button asChild><Link to="/books/new" search={{ path: "template", template: template.id }}>Use this template</Link></Button>
       </header>
 
       <section className="mb-9 rounded-2xl border border-border bg-card p-6 shadow-xs">
-        <h2 className="font-serif text-2xl font-normal">What makes this path different</h2>
+        <h2 className="font-heading text-2xl font-normal">What makes this path different</h2>
         <ul className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
           {(template.details.highlights ?? []).map((highlight) => <li key={highlight} className="flex gap-2"><Check className="size-4 shrink-0 text-text-leaf" />{highlight}</li>)}
         </ul>
       </section>
 
       <section>
-        <h2 className="mb-5 font-serif text-3xl font-normal">Every phase in this template</h2>
+        <h2 className="mb-5 font-heading text-3xl font-normal">Every phase in this template</h2>
         <div className="space-y-4">
           {template.phases.map((phase, index) => {
             const style = phaseStyle(phase.id);
@@ -58,7 +58,7 @@ function TemplatePreview() {
               <article key={phase.id} className="grid grid-cols-[42px_minmax(0,1fr)] gap-4">
                 <span className={`grid size-10 place-items-center rounded-full border-2 font-semibold ${style.marker}`}>{index + 1}</span>
                 <div className={`rounded-2xl border border-border bg-card p-5`}>
-                  <div className="flex flex-wrap items-center gap-2"><h3 className="font-serif text-2xl font-normal">{phase.name}</h3><StatusPill>{phase.mode}</StatusPill></div>
+                  <div className="flex flex-wrap items-center gap-2"><h3 className="font-heading text-2xl font-normal">{phase.name}</h3><StatusPill>{phase.mode}</StatusPill></div>
                   <p className="mt-1 text-sm text-muted-foreground">{phase.summary}</p>
                   <MilestoneDisclosure items={phase.milestones} className="mt-4 space-y-2" renderItem={(milestone, milestoneIndex) => (
                       <li key={`${milestone.name}-${milestoneIndex}`} className="rounded-xl bg-card p-4 shadow-xs">

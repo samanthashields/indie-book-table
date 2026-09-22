@@ -57,7 +57,7 @@ function JournalIndex() {
   return (
     <PublicShell>
       <header className="rounded-3xl border border-border/70 bg-leaf/15 p-8 md:p-12">
-        <h1 className="font-serif text-4xl md:text-5xl">{copy["journal.hero.title"] ?? "The Journal"}</h1>
+        <h1 className="font-heading text-4xl md:text-5xl">{copy["journal.hero.title"] ?? "The Journal"}</h1>
         <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
           {copy["journal.hero.subtitle"] ?? "Notes on publishing, craft and the books on our table."}
         </p>
@@ -69,7 +69,7 @@ function JournalIndex() {
             <p className="text-sm font-semibold text-text-inkblue">
               {formatDate(post.published_at)}
             </p>
-            <h2 className="mt-2 font-serif text-2xl leading-tight">
+            <h2 className="mt-2 font-heading text-2xl leading-tight">
               <Link to="/journal/$slug" params={{ slug: post.slug }} className="hover:underline">
                 {post.title}
               </Link>

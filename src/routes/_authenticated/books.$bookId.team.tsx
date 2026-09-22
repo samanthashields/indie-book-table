@@ -52,7 +52,7 @@ function TeamPage() {
       />
 
       <section className="rounded-2xl border border-border bg-paper p-6 shadow-xs">
-        <h2 className="font-serif text-2xl font-normal">Invite someone</h2>
+        <h2 className="font-heading text-2xl font-normal">Invite someone</h2>
         <p className="mt-2 text-sm text-muted-foreground">They’ll create their own account with this email address, and the invitation stays open for 14 days.</p>
         <form className="mt-5 grid gap-4 md:grid-cols-[1.2fr_1fr_1fr_auto] md:items-end" onSubmit={(event) => { event.preventDefault(); send(); }}>
           <label className="block text-sm font-semibold">Email address<Input className="mt-2" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="editor@example.com" /></label>
@@ -67,7 +67,7 @@ function TeamPage() {
       </section>
 
       <section className="mt-8">
-        <h2 className="mb-4 font-serif text-2xl font-normal">On this book</h2>
+        <h2 className="mb-4 font-heading text-2xl font-normal">On this book</h2>
         {collaborators.isLoading ? (
           <p className="text-sm text-muted-foreground">Loading collaborators…</p>
         ) : (collaborators.data ?? []).length === 0 ? (

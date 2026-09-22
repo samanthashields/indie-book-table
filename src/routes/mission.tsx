@@ -62,7 +62,7 @@ function MissionPage() {
           />
         </div>
 
-        <h1 className="font-serif text-4xl leading-tight text-foreground sm:text-6xl">
+        <h1 className="font-heading text-4xl leading-tight text-foreground sm:text-6xl">
           {value("mission.headline")}
         </h1>
 
@@ -96,12 +96,12 @@ function MissionPage() {
 
         {taglines.length > 0 && (
           <>
-            <h2 className="mt-12 font-serif text-2xl text-cocoa">{value("mission.quotes.title")}</h2>
+            <h2 className="mt-12 font-heading text-2xl text-cocoa">{value("mission.quotes.title")}</h2>
             <div className="mt-6 space-y-9">
               {taglines.map((line, index) => (
                 <blockquote
                   key={line}
-                  className={`border-l-4 border-amber pl-6 font-serif text-2xl italic leading-snug text-cocoa sm:text-3xl ${
+                  className={`border-l-4 border-amber pl-6 font-heading text-2xl italic leading-snug text-cocoa sm:text-3xl ${
                     index % 2 === 0 ? "-rotate-[0.6deg]" : "rotate-[0.6deg]"
                   }`}
                 >

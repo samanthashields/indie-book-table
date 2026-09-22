@@ -12,7 +12,7 @@ export function Doodles({ seed = 0 }: { seed?: number }) {
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 select-none">
       {picks.map((glyph, i) => (
-        <span key={i} className={`absolute font-serif text-2xl text-cocoa/25 sm:text-3xl ${spots[i]}`}>
+        <span key={i} className={`absolute font-heading text-2xl text-cocoa/25 sm:text-3xl ${spots[i]}`}>
           {glyph}
         </span>
       ))}

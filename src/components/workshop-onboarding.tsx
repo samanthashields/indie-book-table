@@ -52,7 +52,7 @@ function TourScreen({ step, index, count }: { step: WorkshopTourStep; index: num
       <Media kind={step.media_kind} value={step.media_value} label={step.title} />
       <DialogHeader>
         <p className="text-sm font-semibold text-link">{index + 1} of {count}</p>
-        <DialogTitle className="font-serif text-3xl font-normal">{step.title}</DialogTitle>
+        <DialogTitle className="font-heading text-3xl font-normal">{step.title}</DialogTitle>
         <DialogDescription className="whitespace-pre-line text-base leading-7">{step.body}</DialogDescription>
       </DialogHeader>
       <div className="flex gap-1" aria-label="Walkthrough progress">
@@ -115,7 +115,7 @@ export function WorkshopOnboarding() {
           <>
             <Media kind={data.welcome.media_kind} value={data.welcome.media_value} label={data.welcome.heading} />
             <DialogHeader>
-              <DialogTitle className="font-serif text-3xl font-normal">{data.welcome.heading}</DialogTitle>
+              <DialogTitle className="font-heading text-3xl font-normal">{data.welcome.heading}</DialogTitle>
               <DialogDescription className="whitespace-pre-line text-base leading-7">{data.welcome.body}</DialogDescription>
             </DialogHeader>
             <label className="flex items-center gap-3 text-sm">

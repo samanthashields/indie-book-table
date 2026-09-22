@@ -61,7 +61,7 @@ function IssuesPage() {
             <p className="text-sm font-semibold text-text-inkblue">
               {current.issue ? current.issue.display_label : "Coming soon"}
             </p>
-            <h1 className="mt-3 font-serif text-4xl leading-tight md:text-5xl">The issues</h1>
+            <h1 className="mt-3 font-heading text-4xl leading-tight md:text-5xl">The issues</h1>
             <p className="mt-4 text-lg text-muted-foreground">
               Every month we lay out a new issue of independent titles — read the flyer, meet the
               authors, buy the book.
@@ -86,11 +86,11 @@ function IssuesPage() {
 
       {spotlight && (
         <section className="mt-10">
-          <h2 className="font-serif text-2xl">This month's spotlight</h2>
+          <h2 className="font-heading text-2xl">This month's spotlight</h2>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <CatalogBookCard book={spotlight} />
             {spotlight.spotlight_blurb && (
-              <p className="self-center rounded-2xl bg-amber/15 p-6 font-serif text-xl leading-relaxed text-cocoa">
+              <p className="self-center rounded-2xl bg-amber/15 p-6 font-heading text-xl leading-relaxed text-cocoa">
                 “{spotlight.spotlight_blurb}”
               </p>
             )}
@@ -107,7 +107,7 @@ function IssuesPage() {
           height={600}
           className="h-40 w-full rounded-3xl object-cover md:h-52"
         />
-        <h2 className="mt-8 font-serif text-2xl">All issues</h2>
+        <h2 className="mt-8 font-heading text-2xl">All issues</h2>
         <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {archive.issues.map((issue) => (
             <li key={issue.id}>
@@ -116,7 +116,7 @@ function IssuesPage() {
                 params={{ issueId: issue.id }}
                 className="flex h-full flex-col justify-between rounded-2xl border border-border/70 bg-card p-5 transition-shadow hover:shadow-md"
               >
-                <span className="font-serif text-xl">{issue.display_label}</span>
+                <span className="font-heading text-xl">{issue.display_label}</span>
                 <span className="mt-2 text-sm text-muted-foreground">{issue.book_count} books</span>
               </Link>
             </li>

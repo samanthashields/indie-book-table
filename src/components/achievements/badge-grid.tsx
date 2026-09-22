@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 export function BadgeGrid({ badges }: { badges: Badge[] }) {
   return (
     <section aria-label="Your milestones">
-      <h2 className="font-serif text-2xl font-semibold">Milestones</h2>
+      <h2 className="font-heading text-2xl font-semibold">Milestones</h2>
       <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {badges.map((badge) => (
           <li

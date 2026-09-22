@@ -69,25 +69,25 @@ function SupportPage() {
 
       <div className="mb-8 grid gap-4 md:grid-cols-2">
         <div className="rounded-2xl border-2 border-sky/40 bg-sky/10 p-5">
-          <h2 className="flex items-center gap-2 font-serif text-xl font-normal"><LifeBuoy className="size-5" />Something’s broken or I need help</h2>
+          <h2 className="flex items-center gap-2 font-heading text-xl font-normal"><LifeBuoy className="size-5" />Something’s broken or I need help</h2>
           <p className="mt-1 text-sm text-muted-foreground">Send us a message below and we’ll answer in this thread.</p>
         </div>
         <Link to="/help/requests" className="rounded-2xl border-2 border-sun/50 bg-sun/10 p-5 transition-colors hover:border-primary">
-          <h2 className="flex items-center gap-2 font-serif text-xl font-normal"><Lightbulb className="size-5" />I have an idea</h2>
+          <h2 className="flex items-center gap-2 font-heading text-xl font-normal"><Lightbulb className="size-5" />I have an idea</h2>
           <p className="mt-1 text-sm text-muted-foreground">Post it to the feature request board, where other authors can vote for it.</p>
         </Link>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <section className="space-y-4 rounded-2xl border-2 border-sky/40 bg-sky/10 p-6">
-          <h2 className="font-serif text-2xl font-normal">New request</h2>
+          <h2 className="font-heading text-2xl font-normal">New request</h2>
           <Input placeholder="Subject" aria-label="Subject" value={subject} onChange={(event) => setSubject(event.target.value)} />
           <Textarea rows={7} placeholder="What happened, and what were you trying to do?" aria-label="Message" value={body} onChange={(event) => setBody(event.target.value)} />
           <Button disabled={open.isPending} onClick={send}>{open.isPending ? <Loader2 className="animate-spin" /> : <Send />}Send message</Button>
         </section>
 
         <section className="rounded-2xl border border-border bg-card p-5 shadow-xs">
-          <h2 className="font-serif text-xl font-normal">My requests</h2>
+          <h2 className="font-heading text-xl font-normal">My requests</h2>
           <ul className="mt-3 space-y-2">
             {mine.map((ticket) => (
               <li key={ticket.id}>
@@ -111,7 +111,7 @@ function SupportPage() {
 
       {activeId && (
         <section className="mt-6 max-w-3xl rounded-2xl border border-border bg-paper p-6">
-          <h2 className="font-serif text-xl font-normal">Conversation</h2>
+          <h2 className="font-heading text-xl font-normal">Conversation</h2>
           {linkedIdea.data && (
             <Link
               to="/help/requests/$requestId"

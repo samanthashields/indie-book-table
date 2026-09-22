@@ -114,7 +114,7 @@ function CreateBook() {
           {paths.map(({ id, title, copy, icon: Icon, tint }) => (
             <button key={id} onClick={() => setPending(id)} className={cn("relative min-h-52 rounded-2xl border p-6 text-left shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md", tint, pending === id ? "border-2 border-primary" : "border-border")}>
               <Icon className="mb-8 size-7 text-link" />
-              <h2 className="font-serif text-2xl font-normal">{title}</h2>
+              <h2 className="font-heading text-2xl font-normal">{title}</h2>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">{copy}</p>
               {pending === id && <span className="absolute right-4 top-4 grid size-6 place-items-center rounded-full bg-primary text-primary-foreground"><Check className="size-4" /></span>}
             </button>
@@ -139,7 +139,7 @@ function CreateBook() {
               {templateList.map((template, index) => (
                 <article key={template.id} className={cn("overflow-hidden rounded-2xl border border-border p-6 shadow-xs", index === 0 ? "bg-amber/8" : "bg-teal/8")}>
                   <div className="mb-3 flex flex-wrap gap-2"><StatusPill tone={index === 0 ? "warm" : "good"}>{template.genre}</StatusPill><StatusPill>{template.phases.length} phases</StatusPill></div>
-                  <h2 className="font-serif text-2xl font-normal">{template.title}</h2>
+                  <h2 className="font-heading text-2xl font-normal">{template.title}</h2>
                   <p className="mt-2 text-sm leading-6 text-muted-foreground">{template.description}</p>
                   <div className="mt-5 flex flex-wrap gap-3">
                     <Button variant="outline" asChild><Link to="/templates/$templateId" params={{ templateId: template.id }}><Eye />Preview</Link></Button>
@@ -263,7 +263,7 @@ function CreateBook() {
           {!plan && !isStreaming && <div className="flex justify-start"><Button variant="outline" onClick={backToChooser}>Back</Button></div>}
 
           {plan && <section className="rounded-2xl border border-border bg-card p-6 shadow-xs md:p-8">
-            <h3 className="font-serif text-2xl font-semibold">Your draft book cycle</h3>
+            <h3 className="font-heading text-2xl font-semibold">Your draft book cycle</h3>
             {isStreaming && <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="size-4 animate-spin" />Pen is writing this now. Phases appear as they arrive.</p>}
             {plan.summary && <p className="mt-2 text-sm leading-6 text-muted-foreground">{plan.summary}</p>}
             {plan.budgetNote && <p className="mt-4 rounded-xl bg-amber/15 p-4 text-sm leading-6">{plan.budgetNote}</p>}
@@ -272,7 +272,7 @@ function CreateBook() {
               {planPhases.map((phase, index) => <li key={phase.name} className="animate-in fade-in slide-in-from-bottom-2 rounded-2xl border border-border p-5 duration-500">
                 <div className="flex items-baseline gap-3">
                   <span className="grid size-7 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">{index + 1}</span>
-                  <h4 className="font-serif text-xl font-semibold">{phase.name}</h4>
+                  <h4 className="font-heading text-xl font-semibold">{phase.name}</h4>
                   {phase.mode && <span className="text-xs font-semibold text-muted-foreground">{phase.mode}</span>}
                 </div>
                 {phase.summary && <p className="mt-2 text-sm leading-6 text-muted-foreground">{phase.summary}</p>}

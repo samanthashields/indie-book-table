@@ -40,7 +40,7 @@ function Stat({ label, value, icon: Icon, tint }: { label: string; value: number
   return (
     <div className="rounded-2xl border border-border bg-card p-5 shadow-xs">
       <span className={`grid size-10 place-items-center rounded-xl ${tint}`}><Icon className="size-5" /></span>
-      <p className="mt-4 font-serif text-4xl font-normal">{value}</p>
+      <p className="mt-4 font-heading text-4xl font-normal">{value}</p>
       <p className="mt-1 text-sm text-muted-foreground">{label}</p>
     </div>
   );
@@ -58,7 +58,7 @@ function AdminDashboard() {
         <Stat label="Global templates" value={stats.data.usage.length} icon={LayoutTemplate} tint="bg-amber/25 text-foreground" />
       </div>
       <section className="rounded-2xl border border-border bg-paper p-6">
-        <h2 className="font-serif text-2xl font-normal">Template usage</h2>
+        <h2 className="font-heading text-2xl font-normal">Template usage</h2>
         {stats.data.usage.length === 0 ? (
           <p className="mt-3 text-sm text-muted-foreground">No templates yet.</p>
         ) : (

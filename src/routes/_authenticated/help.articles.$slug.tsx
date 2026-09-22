@@ -47,7 +47,7 @@ function HelpArticlePage() {
 
       {related.length > 0 && (
         <section className="mt-6 max-w-3xl rounded-2xl border-2 border-sage/50 bg-sage/10 p-6">
-          <h2 className="font-serif text-xl font-normal">Related articles</h2>
+          <h2 className="font-heading text-xl font-normal">Related articles</h2>
           <ul className="mt-3 space-y-2">
             {related.map((entry) => (
               <li key={entry.id}>

@@ -66,11 +66,11 @@ function BookDetails() {
       <PageHeading title="Book Details" description="The working record behind your publishing plan." action={<Button onClick={save} disabled={updateBook.isPending}>Save changes</Button>} />
       <form className="space-y-6" onSubmit={(event) => { event.preventDefault(); save(); }}>
         <section className="rounded-2xl border border-border bg-paper p-6 shadow-xs">
-          <h2 className="mb-5 font-serif text-2xl font-normal">Cover image</h2>
+          <h2 className="mb-5 font-heading text-2xl font-normal">Cover image</h2>
           <CoverUploader bookId={bookId} title={form.title || book.title} coverUrl={cover} onChange={setCover} saving={updateBook.isPending} />
         </section>
         <section className="rounded-2xl border border-border bg-card p-6 shadow-xs">
-          <h2 className="mb-5 font-serif text-2xl font-normal">Book identity</h2>
+          <h2 className="mb-5 font-heading text-2xl font-normal">Book identity</h2>
           <div className="grid gap-5 md:grid-cols-2">
             <Field label="Working title" name="title" value={form.title} onChange={onChange} />
             <Field label="Subtitle" name="subtitle" value={form.subtitle} onChange={onChange} />
@@ -86,7 +86,7 @@ function BookDetails() {
           </div>
         </section>
         <section className="rounded-2xl border border-border bg-card p-6 shadow-xs">
-          <h2 className="mb-5 font-serif text-2xl font-normal">Audience and goals</h2>
+          <h2 className="mb-5 font-heading text-2xl font-normal">Audience and goals</h2>
           <div className="grid gap-5 md:grid-cols-2">
             <Field label="Audience" name="audience" value={form.audience} onChange={onChange} />
             <Field label="Comparable titles" name="comparables" value={form.comparables} onChange={onChange} />
@@ -94,7 +94,7 @@ function BookDetails() {
           </div>
         </section>
         <section className="rounded-2xl border border-border bg-card p-6 shadow-xs">
-          <h2 className="mb-5 font-serif text-2xl font-normal">Production</h2>
+          <h2 className="mb-5 font-heading text-2xl font-normal">Production</h2>
           <div className="grid gap-5 md:grid-cols-3">
             <Field label="Length estimate" name="length_estimate" value={form.length_estimate} onChange={onChange} />
             <Field label="Language" name="language" value={form.language} onChange={onChange} />
@@ -105,7 +105,7 @@ function BookDetails() {
           </div>
         </section>
         <section className="rounded-2xl border border-border bg-card p-6 shadow-xs">
-          <h2 className="mb-5 font-serif text-2xl font-normal">Publishing plan</h2>
+          <h2 className="mb-5 font-heading text-2xl font-normal">Publishing plan</h2>
           <div className="grid gap-5 md:grid-cols-2">
             <Field label="Publishing path" name="publishing_path" value={form.publishing_path} onChange={onChange} />
             <Field label="Cycle start date" name="start_date" type="date" value={form.start_date} onChange={onChange} />

@@ -38,7 +38,7 @@ export const Route = createFileRoute("/table/books/$bookId")({
   },
   notFoundComponent: () => (
     <PublicShell>
-      <h1 className="font-serif text-3xl">We couldn't find that book</h1>
+      <h1 className="font-heading text-3xl">We couldn't find that book</h1>
       <Link to="/table" className="mt-4 inline-block underline">
         Back to The Table
       </Link>
@@ -73,7 +73,7 @@ function BookPage() {
           <CatalogCoverArt book={book} />
         </div>
         <div>
-          <h1 className="font-serif text-4xl leading-tight">{book.title}</h1>
+          <h1 className="font-heading text-4xl leading-tight">{book.title}</h1>
           <p className="mt-2 text-lg text-muted-foreground">
             by{" "}
             <Link to="/table/authors/$authorId" params={{ authorId: book.author_id }} className="hover:underline">
@@ -85,7 +85,7 @@ function BookPage() {
             {book.explicit_content ? " · Mature content" : ""}
           </p>
 
-          {book.hook && <p className="mt-6 font-serif text-2xl leading-relaxed">{book.hook}</p>}
+          {book.hook && <p className="mt-6 font-heading text-2xl leading-relaxed">{book.hook}</p>}
 
           <div className="mt-6 flex flex-wrap gap-2 text-xs">
             {book.tags.map((tag) => (
@@ -110,7 +110,7 @@ function BookPage() {
 
           {book.purchase_links.length > 0 && (
             <div className="mt-8">
-              <h2 className="font-serif text-xl">Where to buy</h2>
+              <h2 className="font-heading text-xl">Where to buy</h2>
               <div className="mt-3 flex flex-wrap gap-3">
                 {book.purchase_links.map((link) => (
                   <a
@@ -129,7 +129,7 @@ function BookPage() {
 
           {credits.length > 0 && (
             <div className="mt-8 rounded-2xl bg-secondary/60 p-5">
-              <h2 className="font-serif text-xl">Made with</h2>
+              <h2 className="font-heading text-xl">Made with</h2>
               <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-3">
                 {credits.map(([label, value]) => (
                   <div key={label}>
