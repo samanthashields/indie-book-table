@@ -63,7 +63,7 @@ export function PageTurner({
           <div className="relative h-full">
             {renderPage(turningPage)}
             <div
-              className={`pointer-events-none absolute inset-0 rounded-sm bg-gradient-to-r from-cocoa/5 via-cocoa/25 to-cocoa/60 ${
+              className={`pointer-events-none absolute inset-0 rounded-sm bg-gradient-to-r from-ink/5 via-ink/25 to-ink/60 ${
                 forward ? "turn-shade-forward" : "turn-shade-back"
               }`}
             />
