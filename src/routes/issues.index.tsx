@@ -90,7 +90,7 @@ function IssuesPage() {
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <CatalogBookCard book={spotlight} />
             {spotlight.spotlight_blurb && (
-              <p className="self-center rounded-2xl bg-amber/15 p-6 font-heading text-xl leading-relaxed text-cocoa">
+              <p className="self-center rounded-2xl border border-border bg-card p-6 font-heading text-xl leading-relaxed text-foreground">
                 “{spotlight.spotlight_blurb}”
               </p>
             )}

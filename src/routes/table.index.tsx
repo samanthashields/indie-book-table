@@ -156,7 +156,7 @@ function TableHomePage() {
       )}
 
       <section className="mt-12 grid gap-6 md:grid-cols-2">
-        <div className="rounded-3xl border border-border/70 bg-amber/15 p-8">
+        <div className="rounded-3xl border border-border bg-card p-8">
           <h2 className="font-heading text-3xl">{value("table.home.submit.title")}</h2>
           <p className="mt-3 text-lg leading-relaxed text-foreground/85">
             {value("table.home.submit.body")}

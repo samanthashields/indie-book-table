@@ -61,7 +61,7 @@ function AuthorPage() {
         <span>{shelf.author.name}</span>
       </nav>
 
-      <header className="mt-4 rounded-3xl border border-border/70 bg-teal/12 p-8">
+      <header className="mt-4 rounded-3xl border border-border bg-card p-8">
         <h1 className="font-heading text-4xl">{shelf.author.name}</h1>
         {shelf.author.bio && <p className="mt-3 max-w-2xl text-muted-foreground">{shelf.author.bio}</p>}
         <div className="mt-4 flex flex-wrap gap-3 text-sm font-semibold">
