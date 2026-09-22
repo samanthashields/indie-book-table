@@ -93,9 +93,15 @@ function toBook(
   };
 }
 
+/** Private storage channel used to sign cover images for public catalog pages. */
+async function coverStorage() {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  return supabaseAdmin.storage.from("catalog-covers");
+}
+
 /** Turns private cover storage paths into temporary public links. */
 async function attachCoverUrls(
-  supabase: ReturnType<typeof createPublicClient>,
+  _supabase: ReturnType<typeof createPublicClient>,
   books: CatalogBook[],
 ) {
   const paths = [
@@ -106,7 +112,7 @@ async function attachCoverUrls(
     ),
   ];
   if (paths.length === 0) return books;
-  const { data } = await supabase.storage.from("catalog-covers").createSignedUrls(paths, 60 * 60);
+  const { data } = await (await coverStorage()).createSignedUrls(paths, 60 * 60);
   const signed = new Map((data ?? []).map((row) => [row.path ?? "", row.signedUrl]));
   for (const book of books) {
     if (book.cover_image_url && signed.get(book.cover_image_url)) {
@@ -118,12 +124,12 @@ async function attachCoverUrls(
 
 /** Signs a private `catalog-covers` storage path, leaving http(s) URLs alone. */
 async function signCoverPath(
-  supabase: ReturnType<typeof createPublicClient>,
+  _supabase: ReturnType<typeof createPublicClient>,
   path: string | null | undefined,
 ): Promise<string | null> {
   if (!path) return null;
   if (/^https?:\/\//.test(path)) return path;
-  const { data } = await supabase.storage.from("catalog-covers").createSignedUrl(path, 60 * 60);
+  const { data } = await (await coverStorage()).createSignedUrl(path, 60 * 60);
   return data?.signedUrl ?? null;
 }
 
