@@ -65,7 +65,7 @@ export function TemplateCyclePreview({
           return (
             <article key={phase.id} className="relative grid grid-cols-[42px_minmax(0,1fr)] gap-4">
               <span className={cn("z-10 grid size-10 place-items-center rounded-full border-2 font-semibold", index === 0 ? style.marker : "border-border bg-background text-muted-foreground")}>{index + 1}</span>
-              <div className={cn("overflow-hidden rounded-2xl border border-border shadow-xs", expanded ? "bg-card" : style.soft)}>
+              <div className={cn("overflow-hidden rounded-2xl border border-border shadow-xs bg-card")}>
                 <button type="button" onClick={() => toggle(phase.id)} aria-expanded={expanded} className="flex w-full items-start gap-3 p-5 text-left">
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
