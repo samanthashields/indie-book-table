@@ -121,7 +121,7 @@ function IssueBody({ data }: { data: IssueData }) {
         <span>{issue?.display_label}</span>
       </nav>
 
-      <header className="mt-4 rounded-3xl border border-border/70 bg-amber/15 p-8 md:p-10">
+      <header className="mt-4 rounded-3xl border border-border bg-card p-8 md:p-10">
         <p className="text-sm font-semibold text-text-inkblue">Issue</p>
         <h1 className="mt-2 font-heading text-4xl">{issue?.cover_headline ?? issue?.display_label}</h1>
         {issue?.cover_tagline && (

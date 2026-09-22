@@ -56,7 +56,7 @@ function JournalIndex() {
 
   return (
     <PublicShell>
-      <header className="rounded-3xl border border-border/70 bg-leaf/15 p-8 md:p-12">
+      <header className="rounded-3xl border border-border bg-card p-8 md:p-12">
         <h1 className="font-heading text-4xl md:text-5xl">{copy["journal.hero.title"] ?? "The Journal"}</h1>
         <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
           {copy["journal.hero.subtitle"] ?? "Notes on publishing, craft and the books on our table."}

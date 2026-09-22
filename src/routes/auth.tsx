@@ -158,7 +158,7 @@ function AuthPage() {
 
   return (
     <div className="grid min-h-screen bg-background lg:grid-cols-[1fr_minmax(420px,560px)]">
-      <aside className="hidden flex-col justify-between bg-inkblue/10 p-12 lg:flex">
+      <aside className="hidden flex-col justify-between border-r border-border bg-card p-12 lg:flex">
         <Link to="/" className="flex min-w-0 items-center gap-3" aria-label="The Indie Book Table">
           <img src={falconAsset.url} alt="" className="h-14 w-auto" width={2000} height={2000} />
           <span className="font-serif text-2xl font-normal">The Indie Book Table</span>
