@@ -62,7 +62,7 @@ function Choice<T extends string>({
           aria-checked={value === option.value}
           onClick={() => onChange(option.value)}
           className={cn(
-            "rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
+            "rounded-md border px-4 py-2 text-sm font-semibold transition-colors",
             value === option.value
               ? "border-inverse bg-inverse text-on-inverse"
               : "border-border bg-card text-muted-foreground hover:text-foreground",
@@ -209,7 +209,7 @@ export function SubmissionForm({
               type="button"
               onClick={() => setStepIndex(index)}
               className={cn(
-                "rounded-full px-3 py-1.5 text-xs font-semibold transition-colors",
+                "rounded-md px-3 py-1.5 text-xs font-semibold transition-colors",
                 index === stepIndex
                   ? "bg-primary text-primary-foreground"
                   : index < stepIndex
@@ -361,7 +361,7 @@ export function SubmissionForm({
                       aria-pressed={on}
                       onClick={() => set("tags", on ? values.tags.filter((t) => t !== tag.value) : [...values.tags, tag.value])}
                       className={cn(
-                        "rounded-full border px-3 py-1.5 text-sm font-semibold transition-colors",
+                        "rounded-md border px-3 py-1.5 text-sm font-semibold transition-colors",
                         on ? "border-amber bg-amber/30 text-cocoa" : "border-border bg-card text-muted-foreground hover:text-foreground",
                       )}
                     >

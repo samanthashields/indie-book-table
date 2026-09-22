@@ -115,8 +115,8 @@ function BookOverview() {
                       </div>
                       <p className="mt-1 text-sm text-muted-foreground">{phase.summary}</p>
                       <div className="mt-3 flex flex-wrap items-center gap-2">
-                        <span className={cn("rounded-full border px-3 py-1 text-xs font-semibold", style.chip)}>{range ? formatRange(range) : complete ? "Finished before this plan" : "Not scheduled"}</span>
-                        <span className={cn("rounded-full px-3 py-1 text-xs font-semibold", state === "behind" ? "bg-clay/18 text-foreground" : state === "current" ? "bg-teal/20" : state === "done" ? "bg-leaf/20" : "bg-secondary text-muted-foreground")}>{pacingCopy[state]}</span>
+                        <span className={cn("rounded-md border px-3 py-1 text-xs font-semibold", style.chip)}>{range ? formatRange(range) : complete ? "Finished before this plan" : "Not scheduled"}</span>
+                        <span className={cn("rounded-md px-3 py-1 text-xs font-semibold", state === "behind" ? "bg-clay/18 text-foreground" : state === "current" ? "bg-teal/20" : state === "done" ? "bg-leaf/20" : "bg-secondary text-muted-foreground")}>{pacingCopy[state]}</span>
                         <span className="text-xs text-muted-foreground">{phase.milestones.filter((m) => m.status === "Complete").length}/{phase.milestones.length} complete</span>
                       </div>
                     </div>

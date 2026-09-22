@@ -89,7 +89,7 @@ function PenButtonsPage() {
               key={item.key}
               type="button"
               onClick={() => setSection(item.key)}
-              className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+              className={`rounded-md border px-3.5 py-1.5 text-xs font-semibold transition-colors ${
                 section === item.key
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border bg-card hover:bg-paper"

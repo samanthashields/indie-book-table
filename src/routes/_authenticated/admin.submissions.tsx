@@ -183,7 +183,7 @@ function AdminSubmissions() {
             type="button"
             onClick={() => setFilter(item.key)}
             className={cn(
-              "rounded-full px-4 py-1.5 text-sm font-semibold transition-colors",
+              "rounded-md px-4 py-1.5 text-sm font-semibold transition-colors",
               filter === item.key ? "bg-inverse text-on-inverse" : "bg-secondary text-muted-foreground hover:text-foreground",
             )}
           >

@@ -167,7 +167,7 @@ export function CoachConversation({
                           : submit(chip)
                       }
                       className={cn(
-                        "rounded-full border px-3 py-1.5 text-sm transition-colors",
+                        "rounded-md border px-3 py-1.5 text-sm transition-colors",
                         active ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-primary",
                       )}
                     >
@@ -212,7 +212,7 @@ export function CoachConversation({
           <div className="flex flex-wrap gap-2 border-t border-border pt-6">
             <Button onClick={generate} disabled={generating}>Generate preview</Button>
             {remainingEnrichment.map((item) => (
-              <button key={item.id} type="button" onClick={() => openEnrichment(item.id)} className="rounded-full border border-border px-3 py-1.5 text-sm transition-colors hover:border-primary hover:bg-secondary">
+              <button key={item.id} type="button" onClick={() => openEnrichment(item.id)} className="rounded-md border border-border px-3 py-1.5 text-sm transition-colors hover:border-primary hover:bg-secondary">
                 {item.label}
               </button>
             ))}

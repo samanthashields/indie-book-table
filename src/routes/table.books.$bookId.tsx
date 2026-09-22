@@ -89,7 +89,7 @@ function BookPage() {
 
           <div className="mt-6 flex flex-wrap gap-2 text-xs">
             {book.tags.map((tag) => (
-              <span key={tag} className="rounded-full bg-secondary px-3 py-1 font-semibold">
+              <span key={tag} className="rounded-md bg-secondary px-3 py-1 font-semibold">
                 {TAG_LABELS[tag] ?? tag}
               </span>
             ))}
@@ -97,12 +97,12 @@ function BookPage() {
 
           <div className="mt-6 flex flex-wrap gap-3">
             {book.ebook_price != null && (
-              <span className="rounded-full bg-leaf/25 px-4 py-2 text-sm font-semibold text-cocoa">
+              <span className="rounded-md bg-leaf/25 px-4 py-2 text-sm font-semibold text-cocoa">
                 eBook ${book.ebook_price.toFixed(2)}
               </span>
             )}
             {book.print_price != null && (
-              <span className="rounded-full bg-teal/25 px-4 py-2 text-sm font-semibold text-cocoa">
+              <span className="rounded-md bg-teal/25 px-4 py-2 text-sm font-semibold text-cocoa">
                 Print ${book.print_price.toFixed(2)}
               </span>
             )}
@@ -118,7 +118,7 @@ function BookPage() {
                     href={link.url}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="rounded-full bg-inverse px-4 py-2 text-sm font-semibold text-on-inverse transition-colors hover:bg-inverse/90"
+                    className="rounded-md bg-inverse px-4 py-2 text-sm font-semibold text-on-inverse transition-colors hover:bg-inverse/90"
                   >
                     {link.platform_label}
                   </a>
