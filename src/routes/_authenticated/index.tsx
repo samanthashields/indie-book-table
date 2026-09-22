@@ -180,9 +180,9 @@ function BookGroup({ books, view, submissionByBook, onDelete }: { books: BookSum
 function StatsSkeleton() {
   return (
     <section className="mb-10 grid gap-3 rounded-2xl border border-border bg-card p-2 shadow-xs sm:grid-cols-3" aria-label="Publishing priorities" aria-busy="true">
-      <div className="rounded-xl bg-primary/5 px-4 py-4"><Skeleton className="h-4 w-28" /><Skeleton className="mt-3 h-8 w-12" /></div>
-      <div className="rounded-xl bg-primary/5 px-4 py-4"><Skeleton className="h-4 w-28" /><Skeleton className="mt-3 h-8 w-12" /></div>
-      <div className="rounded-xl bg-primary/5 px-4 py-4"><Skeleton className="h-4 w-28" /><Skeleton className="mt-3 h-8 w-12" /></div>
+      <div className="rounded-xl border border-border bg-card px-4 py-4"><Skeleton className="h-4 w-28" /><Skeleton className="mt-3 h-8 w-12" /></div>
+      <div className="rounded-xl border border-border bg-card px-4 py-4"><Skeleton className="h-4 w-28" /><Skeleton className="mt-3 h-8 w-12" /></div>
+      <div className="rounded-xl border border-border bg-card px-4 py-4"><Skeleton className="h-4 w-28" /><Skeleton className="mt-3 h-8 w-12" /></div>
     </section>
   );
 }
