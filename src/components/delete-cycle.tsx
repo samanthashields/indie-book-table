@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Loader2, MoreVertical, Sparkles, Trash2 } from "lucide-react";
+import { Eraser, Loader2, MoreVertical, Sparkles, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import {
