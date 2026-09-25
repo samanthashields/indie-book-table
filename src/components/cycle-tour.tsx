@@ -33,7 +33,7 @@ function PenAvatar({ className }: { className?: string }) {
   const image = useCycleTourPenImage().data;
   return (
     <span className={cn("grid size-11 place-items-center overflow-hidden rounded-full border border-border bg-card text-link shadow-sm", className)}>
-      {image ? <img src={image.url} alt="Pen" className="size-full object-cover" /> : <CoachMark className="size-7" />}
+      {image ? <img src={image.url} alt="Pen" className="size-full object-contain p-1" /> : <CoachMark className="size-7" />}
     </span>
   );
 }
