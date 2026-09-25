@@ -136,19 +136,3 @@ export function CycleActionsMenu({ bookId, title, total, done }: { bookId: strin
     </>
   );
 }
-
-/** The Delete book cycle button for the top of the book overview. Only the book's author sees it. */
-export function DeleteCycleButton({ bookId, authorId, title, total, done }: { bookId: string; authorId: string; title: string; total: number; done: number }) {
-  const [open, setOpen] = useState(false);
-  const user = useCurrentUser();
-  if (user.data?.id !== authorId) return null;
-  return (
-    <>
-      <Button variant="outline" className="border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => setOpen(true)}>
-        <Eraser />
-        Delete book cycle
-      </Button>
-      <DeleteCycleDialog open={open} onOpenChange={setOpen} bookId={bookId} title={title} total={total} done={done} />
-    </>
-  );
-}

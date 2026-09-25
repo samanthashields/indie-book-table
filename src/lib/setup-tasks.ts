@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { BookRow } from "@/lib/book-db";
+import { markSeeded, readSeedState } from "@/lib/task-seeding";
 
 export const SETUP_TASKS_LABEL = "Set Up Recommended Tasks (optional)";
 
@@ -60,7 +61,14 @@ export type SetupTask = {
   completed_at: string | null;
 };
 
-/** Fetches this book's setup tasks, creating the recommended list for its template on first visit if none exist yet. */
+async function defsForBook(bookId: string, templateId: string | null) {
+  const { data: template } = templateId
+    ? await supabase.from("templates").select("title").eq("id", templateId).maybeSingle()
+    : { data: null };
+  return setupTaskDefsFor(template?.title);
+}
+
+/** Fetches this book's setup tasks, creating the recommended list for its template on first visit only. */
 export function useSetupTasks(bookId: string) {
   return useQuery({
     queryKey: ["setup-tasks", bookId],
@@ -69,19 +77,74 @@ export function useSetupTasks(bookId: string) {
       if (error) throw error;
       if (data && data.length > 0) return data as SetupTask[];
 
-      const { data: book } = await supabase.from("books").select("template_id").eq("id", bookId).maybeSingle();
-      const { data: template } = book?.template_id
-        ? await supabase.from("templates").select("title").eq("id", book.template_id).maybeSingle()
-        : { data: null };
+      const { seeded, templateId } = await readSeedState(bookId, "setupTasksSeeded");
+      if (seeded) return [] as SetupTask[];
 
+      const defs = await defsForBook(bookId, templateId);
       const { data: created, error: insertError } = await supabase
         .from("book_setup_tasks")
-        .insert(setupTaskDefsFor(template?.title).map((task, position) => ({ book_id: bookId, key: task.key, label: task.label, description: task.description, position })))
+        .insert(defs.map((task, position) => ({ book_id: bookId, key: task.key, label: task.label, description: task.description, position })))
         .select("*");
       if (insertError) throw insertError;
+      await markSeeded(bookId, "setupTasksSeeded");
       return ((created ?? []) as SetupTask[]).sort((a, b) => a.position - b.position);
     },
   });
+}
+
+/** Adds an author's own task to the list. */
+export function useAddSetupTask(bookId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ label, description, position }: { label: string; description: string; position: number }) => {
+      await markSeeded(bookId, "setupTasksSeeded");
+      const { error } = await supabase
+        .from("book_setup_tasks")
+        .insert({ book_id: bookId, key: `custom_${crypto.randomUUID()}`, label: label.trim(), description: description.trim() || null, position });
+      if (error) throw error;
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["setup-tasks", bookId] }),
+  });
+}
+
+export function useRemoveSetupTask(bookId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      await markSeeded(bookId, "setupTasksSeeded");
+      const { error } = await supabase.from("book_setup_tasks").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["setup-tasks", bookId] }),
+  });
+}
+
+/** Puts back any recommended tasks the author removed, leaving their own tasks and progress alone. */
+export function useRestoreSetupTasks(bookId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (existing: SetupTask[]) => {
+      const { templateId } = await readSeedState(bookId, "setupTasksSeeded");
+      const defs = await defsForBook(bookId, templateId);
+      const have = new Set(existing.map((task) => task.key));
+      const start = existing.reduce((max, task) => Math.max(max, task.position), -1) + 1;
+      const missing = defs.filter((def) => !have.has(def.key));
+      if (missing.length === 0) return;
+      const { error } = await supabase
+        .from("book_setup_tasks")
+        .insert(missing.map((task, index) => ({ book_id: bookId, key: task.key, label: task.label, description: task.description, position: start + index })));
+      if (error) throw error;
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["setup-tasks", bookId] }),
+  });
+}
+
+/** How many recommended tasks this book's list is missing. */
+export async function missingSetupTaskCount(bookId: string, existing: SetupTask[]) {
+  const { templateId } = await readSeedState(bookId, "setupTasksSeeded");
+  const defs = await defsForBook(bookId, templateId);
+  const have = new Set(existing.map((task) => task.key));
+  return defs.filter((def) => !have.has(def.key)).length;
 }
 
 export function useUpdateSetupTask(bookId: string) {

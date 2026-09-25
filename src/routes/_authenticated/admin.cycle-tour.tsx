@@ -101,11 +101,11 @@ function PenImageEditor() {
   return (
     <article className="mt-6 flex flex-wrap items-center gap-5 rounded-lg border border-border bg-card p-5">
       <span className="grid size-16 shrink-0 place-items-center overflow-hidden rounded-full border border-border bg-card text-link">
-        {image ? <img src={image.url} alt="Pen" className="size-full object-cover" /> : <CoachMark className="size-9" />}
+        {image ? <img src={image.url} alt="Pen" className="size-full object-contain p-1" /> : <CoachMark className="size-9" />}
       </span>
       <div className="min-w-0 flex-1">
         <h3 className="text-sm font-semibold">Pen’s picture</h3>
-        <p className="mt-1 text-sm text-muted-foreground">Shown next to Pen’s words on every tour screen, cropped to a circle. Use a square PNG, JPG or WebP; without one, the book mark is used.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Shown next to Pen’s words on every tour screen, shown whole inside a circle, never cropped. A square PNG or WebP with a transparent background, about 512 px, looks best; without one, the book mark is used.</p>
       </div>
       <div className="flex gap-2">
         <Button variant="outline" disabled={busy} onClick={() => input.current?.click()}>{busy ? "Working…" : image ? "Replace picture" : "Upload picture"}</Button>

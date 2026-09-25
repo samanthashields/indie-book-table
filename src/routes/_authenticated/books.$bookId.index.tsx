@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { CalendarDays, CheckCircle2, ChevronDown, Circle, Clock3, FileText, FolderOpen, ListChecks, Settings2, Users } from "lucide-react";
+import { CalendarDays, CheckCircle2, ChevronDown, Circle, Clock3, FileText, FolderOpen, Settings2, Users } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { MilestoneBody } from "@/components/milestone-body";
 import { MilestoneDisclosure } from "@/components/milestone-disclosure";
-import { DeleteCycleButton, DeleteCycleSection } from "@/components/delete-cycle";
+import { DeleteCycleSection } from "@/components/delete-cycle";
+import { CycleHeaderMenu } from "@/components/cycle-header-menu";
 import { SetupTasksSection } from "@/components/setup-tasks-section";
 import { CycleTour } from "@/components/cycle-tour";
 import { PostLaunchTasksSection } from "@/components/post-launch-tasks-section";
-import { SETUP_TASKS_LABEL } from "@/lib/setup-tasks";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -72,14 +72,16 @@ function BookOverview() {
           <h1 className="font-heading text-4xl font-normal md:text-5xl">{book.title}</h1>
           <p className="mt-1 text-muted-foreground">by {book.pen_name || "you"}</p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <Button variant="outline" asChild><Link to="/books/$bookId/details" params={{ bookId }}><Settings2 />Book details</Link></Button>
-          <Button variant="outline" asChild><Link to="/books/$bookId/setup" params={{ bookId }}><ListChecks />{SETUP_TASKS_LABEL}</Link></Button>
-          <Button variant="outline" asChild><Link to="/books/$bookId/team" params={{ bookId }}><Users />Collaborators</Link></Button>
-          <Button variant="outline" asChild><Link to="/books/$bookId/resources" params={{ bookId }}><FolderOpen />Resources</Link></Button>
-          <Button variant={book.status !== "complete" ? "secondary" : "outline"} asChild><Link to="/books/$bookId/reflection" params={{ bookId }}><FileText />{book.status !== "complete" ? "End book cycle & reflect" : "Reflection"}</Link></Button>
-          <Button variant="ghost" onClick={() => setTourKey((key) => key + 1)}>Take the tour</Button>
-          <DeleteCycleButton bookId={bookId} authorId={book.author_id} title={book.title} total={allMilestones.length} done={doneCount} />
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" asChild><Link to="/books/$bookId/details" params={{ bookId }}><Settings2 />Book details</Link></Button>
+            <Button variant="outline" asChild><Link to="/books/$bookId/team" params={{ bookId }}><Users />Collaborators</Link></Button>
+            <Button variant="outline" asChild><Link to="/books/$bookId/resources" params={{ bookId }}><FolderOpen />Resources</Link></Button>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant={book.status !== "complete" ? "secondary" : "outline"} asChild><Link to="/books/$bookId/reflection" params={{ bookId }}><FileText />{book.status !== "complete" ? "End book cycle & reflect" : "Reflection"}</Link></Button>
+            <CycleHeaderMenu bookId={bookId} authorId={book.author_id} title={book.title} total={allMilestones.length} done={doneCount} onTour={() => setTourKey((key) => key + 1)} />
+          </div>
         </div>
       </header>
 

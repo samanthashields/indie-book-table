@@ -61,11 +61,9 @@ function SetupTasksPanel({ bookId, userId, book }: { bookId: string; userId: str
           </p>
         </div>
         <div className="flex items-center gap-2">
-          {open && (
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/books/$bookId/setup" params={{ bookId }}>Open full page</Link>
-            </Button>
-          )}
+          <Button variant="ghost" size="sm" asChild>
+            <Link to="/books/$bookId/setup" params={{ bookId }}>Manage tasks</Link>
+          </Button>
           <Button variant="outline" size="sm" onClick={() => choose(!open)} aria-expanded={open} aria-controls="setup-tasks-body">
             {open ? "Hide" : "Show"}
             <ChevronDown className={cn("transition-transform duration-200", open && "rotate-180")} />

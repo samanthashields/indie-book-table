@@ -16,7 +16,7 @@ export const CYCLE_TOUR_TARGETS: Record<string, string> = {
 
 export const CYCLE_TOUR_DEFAULTS: CycleTourStep[] = [
   { key: "welcome", position: 0, enabled: true, title: "Welcome to your Book Cycle", body: "This is your plan for taking a book from idea to published, one phase and milestone at a time. Pen will show you around." },
-  { key: "header", position: 1, enabled: true, title: "Your book’s toolbox", body: "Book details, collaborators, and resources live up here, along with your recommended tasks and the option to end your cycle when you’re done." },
+  { key: "header", position: 1, enabled: true, title: "Your book’s toolbox", body: "Book details, collaborators, and resources live up here, along with the option to end your cycle when you’re done. The ⋯ menu replays this tour." },
   { key: "progress", position: 2, enabled: true, title: "Progress at a glance", body: "See how far along you are, your target publication date, and the next thing to work on." },
   { key: "setup_tasks", position: 3, enabled: true, title: "Set up recommended tasks", body: "Optional decisions and habits worth settling early, like your budget and publishing path. Nothing here blocks your cycle." },
   { key: "phases", position: 4, enabled: true, title: "Your publishing path", body: "Six phases take you from private manuscript to published book. Open a phase to see its milestones, then click a milestone to add notes, files, and steps." },
