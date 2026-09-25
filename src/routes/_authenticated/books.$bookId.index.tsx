@@ -6,6 +6,7 @@ import { MilestoneBody } from "@/components/milestone-body";
 import { MilestoneDisclosure } from "@/components/milestone-disclosure";
 import { DeleteCycleButton, DeleteCycleSection } from "@/components/delete-cycle";
 import { SetupTasksSection } from "@/components/setup-tasks-section";
+import { CycleTour } from "@/components/cycle-tour";
 import { PostLaunchTasksSection } from "@/components/post-launch-tasks-section";
 import { SETUP_TASKS_LABEL } from "@/lib/setup-tasks";
 import { StatusPill } from "@/components/status-pill";
@@ -40,6 +41,7 @@ function BookOverview() {
   const { bookId } = Route.useParams();
   const { data, isLoading } = useBookTree(bookId);
   const [manualOpen, setManualOpen] = useState<string[] | null>(null);
+  const [tourKey, setTourKey] = useState(0);
   const [drawer, setDrawer] = useState<{ milestone: Milestone; phaseName: string } | null>(null);
 
   if (isLoading) return <AppShell><p className="text-sm text-muted-foreground">Loading your book…</p></AppShell>;
@@ -60,7 +62,7 @@ function BookOverview() {
 
   return (
     <AppShell>
-      <header className="mb-8 flex flex-col gap-6 border-b border-border/70 pb-7">
+      <header id="tour-header" className="mb-8 flex flex-col gap-6 border-b border-border/70 pb-7">
         <div>
           <div className="mb-2 flex flex-wrap gap-2">
             <StatusPill tone="good">{book.status === "active" ? "In progress" : book.status}</StatusPill>
@@ -76,11 +78,12 @@ function BookOverview() {
           <Button variant="outline" asChild><Link to="/books/$bookId/team" params={{ bookId }}><Users />Collaborators</Link></Button>
           <Button variant="outline" asChild><Link to="/books/$bookId/resources" params={{ bookId }}><FolderOpen />Resources</Link></Button>
           <Button variant={book.status !== "complete" ? "secondary" : "outline"} asChild><Link to="/books/$bookId/reflection" params={{ bookId }}><FileText />{book.status !== "complete" ? "End book cycle & reflect" : "Reflection"}</Link></Button>
+          <Button variant="ghost" onClick={() => setTourKey((key) => key + 1)}>Take the tour</Button>
           <DeleteCycleButton bookId={bookId} authorId={book.author_id} title={book.title} total={allMilestones.length} done={doneCount} />
         </div>
       </header>
 
-      <section className="mb-10 grid gap-6 rounded-2xl border border-border bg-card p-6 shadow-xs md:grid-cols-[1fr_2fr]">
+      <section id="tour-progress" className="mb-10 grid gap-6 rounded-2xl border border-border bg-card p-6 shadow-xs md:grid-cols-[1fr_2fr]">
         <div><p className="text-sm text-muted-foreground">Overall progress</p><p className="mt-1 font-heading text-4xl font-normal">{progress}%</p><Progress value={progress} className="mt-3" /></div>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
           <div className="rounded-xl bg-amber/15 p-4"><CalendarDays className="mb-2 size-4 text-amber" /><p className="text-xs text-muted-foreground">Target publication</p><p className="font-semibold">{target}</p></div>
@@ -93,7 +96,7 @@ function BookOverview() {
 
       {timeline.warnings.length > 0 && <p className="mb-6 rounded-2xl border border-clay/40 bg-clay/12 p-5 text-sm leading-6">{timeline.warnings[0]}</p>}
 
-      <section>
+      <section id="tour-phases">
         <div className="mb-5">
           <h2 className="font-heading text-3xl font-normal">Your publishing path</h2>
           <p className="mt-1 text-sm text-muted-foreground">Six phases from private manuscript to published book, paced around {target}.</p>
@@ -145,6 +148,8 @@ function BookOverview() {
       <PostLaunchTasksSection bookId={bookId} authorId={book.author_id} />
 
       <DeleteCycleSection bookId={bookId} authorId={book.author_id} title={book.title} total={allMilestones.length} done={doneCount} />
+
+      <CycleTour replayKey={tourKey} />
 
       <Sheet open={Boolean(drawer)} onOpenChange={(next) => { if (!next) setDrawer(null); }}>
         <SheetContent side="right" dim={false} className="w-full overflow-y-auto border-l-2 shadow-2xl sm:max-w-xl">

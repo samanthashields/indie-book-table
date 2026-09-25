@@ -9,6 +9,7 @@ import { ViewSwitcher, useCollectionView } from "@/components/view-switcher";
 import { useCurrentUser } from "@/lib/use-current-user";
 import { useDeleteAuthorTemplate, useSaveAuthorTemplate, useTemplates } from "@/lib/book-db";
 import { templateCover } from "@/lib/template-covers";
+import { UseTemplateButton } from "@/components/use-template-dialog";
 
 export const Route = createFileRoute("/_authenticated/templates/")({ head: () => ({ meta: [
   { title: "Book Cycle Templates — The Indie Book Table" }, { name: "description", content: "Start with a genre-aware publishing plan, or build and save your own." }, { property: "og:title", content: "Book Cycle Templates — The Indie Book Table" }, { property: "og:description", content: "Start with a genre-aware publishing plan, or build and save your own." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
@@ -81,7 +82,7 @@ function Templates() {
                       <div className="mt-6 flex flex-wrap gap-3">
                         <Button variant="outline" asChild><Link to="/templates/$templateId" params={{ templateId: template.id }}><Eye />Preview</Link></Button>
                         <Button variant="outline" disabled={save.isPending} onClick={() => clone(template)}><Copy />Make my own copy</Button>
-                        <Button asChild><Link to="/books/new" search={{ path: "template", template: template.id }}>Use this template</Link></Button>
+                        <UseTemplateButton template={template} />
                       </div>
                     </div>
                   </div>
@@ -108,7 +109,7 @@ function Templates() {
                     </div>
                     <div className={`flex flex-wrap gap-3 ${view === "list" ? "mt-5 sm:mt-0 sm:shrink-0" : "mt-5"}`}>
                       <Button variant="outline" asChild><Link to="/templates/mine/$templateId" params={{ templateId: template.id }}><SquarePen />Edit</Link></Button>
-                      <Button asChild><Link to="/books/new" search={{ path: "template", template: template.id }}>Use this template</Link></Button>
+                      <UseTemplateButton template={template} />
                       <Button variant="ghost" size="icon" aria-label={`Delete ${template.title}`} onClick={() => destroy(template.id)}><Trash2 /></Button>
                     </div>
                   </article>
