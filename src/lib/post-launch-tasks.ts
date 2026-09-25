@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { markSeeded, readSeedState } from "@/lib/task-seeding";
 
 export const POST_LAUNCH_TASKS_LABEL = "Post Launch Recommended Tasks (optional)";
 
@@ -57,10 +58,12 @@ export function usePostLaunchTasks(bookId: string) {
       const { data, error } = await supabase.from("book_post_launch_tasks").select("*").eq("book_id", bookId).order("position");
       if (error) throw error;
       if (data && data.length > 0) return data as PostLaunchTask[];
+      if ((await readSeedState(bookId, "postLaunchTasksSeeded")).seeded) return [] as PostLaunchTask[];
 
       const rows = POST_LAUNCH_TASK_GROUPS.flatMap((entry) => entry.tasks.map((task) => ({ ...task, group_label: entry.group }))).map((task, position) => ({ book_id: bookId, ...task, position }));
       const { data: created, error: insertError } = await supabase.from("book_post_launch_tasks").insert(rows).select("*");
       if (insertError) throw insertError;
+      await markSeeded(bookId, "postLaunchTasksSeeded");
       return ((created ?? []) as PostLaunchTask[]).sort((a, b) => a.position - b.position);
     },
   });
@@ -74,6 +77,48 @@ export function useUpdatePostLaunchTask(bookId: string) {
         .from("book_post_launch_tasks")
         .update({ status: complete ? "complete" : "pending", completed_at: complete ? new Date().toISOString() : null })
         .eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["post-launch-tasks", bookId] }),
+  });
+}
+
+export function useAddPostLaunchTask(bookId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ label, group, position }: { label: string; group: string; position: number }) => {
+      await markSeeded(bookId, "postLaunchTasksSeeded");
+      const { error } = await supabase
+        .from("book_post_launch_tasks")
+        .insert({ book_id: bookId, key: `custom_${crypto.randomUUID()}`, label: label.trim(), group_label: group.trim(), position });
+      if (error) throw error;
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["post-launch-tasks", bookId] }),
+  });
+}
+
+export function useRemovePostLaunchTask(bookId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      await markSeeded(bookId, "postLaunchTasksSeeded");
+      const { error } = await supabase.from("book_post_launch_tasks").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["post-launch-tasks", bookId] }),
+  });
+}
+
+/** Puts back any recommended tasks that were removed, in their original groups. */
+export function useRestorePostLaunchTasks(bookId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (existing: PostLaunchTask[]) => {
+      const have = new Set(existing.map((task) => task.key));
+      const start = existing.reduce((max, task) => Math.max(max, task.position), -1) + 1;
+      const missing = POST_LAUNCH_TASK_GROUPS.flatMap((entry) => entry.tasks.map((task) => ({ ...task, group_label: entry.group }))).filter((task) => !have.has(task.key));
+      if (missing.length === 0) return;
+      const { error } = await supabase.from("book_post_launch_tasks").insert(missing.map((task, index) => ({ book_id: bookId, ...task, position: start + index })));
       if (error) throw error;
     },
     onSuccess: () => void queryClient.invalidateQueries({ queryKey: ["post-launch-tasks", bookId] }),

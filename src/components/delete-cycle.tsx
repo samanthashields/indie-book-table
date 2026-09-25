@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Eraser, Loader2, MoreVertical, Sparkles, Trash2 } from "lucide-react";
+import { Loader2, MoreVertical, Sparkles, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -133,22 +133,6 @@ export function CycleActionsMenu({ bookId, title, total, done }: { bookId: strin
       <span onClick={(event) => event.stopPropagation()}>
         <DeleteCycleDialog open={confirm} onOpenChange={setConfirm} bookId={bookId} title={title} total={total} done={done} />
       </span>
-    </>
-  );
-}
-
-/** The Delete book cycle button for the top of the book overview. Only the book's author sees it. */
-export function DeleteCycleButton({ bookId, authorId, title, total, done }: { bookId: string; authorId: string; title: string; total: number; done: number }) {
-  const [open, setOpen] = useState(false);
-  const user = useCurrentUser();
-  if (user.data?.id !== authorId) return null;
-  return (
-    <>
-      <Button variant="outline" className="border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => setOpen(true)}>
-        <Eraser />
-        Delete book cycle
-      </Button>
-      <DeleteCycleDialog open={open} onOpenChange={setOpen} bookId={bookId} title={title} total={total} done={done} />
     </>
   );
 }
