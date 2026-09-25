@@ -1,5 +1,7 @@
-import { CheckCircle2, Circle } from "lucide-react";
+import { useState } from "react";
+import { CheckCircle2, ChevronDown, Circle } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { POST_LAUNCH_TASKS_LABEL, usePostLaunchTasks, useUpdatePostLaunchTask, type PostLaunchTask } from "@/lib/post-launch-tasks";
 import { useCurrentUser } from "@/lib/use-current-user";
 import { cn } from "@/lib/utils";
@@ -8,10 +10,29 @@ import { cn } from "@/lib/utils";
 export function PostLaunchTasksSection({ bookId, authorId }: { bookId: string; authorId: string }) {
   const user = useCurrentUser();
   if (!user.data?.id || user.data.id !== authorId) return null;
-  return <PostLaunchTasksPanel bookId={bookId} />;
+  return <PostLaunchTasksPanel bookId={bookId} userId={user.data.id} />;
 }
 
-function PostLaunchTasksPanel({ bookId }: { bookId: string }) {
+const storageKey = (userId: string) => `ibt:post-launch-tasks-open:${userId}`;
+
+function readOpen(userId: string): boolean {
+  try {
+    return window.localStorage.getItem(storageKey(userId)) !== "0";
+  } catch {
+    return true;
+  }
+}
+
+function PostLaunchTasksPanel({ bookId, userId }: { bookId: string; userId: string }) {
+  const [open, setOpen] = useState(() => readOpen(userId));
+  const choose = (next: boolean) => {
+    setOpen(next);
+    try {
+      window.localStorage.setItem(storageKey(userId), next ? "1" : "0");
+    } catch {
+      // Storage can be blocked; the choice still applies until the page is closed.
+    }
+  };
   const tasks = usePostLaunchTasks(bookId);
   const update = useUpdatePostLaunchTask(bookId);
 
@@ -25,14 +46,20 @@ function PostLaunchTasksPanel({ bookId }: { bookId: string }) {
   }, []);
 
   return (
-    <section className="mb-10 rounded-2xl border border-border bg-card shadow-xs" aria-labelledby="post-launch-tasks-heading">
-      <div className="px-6 py-5">
-        <h2 id="post-launch-tasks-heading" className="font-heading text-2xl font-normal">{POST_LAUNCH_TASKS_LABEL}</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {list.length > 0 ? `${done} of ${list.length} done. ` : ""}Ways to keep your book growing after launch. Nothing here blocks your cycle — check items off in any order.
-        </p>
+    <section id="tour-post-launch" className="mb-10 mt-10 rounded-2xl border border-border bg-card shadow-xs" aria-labelledby="post-launch-tasks-heading">
+      <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-5">
+        <div className="min-w-0">
+          <h2 id="post-launch-tasks-heading" className="font-heading text-2xl font-normal">{POST_LAUNCH_TASKS_LABEL}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {list.length > 0 ? `${done} of ${list.length} done. ` : ""}Ways to keep your book growing after launch. Nothing here blocks your cycle — check items off in any order.
+          </p>
+        </div>
+        <Button variant="outline" size="sm" onClick={() => choose(!open)} aria-expanded={open} aria-controls="post-launch-tasks-body">
+          {open ? "Hide" : "Show"}
+          <ChevronDown className={cn("transition-transform duration-200", open && "rotate-180")} />
+        </Button>
       </div>
-      <div className="border-t border-border/70 px-6 pb-5 pt-4">
+      {open && <div id="post-launch-tasks-body" className="border-t border-border/70 px-6 pb-5 pt-4">
         {tasks.isLoading ? (
           <p className="text-sm text-muted-foreground">Loading…</p>
         ) : tasks.isError ? (
@@ -64,7 +91,8 @@ function PostLaunchTasksPanel({ bookId }: { bookId: string }) {
             ))}
           </div>
         )}
-      </div>
+        <p className="mt-3 text-xs text-muted-foreground">Hide this panel any time. We’ll remember your choice on this device.</p>
+      </div>}
     </section>
   );
 }

@@ -8,6 +8,7 @@ import { requirementLabel } from "@/lib/book-data";
 import { useTemplates } from "@/lib/book-db";
 import { phaseStyle } from "@/lib/phase-style";
 import { templateCover } from "@/lib/template-covers";
+import { UseTemplateButton } from "@/components/use-template-dialog";
 
 export const Route = createFileRoute("/_authenticated/templates/$templateId")({
   head: () => ({ meta: [
@@ -39,7 +40,7 @@ function TemplatePreview() {
           <h1 className="font-heading text-4xl font-normal md:text-5xl">{template.title}</h1>
           <p className="mt-2 max-w-2xl text-muted-foreground">{template.description}</p>
         </div>
-        <Button asChild><Link to="/books/new" search={{ path: "template", template: template.id }}>Use this template</Link></Button>
+        <UseTemplateButton template={template} />
       </header>
 
       <section className="mb-9 rounded-2xl border border-border bg-card p-6 shadow-xs">

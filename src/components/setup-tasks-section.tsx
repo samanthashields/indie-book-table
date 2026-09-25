@@ -52,7 +52,7 @@ function SetupTasksPanel({ bookId, userId, book }: { bookId: string; userId: str
   const done = list.filter((task) => task.status === "complete").length;
 
   return (
-    <section className="mb-10 rounded-2xl border border-border bg-card shadow-xs" aria-labelledby="setup-tasks-heading">
+    <section id="tour-setup-tasks" className="mb-10 rounded-2xl border border-border bg-card shadow-xs" aria-labelledby="setup-tasks-heading">
       <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-5">
         <div className="min-w-0">
           <h2 id="setup-tasks-heading" className="font-heading text-2xl font-normal">{SETUP_TASKS_LABEL}</h2>
