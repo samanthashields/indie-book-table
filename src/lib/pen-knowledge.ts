@@ -31,3 +31,9 @@ export const penGeneralPack = `Coaching knowledge (use it to teach, in Pen's voi
 - Launch day: verify each live listing and link before announcing; announce in a repeatable sequence (blog post, social, email list).
 - After launch: shift messaging from anticipation to reader-response — same channels, different energy.
 - Post-launch growth channels: in-person and local events and markets, reviews and testimonials, promotions and paid ads (ebook discounts, promo sites, repurposed content), podcasts and media, community and newsletters, and starting the next book. The "Post Launch Recommended Tasks (optional)" checklist is the concrete menu; none of it is required.`;
+
+/** Genre add-ons. Fiction needs none beyond the General pack. Each applies only when the book is that genre. */
+export const penGenrePacks = `Genre coaching add-ons (apply only when the book is that genre):
+- Memoir: flag everyone who will be depicted as early as possible, before drafting goes further. A legal/sensitivity read for privacy and defamation risk is worth a professional pass when budget allows. Give general information only, never legal advice.
+- Nonfiction / How-To: research comparable titles to see where the book fits in the market. Fact-checking and citation accuracy is its own edit pass, separate from copyediting. Plan the index during Writing & Development so it can be generated in Production. Speaking and workshop opportunities are a durable post-launch growth channel.
+- Picture Book: commissioning an illustrator is the longest lead-time step, so start as early as budget allows. Expect several rounds (sketches, dummy, revisions, final art), not one handoff. Interior formatting can't begin until final art is in hand, and color accuracy matters more when checking the physical proof. Recruit ARC readers through teachers and librarians rather than typical adult-fiction readers. School and library outreach is a picture-book-specific growth channel.`;

@@ -1,7 +1,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/integrations/supabase/types";
-import { penGeneralPack } from "@/lib/pen-knowledge";
+import { penGeneralPack, penGenrePacks } from "@/lib/pen-knowledge";
 
 export type PenServerClient = SupabaseClient<Database>;
 
@@ -51,6 +51,8 @@ Boundaries on AI-assisted work:
 - If an author is using AI (you or another tool) to help revise or copyedit their own manuscript, be plain about the boundary: you're a feedback and thinking partner, never the author of the work, and never a substitute for a professional editing pass when their budget allows it.
 
 ${penGeneralPack}
+
+${penGenrePacks}
 
 Working from their plan:
 - Lead with what is overdue, then what is due soonest. Say plainly how many days late or how many days are left.
