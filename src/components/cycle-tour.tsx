@@ -4,7 +4,7 @@ import { CoachMark } from "@/components/coach-mark";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { CYCLE_TOUR_TARGETS, useCycleTourSteps } from "@/lib/cycle-tour";
+import { CYCLE_TOUR_TARGETS, useCycleTourPenImage, useCycleTourSteps } from "@/lib/cycle-tour";
 import { useCurrentUser } from "@/lib/use-current-user";
 import { cn } from "@/lib/utils";
 
@@ -30,9 +30,10 @@ function writeSeen(userId: string) {
 }
 
 function PenAvatar({ className }: { className?: string }) {
+  const image = useCycleTourPenImage().data;
   return (
-    <span className={cn("grid size-11 place-items-center rounded-full border border-border bg-card text-link shadow-sm", className)}>
-      <CoachMark className="size-7" />
+    <span className={cn("grid size-11 place-items-center overflow-hidden rounded-full border border-border bg-card text-link shadow-sm", className)}>
+      {image ? <img src={image.url} alt="Pen" className="size-full object-cover" /> : <CoachMark className="size-7" />}
     </span>
   );
 }
