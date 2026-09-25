@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
 export const POST_LAUNCH_TASKS_LABEL = "Post Launch Recommended Tasks (optional)";
@@ -50,44 +49,17 @@ export type PostLaunchTask = {
   completed_at: string | null;
 };
 
-type PostLaunchTaskInsert = Omit<PostLaunchTask, "id" | "status" | "completed_at"> & {
-  id?: string;
-  status?: string;
-  completed_at?: string | null;
-  created_at?: string;
-};
-
-type PostLaunchTaskDatabase = {
-  public: {
-    Tables: {
-      book_post_launch_tasks: {
-        Row: PostLaunchTask & { created_at: string };
-        Insert: PostLaunchTaskInsert;
-        Update: Partial<PostLaunchTaskInsert>;
-        Relationships: [];
-      };
-    };
-    Views: Record<string, never>;
-    Functions: Record<string, never>;
-    Enums: Record<string, never>;
-    CompositeTypes: Record<string, never>;
-  };
-};
-
-// This table is newer than the integration-managed generated definitions.
-const postLaunchClient = supabase as unknown as SupabaseClient<PostLaunchTaskDatabase>;
-
 /** Fetches this book's post-launch tasks, creating the recommended list on first visit if none exist yet. */
 export function usePostLaunchTasks(bookId: string) {
   return useQuery({
     queryKey: ["post-launch-tasks", bookId],
     queryFn: async () => {
-      const { data, error } = await postLaunchClient.from("book_post_launch_tasks").select("*").eq("book_id", bookId).order("position");
+      const { data, error } = await supabase.from("book_post_launch_tasks").select("*").eq("book_id", bookId).order("position");
       if (error) throw error;
       if (data && data.length > 0) return data as PostLaunchTask[];
 
       const rows = POST_LAUNCH_TASK_GROUPS.flatMap((entry) => entry.tasks.map((task) => ({ ...task, group_label: entry.group }))).map((task, position) => ({ book_id: bookId, ...task, position }));
-      const { data: created, error: insertError } = await postLaunchClient.from("book_post_launch_tasks").insert(rows).select("*");
+      const { data: created, error: insertError } = await supabase.from("book_post_launch_tasks").insert(rows).select("*");
       if (insertError) throw insertError;
       return ((created ?? []) as PostLaunchTask[]).sort((a, b) => a.position - b.position);
     },
@@ -98,7 +70,7 @@ export function useUpdatePostLaunchTask(bookId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, complete }: { id: string; complete: boolean }) => {
-      const { error } = await postLaunchClient
+      const { error } = await supabase
         .from("book_post_launch_tasks")
         .update({ status: complete ? "complete" : "pending", completed_at: complete ? new Date().toISOString() : null })
         .eq("id", id);
