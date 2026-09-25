@@ -56,7 +56,7 @@ export function DeleteCycleDialog({
             <div className="space-y-3 text-sm leading-6">
               <p>
                 This removes the plan for “{title}”: {total} {total === 1 ? "milestone" : "milestones"}
-                {done > 0 ? ` (${done} complete)` : ""}, with their notes, steps and attachments, plus the setup tasks and
+                {done > 0 ? ` (${done} complete)` : ""}, with their notes, steps and attachments, plus the recommended tasks and
                 reflection. It can’t be undone.
               </p>
               <p>The book stays on your shelf as an idea, with its details and cover. You can start a new cycle whenever you like.</p>

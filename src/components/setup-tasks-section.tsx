@@ -4,7 +4,7 @@ import { CheckCircle2, ChevronDown, Circle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import type { BookRow } from "@/lib/book-db";
-import { SETUP_TASK_DEFS, useSetupTasks, useUpdateSetupTask } from "@/lib/setup-tasks";
+import { SETUP_TASKS_LABEL, findSetupTaskDef, useSetupTasks, useUpdateSetupTask } from "@/lib/setup-tasks";
 import { useCurrentUser } from "@/lib/use-current-user";
 import { cn } from "@/lib/utils";
 
@@ -55,9 +55,9 @@ function SetupTasksPanel({ bookId, userId, book }: { bookId: string; userId: str
     <section className="mb-10 rounded-2xl border border-border bg-card shadow-xs" aria-labelledby="setup-tasks-heading">
       <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-5">
         <div className="min-w-0">
-          <h2 id="setup-tasks-heading" className="font-heading text-2xl font-normal">Your setup tasks</h2>
+          <h2 id="setup-tasks-heading" className="font-heading text-2xl font-normal">{SETUP_TASKS_LABEL}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {list.length > 0 ? `${done} of ${list.length} done. ` : ""}The decisions worth settling before and around production.
+            {list.length > 0 ? `${done} of ${list.length} done. ` : ""}Nothing here blocks your cycle — check items off in any order.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -78,11 +78,11 @@ function SetupTasksPanel({ bookId, userId, book }: { bookId: string; userId: str
           {tasks.isLoading ? (
             <p className="text-sm text-muted-foreground">Loading…</p>
           ) : tasks.isError ? (
-            <p className="text-sm text-muted-foreground">Couldn’t load your setup tasks. Try again in a moment.</p>
+            <p className="text-sm text-muted-foreground">Couldn’t load your recommended tasks. Try again in a moment.</p>
           ) : (
             <ul className="grid gap-x-8 gap-y-1 lg:grid-cols-2">
               {list.map((task) => {
-                const def = SETUP_TASK_DEFS.find((entry) => entry.key === task.key);
+                const def = findSetupTaskDef(task.key);
                 const fieldValue = def?.bookField ? book[def.bookField] : undefined;
                 const hasValue = fieldValue !== undefined && fieldValue !== null && fieldValue !== "";
                 const complete = task.status === "complete";

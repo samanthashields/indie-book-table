@@ -625,7 +625,7 @@ export function useDeleteBookCycle() {
     onSuccess: (_data, bookId) => {
       void queryClient.invalidateQueries({ queryKey: ["books"] });
       queryClient.removeQueries({ queryKey: ["book", bookId] });
-      for (const key of ["setup-tasks", "reflection", "resources"]) void queryClient.invalidateQueries({ queryKey: [key, bookId] });
+      for (const key of ["setup-tasks", "post-launch-tasks", "reflection", "resources"]) void queryClient.invalidateQueries({ queryKey: [key, bookId] });
     },
   });
 }
