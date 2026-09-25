@@ -3,15 +3,15 @@ import { CheckCircle2, Circle } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
 import { useBookTree } from "@/lib/book-db";
-import { SETUP_TASK_DEFS, useSetupTasks, useUpdateSetupTask } from "@/lib/setup-tasks";
+import { SETUP_TASKS_LABEL, findSetupTaskDef, useSetupTasks, useUpdateSetupTask } from "@/lib/setup-tasks";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/books/$bookId/setup")({
   head: () => ({ meta: [
-    { title: "Setup Tasks — The Indie Book Table" },
-    { name: "description", content: "The strategic decisions to make before and around production." },
-    { property: "og:title", content: "Setup Tasks — The Indie Book Table" },
-    { property: "og:description", content: "The strategic decisions to make before and around production." },
+    { title: `${SETUP_TASKS_LABEL} — The Indie Book Table` },
+    { name: "description", content: "Optional decisions and habits worth settling before and around production." },
+    { property: "og:title", content: `${SETUP_TASKS_LABEL} — The Indie Book Table` },
+    { property: "og:description", content: "Optional decisions and habits worth settling before and around production." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
   ] }),
@@ -30,8 +30,8 @@ function SetupTasksPage() {
   return (
     <AppShell>
       <PageHeading
-        title="Setup Tasks"
-        description={`Strategic decisions worth settling before and around production for ${book.data?.book.title ?? "this book"}.`}
+        title={SETUP_TASKS_LABEL}
+        description={`Optional, non-blocking — worth settling before and around production for ${book.data?.book.title ?? "this book"}.`}
       />
       {list.length > 0 && <p className="mb-5 text-sm font-semibold text-muted-foreground">{done} of {list.length} done</p>}
 
@@ -40,7 +40,7 @@ function SetupTasksPage() {
       ) : (
         <ul className="max-w-3xl space-y-3">
           {list.map((task) => {
-            const def = SETUP_TASK_DEFS.find((entry) => entry.key === task.key);
+            const def = findSetupTaskDef(task.key);
             const fieldValue = def?.bookField ? book.data?.book[def.bookField] : undefined;
             const hasValue = fieldValue !== undefined && fieldValue !== null && fieldValue !== "";
             const complete = task.status === "complete";

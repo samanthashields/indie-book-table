@@ -6,6 +6,8 @@ import { MilestoneBody } from "@/components/milestone-body";
 import { MilestoneDisclosure } from "@/components/milestone-disclosure";
 import { DeleteCycleButton, DeleteCycleSection } from "@/components/delete-cycle";
 import { SetupTasksSection } from "@/components/setup-tasks-section";
+import { PostLaunchTasksSection } from "@/components/post-launch-tasks-section";
+import { SETUP_TASKS_LABEL } from "@/lib/setup-tasks";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -70,7 +72,7 @@ function BookOverview() {
         </div>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" asChild><Link to="/books/$bookId/details" params={{ bookId }}><Settings2 />Book details</Link></Button>
-          <Button variant="outline" asChild><Link to="/books/$bookId/setup" params={{ bookId }}><ListChecks />Setup tasks</Link></Button>
+          <Button variant="outline" asChild><Link to="/books/$bookId/setup" params={{ bookId }}><ListChecks />{SETUP_TASKS_LABEL}</Link></Button>
           <Button variant="outline" asChild><Link to="/books/$bookId/team" params={{ bookId }}><Users />Collaborators</Link></Button>
           <Button variant="outline" asChild><Link to="/books/$bookId/resources" params={{ bookId }}><FolderOpen />Resources</Link></Button>
           <Button variant={book.status !== "complete" ? "secondary" : "outline"} asChild><Link to="/books/$bookId/reflection" params={{ bookId }}><FileText />{book.status !== "complete" ? "End book cycle & reflect" : "Reflection"}</Link></Button>
@@ -139,6 +141,8 @@ function BookOverview() {
           })}
         </div>
       </section>
+
+      <PostLaunchTasksSection bookId={bookId} authorId={book.author_id} />
 
       <DeleteCycleSection bookId={bookId} authorId={book.author_id} title={book.title} total={allMilestones.length} done={doneCount} />
 
