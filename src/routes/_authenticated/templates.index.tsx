@@ -1,5 +1,5 @@
-import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Check, Copy, Eye, Plus, SquarePen, Trash2 } from "lucide-react";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { Check, Eye, Plus, SquarePen, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
@@ -7,7 +7,7 @@ import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { ViewSwitcher, useCollectionView } from "@/components/view-switcher";
 import { useCurrentUser } from "@/lib/use-current-user";
-import { useDeleteAuthorTemplate, useSaveAuthorTemplate, useTemplates } from "@/lib/book-db";
+import { useDeleteAuthorTemplate, useTemplates } from "@/lib/book-db";
 import { templateCover } from "@/lib/template-covers";
 import { UseTemplateButton } from "@/components/use-template-dialog";
 
@@ -18,34 +18,12 @@ export const Route = createFileRoute("/_authenticated/templates/")({ head: () =>
 function Templates() {
   const { data: templates = [], isLoading } = useTemplates();
   const user = useCurrentUser();
-  const save = useSaveAuthorTemplate();
   const remove = useDeleteAuthorTemplate();
-  const navigate = useNavigate();
   const [view, setView] = useCollectionView("grid");
   const userId = user.data?.id;
 
   const globals = templates.filter((template) => template.published && !template.archived);
   const mine = templates.filter((template) => template.owner_id === userId && !template.published);
-
-  const clone = (template: (typeof templates)[number]) => {
-    save.mutate(
-      {
-        input: {
-          title: `${template.title} (my copy)`,
-          description: template.description ?? "",
-          genre: template.genre ?? "",
-          audience: template.audience ?? "",
-          duration: template.duration ?? "",
-          phases: template.phases,
-          details: template.details,
-        },
-      },
-      {
-        onSuccess: (id) => { toast.success("Copied to your templates"); void navigate({ to: "/templates/mine/$templateId", params: { templateId: id } }); },
-        onError: () => toast.error("Couldn’t copy that template"),
-      },
-    );
-  };
 
   const destroy = (id: string) => {
     if (!window.confirm("Delete this template? Book cycles already created from it stay as they are.")) return;
@@ -81,7 +59,6 @@ function Templates() {
                       </ul>
                       <div className="mt-6 flex flex-wrap gap-3">
                         <Button variant="outline" asChild><Link to="/templates/$templateId" params={{ templateId: template.id }}><Eye />Preview</Link></Button>
-                        <Button variant="outline" disabled={save.isPending} onClick={() => clone(template)}><Copy />Make my own copy</Button>
                         <UseTemplateButton template={template} />
                       </div>
                     </div>
@@ -95,7 +72,7 @@ function Templates() {
             <div className="mb-5 flex items-baseline justify-between"><h2 className="font-heading text-2xl font-semibold">My templates</h2><span className="text-sm text-muted-foreground">{mine.length} saved</span></div>
             {mine.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-border bg-paper p-8 text-center">
-                <p className="text-sm leading-6 text-muted-foreground">You haven’t saved a template yet. Copy a genre template and change it, or build one from an empty set of phases.</p>
+                <p className="text-sm leading-6 text-muted-foreground">You haven’t saved a template yet. Build one from an empty set of phases.</p>
                 <Button className="mt-5" asChild><Link to="/templates/mine/$templateId" params={{ templateId: "new" }}><Plus />New template</Link></Button>
               </div>
             ) : (

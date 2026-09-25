@@ -32,6 +32,7 @@ import { Route as TableIssueIdRouteImport } from './routes/table.$issueId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminActivityRouteImport } from './routes/_authenticated/admin.activity'
 import { Route as AuthenticatedAdminChallengesRouteImport } from './routes/_authenticated/admin.challenges'
+import { Route as AuthenticatedAdminCycleTourRouteImport } from './routes/_authenticated/admin.cycle-tour'
 import { Route as AuthenticatedAdminIssuesRouteImport } from './routes/_authenticated/admin.issues'
 import { Route as AuthenticatedAdminMissionpageRouteImport } from './routes/_authenticated/admin.missionpage'
 import { Route as AuthenticatedAdminOnboardingRouteImport } from './routes/_authenticated/admin.onboarding'
@@ -196,6 +197,12 @@ const AuthenticatedAdminChallengesRoute =
   AuthenticatedAdminChallengesRouteImport.update({
     id: '/challenges',
     path: '/challenges',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminCycleTourRoute =
+  AuthenticatedAdminCycleTourRouteImport.update({
+    id: '/cycle-tour',
+    path: '/cycle-tour',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminIssuesRoute =
@@ -491,6 +498,7 @@ export interface FileRoutesByFullPath {
   '/table/': typeof TableIndexRoute
   '/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/admin/challenges': typeof AuthenticatedAdminChallengesRoute
+  '/admin/cycle-tour': typeof AuthenticatedAdminCycleTourRoute
   '/admin/issues': typeof AuthenticatedAdminIssuesRoute
   '/admin/missionpage': typeof AuthenticatedAdminMissionpageRoute
   '/admin/onboarding': typeof AuthenticatedAdminOnboardingRoute
@@ -561,6 +569,7 @@ export interface FileRoutesByTo {
   '/table': typeof TableIndexRoute
   '/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/admin/challenges': typeof AuthenticatedAdminChallengesRoute
+  '/admin/cycle-tour': typeof AuthenticatedAdminCycleTourRoute
   '/admin/issues': typeof AuthenticatedAdminIssuesRoute
   '/admin/missionpage': typeof AuthenticatedAdminMissionpageRoute
   '/admin/onboarding': typeof AuthenticatedAdminOnboardingRoute
@@ -633,6 +642,7 @@ export interface FileRoutesById {
   '/table/': typeof TableIndexRoute
   '/_authenticated/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/_authenticated/admin/challenges': typeof AuthenticatedAdminChallengesRoute
+  '/_authenticated/admin/cycle-tour': typeof AuthenticatedAdminCycleTourRoute
   '/_authenticated/admin/issues': typeof AuthenticatedAdminIssuesRoute
   '/_authenticated/admin/missionpage': typeof AuthenticatedAdminMissionpageRoute
   '/_authenticated/admin/onboarding': typeof AuthenticatedAdminOnboardingRoute
@@ -706,6 +716,7 @@ export interface FileRouteTypes {
     | '/table/'
     | '/admin/activity'
     | '/admin/challenges'
+    | '/admin/cycle-tour'
     | '/admin/issues'
     | '/admin/missionpage'
     | '/admin/onboarding'
@@ -776,6 +787,7 @@ export interface FileRouteTypes {
     | '/table'
     | '/admin/activity'
     | '/admin/challenges'
+    | '/admin/cycle-tour'
     | '/admin/issues'
     | '/admin/missionpage'
     | '/admin/onboarding'
@@ -847,6 +859,7 @@ export interface FileRouteTypes {
     | '/table/'
     | '/_authenticated/admin/activity'
     | '/_authenticated/admin/challenges'
+    | '/_authenticated/admin/cycle-tour'
     | '/_authenticated/admin/issues'
     | '/_authenticated/admin/missionpage'
     | '/_authenticated/admin/onboarding'
@@ -1082,6 +1095,13 @@ declare module '@tanstack/react-router' {
       path: '/challenges'
       fullPath: '/admin/challenges'
       preLoaderRoute: typeof AuthenticatedAdminChallengesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/cycle-tour': {
+      id: '/_authenticated/admin/cycle-tour'
+      path: '/cycle-tour'
+      fullPath: '/admin/cycle-tour'
+      preLoaderRoute: typeof AuthenticatedAdminCycleTourRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/issues': {
@@ -1419,6 +1439,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminActivityRoute: typeof AuthenticatedAdminActivityRoute
   AuthenticatedAdminChallengesRoute: typeof AuthenticatedAdminChallengesRoute
+  AuthenticatedAdminCycleTourRoute: typeof AuthenticatedAdminCycleTourRoute
   AuthenticatedAdminIssuesRoute: typeof AuthenticatedAdminIssuesRoute
   AuthenticatedAdminMissionpageRoute: typeof AuthenticatedAdminMissionpageRoute
   AuthenticatedAdminOnboardingRoute: typeof AuthenticatedAdminOnboardingRoute
@@ -1441,6 +1462,7 @@ interface AuthenticatedAdminRouteChildren {
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminActivityRoute: AuthenticatedAdminActivityRoute,
   AuthenticatedAdminChallengesRoute: AuthenticatedAdminChallengesRoute,
+  AuthenticatedAdminCycleTourRoute: AuthenticatedAdminCycleTourRoute,
   AuthenticatedAdminIssuesRoute: AuthenticatedAdminIssuesRoute,
   AuthenticatedAdminMissionpageRoute: AuthenticatedAdminMissionpageRoute,
   AuthenticatedAdminOnboardingRoute: AuthenticatedAdminOnboardingRoute,

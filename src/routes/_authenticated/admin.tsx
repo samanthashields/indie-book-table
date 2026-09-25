@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_authenticated/admin")({ component: Admin
 type AdminPath =
   | "/admin" | "/admin/submissions" | "/admin/issues" | "/admin/journal" | "/admin/tablehome"
   | "/admin/missionpage" | "/admin/sitewords" | "/admin/people" | "/admin/subscribers"
-  | "/admin/templates" | "/admin/challenges" | "/admin/onboarding" | "/admin/help"
+  | "/admin/templates" | "/admin/challenges" | "/admin/onboarding" | "/admin/cycle-tour" | "/admin/help"
   | "/admin/support" | "/admin/requests" | "/admin/releases" | "/admin/activity";
 
 type AdminSection = { label: string; items: { label: string; to: AdminPath; exact?: boolean }[] };
@@ -27,6 +27,7 @@ const sections: AdminSection[] = [
   { label: "Workshop", items: [
     { label: "Templates", to: "/admin/templates" as const }, { label: "Challenges", to: "/admin/challenges" as const },
     { label: "Onboarding", to: "/admin/onboarding" as const },
+    { label: "Book Cycle tour", to: "/admin/cycle-tour" as const },
   ] },
   { label: "Operations", items: [
     { label: "Help articles", to: "/admin/help" as const }, { label: "Support", to: "/admin/support" as const },
