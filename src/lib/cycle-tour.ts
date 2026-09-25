@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
+import { resolveOnboardingMedia } from "@/lib/workshop-onboarding";
 
 export type CycleTourStep = { key: string; title: string; body: string; position: number; enabled: boolean };
 
@@ -40,4 +41,32 @@ export function useCycleTourSteps({ includeDisabled = false }: { includeDisabled
     },
     staleTime: 60_000,
   });
+}
+
+/** Pen's picture on the tour lives in the same table under a reserved key; it is not a tour step. */
+export const PEN_IMAGE_KEY = "pen_image";
+export const penImageQueryKey = ["cycle-tour-pen-image"] as const;
+
+/** Signed URL for the picture an admin uploaded, or null to fall back to the built-in Pen mark. */
+export function useCycleTourPenImage() {
+  return useQuery({
+    queryKey: penImageQueryKey,
+    queryFn: async (): Promise<{ path: string; url: string } | null> => {
+      const { data } = await supabase.from("cycle_tour_steps").select("body").eq("key", PEN_IMAGE_KEY).maybeSingle();
+      if (!data?.body) return null;
+      try {
+        return { path: data.body, url: await resolveOnboardingMedia(data.body) };
+      } catch {
+        return null;
+      }
+    },
+    staleTime: 60_000,
+  });
+}
+
+export async function savePenImagePath(path: string | null) {
+  const { error } = path
+    ? await supabase.from("cycle_tour_steps").upsert({ key: PEN_IMAGE_KEY, title: "Pen image", body: path, position: 99, enabled: true })
+    : await supabase.from("cycle_tour_steps").delete().eq("key", PEN_IMAGE_KEY);
+  if (error) throw error;
 }
