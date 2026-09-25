@@ -929,33 +929,6 @@ export type Database = {
           },
         ]
       }
-      cycle_tour_steps: {
-        Row: {
-          body: string
-          enabled: boolean
-          key: string
-          position: number
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          body?: string
-          enabled?: boolean
-          key: string
-          position?: number
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          body?: string
-          enabled?: boolean
-          key?: string
-          position?: number
-          title?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
       feature_request_updates: {
         Row: {
           author_user_id: string | null
