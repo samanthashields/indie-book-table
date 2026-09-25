@@ -1,11 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
+import { CoachMark } from "@/components/coach-mark";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { CYCLE_TOUR_TARGETS, useCycleTourSteps } from "@/lib/cycle-tour";
 import { useCurrentUser } from "@/lib/use-current-user";
+import { cn } from "@/lib/utils";
 
 const storageKey = (userId: string) => `ibt:cycle-tour-seen:${userId}`;
+const RING = ["ring-2", "ring-primary", "ring-offset-4", "ring-offset-background", "transition-shadow"];
+const CARD_WIDTH = 360;
+const GAP = 18;
 
 function readSeen(userId: string): boolean {
   try {
@@ -23,58 +29,110 @@ function writeSeen(userId: string) {
   }
 }
 
-const STEPS: { target: string; title: string; body: string }[] = [
-  { target: "tour-header", title: "Your book’s toolbox", body: "Book details, collaborators, and resources live up here, along with your recommended tasks and the option to end your cycle when you’re done." },
-  { target: "tour-progress", title: "Progress at a glance", body: "See how far along you are, your target publication date, and the next thing to work on." },
-  { target: "tour-setup-tasks", title: "Set up recommended tasks", body: "Optional decisions and habits worth settling early, like your budget and publishing path. Nothing here blocks your cycle." },
-  { target: "tour-phases", title: "Your publishing path", body: "Six phases take you from private manuscript to published book. Open a phase to see its milestones, then click a milestone to add notes, files, and steps." },
-  { target: "tour-post-launch", title: "After launch", body: "An optional checklist for keeping your book growing once it’s out in the world. Check items off in any order." },
-];
+function PenAvatar({ className }: { className?: string }) {
+  return (
+    <span className={cn("grid size-11 place-items-center rounded-full border border-border bg-card text-link shadow-sm", className)}>
+      <CoachMark className="size-7" />
+    </span>
+  );
+}
 
-/** A first-visit welcome plus a short walkthrough that scrolls to each part of the cycle page. */
+type Placement = { top: number; left: number; side: "above" | "below"; arrowLeft: number } | null;
+
+/** A first-visit welcome plus a short walkthrough. Each step floats beside the part of the page it talks about. */
 export function CycleTour({ replayKey }: { replayKey: number }) {
   const user = useCurrentUser();
   const userId = user.data?.id;
+  const stepsQuery = useCycleTourSteps();
   const [stage, setStage] = useState<"closed" | "welcome" | "tour">("closed");
   const [index, setIndex] = useState(0);
   const [never, setNever] = useState(false);
+  const [placement, setPlacement] = useState<Placement>(null);
+  const [narrow, setNarrow] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const all = stepsQuery.data ?? [];
+  const welcome = all.find((step) => step.key === "welcome");
+  const tourSteps = stage === "tour" ? all.filter((step) => step.key !== "welcome" && document.getElementById(CYCLE_TOUR_TARGETS[step.key] ?? "")) : [];
+  const step = tourSteps[index];
+  const targetId = step ? CYCLE_TOUR_TARGETS[step.key] : undefined;
 
   useEffect(() => {
-    if (userId && !readSeen(userId)) setStage("welcome");
-  }, [userId]);
+    if (userId && stepsQuery.isSuccess && !readSeen(userId)) setStage(welcome ? "welcome" : "tour");
+  }, [userId, stepsQuery.isSuccess, welcome]);
 
   useEffect(() => {
     if (replayKey > 0) {
       setIndex(0);
-      setStage("welcome");
+      setStage(welcome ? "welcome" : "tour");
     }
-  }, [replayKey]);
-
-  const steps = STEPS.filter((step) => stage !== "tour" || document.getElementById(step.target));
-  const step = steps[index];
+  }, [replayKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (stage !== "tour" || !step) return;
-    const element = document.getElementById(step.target);
+    if (stage !== "tour" || !targetId) return;
+    const element = document.getElementById(targetId);
+    if (!element) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    element?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
-    element?.classList.add("ring-2", "ring-primary", "ring-offset-4", "ring-offset-background", "transition-shadow");
-    return () => element?.classList.remove("ring-2", "ring-primary", "ring-offset-4", "ring-offset-background", "transition-shadow");
-  }, [stage, step]);
+    element.style.scrollMarginTop = "300px";
+    element.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    element.classList.add(...RING);
+    return () => {
+      element.classList.remove(...RING);
+      element.style.scrollMarginTop = "";
+    };
+  }, [stage, targetId]);
+
+  useLayoutEffect(() => {
+    if (stage !== "tour" || !targetId) return;
+    let frame = 0;
+    const place = () => {
+      const element = document.getElementById(targetId);
+      const card = cardRef.current;
+      const isNarrow = window.innerWidth < 640;
+      setNarrow(isNarrow);
+      if (!element || !card || isNarrow) {
+        setPlacement(null);
+        return;
+      }
+      const rect = element.getBoundingClientRect();
+      const height = card.offsetHeight;
+      const left = Math.min(Math.max(rect.left + 32, 16), window.innerWidth - CARD_WIDTH - 16);
+      const arrowLeft = Math.min(Math.max(rect.left + 56 - left, 24), CARD_WIDTH - 40);
+      const aboveTop = rect.top - height - GAP;
+      const side = aboveTop >= 8 ? "above" : "below";
+      const rawTop = side === "above" ? aboveTop : rect.bottom + GAP;
+      const top = Math.min(Math.max(rawTop, 8), window.innerHeight - height - 16);
+      setPlacement({ top, left, side, arrowLeft });
+    };
+    const schedule = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(place);
+    };
+    place();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+  }, [stage, targetId, index]);
 
   const close = (markSeen: boolean) => {
     if (userId && (markSeen || never)) writeSeen(userId);
     setStage("closed");
     setIndex(0);
+    setPlacement(null);
   };
 
-  if (stage === "welcome") {
+  if (stage === "welcome" && welcome) {
     return (
       <Dialog open onOpenChange={(next) => { if (!next) close(false); }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Welcome to your Book Cycle</DialogTitle>
-            <DialogDescription>This is your plan for taking a book from idea to published, one phase and milestone at a time. Take a quick look around, and it’ll be easy to find your way.</DialogDescription>
+            <PenAvatar className="mb-1" />
+            <DialogTitle>{welcome.title}</DialogTitle>
+            <DialogDescription>{welcome.body}</DialogDescription>
           </DialogHeader>
           <label className="flex items-center gap-2 text-sm"><Checkbox checked={never} onCheckedChange={(value) => setNever(value === true)} />Don’t show this again</label>
           <DialogFooter>
@@ -87,10 +145,28 @@ export function CycleTour({ replayKey }: { replayKey: number }) {
   }
 
   if (stage === "tour" && step) {
-    const last = index === steps.length - 1;
+    const last = index === tourSteps.length - 1;
     return (
-      <div role="dialog" aria-label="Book cycle tour" className="fixed inset-x-4 bottom-4 z-50 mx-auto max-w-md rounded-2xl border border-border bg-card p-5 shadow-lg sm:left-auto sm:right-6 sm:mx-0">
-        <p className="text-xs text-muted-foreground">Step {index + 1} of {steps.length}</p>
+      <div
+        ref={cardRef}
+        role="dialog"
+        aria-label="Book cycle tour"
+        style={narrow || !placement ? undefined : { top: placement.top, left: placement.left, width: CARD_WIDTH }}
+        className={cn(
+          "fixed z-50 rounded-2xl border border-border bg-card p-5 pl-6 shadow-lg motion-safe:transition-[top,left] motion-safe:duration-300",
+          narrow || !placement ? "inset-x-4 bottom-4 mx-auto max-w-md" : "",
+          !narrow && !placement && "opacity-0",
+        )}
+      >
+        {!narrow && placement && (
+          <span
+            aria-hidden="true"
+            style={{ left: placement.arrowLeft }}
+            className={cn("absolute size-4 rotate-45 border-border bg-card", placement.side === "above" ? "-bottom-2 border-b border-r" : "-top-2 border-l border-t")}
+          />
+        )}
+        <PenAvatar className="absolute -left-4 -top-4" />
+        <p className="pl-6 text-xs text-muted-foreground">Step {index + 1} of {tourSteps.length}</p>
         <h2 className="mt-1 font-heading text-xl font-normal">{step.title}</h2>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">{step.body}</p>
         <label className="mt-4 flex items-center gap-2 text-sm"><Checkbox checked={never} onCheckedChange={(value) => setNever(value === true)} />Don’t show this again</label>
