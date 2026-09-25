@@ -49,6 +49,50 @@ export type Database = {
           },
         ]
       }
+      book_post_launch_tasks: {
+        Row: {
+          book_id: string
+          completed_at: string | null
+          created_at: string
+          group_label: string
+          id: string
+          key: string
+          label: string
+          position: number
+          status: string
+        }
+        Insert: {
+          book_id: string
+          completed_at?: string | null
+          created_at?: string
+          group_label: string
+          id?: string
+          key: string
+          label: string
+          position?: number
+          status?: string
+        }
+        Update: {
+          book_id?: string
+          completed_at?: string | null
+          created_at?: string
+          group_label?: string
+          id?: string
+          key?: string
+          label?: string
+          position?: number
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "book_post_launch_tasks_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       book_setup_tasks: {
         Row: {
           book_id: string
