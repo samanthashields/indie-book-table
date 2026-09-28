@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 import { StatusPill } from "@/components/status-pill";
 import { MilestoneDisclosure } from "@/components/milestone-disclosure";
@@ -12,18 +12,29 @@ import type { TemplatePhase } from "@/lib/template-data";
 
 export const blankPhases: TemplatePhase[] = PHASE_DEFS.map((def) => ({ id: def.key, name: def.name, mode: def.mode, summary: def.summary, milestones: [] }));
 
-export function CycleBuilder({ title, description, phases: initial, initialTitle, creating, onBack, onCreate }: {
+export function CycleBuilder({ title, description, phases: initial, initialTitle, initialTargetDate, creating, onBack, onCreate }: {
   title: string;
   description: string;
   phases: TemplatePhase[];
   initialTitle?: string;
+  initialTargetDate?: string;
   creating?: boolean;
   onBack: () => void;
   onCreate: (input: { title: string; targetDate: string; phases: TemplatePhase[] }) => void;
 }) {
   const [phases, setPhases] = useState<TemplatePhase[]>(initial);
   const [bookTitle, setBookTitle] = useState(initialTitle ?? "");
-  const [targetDate, setTargetDate] = useState("");
+  const [targetDate, setTargetDate] = useState(initialTargetDate ?? "");
+
+  // The book behind initialTitle/initialTargetDate can still be loading when this mounts
+  // (useBooks resolves after first paint) — fill in once it arrives, but only if the author
+  // hasn't already typed something over the empty default.
+  useEffect(() => {
+    if (initialTitle) setBookTitle((current) => current || initialTitle);
+  }, [initialTitle]);
+  useEffect(() => {
+    if (initialTargetDate) setTargetDate((current) => current || initialTargetDate);
+  }, [initialTargetDate]);
 
   const updateMilestone = (phaseId: string, index: number, patch: Partial<TemplatePhase["milestones"][number]>) =>
     setPhases((current) => current.map((phase) => phase.id === phaseId ? { ...phase, milestones: phase.milestones.map((milestone, i) => i === index ? { ...milestone, ...patch } : milestone) } : phase));

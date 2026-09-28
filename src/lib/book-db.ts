@@ -96,6 +96,7 @@ export type BookSummary = {
   phaseName: string | null;
   nextAction: string;
   target: string;
+  targetDateIso: string | null;
   coverUrl: string | null;
   startDate: string | null;
   metadata: Record<string, unknown>;
@@ -173,6 +174,7 @@ const summarize = (
     phaseName: phase?.name ?? null,
     nextAction: next?.name ?? "All milestones complete",
     target: formatDate(book.target_publication_date) || "No target date",
+    targetDateIso: book.target_publication_date,
     coverUrl: book.cover_url,
     startDate: book.start_date,
     metadata: book.metadata ?? {},
@@ -303,15 +305,26 @@ export function useCreateBookCycle() {
     mutationFn: async (input: CreateCycleInput) => {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData.user) throw new Error("You need to be signed in.");
+
+      // When attaching to an existing book, don't let a field the create-flow form left blank
+      // wipe out a value the author already saved on the book (e.g. genre, budget, formats set
+      // from the Book Details page before starting the cycle).
+      let existing: { genre: string | null; target_publication_date: string | null; budget: number | null; formats: string[] | null } | null = null;
+      if (input.bookId) {
+        const { data, error } = await supabase.from("books").select("genre, target_publication_date, budget, formats").eq("id", input.bookId).single();
+        if (error) throw error;
+        existing = data;
+      }
+
       const payload = {
         title: input.title,
-        genre: input.genre ?? null,
-        target_publication_date: input.targetDate ?? null,
+        genre: input.genre ?? existing?.genre ?? null,
+        target_publication_date: input.targetDate ?? existing?.target_publication_date ?? null,
         template_id: input.templateId ?? null,
         status: "active",
         has_cycle: true,
-        budget: input.budget ?? null,
-        formats: input.formats ?? [],
+        budget: input.budget ?? existing?.budget ?? null,
+        formats: input.formats && input.formats.length > 0 ? input.formats : existing?.formats ?? [],
         metadata: {
           manuscriptStatus: input.manuscriptStatus ?? "drafting",
           illustrated: input.illustrated ?? false,

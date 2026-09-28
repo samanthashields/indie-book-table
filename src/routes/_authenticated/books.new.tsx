@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { BookOpen, Check, Eye, Loader2, MessageSquareText, X } from "lucide-react";
 import { toast } from "sonner";
@@ -72,6 +72,15 @@ function CreateBook() {
 
   const books = useBooks();
   const existingBook = search.book ? books.data?.find((entry) => entry.id === search.book) : undefined;
+
+  // Pen's own working-title/target-date inputs start empty and only fill in once the coach
+  // conversation runs — seed them from the book being started from as soon as it loads, without
+  // clobbering anything the author already typed.
+  useEffect(() => {
+    if (!existingBook) return;
+    setCoachTitle((current) => current || existingBook.title);
+    setCoachDate((current) => current || existingBook.targetDateIso || "");
+  }, [existingBook]);
 
   const go = (next: Search) => void navigate({ to: "/books/new", search: { ...next, ...(search.book ? { book: search.book } : {}) } });
   const backToChooser = () => void navigate({ to: "/books/new", search: { ...(search.book ? { book: search.book } : {}) } });
@@ -182,6 +191,7 @@ function CreateBook() {
           description={template.description ?? ""}
           phases={template.phases}
           initialTitle={existingBook?.title ?? ""}
+          initialTargetDate={existingBook?.targetDateIso ?? ""}
           creating={createCycle.isPending}
           onBack={() => go({ path: "template", template: template.id })}
           onCreate={(input) => create({ ...input, templateId: template.id, ...(template.genre ? { genre: template.genre } : {}), illustrated: template.details.illustrated ?? false })}
@@ -199,6 +209,7 @@ function CreateBook() {
           description="Add at least one milestone per phase. Each milestone carries exactly one requirement."
           phases={blankPhases}
           initialTitle={existingBook?.title ?? ""}
+          initialTargetDate={existingBook?.targetDateIso ?? ""}
           creating={createCycle.isPending}
           onBack={backToChooser}
           onCreate={(input) => create(input)}
