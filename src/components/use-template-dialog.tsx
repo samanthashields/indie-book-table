@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -14,12 +14,34 @@ type TemplateRow = NonNullable<ReturnType<typeof useTemplates>["data"]>[number];
  * "Use this template": asks only for a title and publication date, creates the cycle straight
  * from the template's default phases, and lands on the new cycle. Customising happens there.
  */
-export function UseTemplateButton({ template, bookId, variant }: { template: TemplateRow; bookId?: string | undefined; variant?: "default" | "outline" }) {
+export function UseTemplateButton({
+  template,
+  bookId,
+  variant,
+  initialTitle,
+  initialTargetDate,
+}: {
+  template: TemplateRow;
+  bookId?: string | undefined;
+  variant?: "default" | "outline";
+  initialTitle?: string;
+  initialTargetDate?: string;
+}) {
   const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
+  const [title, setTitle] = useState(initialTitle ?? "");
+  const [date, setDate] = useState(initialTargetDate ?? "");
   const navigate = useNavigate();
   const createCycle = useCreateBookCycle();
+
+  // The book behind initialTitle/initialTargetDate can still be loading when this mounts
+  // (useBooks resolves after first paint) — fill in once it arrives, but only if the author
+  // hasn't already typed something over the empty default.
+  useEffect(() => {
+    if (initialTitle) setTitle((current) => current || initialTitle);
+  }, [initialTitle]);
+  useEffect(() => {
+    if (initialTargetDate) setDate((current) => current || initialTargetDate);
+  }, [initialTargetDate]);
 
   const submit = () => {
     if (!title.trim()) return;
