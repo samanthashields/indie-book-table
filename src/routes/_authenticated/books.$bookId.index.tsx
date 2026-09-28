@@ -2,8 +2,11 @@ import { useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { CalendarDays, CheckCircle2, ChevronDown, Circle, Clock3, FileText, FolderOpen, Settings2, Users } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { BookDetailsBody } from "@/components/book-details-body";
 import { MilestoneBody } from "@/components/milestone-body";
 import { MilestoneDisclosure } from "@/components/milestone-disclosure";
+import { ResourcesBody } from "@/components/resources-body";
+import { TeamBody } from "@/components/team-body";
 import { DeleteCycleSection } from "@/components/delete-cycle";
 import { CycleHeaderMenu } from "@/components/cycle-header-menu";
 import { SetupTasksSection } from "@/components/setup-tasks-section";
@@ -30,6 +33,12 @@ export const Route = createFileRoute("/_authenticated/books/$bookId/")({
 
 const pacingCopy = { done: "Wrapped up", current: "You’re in this phase now", behind: "Running past the suggested window", ahead: "Suggested window" } as const;
 
+type OverviewDrawer =
+  | { kind: "milestone"; milestone: Milestone; phaseName: string }
+  | { kind: "details" }
+  | { kind: "team" }
+  | { kind: "resources" };
+
 const needsFollowUpTone: Record<NeedsFollowUp, "neutral" | "good" | "warm" | "danger"> = {
   behind_pace: "danger",
   no_progress: "warm",
@@ -42,7 +51,7 @@ function BookOverview() {
   const { data, isLoading } = useBookTree(bookId);
   const [manualOpen, setManualOpen] = useState<string[] | null>(null);
   const [tourKey, setTourKey] = useState(0);
-  const [drawer, setDrawer] = useState<{ milestone: Milestone; phaseName: string } | null>(null);
+  const [drawer, setDrawer] = useState<OverviewDrawer | null>(null);
 
   if (isLoading) return <AppShell><p className="text-sm text-muted-foreground">Loading your book…</p></AppShell>;
   if (!data) return <AppShell><p className="text-sm text-muted-foreground">This book isn’t available for your account.</p></AppShell>;
@@ -74,9 +83,9 @@ function BookOverview() {
         </div>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap gap-2">
-            <Button variant="outline" asChild><Link to="/books/$bookId/details" params={{ bookId }}><Settings2 />Book details</Link></Button>
-            <Button variant="outline" asChild><Link to="/books/$bookId/team" params={{ bookId }}><Users />Collaborators</Link></Button>
-            <Button variant="outline" asChild><Link to="/books/$bookId/resources" params={{ bookId }}><FolderOpen />Resources</Link></Button>
+            <Button variant="outline" onClick={() => setDrawer({ kind: "details" })}><Settings2 />Book details</Button>
+            <Button variant="outline" onClick={() => setDrawer({ kind: "team" })}><Users />Collaborators</Button>
+            <Button variant="outline" onClick={() => setDrawer({ kind: "resources" })}><FolderOpen />Resources</Button>
           </div>
           <div className="flex items-center gap-2">
             <Button variant={book.status !== "complete" ? "secondary" : "outline"} asChild><Link to="/books/$bookId/reflection" params={{ bookId }}><FileText />{book.status !== "complete" ? "End book cycle & reflect" : "Reflection"}</Link></Button>
@@ -132,7 +141,7 @@ function BookOverview() {
                   {expanded && (
                     <div className="animate-in fade-in slide-in-from-top-1 border-t border-border/70 px-5 pb-4 pt-2 duration-200">
                       <MilestoneDisclosure items={phase.milestones} reveal={(milestone) => milestone.id === next?.id} className="space-y-1" renderItem={(milestone) => (
-                        <li key={milestone.id}><button onClick={() => setDrawer({ milestone: { ...milestone }, phaseName: phase.name })} className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-xl px-2 py-3 text-left text-sm transition-colors hover:bg-secondary hover:text-link">
+                        <li key={milestone.id}><button onClick={() => setDrawer({ kind: "milestone", milestone: { ...milestone }, phaseName: phase.name })} className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-xl px-2 py-3 text-left text-sm transition-colors hover:bg-secondary hover:text-link">
                           {milestone.status === "Complete" ? <CheckCircle2 className={cn("size-5", style.dot)} /> : <Circle className="size-5 text-muted-foreground" />}
                           <span className="min-w-0 font-medium">{milestone.name}</span>
                           {milestone.due && <span className="text-muted-foreground">{milestone.due}</span>}
@@ -155,8 +164,13 @@ function BookOverview() {
 
       <Sheet open={Boolean(drawer)} onOpenChange={(next) => { if (!next) setDrawer(null); }}>
         <SheetContent side="right" dim={false} className="w-full overflow-y-auto border-l-2 shadow-2xl sm:max-w-xl">
-          <SheetTitle className="sr-only">{drawer?.milestone.name ?? "Milestone"}</SheetTitle>
-          {drawer && <MilestoneBody key={drawer.milestone.id} bookId={bookId} milestone={drawer.milestone} phaseName={drawer.phaseName} compact />}
+          <SheetTitle className="sr-only">
+            {drawer?.kind === "milestone" ? drawer.milestone.name : drawer?.kind === "details" ? "Book details" : drawer?.kind === "team" ? "Collaborators" : drawer?.kind === "resources" ? "Resources" : "Panel"}
+          </SheetTitle>
+          {drawer?.kind === "milestone" && <MilestoneBody key={drawer.milestone.id} bookId={bookId} milestone={drawer.milestone} phaseName={drawer.phaseName} compact />}
+          {drawer?.kind === "details" && <BookDetailsBody bookId={bookId} compact />}
+          {drawer?.kind === "team" && <TeamBody bookId={bookId} compact />}
+          {drawer?.kind === "resources" && <ResourcesBody bookId={bookId} compact />}
         </SheetContent>
       </Sheet>
     </AppShell>
