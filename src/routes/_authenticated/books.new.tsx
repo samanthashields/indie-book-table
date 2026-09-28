@@ -7,6 +7,7 @@ import { MilestoneDisclosure } from "@/components/milestone-disclosure";
 import { AppShell } from "@/components/app-shell";
 import { CoachConversation } from "@/components/coach-conversation";
 import { CycleBuilder, blankPhases } from "@/components/cycle-builder";
+import { RequestUpgradeButton } from "@/components/pen/upgrade-button";
 import { TemplateCyclePreview } from "@/components/template-cycle-preview";
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
@@ -253,7 +254,8 @@ function CreateBook() {
         <div className="max-w-2xl rounded-2xl border border-border bg-paper p-8">
           <p className="text-sm leading-7 text-muted-foreground">Your account is on the free plan, which includes every template and building a book cycle from scratch. Upgrade whenever you’d like the coach to shape the plan around your genre, budget and launch date.</p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button onClick={() => go({ path: "template" })}>Start from a template</Button>
+            <RequestUpgradeButton />
+            <Button variant="outline" onClick={() => go({ path: "template" })}>Start from a template</Button>
             <Button variant="outline" onClick={() => go({ path: "scratch" })}>Build from scratch</Button>
           </div>
         </div>
