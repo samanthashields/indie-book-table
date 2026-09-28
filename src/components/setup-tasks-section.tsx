@@ -35,16 +35,22 @@ function useSetupTasksOpen(userId: string) {
   return [open, choose] as const;
 }
 
-/** A collapsible copy of the setup tasks, for the top of the book overview. Only the author sees it. */
-export function SetupTasksSection({ bookId, authorId, book }: { bookId: string; authorId: string; book: BookRow }) {
+/**
+ * A collapsible copy of the setup tasks, for the top of the book overview. Only the author sees it.
+ * `forceClosed` starts it collapsed for this render (the book cycle has ended) without touching the
+ * author's remembered preference for the normal, in-progress view.
+ */
+export function SetupTasksSection({ bookId, authorId, book, forceClosed = false }: { bookId: string; authorId: string; book: BookRow; forceClosed?: boolean }) {
   const user = useCurrentUser();
   const userId = user.data?.id;
   if (!userId || userId !== authorId) return null;
-  return <SetupTasksPanel bookId={bookId} userId={userId} book={book} />;
+  return <SetupTasksPanel bookId={bookId} userId={userId} book={book} forceClosed={forceClosed} />;
 }
 
-function SetupTasksPanel({ bookId, userId, book }: { bookId: string; userId: string; book: BookRow }) {
-  const [open, choose] = useSetupTasksOpen(userId);
+function SetupTasksPanel({ bookId, userId, book, forceClosed }: { bookId: string; userId: string; book: BookRow; forceClosed: boolean }) {
+  const persisted = useSetupTasksOpen(userId);
+  const sessionOnly = useState(false);
+  const [open, choose] = forceClosed ? sessionOnly : persisted;
   const tasks = useSetupTasks(bookId);
   const update = useUpdateSetupTask(bookId);
 

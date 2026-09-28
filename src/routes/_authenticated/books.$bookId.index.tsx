@@ -64,6 +64,7 @@ function BookOverview() {
   const [drawer, setDrawer] = useState<OverviewDrawer | null>(null);
   const [confirmEnd, setConfirmEnd] = useState(false);
   const [reflectionStarted, setReflectionStarted] = useState(false);
+  const [phasesOpenWhenEnded, setPhasesOpenWhenEnded] = useState(false);
 
   if (isLoading) return <AppShell><p className="text-sm text-muted-foreground">Loading your book…</p></AppShell>;
   if (!data) return <AppShell><p className="text-sm text-muted-foreground">This book isn’t available for your account.</p></AppShell>;
@@ -105,7 +106,16 @@ function BookOverview() {
           </div>
           <div className="flex items-center gap-2">
             {!reflecting && <Button variant="secondary" onClick={() => setConfirmEnd(true)}><FileText />End book cycle & reflect</Button>}
-            <CycleHeaderMenu bookId={bookId} authorId={book.author_id} title={book.title} total={allMilestones.length} done={doneCount} onTour={() => setTourKey((key) => key + 1)} />
+            <CycleHeaderMenu
+              bookId={bookId}
+              authorId={book.author_id}
+              title={book.title}
+              total={allMilestones.length}
+              done={doneCount}
+              ended={book.status === "complete"}
+              onTour={() => setTourKey((key) => key + 1)}
+              onRestart={() => { setReflectionStarted(false); setPhasesOpenWhenEnded(false); }}
+            />
           </div>
         </div>
       </header>
@@ -121,16 +131,14 @@ function BookOverview() {
 
       {reflecting && <PostLaunchReflectionSection bookId={bookId} authorId={book.author_id} />}
 
-      {!reflecting && <SetupTasksSection bookId={bookId} authorId={book.author_id} book={book} />}
+      {reflecting && <PostLaunchTasksSection bookId={bookId} authorId={book.author_id} />}
+
+      <SetupTasksSection bookId={bookId} authorId={book.author_id} book={book} forceClosed={reflecting} />
 
       {!reflecting && timeline.warnings.length > 0 && <p className="mb-6 rounded-2xl border border-clay/40 bg-clay/12 p-5 text-sm leading-6">{timeline.warnings[0]}</p>}
 
-      {!reflecting && (
-        <section id="tour-phases">
-          <div className="mb-5">
-            <h2 className="font-heading text-3xl font-normal">Your publishing path</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Six phases from private manuscript to published book, paced around {target}.</p>
-          </div>
+      {(() => {
+        const phasesList = (
           <div className="relative space-y-4 before:absolute before:bottom-8 before:left-5 before:top-7 before:w-px before:bg-border">
             {phases.filter((phase) => !phase.hidden).map((phase, index) => {
               const style = phaseStyle(phase.id);
@@ -173,10 +181,38 @@ function BookOverview() {
               );
             })}
           </div>
-        </section>
-      )}
+        );
 
-      <PostLaunchTasksSection bookId={bookId} authorId={book.author_id} />
+        if (!reflecting) {
+          return (
+            <section id="tour-phases" className="mb-10">
+              <div className="mb-5">
+                <h2 className="font-heading text-3xl font-normal">Your publishing path</h2>
+                <p className="mt-1 text-sm text-muted-foreground">Six phases from private manuscript to published book, paced around {target}.</p>
+              </div>
+              {phasesList}
+            </section>
+          );
+        }
+
+        return (
+          <section id="tour-phases" className="mb-10 rounded-2xl border border-border bg-card shadow-xs">
+            <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-5">
+              <div className="min-w-0">
+                <h2 className="font-heading text-2xl font-normal">Your publishing path</h2>
+                <p className="mt-1 text-sm text-muted-foreground">Six phases from private manuscript to published book, paced around {target}.</p>
+              </div>
+              <Button variant="outline" size="sm" onClick={() => setPhasesOpenWhenEnded((value) => !value)} aria-expanded={phasesOpenWhenEnded}>
+                {phasesOpenWhenEnded ? "Hide" : "Show"}
+                <ChevronDown className={cn("transition-transform duration-200", phasesOpenWhenEnded && "rotate-180")} />
+              </Button>
+            </div>
+            {phasesOpenWhenEnded && <div className="border-t border-border/70 px-6 pb-6 pt-4">{phasesList}</div>}
+          </section>
+        );
+      })()}
+
+      {!reflecting && <PostLaunchTasksSection bookId={bookId} authorId={book.author_id} />}
 
       <DeleteCycleSection bookId={bookId} authorId={book.author_id} title={book.title} total={allMilestones.length} done={doneCount} />
 

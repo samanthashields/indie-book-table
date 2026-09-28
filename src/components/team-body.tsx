@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useBookTree } from "@/lib/book-db";
 import { collaboratorRoles, useCollaborators, useInviteCollaborator, useRemoveCollaborator, useUpdateCollaborator } from "@/lib/collaborators";
+import { cn } from "@/lib/utils";
 
 /** The Collaborators page body — reused by the standalone /books/$bookId/team route and the overview page's drawer. */
 export function TeamBody({ bookId, compact = false }: { bookId: string; compact?: boolean }) {
@@ -39,7 +40,7 @@ export function TeamBody({ bookId, compact = false }: { bookId: string; compact?
       <section className="rounded-2xl border border-border bg-paper p-6 shadow-xs">
         <h3 className="font-heading text-2xl font-normal">Invite someone</h3>
         <p className="mt-2 text-sm text-muted-foreground">They’ll create their own account with this email address, and the invitation stays open for 14 days.</p>
-        <form className="mt-5 grid gap-4 md:grid-cols-[1.2fr_1fr_1fr_auto] md:items-end" onSubmit={(event) => { event.preventDefault(); send(); }}>
+        <form className={cn("mt-5 grid gap-4", compact ? "grid-cols-1" : "md:grid-cols-[1.2fr_1fr_1fr_auto] md:items-end")} onSubmit={(event) => { event.preventDefault(); send(); }}>
           <label className="block text-sm font-semibold">Email address<Input className="mt-2" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="editor@example.com" /></label>
           <label className="block text-sm font-semibold">Name (optional)<Input className="mt-2" value={name} onChange={(event) => setName(event.target.value)} placeholder="Priya" /></label>
           <label className="block text-sm font-semibold">Role
@@ -63,7 +64,7 @@ export function TeamBody({ bookId, compact = false }: { bookId: string; compact?
         ) : (
           <ul className="space-y-3">
             {(collaborators.data ?? []).map((person) => (
-              <li key={person.id} className="grid gap-4 rounded-2xl border border-border bg-card px-5 py-4 shadow-xs sm:grid-cols-[1fr_auto_auto] sm:items-center">
+              <li key={person.id} className={cn("grid gap-4 rounded-2xl border border-border bg-card px-5 py-4 shadow-xs", compact ? "grid-cols-1" : "sm:grid-cols-[1fr_auto_auto] sm:items-center")}>
                 <div className="min-w-0">
                   <p className="font-semibold">{person.name || person.email}</p>
                   <p className="truncate text-sm text-muted-foreground">{person.email}</p>
