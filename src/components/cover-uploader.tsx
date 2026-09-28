@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { removeBookFile, uploadBookFile, useFileUrl } from "@/lib/book-files";
+import { cn } from "@/lib/utils";
 
 export function CoverUploader({
   bookId,
@@ -9,12 +10,16 @@ export function CoverUploader({
   coverUrl,
   onChange,
   saving,
+  compact = false,
 }: {
   bookId: string;
   title: string;
   coverUrl: string | null;
   onChange: (value: string | null) => void;
   saving?: boolean;
+  /** True inside the narrow book-overview drawer, where `sm:flex-row` would trigger from the
+   * browser's viewport width even though the drawer itself is much narrower. */
+  compact?: boolean;
 }) {
   const input = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
@@ -43,7 +48,7 @@ export function CoverUploader({
   };
 
   return (
-    <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
+    <div className={cn("flex flex-col gap-6", !compact && "sm:flex-row sm:items-center")}>
       {preview.data ? (
         <img src={preview.data} alt={`Current cover artwork for ${title}`} width={768} height={1152} className="aspect-[2/3] w-32 rounded-xl object-cover shadow-sm" />
       ) : (
