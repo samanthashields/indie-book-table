@@ -98,8 +98,8 @@ export function DeleteCycleSection({
     <section className="mt-12 rounded-2xl border border-destructive/30 bg-destructive/5 p-6">
       <h2 className="font-heading text-2xl font-normal">Delete this book cycle</h2>
       <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">
-        Remove this plan without deleting the book. “{title}” stays on your shelf and you can start a new cycle whenever you like.
-        To keep a record of how it went, use “End book cycle &amp; reflect” instead.
+        Delete this book cycle without deleting the book. “{title}” stays on your shelf and you can start a new cycle whenever
+        you’d like. To keep a record of how it went, use “End book cycle &amp; reflect” instead.
       </p>
       <Button variant="outline" className="mt-4 border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => setOpen(true)}>
         <Trash2 />

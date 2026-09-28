@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { formatDateMDY } from "@/lib/date";
 
 export const Route = createFileRoute("/_authenticated/admin/journal/")({ component: AdminJournal });
 
@@ -46,7 +47,7 @@ function AdminJournal() {
             <span className="min-w-0 flex-1 text-sm font-semibold">{post.title}</span>
             {post.published_at && (
               <span className="text-xs text-muted-foreground">
-                {new Date(post.published_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+                {formatDateMDY(post.published_at)}
               </span>
             )}
             <StatusPill tone={post.status === "published" ? "good" : "warm"}>{post.status === "published" ? "Published" : "Draft"}</StatusPill>

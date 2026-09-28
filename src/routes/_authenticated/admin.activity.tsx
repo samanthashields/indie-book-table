@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { formatDateTimeMDY } from "@/lib/date";
 
 export const Route = createFileRoute("/_authenticated/admin/activity")({
   head: () => ({ meta: [
@@ -33,7 +34,7 @@ function AdminActivity() {
       {rows.map((row) => (
         <li key={row.id} className="rounded-xl border border-border bg-card px-4 py-3 text-sm shadow-xs">
           <p>{row.text}</p>
-          <p className="mt-1 text-xs text-muted-foreground">{new Date(row.created_at).toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
+          <p className="mt-1 text-xs text-muted-foreground">{formatDateTimeMDY(row.created_at)}</p>
         </li>
       ))}
     </ul>

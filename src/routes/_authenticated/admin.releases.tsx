@@ -9,6 +9,7 @@ import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useDeleteReleaseNote, useReleaseNotes, useSaveReleaseNote, type ReleaseNote } from "@/lib/help-db";
+import { formatDateMDY } from "@/lib/date";
 
 export const Route = createFileRoute("/_authenticated/admin/releases")({ component: AdminReleases });
 
@@ -76,7 +77,7 @@ function AdminReleases() {
             <div className="flex flex-wrap items-center gap-2">
               {note.label && <StatusPill tone="good">{note.label}</StatusPill>}
               <StatusPill tone={note.status === "published" ? "good" : "warm"}>{note.status === "published" ? "Published" : "Draft"}</StatusPill>
-              <span className="text-xs text-muted-foreground">{new Date(note.released_on).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</span>
+              <span className="text-xs text-muted-foreground">{formatDateMDY(note.released_on)}</span>
             </div>
             <h3 className="mt-2 font-heading text-xl font-normal">{note.title}</h3>
             <div className="mt-2 text-sm"><MarkdownText body={note.body} /></div>

@@ -1,9 +1,22 @@
 import { useState } from "react";
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { CalendarDays, CheckCircle2, ChevronDown, Circle, Clock3, FileText, FolderOpen, Settings2, Users } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { AppShell } from "@/components/app-shell";
+import { BookDetailsBody } from "@/components/book-details-body";
 import { MilestoneBody } from "@/components/milestone-body";
 import { MilestoneDisclosure } from "@/components/milestone-disclosure";
+import { PostLaunchReflectionSection } from "@/components/post-launch-reflection-section";
+import { ResourcesBody } from "@/components/resources-body";
+import { TeamBody } from "@/components/team-body";
 import { DeleteCycleSection } from "@/components/delete-cycle";
 import { CycleHeaderMenu } from "@/components/cycle-header-menu";
 import { SetupTasksSection } from "@/components/setup-tasks-section";
@@ -30,6 +43,12 @@ export const Route = createFileRoute("/_authenticated/books/$bookId/")({
 
 const pacingCopy = { done: "Wrapped up", current: "You’re in this phase now", behind: "Running past the suggested window", ahead: "Suggested window" } as const;
 
+type OverviewDrawer =
+  | { kind: "milestone"; milestone: Milestone; phaseName: string }
+  | { kind: "details" }
+  | { kind: "team" }
+  | { kind: "resources" };
+
 const needsFollowUpTone: Record<NeedsFollowUp, "neutral" | "good" | "warm" | "danger"> = {
   behind_pace: "danger",
   no_progress: "warm",
@@ -42,12 +61,18 @@ function BookOverview() {
   const { data, isLoading } = useBookTree(bookId);
   const [manualOpen, setManualOpen] = useState<string[] | null>(null);
   const [tourKey, setTourKey] = useState(0);
-  const [drawer, setDrawer] = useState<{ milestone: Milestone; phaseName: string } | null>(null);
+  const [drawer, setDrawer] = useState<OverviewDrawer | null>(null);
+  const [confirmEnd, setConfirmEnd] = useState(false);
+  const [reflectionStarted, setReflectionStarted] = useState(false);
 
   if (isLoading) return <AppShell><p className="text-sm text-muted-foreground">Loading your book…</p></AppShell>;
   if (!data) return <AppShell><p className="text-sm text-muted-foreground">This book isn’t available for your account.</p></AppShell>;
 
   const { book, phases, timeline, collaboratorCount, needsFollowUp } = data;
+  // Ending the cycle replaces the phase timeline and setup tasks with the reflection section —
+  // once the cycle is actually complete this is permanent, but the author can also step into it
+  // early (before answering the closing questions) via the confirmation below.
+  const reflecting = book.status === "complete" || reflectionStarted;
   const allMilestones = phases.flatMap((phase) => phase.milestones);
   const doneCount = allMilestones.filter((milestone) => milestone.status === "Complete").length;
   const progress = allMilestones.length ? Math.round((doneCount / allMilestones.length) * 100) : 0;
@@ -74,12 +99,12 @@ function BookOverview() {
         </div>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap gap-2">
-            <Button variant="outline" asChild><Link to="/books/$bookId/details" params={{ bookId }}><Settings2 />Book details</Link></Button>
-            <Button variant="outline" asChild><Link to="/books/$bookId/team" params={{ bookId }}><Users />Collaborators</Link></Button>
-            <Button variant="outline" asChild><Link to="/books/$bookId/resources" params={{ bookId }}><FolderOpen />Resources</Link></Button>
+            <Button variant="outline" onClick={() => setDrawer({ kind: "details" })}><Settings2 />Book details</Button>
+            <Button variant="outline" onClick={() => setDrawer({ kind: "team" })}><Users />Collaborators</Button>
+            <Button variant="outline" onClick={() => setDrawer({ kind: "resources" })}><FolderOpen />Resources</Button>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant={book.status !== "complete" ? "secondary" : "outline"} asChild><Link to="/books/$bookId/reflection" params={{ bookId }}><FileText />{book.status !== "complete" ? "End book cycle & reflect" : "Reflection"}</Link></Button>
+            {!reflecting && <Button variant="secondary" onClick={() => setConfirmEnd(true)}><FileText />End book cycle & reflect</Button>}
             <CycleHeaderMenu bookId={bookId} authorId={book.author_id} title={book.title} total={allMilestones.length} done={doneCount} onTour={() => setTourKey((key) => key + 1)} />
           </div>
         </div>
@@ -94,58 +119,62 @@ function BookOverview() {
         </div>
       </section>
 
-      <SetupTasksSection bookId={bookId} authorId={book.author_id} book={book} />
+      {reflecting && <PostLaunchReflectionSection bookId={bookId} authorId={book.author_id} />}
 
-      {timeline.warnings.length > 0 && <p className="mb-6 rounded-2xl border border-clay/40 bg-clay/12 p-5 text-sm leading-6">{timeline.warnings[0]}</p>}
+      {!reflecting && <SetupTasksSection bookId={bookId} authorId={book.author_id} book={book} />}
 
-      <section id="tour-phases">
-        <div className="mb-5">
-          <h2 className="font-heading text-3xl font-normal">Your publishing path</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Six phases from private manuscript to published book, paced around {target}.</p>
-        </div>
-        <div className="relative space-y-4 before:absolute before:bottom-8 before:left-5 before:top-7 before:w-px before:bg-border">
-          {phases.filter((phase) => !phase.hidden).map((phase, index) => {
-            const style = phaseStyle(phase.id);
-            const range = timeline.ranges[phase.id as keyof typeof timeline.ranges];
-            const complete = phase.milestones.length > 0 && phase.milestones.every((milestone) => milestone.status === "Complete");
-            const state = pacing(range, complete);
-            const expanded = open.includes(phase.id);
-            return (
-              <article key={phase.id} className="relative grid grid-cols-[42px_minmax(0,1fr)] gap-4">
-                <span className={cn("z-10 grid size-10 place-items-center rounded-full border-2 font-semibold", state === "ahead" ? "border-border bg-background text-muted-foreground" : style.marker)}>{index + 1}</span>
-                <div className={cn("overflow-hidden rounded-2xl border border-border shadow-xs bg-card")}>
-                  <button onClick={() => toggle(phase.id)} aria-expanded={expanded} className="flex w-full items-start gap-3 p-5 text-left">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="font-heading text-2xl font-normal">{phase.name}</h3>
-                        <StatusPill>{phase.mode}</StatusPill>
+      {!reflecting && timeline.warnings.length > 0 && <p className="mb-6 rounded-2xl border border-clay/40 bg-clay/12 p-5 text-sm leading-6">{timeline.warnings[0]}</p>}
+
+      {!reflecting && (
+        <section id="tour-phases">
+          <div className="mb-5">
+            <h2 className="font-heading text-3xl font-normal">Your publishing path</h2>
+            <p className="mt-1 text-sm text-muted-foreground">Six phases from private manuscript to published book, paced around {target}.</p>
+          </div>
+          <div className="relative space-y-4 before:absolute before:bottom-8 before:left-5 before:top-7 before:w-px before:bg-border">
+            {phases.filter((phase) => !phase.hidden).map((phase, index) => {
+              const style = phaseStyle(phase.id);
+              const range = timeline.ranges[phase.id as keyof typeof timeline.ranges];
+              const complete = phase.milestones.length > 0 && phase.milestones.every((milestone) => milestone.status === "Complete");
+              const state = pacing(range, complete);
+              const expanded = open.includes(phase.id);
+              return (
+                <article key={phase.id} className="relative grid grid-cols-[42px_minmax(0,1fr)] gap-4">
+                  <span className={cn("z-10 grid size-10 place-items-center rounded-full border-2 font-semibold", state === "ahead" ? "border-border bg-background text-muted-foreground" : style.marker)}>{index + 1}</span>
+                  <div className={cn("overflow-hidden rounded-2xl border border-border shadow-xs bg-card")}>
+                    <button onClick={() => toggle(phase.id)} aria-expanded={expanded} className="flex w-full items-start gap-3 p-5 text-left">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="font-heading text-2xl font-normal">{phase.name}</h3>
+                          <StatusPill>{phase.mode}</StatusPill>
+                        </div>
+                        <p className="mt-1 text-sm text-muted-foreground">{phase.summary}</p>
+                        <div className="mt-3 flex flex-wrap items-center gap-2">
+                          <span className={cn("rounded-md border px-3 py-1 text-xs font-semibold", style.chip)}>{range ? formatRange(range) : complete ? "Finished before this plan" : "Not scheduled"}</span>
+                          <span className={cn("rounded-md px-3 py-1 text-xs font-semibold", state === "behind" ? "bg-clay/18 text-foreground" : state === "current" ? "bg-teal/20" : state === "done" ? "bg-leaf/20" : "bg-secondary text-muted-foreground")}>{pacingCopy[state]}</span>
+                          <span className="text-xs text-muted-foreground">{phase.milestones.filter((m) => m.status === "Complete").length}/{phase.milestones.length} complete</span>
+                        </div>
                       </div>
-                      <p className="mt-1 text-sm text-muted-foreground">{phase.summary}</p>
-                      <div className="mt-3 flex flex-wrap items-center gap-2">
-                        <span className={cn("rounded-md border px-3 py-1 text-xs font-semibold", style.chip)}>{range ? formatRange(range) : complete ? "Finished before this plan" : "Not scheduled"}</span>
-                        <span className={cn("rounded-md px-3 py-1 text-xs font-semibold", state === "behind" ? "bg-clay/18 text-foreground" : state === "current" ? "bg-teal/20" : state === "done" ? "bg-leaf/20" : "bg-secondary text-muted-foreground")}>{pacingCopy[state]}</span>
-                        <span className="text-xs text-muted-foreground">{phase.milestones.filter((m) => m.status === "Complete").length}/{phase.milestones.length} complete</span>
+                      <ChevronDown className={cn("mt-1 size-5 shrink-0 text-muted-foreground transition-transform duration-200", expanded && "rotate-180")} />
+                    </button>
+                    {expanded && (
+                      <div className="animate-in fade-in slide-in-from-top-1 border-t border-border/70 px-5 pb-4 pt-2 duration-200">
+                        <MilestoneDisclosure items={phase.milestones} reveal={(milestone) => milestone.id === next?.id} className="space-y-1" renderItem={(milestone) => (
+                          <li key={milestone.id}><button onClick={() => setDrawer({ kind: "milestone", milestone: { ...milestone }, phaseName: phase.name })} className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-xl px-2 py-3 text-left text-sm transition-colors hover:bg-secondary hover:text-link">
+                            {milestone.status === "Complete" ? <CheckCircle2 className={cn("size-5", style.dot)} /> : <Circle className="size-5 text-muted-foreground" />}
+                            <span className="min-w-0 font-medium">{milestone.name}</span>
+                            {milestone.due && <span className="text-muted-foreground">{milestone.due}</span>}
+                          </button></li>
+                        )} />
                       </div>
-                    </div>
-                    <ChevronDown className={cn("mt-1 size-5 shrink-0 text-muted-foreground transition-transform duration-200", expanded && "rotate-180")} />
-                  </button>
-                  {expanded && (
-                    <div className="animate-in fade-in slide-in-from-top-1 border-t border-border/70 px-5 pb-4 pt-2 duration-200">
-                      <MilestoneDisclosure items={phase.milestones} reveal={(milestone) => milestone.id === next?.id} className="space-y-1" renderItem={(milestone) => (
-                        <li key={milestone.id}><button onClick={() => setDrawer({ milestone: { ...milestone }, phaseName: phase.name })} className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-xl px-2 py-3 text-left text-sm transition-colors hover:bg-secondary hover:text-link">
-                          {milestone.status === "Complete" ? <CheckCircle2 className={cn("size-5", style.dot)} /> : <Circle className="size-5 text-muted-foreground" />}
-                          <span className="min-w-0 font-medium">{milestone.name}</span>
-                          {milestone.due && <span className="text-muted-foreground">{milestone.due}</span>}
-                        </button></li>
-                      )} />
-                    </div>
-                  )}
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       <PostLaunchTasksSection bookId={bookId} authorId={book.author_id} />
 
@@ -153,10 +182,35 @@ function BookOverview() {
 
       <CycleTour replayKey={tourKey} />
 
+      <AlertDialog open={confirmEnd} onOpenChange={setConfirmEnd}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>End this book cycle?</AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="space-y-3 text-sm leading-6">
+                <p>You’ll answer a few closing questions — whether it was completed and published — plus a short reflection. The phase timeline and recommended tasks step aside while you do.</p>
+                <p>Nothing is deleted, and “{book.title}” stays on your shelf either way.</p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Not yet</AlertDialogCancel>
+            <Button onClick={() => { setReflectionStarted(true); setConfirmEnd(false); }}>
+              <FileText />End book cycle
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <Sheet open={Boolean(drawer)} onOpenChange={(next) => { if (!next) setDrawer(null); }}>
         <SheetContent side="right" dim={false} className="w-full overflow-y-auto border-l-2 shadow-2xl sm:max-w-xl">
-          <SheetTitle className="sr-only">{drawer?.milestone.name ?? "Milestone"}</SheetTitle>
-          {drawer && <MilestoneBody key={drawer.milestone.id} bookId={bookId} milestone={drawer.milestone} phaseName={drawer.phaseName} compact />}
+          <SheetTitle className="sr-only">
+            {drawer?.kind === "milestone" ? drawer.milestone.name : drawer?.kind === "details" ? "Book details" : drawer?.kind === "team" ? "Collaborators" : drawer?.kind === "resources" ? "Resources" : "Panel"}
+          </SheetTitle>
+          {drawer?.kind === "milestone" && <MilestoneBody key={drawer.milestone.id} bookId={bookId} milestone={drawer.milestone} phaseName={drawer.phaseName} compact />}
+          {drawer?.kind === "details" && <BookDetailsBody bookId={bookId} compact />}
+          {drawer?.kind === "team" && <TeamBody bookId={bookId} compact />}
+          {drawer?.kind === "resources" && <ResourcesBody bookId={bookId} compact />}
         </SheetContent>
       </Sheet>
     </AppShell>

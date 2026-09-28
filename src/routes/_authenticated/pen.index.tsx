@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
 import { PenChat, penOpener } from "@/components/pen/pen-chat";
+import { RequestUpgradeButton } from "@/components/pen/upgrade-button";
 import { useCreatePenThread, usePenThreads } from "@/lib/pen-db";
 import { useCurrentUser } from "@/lib/use-current-user";
 import penMarkAsset from "@/assets/pen-mark.png.asset.json";
@@ -82,14 +83,7 @@ function PenIndexPage() {
                   Free authors keep the templates and the build-from-scratch cycle. Upgrade to talk
                   with Pen about your shelf, your pacing and your budget whenever you like.
                 </p>
-                <Button
-                  className="mt-4"
-                  onClick={() =>
-                    toast.info("Plans are coming soon — your account is on the free plan for now.")
-                  }
-                >
-                  Upgrade to the paid plan
-                </Button>
+                <RequestUpgradeButton className="mt-4" />
               </div>
             </div>
           </div>

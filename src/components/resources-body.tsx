@@ -1,0 +1,142 @@
+import { useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { FolderOpen, Link2, Paperclip, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useBookTree } from "@/lib/book-db";
+import { uploadBookFile, useFileUrl } from "@/lib/book-files";
+import { RESOURCE_KINDS, resourceKindLabel, useAddResource, useDeleteResource, useResources } from "@/lib/resources";
+import type { Resource, ResourceKind } from "@/lib/resources";
+
+function ResourceRow({ resource, milestoneLabel, onRemove }: { resource: Resource; milestoneLabel: string | null; onRemove: () => void }) {
+  const url = useFileUrl(resource.url);
+  return (
+    <li className="flex items-start justify-between gap-3 rounded-xl border border-border bg-card px-4 py-3 shadow-xs">
+      <div className="min-w-0">
+        <p className="text-sm font-semibold">{resource.label}</p>
+        <p className="text-xs text-muted-foreground">{resourceKindLabel[resource.kind]}{milestoneLabel ? ` — ${milestoneLabel}` : ""}</p>
+        {resource.url && (url.data ? (
+          <a href={url.data} target="_blank" rel="noreferrer" className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-link underline-offset-2 hover:underline">
+            <Link2 className="size-3" />Open
+          </a>
+        ) : (
+          <p className="mt-1 text-xs text-muted-foreground">Preparing link…</p>
+        ))}
+      </div>
+      <Button variant="ghost" size="icon" aria-label={`Remove ${resource.label}`} onClick={onRemove}><Trash2 /></Button>
+    </li>
+  );
+}
+
+/** The Resources page body — reused by the standalone /books/$bookId/resources route and the overview page's drawer. */
+export function ResourcesBody({ bookId, compact = false, showBackLink = false }: { bookId: string; compact?: boolean; showBackLink?: boolean }) {
+  const book = useBookTree(bookId);
+  const resources = useResources(bookId);
+  const addResource = useAddResource(bookId);
+  const deleteResource = useDeleteResource(bookId);
+  const [kind, setKind] = useState<ResourceKind>("link");
+  const [label, setLabel] = useState("");
+  const [url, setUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  const milestoneNames = new Map((book.data?.phases ?? []).flatMap((phase) => phase.milestones.map((milestone) => [milestone.id, `${phase.name} — ${milestone.name}`] as const)));
+  const list = resources.data ?? [];
+  const bookLevel = list.filter((resource) => !resource.milestone_id);
+  const milestoneScoped = list.filter((resource) => resource.milestone_id);
+
+  const addLinkResource = () => {
+    if (!label.trim()) return;
+    addResource.mutate(
+      { kind, label: label.trim(), url: url.trim() || null },
+      { onSuccess: () => { setLabel(""); setUrl(""); toast.success("Resource added"); }, onError: () => toast.error("Couldn’t add that resource") },
+    );
+  };
+
+  const uploadFile = async (file: File | undefined) => {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const path = await uploadBookFile(bookId, "resources", file);
+      addResource.mutate(
+        { kind: "file", label: label.trim() || file.name, url: path },
+        { onSuccess: () => { setLabel(""); toast.success("File added"); }, onError: () => toast.error("Couldn’t add that file") },
+      );
+    } catch {
+      toast.error("Couldn’t upload that file");
+    } finally {
+      setUploading(false);
+      if (fileInput.current) fileInput.current.value = "";
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="border-b border-border/70 pb-6">
+        <h2 className={compact ? "font-heading text-3xl font-normal" : "font-heading text-4xl font-normal md:text-5xl"}>Resources</h2>
+        <p className="mt-2 text-sm text-muted-foreground">Working files and reference material for {book.data?.book.title ?? "this book"} — book-level, plus everything rolled up from individual milestones.</p>
+      </div>
+
+      <section className="rounded-2xl border border-border bg-paper p-6 shadow-xs">
+        <h3 className="font-heading text-2xl font-normal">Add a book-level resource</h3>
+        <p className="mt-2 text-sm text-muted-foreground">Not tied to one milestone — comps, style guides, vendor lists, anything worth keeping with the whole cycle.</p>
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <select className="h-10 rounded-xl border border-input bg-card px-3 text-sm" aria-label="Resource kind" value={kind} onChange={(event) => setKind(event.target.value as ResourceKind)}>
+            {RESOURCE_KINDS.map((k) => <option key={k} value={k}>{resourceKindLabel[k]}</option>)}
+          </select>
+          <Input className="h-10 min-w-40 flex-1" aria-label="Resource label" placeholder="Label" value={label} onChange={(event) => setLabel(event.target.value)} />
+          {kind === "file" ? (
+            <>
+              <Button type="button" variant="outline" disabled={uploading} onClick={() => fileInput.current?.click()}><Paperclip />{uploading ? "Uploading…" : "Choose file"}</Button>
+              <input ref={fileInput} type="file" className="sr-only" onChange={(event) => void uploadFile(event.target.files?.[0])} />
+            </>
+          ) : (
+            <>
+              <Input className="h-10 min-w-40 flex-1" aria-label="Resource URL" placeholder="https://…" value={url} onChange={(event) => setUrl(event.target.value)} />
+              <Button type="button" onClick={addLinkResource} disabled={!label.trim() || addResource.isPending}>Add</Button>
+            </>
+          )}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="mb-4 font-heading text-2xl font-normal">Book-level</h3>
+        {bookLevel.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-border bg-card p-8 text-center">
+            <FolderOpen className="mx-auto size-6 text-muted-foreground" />
+            <p className="mt-3 text-sm text-muted-foreground">Nothing here yet — add one above, or attach resources to individual milestones.</p>
+          </div>
+        ) : (
+          <ul className="space-y-2">
+            {bookLevel.map((resource) => <ResourceRow key={resource.id} resource={resource} milestoneLabel={null} onRemove={() => deleteResource.mutate(resource.id)} />)}
+          </ul>
+        )}
+      </section>
+
+      <section>
+        <h3 className="mb-4 font-heading text-2xl font-normal">From your milestones</h3>
+        {milestoneScoped.length === 0 ? (
+          <p className="text-sm text-muted-foreground">Resources you add to a specific milestone show up here too.</p>
+        ) : (
+          <ul className="space-y-2">
+            {milestoneScoped.map((resource) => (
+              <ResourceRow
+                key={resource.id}
+                resource={resource}
+                milestoneLabel={milestoneNames.get(resource.milestone_id!) ?? null}
+                onRemove={() => deleteResource.mutate(resource.id)}
+              />
+            ))}
+          </ul>
+        )}
+      </section>
+
+      {showBackLink && (
+        <p className="text-sm text-muted-foreground">
+          <Link to="/books/$bookId" params={{ bookId }} className="font-semibold text-link underline-offset-2 hover:underline">Back to the book overview</Link>
+        </p>
+      )}
+    </div>
+  );
+}

@@ -4,6 +4,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { MarkdownText } from "@/components/markdown-text";
 import { PublicShell } from "@/components/site/public-shell";
 import { getJournalPost } from "@/lib/catalog.functions";
+import { formatDateMDY } from "@/lib/date";
 
 const postQuery = (slug: string) =>
   queryOptions({
@@ -63,11 +64,7 @@ function JournalPostPage() {
         <h1 className="mt-4 font-heading text-4xl leading-tight">{post.title}</h1>
         {post.published_at && (
           <p className="mt-2 text-sm text-muted-foreground">
-            {new Date(post.published_at).toLocaleDateString(undefined, {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
+            {formatDateMDY(post.published_at)}
           </p>
         )}
         <MarkdownText body={post.body} className="mt-8 text-lg leading-relaxed text-foreground/85" />

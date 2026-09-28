@@ -129,7 +129,7 @@ export function CycleTour({ replayKey }: { replayKey: number }) {
   if (stage === "welcome" && welcome) {
     return (
       <Dialog open onOpenChange={(next) => { if (!next) close(false); }}>
-        <DialogContent>
+        <DialogContent className="bg-inkblue-soft">
           <DialogHeader>
             <PenAvatar className="mb-1" />
             <DialogTitle>{welcome.title}</DialogTitle>
@@ -154,7 +154,7 @@ export function CycleTour({ replayKey }: { replayKey: number }) {
         aria-label="Book cycle tour"
         style={narrow || !placement ? undefined : { top: placement.top, left: placement.left, width: CARD_WIDTH }}
         className={cn(
-          "fixed z-50 rounded-2xl border border-border bg-card p-5 pl-6 shadow-lg motion-safe:transition-[top,left] motion-safe:duration-300",
+          "fixed z-50 rounded-2xl border border-border bg-inkblue-soft p-5 pl-6 shadow-lg motion-safe:transition-[top,left] motion-safe:duration-300",
           narrow || !placement ? "inset-x-4 bottom-4 mx-auto max-w-md" : "",
           !narrow && !placement && "opacity-0",
         )}
@@ -163,7 +163,7 @@ export function CycleTour({ replayKey }: { replayKey: number }) {
           <span
             aria-hidden="true"
             style={{ left: placement.arrowLeft }}
-            className={cn("absolute size-4 rotate-45 border-border bg-card", placement.side === "above" ? "-bottom-2 border-b border-r" : "-top-2 border-l border-t")}
+            className={cn("absolute size-4 rotate-45 border-border bg-inkblue-soft", placement.side === "above" ? "-bottom-2 border-b border-r" : "-top-2 border-l border-t")}
           />
         )}
         <PenAvatar className="absolute -left-4 -top-4" />

@@ -3,6 +3,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
 import { PublicShell } from "@/components/site/public-shell";
 import { getSiteCopy, listJournalPosts } from "@/lib/catalog.functions";
+import { formatDateMDY } from "@/lib/date";
 
 const postsQuery = queryOptions({
   queryKey: ["journal", "posts"],
@@ -41,12 +42,7 @@ export const Route = createFileRoute("/journal/")({
 });
 
 function formatDate(value: string | null) {
-  if (!value) return "";
-  return new Date(value).toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  return formatDateMDY(value);
 }
 
 function JournalIndex() {

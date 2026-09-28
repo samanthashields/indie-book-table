@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Maximize2, Minus } from "lucide-react";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { PenChat } from "@/components/pen/pen-chat";
+import { RequestUpgradeButton } from "@/components/pen/upgrade-button";
 import { useCurrentUser } from "@/lib/use-current-user";
 import penMarkAsset from "@/assets/pen-mark.png.asset.json";
 import aiPenCoachAsset from "@/assets/ai-pen-coach.svg.asset.json";
@@ -86,14 +86,7 @@ export function PenLauncher({ context = "overview" }: { context?: string | undef
                   Do it yourself or hire, based on your budget
                 </li>
               </ul>
-              <Button
-                className="w-full"
-                onClick={() =>
-                  toast.info("Plans are coming soon — your account is on the free plan for now.")
-                }
-              >
-                Upgrade to the paid plan
-              </Button>
+              <RequestUpgradeButton className="w-full" />
             </div>
           )}
         </div>
