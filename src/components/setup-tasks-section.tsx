@@ -40,14 +40,27 @@ function useSetupTasksOpen(userId: string) {
  * `forceClosed` starts it collapsed for this render (the book cycle has ended) without touching the
  * author's remembered preference for the normal, in-progress view.
  */
-export function SetupTasksSection({ bookId, authorId, book, forceClosed = false }: { bookId: string; authorId: string; book: BookRow; forceClosed?: boolean }) {
+export function SetupTasksSection({
+  bookId,
+  authorId,
+  book,
+  forceClosed = false,
+  onEditDetails,
+}: {
+  bookId: string;
+  authorId: string;
+  book: BookRow;
+  forceClosed?: boolean;
+  /** Opens the Book Details drawer instead of navigating to the standalone page. */
+  onEditDetails: () => void;
+}) {
   const user = useCurrentUser();
   const userId = user.data?.id;
   if (!userId || userId !== authorId) return null;
-  return <SetupTasksPanel bookId={bookId} userId={userId} book={book} forceClosed={forceClosed} />;
+  return <SetupTasksPanel bookId={bookId} userId={userId} book={book} forceClosed={forceClosed} onEditDetails={onEditDetails} />;
 }
 
-function SetupTasksPanel({ bookId, userId, book, forceClosed }: { bookId: string; userId: string; book: BookRow; forceClosed: boolean }) {
+function SetupTasksPanel({ bookId, userId, book, forceClosed, onEditDetails }: { bookId: string; userId: string; book: BookRow; forceClosed: boolean; onEditDetails: () => void }) {
   const persisted = useSetupTasksOpen(userId);
   const sessionOnly = useState(false);
   const [open, choose] = forceClosed ? sessionOnly : persisted;
@@ -107,7 +120,7 @@ function SetupTasksPanel({ bookId, userId, book, forceClosed }: { bookId: string
                         <p className="mt-1.5 text-xs">
                           <span className={hasValue ? "font-semibold text-text-leaf" : "font-semibold text-amber"}>{hasValue ? "Set in Book Details" : "Not set yet"}</span>
                           {" — "}
-                          <Link to="/books/$bookId/details" params={{ bookId }} className="font-semibold text-link underline-offset-2 hover:underline">Edit in Book Details</Link>
+                          <button type="button" onClick={onEditDetails} className="font-semibold text-link underline-offset-2 hover:underline">Edit in Book Details</button>
                         </p>
                       )}
                     </div>

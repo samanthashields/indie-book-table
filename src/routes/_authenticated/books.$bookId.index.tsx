@@ -133,7 +133,7 @@ function BookOverview() {
 
       {reflecting && <PostLaunchTasksSection bookId={bookId} authorId={book.author_id} />}
 
-      <SetupTasksSection bookId={bookId} authorId={book.author_id} book={book} forceClosed={reflecting} />
+      <SetupTasksSection bookId={bookId} authorId={book.author_id} book={book} forceClosed={reflecting} onEditDetails={() => setDrawer({ kind: "details" })} />
 
       {!reflecting && timeline.warnings.length > 0 && <p className="mb-6 rounded-2xl border border-clay/40 bg-clay/12 p-5 text-sm leading-6">{timeline.warnings[0]}</p>}
 

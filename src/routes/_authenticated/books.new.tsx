@@ -154,7 +154,12 @@ function CreateBook() {
                   <p className="mt-2 text-sm leading-6 text-muted-foreground">{template.description}</p>
                   <div className="mt-5 flex flex-wrap gap-3">
                     <Button variant="outline" asChild><Link to="/templates/$templateId" params={{ templateId: template.id }}><Eye />Preview</Link></Button>
-                    <UseTemplateButton template={template} bookId={search.book} />
+                    <UseTemplateButton
+                      template={template}
+                      bookId={search.book}
+                      initialTitle={existingBook?.title ?? ""}
+                      initialTargetDate={existingBook?.targetDateIso ?? ""}
+                    />
                   </div>
                 </article>
               ))}
