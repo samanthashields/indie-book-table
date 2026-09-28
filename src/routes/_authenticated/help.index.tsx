@@ -9,6 +9,7 @@ import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useHelpArticles, useHelpCategories, useReleaseNotes } from "@/lib/help-db";
+import { formatDateMDY } from "@/lib/date";
 
 export const Route = createFileRoute("/_authenticated/help/")({
   component: HelpCenter,
@@ -91,7 +92,7 @@ function HelpCenter() {
                 <Link to="/help/releases" className="block rounded-xl bg-card p-4 shadow-xs transition-colors hover:border-primary">
                   <div className="flex items-center gap-2">
                     {note.label && <StatusPill tone="good">{note.label}</StatusPill>}
-                    <span className="text-xs text-muted-foreground">{new Date(note.released_on).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</span>
+                    <span className="text-xs text-muted-foreground">{formatDateMDY(note.released_on)}</span>
                   </div>
                   <p className="mt-2 text-sm font-semibold">{note.title}</p>
                 </Link>

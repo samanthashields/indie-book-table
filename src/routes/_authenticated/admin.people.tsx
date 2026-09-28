@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { inviteAdmin, listPeople, sendPersonReset, setPersonAdmin, setPersonPassword, updatePerson } from "@/lib/admin-people.functions";
+import { formatDateMDY } from "@/lib/date";
 
 export const Route = createFileRoute("/_authenticated/admin/people")({
   head: () => ({ meta: [
@@ -72,7 +73,7 @@ function PersonCard({ person, onSaved }: { person: Person; onSaved: () => void }
           <p className="font-semibold">{person.display_name || "No name yet"}</p>
           <p className="truncate text-sm text-muted-foreground">
             {person.email || "no email"} · {person.roles.length > 0 ? person.roles.join(", ") : "no role"} · joined{" "}
-            {new Date(person.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+            {formatDateMDY(person.created_at)}
           </p>
         </div>
         <StatusPill tone={person.suspended ? "danger" : "good"}>{person.suspended ? "Suspended" : "Active"}</StatusPill>

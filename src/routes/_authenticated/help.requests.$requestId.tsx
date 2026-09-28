@@ -28,6 +28,7 @@ import {
   type FeatureAttachment,
   type FeaturePriority,
 } from "@/lib/feature-requests";
+import { formatDateMDY } from "@/lib/date";
 
 export const Route = createFileRoute("/_authenticated/help/requests/$requestId")({
   component: FeatureRequestDetail,
@@ -43,8 +44,7 @@ export const Route = createFileRoute("/_authenticated/help/requests/$requestId")
   }),
 });
 
-const dateLabel = (value: string) =>
-  new Date(value).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+const dateLabel = (value: string) => formatDateMDY(value);
 
 function FeatureRequestDetail() {
   const { requestId } = Route.useParams();

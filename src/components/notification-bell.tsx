@@ -2,6 +2,7 @@ import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useMarkNotificationsRead, useNotifications } from "@/lib/notifications";
+import { formatDateTimeMDY } from "@/lib/date";
 
 export function NotificationBell({ className }: { className?: string }) {
   const notifications = useNotifications();
@@ -29,7 +30,7 @@ export function NotificationBell({ className }: { className?: string }) {
               <li key={item.id} className="px-4 py-3">
                 <p className="text-sm font-semibold">{item.title}</p>
                 {item.body && <p className="mt-1 text-sm text-muted-foreground">{item.body}</p>}
-                <p className="mt-1 text-xs text-muted-foreground">{new Date(item.created_at).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{formatDateTimeMDY(item.created_at)}</p>
               </li>
             ))}
           </ul>

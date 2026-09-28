@@ -9,6 +9,7 @@ import type { Milestone, Phase, RequirementType } from "@/lib/book-data";
 import type { ManuscriptStatus, NeedsFollowUp, TimelineResult } from "@/lib/phase-timeline";
 import { needsFollowUp, suggestPhaseRanges } from "@/lib/phase-timeline";
 import type { TemplatePhase } from "@/lib/template-data";
+import { formatDateMDY } from "@/lib/date";
 
 export type BookRow = {
   id: string;
@@ -102,10 +103,8 @@ export type BookSummary = {
 };
 
 
-export const formatDate = (iso: string | null | undefined) =>
-  iso ? new Date(`${iso}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "";
-export const formatShortDate = (iso: string | null | undefined) =>
-  iso ? new Date(`${iso}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : undefined;
+export const formatDate = (iso: string | null | undefined) => formatDateMDY(iso);
+export const formatShortDate = (iso: string | null | undefined) => (iso ? formatDateMDY(iso) : undefined);
 
 /** Some rows store the status as a slug (for example "not-started"); use the label form everywhere. */
 const normalizeStatus = (value: string | null): Milestone["status"] => {

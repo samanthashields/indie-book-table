@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { FEATURE_STATUS_LABELS, useFeatureRequest } from "@/lib/feature-requests";
 import { TICKET_STATUS_LABELS, useOpenTicket, useReplyToTicket, useSupportTickets, useTicketMessages } from "@/lib/help-db";
 import { useCurrentUser } from "@/lib/use-current-user";
+import { formatDateMDY } from "@/lib/date";
 
 export const Route = createFileRoute("/_authenticated/help/support")({
   component: SupportPage,
@@ -27,7 +28,7 @@ export const Route = createFileRoute("/_authenticated/help/support")({
   }),
 });
 
-const dateLabel = (value: string) => new Date(value).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+const dateLabel = (value: string) => formatDateMDY(value);
 
 function SupportPage() {
   const user = useCurrentUser();

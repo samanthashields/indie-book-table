@@ -11,6 +11,7 @@ import { useCatalogCoverUrl } from "@/lib/catalog-covers";
 import { useMySubmissions, type SubmissionRow } from "@/lib/catalog-submit";
 import { SUBMISSION_STATUS_LABELS } from "@/lib/submission-schema";
 import { cn } from "@/lib/utils";
+import { formatDateMDY } from "@/lib/date";
 
 export const Route = createFileRoute("/_authenticated/submissions")({
   head: () => ({
@@ -65,8 +66,7 @@ function Timeline({ step, className }: { step: number; className?: string | unde
   );
 }
 
-const submittedOn = (value: string) =>
-  new Date(value).toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" });
+const submittedOn = (value: string) => formatDateMDY(value);
 
 function SubmissionCard({ book, view }: { book: SubmissionRow; view: CollectionView }) {
   const cover = useCatalogCoverUrl(book.cover_image_url);

@@ -5,6 +5,7 @@ import { MarkdownText } from "@/components/markdown-text";
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { useReleaseNotes } from "@/lib/help-db";
+import { formatDateMDY } from "@/lib/date";
 
 export const Route = createFileRoute("/_authenticated/help/releases")({
   component: ReleaseNotesPage,
@@ -33,7 +34,7 @@ function ReleaseNotesPage() {
           <li key={note.id} className={`rounded-2xl border-2 p-6 ${note.highlight ? "border-sun/60 bg-sun/10" : "border-border bg-card"}`}>
             <div className="flex flex-wrap items-center gap-2">
               {note.label && <StatusPill tone="good">{note.label}</StatusPill>}
-              <span className="text-xs text-muted-foreground">{new Date(note.released_on).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</span>
+              <span className="text-xs text-muted-foreground">{formatDateMDY(note.released_on)}</span>
             </div>
             <h2 className="mt-2 font-heading text-2xl font-normal">{note.title}</h2>
             <div className="mt-3"><MarkdownText body={note.body} /></div>

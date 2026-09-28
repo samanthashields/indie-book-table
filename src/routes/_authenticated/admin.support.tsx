@@ -18,6 +18,7 @@ import {
   useTicketMessages,
   type TicketStatus,
 } from "@/lib/help-db";
+import { formatDateMDY } from "@/lib/date";
 
 export const Route = createFileRoute("/_authenticated/admin/support")({ component: AdminSupport });
 
@@ -72,7 +73,7 @@ function AdminSupport() {
             <p className="text-sm font-semibold">{ticket.subject}</p>
             <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               <StatusPill tone={ticket.status === "resolved" ? "good" : "warm"}>{TICKET_STATUS_LABELS[ticket.status]}</StatusPill>
-              {authors.data?.[ticket.user_id] ?? "Author"} · {new Date(ticket.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+              {authors.data?.[ticket.user_id] ?? "Author"} · {formatDateMDY(ticket.created_at)}
             </p>
           </button>
         ))}
@@ -127,7 +128,7 @@ function AdminSupport() {
               {(messages.data ?? []).map((message) => (
                 <li key={message.id} className={`rounded-xl p-4 text-sm ${message.from_admin ? "bg-teal/15" : "bg-paper"}`}>
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                    {message.from_admin ? "Support" : authors.data?.[active.user_id] ?? "Author"} · {new Date(message.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
+                    {message.from_admin ? "Support" : authors.data?.[active.user_id] ?? "Author"} · {formatDateMDY(message.created_at)}
                   </p>
                   <p className="mt-2 whitespace-pre-wrap">{message.body}</p>
                 </li>

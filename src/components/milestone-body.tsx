@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCompleteMilestone, useUpdateMilestone, type CompletionSource } from "@/lib/book-db";
 import { uploadBookFile, useFileUrl } from "@/lib/book-files";
 import { useCollaborators } from "@/lib/collaborators";
+import { formatDateTimeMDY } from "@/lib/date";
 import { OWNER_KINDS, PROVISIONS, REQUIREMENT_TYPES, ownerKindLabel, provisionLabel, requirementLabel } from "@/lib/book-data";
 import type { Collaborator } from "@/lib/collaborators";
 import type { Milestone, OwnerKind, Provision, RequirementType } from "@/lib/book-data";
@@ -336,7 +337,7 @@ export function MilestoneBody({ bookId, milestone: initial, phaseName, compact =
                   <li key={entry.id} className="rounded-xl bg-secondary p-3 text-sm">
                     <p className="whitespace-pre-line">{entry.body}</p>
                     {entry.attachment_path && <NoteAttachment path={entry.attachment_path} />}
-                    <p className="mt-1 text-xs text-muted-foreground">{new Date(entry.created_at).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">{formatDateTimeMDY(entry.created_at)}</p>
                   </li>
                 ))}
               </ul>

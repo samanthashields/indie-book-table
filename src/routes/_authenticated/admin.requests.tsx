@@ -22,13 +22,13 @@ import {
   type FeatureRequestStatus,
 } from "@/lib/feature-requests";
 import { updateFeatureRequest } from "@/lib/feature-requests.functions";
+import { formatDateMDY } from "@/lib/date";
 
 export const Route = createFileRoute("/_authenticated/admin/requests")({ component: AdminFeatureRequests });
 
 type Filter = "needs_triage" | "all" | FeatureRequestStatus;
 
-const dateLabel = (value: string) =>
-  new Date(value).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+const dateLabel = (value: string) => formatDateMDY(value);
 
 function AdminFeatureRequests() {
   const requests = useFeatureRequests();

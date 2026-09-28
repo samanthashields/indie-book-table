@@ -18,6 +18,7 @@ import {
   sendWelcomeEmailTest,
   type Subscriber,
 } from "@/lib/admin-subscribers.functions";
+import { formatDateMDY } from "@/lib/date";
 
 export const Route = createFileRoute("/_authenticated/admin/subscribers")({
   head: () => ({
@@ -51,7 +52,7 @@ const logoPreviewUrl = (file: string) =>
   /^https?:\/\//.test(file) ? file : `/api/public/email-asset/${file}`;
 
 function formatDate(value: string) {
-  return new Date(value).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  return formatDateMDY(value);
 }
 
 function downloadCsv(rows: Subscriber[]) {

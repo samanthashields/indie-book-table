@@ -1,3 +1,5 @@
+import { formatDateRangeMDY } from "@/lib/date";
+
 export type ManuscriptStatus = "drafting" | "first_draft_done" | "edited";
 
 export type PhaseKey = "writing_development" | "editing" | "production" | "pre_launch" | "launch" | "post_launch_growth";
@@ -87,12 +89,9 @@ export function suggestPhaseRanges(
   return { valid: true, ranges, warnings, shortfall, marketingStartBy: addDays(pub, -Math.round(B * 0.5)) };
 }
 
-const short = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short" });
-
 export function formatRange(range?: PhaseRange): string {
   if (!range) return "Not scheduled";
-  if (!range.end) return `From ${short.format(range.start)}, ongoing`;
-  return `${short.format(range.start)} – ${short.format(range.end)}`;
+  return formatDateRangeMDY(range.start, range.end);
 }
 
 export function pacing(range: PhaseRange | undefined, complete: boolean, now = new Date()): "ahead" | "current" | "behind" | "done" {
