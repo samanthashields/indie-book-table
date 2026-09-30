@@ -1,8 +1,18 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { LogOut, Menu, Shield, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
-import { useCurrentUser } from "@/lib/use-current-user";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { NotificationBell } from "@/components/notification-bell";
+import { signOut, useCurrentUser } from "@/lib/use-current-user";
 import { ThemeToggle } from "@/components/theme-toggle";
 import falconAsset from "@/assets/falcon.svg.asset.json";
 
@@ -13,6 +23,65 @@ const links = [
   { label: "Journal", to: "/journal" as const },
   { label: "Mission", to: "/mission" as const },
 ];
+
+function AccountMenu() {
+  const user = useCurrentUser();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const displayName = user.data?.profile?.display_name || user.data?.email || "Reader";
+  const initials =
+    displayName
+      .trim()
+      .split(/\s+/)
+      .map((part) => part[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase() || "?";
+  const isAdmin = Boolean(user.data?.roles.includes("admin"));
+
+  const handleSignOut = async () => {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await signOut();
+    void navigate({ to: "/auth", replace: true });
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          aria-label="Account menu"
+          className="grid size-9 shrink-0 place-items-center rounded-full bg-accent text-sm font-semibold text-accent-foreground"
+        >
+          {initials}
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-60">
+        <DropdownMenuLabel>
+          <p className="truncate text-sm font-semibold" title={displayName}>{displayName}</p>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link to="/">Author's Workshop</Link>
+        </DropdownMenuItem>
+        {isAdmin && (
+          <DropdownMenuItem asChild>
+            <Link to="/admin">
+              <Shield className="size-4" />
+              Admin
+            </Link>
+          </DropdownMenuItem>
+        )}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={() => void handleSignOut()}>
+          <LogOut className="size-4" />
+          Sign out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 export function PublicShell({ children }: { children: ReactNode }) {
   const user = useCurrentUser();
@@ -60,15 +129,23 @@ export function PublicShell({ children }: { children: ReactNode }) {
             </Link>
           </nav>
 
-          <button
-            type="button"
-            onClick={() => setMenuOpen((open) => !open)}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            className="grid size-11 shrink-0 place-items-center rounded-lg text-foreground transition-colors hover:bg-secondary md:hidden"
-          >
-            {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-          </button>
+          <div className="flex shrink-0 items-center gap-1">
+            {signedIn && (
+              <>
+                <NotificationBell />
+                <AccountMenu />
+              </>
+            )}
+            <button
+              type="button"
+              onClick={() => setMenuOpen((open) => !open)}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              className="grid size-11 shrink-0 place-items-center rounded-lg text-foreground transition-colors hover:bg-secondary md:hidden"
+            >
+              {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+            </button>
+          </div>
         </div>
 
         {menuOpen && (
