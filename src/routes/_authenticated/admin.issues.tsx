@@ -81,7 +81,6 @@ function AdminIssues() {
   };
 
   return (
-    <div className="relative left-1/2 w-[calc(100vw-2.5rem)] -translate-x-1/2 md:w-[calc(100vw-4rem)]">
     <section className="grid gap-8 lg:grid-cols-[260px_1fr]">
       <aside className="space-y-4">
         <div className="rounded-2xl border border-border bg-card p-4">
@@ -413,6 +412,5 @@ function AdminIssues() {
 
       )}
     </section>
-    </div>
   );
 }
