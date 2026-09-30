@@ -133,6 +133,20 @@ async function signCoverPath(
   return data?.signedUrl ?? null;
 }
 
+/** Private storage channel used to sign an issue's alternative PDF for public reading. */
+async function pdfStorage() {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  return supabaseAdmin.storage.from("catalog-issue-pdfs");
+}
+
+/** Signs a private `catalog-issue-pdfs` storage path, leaving http(s) URLs alone. */
+async function signPdfPath(path: string | null | undefined): Promise<string | null> {
+  if (!path) return null;
+  if (/^https?:\/\//.test(path)) return path;
+  const { data } = await (await pdfStorage()).createSignedUrl(path, 60 * 60);
+  return data?.signedUrl ?? null;
+}
+
 /** Loads one published issue (the newest when no id is given) with its grouped books. */
 export async function loadIssueCatalog(
   issueId?: string,
@@ -146,7 +160,7 @@ export async function loadIssueCatalog(
 
   let query = supabase
     .from("catalog_issues")
-    .select("id, display_label, issue_month, catalog_issue_themes ( preset, border_pattern, cover_headline, cover_tagline, cover_image_url )");
+    .select("id, display_label, issue_month, catalog_issue_themes ( preset, border_pattern, cover_headline, cover_tagline, cover_image_url, pdf_url )");
   if (!options?.includeDrafts) query = query.eq("status", "published");
 
   query = issueId
@@ -213,6 +227,7 @@ export async function loadIssueCatalog(
       cover_headline: theme?.cover_headline ?? null,
       cover_tagline: theme?.cover_tagline ?? null,
       cover_image_url: await signCoverPath(supabase, theme?.cover_image_url),
+      pdf_url: await signPdfPath(theme?.pdf_url),
     },
     blocks: await Promise.all(
       ((blockRows ?? []) as unknown as StoredFlyerBlock[]).map(async (row) => ({

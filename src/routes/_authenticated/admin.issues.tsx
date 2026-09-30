@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
-import { Star, Trash2 } from "lucide-react";
+import { FileText, Star, Trash2, Upload } from "lucide-react";
 
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,9 @@ import {
   useAdminSubmissions,
   useIssueDetail,
 } from "@/lib/catalog-admin";
+import { uploadCatalogCover, useCatalogCoverUrl } from "@/lib/catalog-covers";
+import { removeIssuePdf, uploadIssuePdf, useSignedIssuePdf } from "@/lib/catalog-issue-pdf";
+import { useCurrentUser } from "@/lib/use-current-user";
 import { IssueBlockBuilder } from "@/components/admin/issue-block-builder";
 import { cn } from "@/lib/utils";
 
@@ -36,6 +39,7 @@ const monthLabel = (value: string) =>
 
 function AdminIssues() {
   const queryClient = useQueryClient();
+  const currentUser = useCurrentUser();
   const issues = useAdminIssues();
   const submissions = useAdminSubmissions();
   const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
@@ -47,10 +51,16 @@ function AdminIssues() {
   const [tagline, setTagline] = useState<string | null>(null);
   const [newCategory, setNewCategory] = useState("");
   const [addTo, setAddTo] = useState<Record<string, string>>({});
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const [uploadingPdf, setUploadingPdf] = useState(false);
+  const coverInput = useRef<HTMLInputElement>(null);
+  const pdfInput = useRef<HTMLInputElement>(null);
 
   const refresh = () => void queryClient.invalidateQueries({ queryKey: ["catalog-admin"] });
   const issue = issues.data?.find((item) => item.id === activeId);
   const theme = detail.data?.theme;
+  const coverPreview = useCatalogCoverUrl(theme?.cover_image_url);
+  const pdfPreview = useSignedIssuePdf(theme?.pdf_url);
   const categories = useMemo(() => {
     const names = new Set<string>();
     for (const quota of detail.data?.quotas ?? []) names.add(quota.category);
@@ -178,8 +188,52 @@ function AdminIssues() {
                 <Textarea className="mt-2" rows={2} value={tagline ?? theme?.cover_tagline ?? ""} onChange={(e) => setTagline(e.target.value)} />
               </label>
             </div>
+
+            <div className="mt-5">
+              <p className="text-sm font-semibold">Cover image</p>
+              <p className="mt-1 text-sm text-muted-foreground">Shown on the issue's cover section. Optional — without one, the cover shows a table of contents instead.</p>
+              <div className="mt-3 flex flex-wrap items-center gap-4">
+                {coverPreview.data && (
+                  <img src={coverPreview.data} alt="Issue cover preview" className="aspect-[2/3] w-20 rounded-lg object-cover shadow-sm" />
+                )}
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={uploadingCover}
+                    onClick={() => coverInput.current?.click()}
+                  >
+                    <Upload />{uploadingCover ? "Uploading…" : theme?.cover_image_url ? "Replace cover image" : "Upload cover image"}
+                  </Button>
+                  {theme?.cover_image_url && (
+                    <Button type="button" variant="ghost" onClick={() => void run(() => saveIssueTheme(issue.id, { cover_image_url: null }), "Cover image removed")}>
+                      Remove
+                    </Button>
+                  )}
+                </div>
+                <input
+                  ref={coverInput}
+                  type="file"
+                  accept="image/*"
+                  className="sr-only"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (!file || !currentUser.data?.id) return;
+                    setUploadingCover(true);
+                    void run(async () => {
+                      const path = await uploadCatalogCover(currentUser.data!.id, file);
+                      await saveIssueTheme(issue.id, { cover_image_url: path });
+                    }, "Cover image uploaded").finally(() => {
+                      setUploadingCover(false);
+                      if (coverInput.current) coverInput.current.value = "";
+                    });
+                  }}
+                />
+              </div>
+            </div>
+
             <Button
-              className="mt-4"
+              className="mt-5"
               onClick={() =>
                 void run(
                   () =>
@@ -193,6 +247,62 @@ function AdminIssues() {
             >
               Save cover words
             </Button>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-card p-5">
+            <h3 className="font-heading text-2xl font-normal">Issue PDF</h3>
+            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+              Upload a PDF to show instead of the block-built sections below — when one is set, the public issue page renders the PDF and the Layout tab's sections don't appear to readers. Remove it to go back to the block-built page.
+            </p>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              {theme?.pdf_url && (
+                <span className="inline-flex items-center gap-2 rounded-xl border border-border bg-paper px-3 py-2 text-sm">
+                  <FileText className="size-4 text-link" />
+                  {pdfPreview.data ? (
+                    <a href={pdfPreview.data} target="_blank" rel="noreferrer" className="font-semibold text-link underline-offset-2 hover:underline">
+                      View current PDF
+                    </a>
+                  ) : (
+                    "PDF set"
+                  )}
+                </span>
+              )}
+              <Button type="button" variant="outline" disabled={uploadingPdf} onClick={() => pdfInput.current?.click()}>
+                <Upload />{uploadingPdf ? "Uploading…" : theme?.pdf_url ? "Replace PDF" : "Upload a PDF"}
+              </Button>
+              {theme?.pdf_url && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() =>
+                    void run(async () => {
+                      await removeIssuePdf(theme.pdf_url!);
+                      await saveIssueTheme(issue.id, { pdf_url: null });
+                    }, "PDF removed — the block-built page is back")
+                  }
+                >
+                  Remove PDF
+                </Button>
+              )}
+              <input
+                ref={pdfInput}
+                type="file"
+                accept="application/pdf"
+                className="sr-only"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (!file) return;
+                  setUploadingPdf(true);
+                  void run(async () => {
+                    const path = await uploadIssuePdf(issue.id, file);
+                    await saveIssueTheme(issue.id, { pdf_url: path });
+                  }, "PDF uploaded").finally(() => {
+                    setUploadingPdf(false);
+                    if (pdfInput.current) pdfInput.current.value = "";
+                  });
+                }}
+              />
+            </div>
           </div>
 
           <div className="rounded-2xl border border-border bg-card p-5">

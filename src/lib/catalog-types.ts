@@ -84,6 +84,8 @@ export type CatalogIssue = {
     cover_headline: string | null;
     cover_tagline: string | null;
     cover_image_url: string | null;
+    /** When set, the public issue page renders this PDF instead of the blocks. */
+    pdf_url: string | null;
   };
   pageThemes?: CatalogPageTheme[];
   blocks?: StoredFlyerBlock[];

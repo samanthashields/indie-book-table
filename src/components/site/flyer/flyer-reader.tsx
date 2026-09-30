@@ -1,12 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
 import type { CatalogIssue } from "@/lib/catalog-types";
 import { normalizeIssueTheme, resolvePage } from "@/lib/flyer-theme";
-import { buildPages, PAGINATION } from "@/lib/flyer-blocks";
+import { buildPages } from "@/lib/flyer-blocks";
 import { FlyerPage } from "./flyer-page";
-import { PageTurner } from "./page-turner";
-import { PageNav, CornerTurn } from "./page-nav";
 import { CoverBlock } from "./blocks/cover-block";
 import { SectionBanner } from "./blocks/section-banner";
 import { HeroBlock } from "./blocks/hero-block";
@@ -18,10 +16,8 @@ import { WishlistBar } from "@/components/site/wishlist-bar";
 import { SubscribeGateModal } from "@/components/site/subscribe-gate-modal";
 import { useWishlist, useWishlistGate, type WishlistEntry } from "@/lib/wishlist";
 
-/** The flip-book: one published issue rendered as page-turning flyer sheets. */
+/** The issue's public page: every section stacked in one long scroll, no page-turning. */
 export function FlyerReader({ data }: { data: CatalogIssue }) {
-  const [pageIndex, setPageIndex] = useState(0);
-  const touchStartX = useRef<number | null>(null);
   const { entries, toggle, clear, isCircled } = useWishlist();
   const { unlocked, unlock } = useWishlistGate();
   const [gateOpen, setGateOpen] = useState(false);
@@ -52,67 +48,31 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
     return map;
   }, [allBooks]);
 
-  // Read after mount so the server and first client render agree.
-  const [wide, setWide] = useState(true);
-  useEffect(() => {
-    const query = window.matchMedia("(min-width: 640px)");
-    const sync = () => setWide(query.matches);
-    sync();
-    query.addEventListener("change", sync);
-    return () => query.removeEventListener("change", sync);
-  }, []);
-
-  const pages = useMemo(
-    () => buildPages(data, wide ? PAGINATION.desktop : PAGINATION.mobile),
-    [data, wide],
-  );
-
-  // A narrower screen makes more pages; never point past the end.
-  useEffect(() => {
-    setPageIndex((i) => Math.min(i, Math.max(pages.length - 1, 0)));
-  }, [pages.length]);
-
-  const total = pages.length;
-  const goNext = useCallback(
-    () => setPageIndex((i) => Math.min(i + 1, Math.max(total - 1, 0))),
-    [total],
-  );
-  const goPrev = useCallback(() => setPageIndex((i) => Math.max(i - 1, 0)), []);
-
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "ArrowRight") goNext();
-      if (event.key === "ArrowLeft") goPrev();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [goNext, goPrev]);
+  // Every block flows in one scroll — no per-screen pagination budget.
+  const sections = useMemo(() => buildPages(data), [data]);
 
   const theme = normalizeIssueTheme(data.theme);
   const pageThemes = data.pageThemes ?? [];
+  const pdfUrl = theme.pdf_url;
 
-  const renderPage = (index: number) => {
-    const page = pages[index];
-    if (!page) return null;
+  const renderSection = (index: number) => {
+    const section = sections[index];
+    if (!section) return null;
 
-    const look = resolvePage(theme, pageThemes, page.category, index);
-    const isCover = page.category === null && page.blocks.some((block) => block.type === "cover");
+    const look = resolvePage(theme, pageThemes, section.category, index);
+    const isCover = section.category === null && section.blocks.some((block) => block.type === "cover");
 
     return (
       <FlyerPage
+        key={index}
+        id={`section-${index}`}
         groundClass={look.ground}
         accent={look.accent}
         pattern={look.pattern}
         backgroundImage={look.backgroundImage}
-        {...(isCover
-          ? {}
-          : {
-              runningHead: page.label,
-              folio: `Page ${index + 1} of ${total}`,
-            })}
-        corner={<CornerTurn onNext={goNext} disabled={index >= total - 1} />}
+        {...(isCover ? {} : { runningHead: section.label })}
       >
-        {page.blocks.map((block, blockIndex) => {
+        {section.blocks.map((block, blockIndex) => {
           switch (block.type) {
             case "cover":
               return (
@@ -121,7 +81,7 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
                   data={data}
                   theme={theme}
                   bookCount={allBooks.length}
-                  toc={pages.slice(1).map((entry, i) => ({ label: entry.label, page: i + 2 }))}
+                  toc={sections.slice(1).map((entry, i) => ({ label: entry.label, anchor: `section-${i + 1}` }))}
                 />
               );
             case "sectionBanner":
@@ -197,20 +157,7 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
 
   return (
     <div className="min-h-screen bg-paper/60">
-      <div
-        className="mx-auto max-w-5xl px-3 pb-16 pt-6 sm:px-6 sm:pt-10"
-        onTouchStart={(event) => {
-          touchStartX.current = event.touches[0]?.clientX ?? null;
-        }}
-        onTouchEnd={(event) => {
-          if (touchStartX.current === null) return;
-          const delta = (event.changedTouches[0]?.clientX ?? 0) - touchStartX.current;
-          touchStartX.current = null;
-          if (Math.abs(delta) < 48) return;
-          if (delta < 0) goNext();
-          else goPrev();
-        }}
-      >
+      <div className="mx-auto max-w-5xl px-3 pb-16 pt-6 sm:px-6 sm:pt-10">
         <nav className="mb-4 text-sm text-cocoa/70">
           <Link to="/table" className="hover:text-cocoa hover:underline">
             The Table
@@ -231,24 +178,22 @@ export function FlyerReader({ data }: { data: CatalogIssue }) {
           <span className="font-semibold text-cocoa">Flyer</span>
         </nav>
 
-        {total === 0 ? (
+        {pdfUrl ? (
+          <div className="overflow-hidden rounded-2xl border-2 border-ink bg-card">
+            <iframe
+              title={`${data.issue?.display_label ?? "Issue"} flyer PDF`}
+              src={pdfUrl}
+              className="h-[min(90vh,60rem)] w-full"
+            />
+          </div>
+        ) : sections.length === 0 ? (
           <FlyerPage>
             <p className="py-24 text-center text-cocoa/70">
               No issue is published yet. Check back at the start of the month.
             </p>
           </FlyerPage>
         ) : (
-          <>
-            <PageTurner index={pageIndex} renderPage={renderPage} />
-            <PageNav
-              index={pageIndex}
-              total={total}
-              onPrev={goPrev}
-              onNext={goNext}
-              onJump={setPageIndex}
-              labels={pages.map((page, i) => `${i + 1}. ${page.label}`)}
-            />
-          </>
+          <div className="space-y-8">{sections.map((_, index) => renderSection(index))}</div>
         )}
 
         <WishlistBar entries={entries} onClear={clear} />

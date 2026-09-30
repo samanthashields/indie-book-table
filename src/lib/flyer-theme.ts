@@ -33,6 +33,8 @@ export type FlyerIssueTheme = {
   cover_image_url: string | null;
   cover_headline: string | null;
   cover_tagline: string | null;
+  /** When set, the public issue page renders this PDF instead of the blocks. */
+  pdf_url: string | null;
 };
 
 export type FlyerPageTheme = {
@@ -47,6 +49,7 @@ export const DEFAULT_ISSUE_THEME: FlyerIssueTheme = {
   cover_image_url: null,
   cover_headline: null,
   cover_tagline: null,
+  pdf_url: null,
 };
 
 /** Casts loose DB strings to a valid theme, falling back to the default. */
@@ -58,6 +61,7 @@ export function normalizeIssueTheme(
         cover_image_url?: string | null;
         cover_headline?: string | null;
         cover_tagline?: string | null;
+        pdf_url?: string | null;
       }
     | null
     | undefined,
@@ -78,6 +82,7 @@ export function normalizeIssueTheme(
     cover_image_url: theme.cover_image_url ?? null,
     cover_headline: theme.cover_headline ?? null,
     cover_tagline: theme.cover_tagline ?? null,
+    pdf_url: theme.pdf_url ?? null,
   };
 }
 
