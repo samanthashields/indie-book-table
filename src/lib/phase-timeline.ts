@@ -1,4 +1,4 @@
-import { formatDateRangeMDY } from "@/lib/date";
+import { formatDateMDY, formatDateRangeMDY } from "@/lib/date";
 
 export type ManuscriptStatus = "drafting" | "first_draft_done" | "edited";
 
@@ -71,8 +71,9 @@ export function suggestPhaseRanges(
   const warnings: string[] = [];
   const shortfall = Math.max(0, used - B);
   if (shortfall > 0) {
+    const suggestedPub = formatDateMDY(addDays(pub, shortfall));
     warnings.push(
-      `This plan needs about ${used} days of build time and your date gives ${B}. Moving publication out by roughly ${shortfall} days would make it realistic, or we can trim the scope.`,
+      `This plan needs about ${used} days of build time and your date gives ${B}. Moving publication out by roughly ${shortfall} days, to ${suggestedPub}, would make it realistic, or we can trim the scope.`,
     );
   }
 
