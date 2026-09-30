@@ -3,6 +3,7 @@ import { ChevronDown } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
 import { Button } from "@/components/ui/button";
+import { useNewSubmissionsCount } from "@/lib/catalog-admin";
 import { useCurrentUser } from "@/lib/use-current-user";
 import { cn } from "@/lib/utils";
 
@@ -39,6 +40,9 @@ const sections: AdminSection[] = [
 
 function AdminLayout() {
   const user = useCurrentUser();
+  const isAdmin = Boolean(user.data?.roles.includes("admin"));
+  const newSubmissions = useNewSubmissionsCount(isAdmin);
+  const newCount = newSubmissions.data ?? 0;
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const allItems = sections.flatMap((section) => section.items);
   const activeItem = allItems.find((item) => item.exact ? pathname === item.to : pathname.startsWith(item.to));
@@ -83,7 +87,13 @@ function AdminLayout() {
         <div className="relative">
           <select id="admin-sections" value={activeItem?.to ?? "/admin"} onChange={(event) => { window.location.href = event.target.value; }} className="h-11 w-full appearance-none rounded-lg border border-border bg-card px-4 pr-10 text-sm font-semibold">
             {sections.map((section) => (
-              <optgroup key={section.label} label={section.label}>{section.items.map((item) => <option key={item.to} value={item.to}>{item.label}</option>)}</optgroup>
+              <optgroup key={section.label} label={section.label}>
+                {section.items.map((item) => (
+                  <option key={item.to} value={item.to}>
+                    {item.label}{item.to === "/admin/submissions" && newCount > 0 ? ` (${newCount} new)` : ""}
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
           <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -95,7 +105,15 @@ function AdminLayout() {
             <p className="mb-1 px-3 text-xs font-semibold text-muted-foreground">{section.label}</p>
             <div className="space-y-0.5">{section.items.map((item) => {
               const active = item.exact ? pathname === item.to : pathname.startsWith(item.to);
-              return <Link key={item.to} to={item.to} className={cn("block rounded-md border-l-2 px-3 py-2 text-sm transition-colors", active ? "border-primary bg-secondary font-semibold text-foreground" : "border-transparent text-muted-foreground hover:bg-secondary/60 hover:text-foreground")}>{item.label}</Link>;
+              const showNewBadge = item.to === "/admin/submissions" && newCount > 0;
+              return (
+                <Link key={item.to} to={item.to} className={cn("flex items-center justify-between gap-2 rounded-md border-l-2 px-3 py-2 text-sm transition-colors", active ? "border-primary bg-secondary font-semibold text-foreground" : "border-transparent text-muted-foreground hover:bg-secondary/60 hover:text-foreground")}>
+                  <span>{item.label}</span>
+                  {showNewBadge && (
+                    <span className="rounded-full bg-primary px-1.5 py-0.5 text-xs font-semibold leading-none text-primary-foreground">{newCount}</span>
+                  )}
+                </Link>
+              );
             })}</div>
           </div>)}
         </nav>
