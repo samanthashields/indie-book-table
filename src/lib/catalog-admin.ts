@@ -69,6 +69,20 @@ export function useAdminSubmissions() {
   });
 }
 
+/** A light head-count for the admin nav badge — avoids useAdminSubmissions' full rows + per-author email RPCs. */
+export function useNewSubmissionsCount(enabled = true) {
+  return useQuery({
+    queryKey: ["catalog-admin", "submissions", "new-count"],
+    enabled,
+    queryFn: async (): Promise<number> => {
+      const { count, error } = await supabase.from("catalog_books").select("id", { count: "exact", head: true }).eq("status", "submitted");
+      if (error) throw error;
+      return count ?? 0;
+    },
+    refetchInterval: 60_000,
+  });
+}
+
 export async function setSubmissionStatus(bookId: string, status: string, removalReason?: string | null) {
   const { error } = await supabase
     .from("catalog_books")
