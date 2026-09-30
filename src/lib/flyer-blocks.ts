@@ -182,137 +182,14 @@ export function pagesFromStoredBlocks(
 }
 
 /**
- * Rough vertical cost of each block, in the same units as the page budget below.
- * Tuned by eye against the rendered flyer; change these numbers to make pages
- * break earlier or later.
+ * Derives the issue's ordered sections for the single-scroll reader. Each
+ * entry renders as one FlyerPage section, sized to its own content — there's
+ * no per-screen pagination budget to fit within anymore.
  */
-const BLOCK_WEIGHT = {
-  banner: 130,
-  hero: 700,
-  gridRow: 620,
-  fanOutBase: 300,
-  fanOutBook: 130,
-  wholePage: 9999,
-} as const;
-
-export type PaginateOptions = { budget: number; gridChunk: number; gridCols: number };
-
-/** Narrow screens fit far less, so they split sooner and pack fewer grid cards. */
-export const PAGINATION: Record<"mobile" | "desktop", PaginateOptions> = {
-  mobile: { budget: 800, gridChunk: 2, gridCols: 1 },
-  desktop: { budget: 820, gridChunk: 3, gridCols: 3 },
-};
-
-function weightOf(block: FlyerBlock, cols: number): number {
-  switch (block.type) {
-    case "sectionBanner":
-      return BLOCK_WEIGHT.banner;
-    case "hero":
-      return BLOCK_WEIGHT.hero;
-    case "grid": {
-      // The first card runs double-width once there are three or more books.
-      const feature = !block.compact && block.books.length >= 3 && cols > 1;
-      const cells = block.books.length + (feature ? 1 : 0);
-      return Math.ceil(cells / cols) * BLOCK_WEIGHT.gridRow;
-    }
-    case "fanOut":
-      return BLOCK_WEIGHT.fanOutBase + block.books.length * BLOCK_WEIGHT.fanOutBook;
-    default:
-      return BLOCK_WEIGHT.wholePage;
-  }
-}
-
-/**
- * Chops any grid longer than `chunk` books into several grids of that size, and
- * drops the double-width first card when keeping it would push a grid onto a
- * second row of cards.
- */
-function splitGrids(blocks: FlyerBlock[], options: PaginateOptions): FlyerBlock[] {
-  const { gridChunk: chunk, gridCols: cols, budget } = options;
-  const out: FlyerBlock[] = [];
-
-  const fit = (block: Extract<FlyerBlock, { type: "grid" }>) =>
-    weightOf(block, cols) + BLOCK_WEIGHT.banner <= budget
-      ? block
-      : { ...block, compact: true, featuredBookId: null };
-
-  for (const block of blocks) {
-    if (block.type !== "grid") {
-      out.push(block);
-      continue;
-    }
-    if (block.books.length <= chunk) {
-      out.push(fit(block));
-      continue;
-    }
-    for (let i = 0; i < block.books.length; i += chunk) {
-      const slice = block.books.slice(i, i + chunk);
-      out.push(
-        fit({
-          type: "grid",
-          category: block.category,
-          books: slice,
-          featuredBookId:
-            block.featuredBookId && slice.some((book) => book.id === block.featuredBookId)
-              ? block.featuredBookId
-              : null,
-        }),
-      );
-    }
-  }
-  return out;
-}
-
-/**
- * Re-flows pages so no single sheet runs far past one screenful — the reader
- * should never have to scroll to find the page turn.
- */
-export function paginate(pages: FlyerBlockPage[], options: PaginateOptions): FlyerBlockPage[] {
-  const out: FlyerBlockPage[] = [];
-
-  for (const page of pages) {
-    const blocks = splitGrids(page.blocks, options);
-    const banner = blocks[0]?.type === "sectionBanner" ? blocks[0] : null;
-    const body = banner ? blocks.slice(1) : blocks;
-
-    let current: FlyerBlock[] = banner ? [banner] : [];
-    let weight = banner ? weightOf(banner, options.gridCols) : 0;
-    let sheet = 0;
-
-    const flush = () => {
-      if (current.length === 0 || (banner && current.length === 1)) return;
-      out.push({
-        label: sheet === 0 ? page.label : `${page.label} (continued)`,
-        category: page.category,
-        blocks: current,
-      });
-      sheet += 1;
-      current = banner ? [banner] : [];
-      weight = banner ? weightOf(banner, options.gridCols) : 0;
-    };
-
-    for (const block of body) {
-      const cost = weightOf(block, options.gridCols);
-      const hasContent = banner ? current.length > 1 : current.length > 0;
-      if (hasContent && weight + cost > options.budget) flush();
-      current.push(block);
-      weight += cost;
-    }
-    flush();
-
-    // A page that was only a banner (or empty) still deserves to exist.
-    if (sheet === 0) out.push(page);
-  }
-
-  return out;
-}
-
-export function buildPages(data: CatalogIssue, options?: PaginateOptions): FlyerBlockPage[] {
-  const finish = (pages: FlyerBlockPage[]) => (options ? paginate(pages, options) : pages);
-
+export function buildPages(data: CatalogIssue): FlyerBlockPage[] {
   if (data.blocks && data.blocks.length > 0) {
     const pages = pagesFromStoredBlocks(data, data.blocks);
-    if (pages.length > 0) return finish(pages);
+    if (pages.length > 0) return pages;
   }
   if (!data.issue || data.categories.length === 0) return [];
 

@@ -3,17 +3,17 @@ import type { ReactNode } from "react";
 import { accentBarClass, posterGroundClass, type FlyerColor } from "@/lib/flyer-theme";
 
 /**
- * One page of the fair flyer, in the flatter catalog style: a plain colour
- * background, a bold rectangular running-head band, and a page-number tag —
- * no printed-poster border or slanted masthead.
+ * One section of the single-scroll issue page, in the flatter catalog style: a
+ * plain colour background and a bold rectangular running-head band — no
+ * printed-poster border, slanted masthead, or page-turn chrome. Sections size
+ * to their own content instead of each filling a screen.
  */
 export function FlyerPage({
   children,
   groundClass,
   accent,
   runningHead,
-  folio,
-  corner,
+  id,
 }: {
   children: ReactNode;
   groundClass?: string | null;
@@ -21,14 +21,14 @@ export function FlyerPage({
   pattern?: string;
   backgroundImage?: string | null;
   runningHead?: string;
-  folio?: string;
-  corner?: ReactNode;
+  id?: string;
 }) {
   const ground = accent ? posterGroundClass(accent) : (groundClass ?? "bg-background");
 
   return (
     <div
-      className={`light relative flex min-h-[min(78rem,calc(100vh-9rem))] flex-col overflow-hidden rounded-2xl border-2 border-ink ${ground}`}
+      id={id}
+      className={`light relative overflow-hidden rounded-2xl border-2 border-ink scroll-mt-6 ${ground}`}
     >
       {runningHead && (
         <div
@@ -46,15 +46,7 @@ export function FlyerPage({
         </div>
       )}
 
-      <div className="relative flex-1 px-4 py-7 sm:px-9 sm:py-10">{children}</div>
-
-      {folio && (
-        <span className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-md border-2 border-ink bg-card px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.18em] text-ink">
-          {folio}
-        </span>
-      )}
-
-      {corner}
+      <div className="relative px-4 py-7 sm:px-9 sm:py-10">{children}</div>
     </div>
   );
 }

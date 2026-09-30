@@ -2,7 +2,7 @@ import type { CatalogIssue } from "@/lib/catalog-types";
 import type { FlyerIssueTheme } from "@/lib/flyer-theme";
 import { IconLegend } from "../tag-chips";
 
-/** The issue's front page: masthead, headline, cover art or table of contents. */
+/** The issue's cover section: masthead, headline, cover art or a jump-to-section list. */
 export function CoverBlock({
   data,
   theme,
@@ -12,7 +12,7 @@ export function CoverBlock({
   data: CatalogIssue;
   theme: FlyerIssueTheme;
   bookCount: number;
-  toc: { label: string; page: number }[];
+  toc: { label: string; anchor: string }[];
 }) {
   return (
     <div className="flex min-h-[min(70rem,calc(100vh-14rem))] flex-col justify-center">
@@ -37,7 +37,7 @@ export function CoverBlock({
               "A hand-curated flyer of independently published books. Flip through and find your next read."}
           </p>
           <p className="mt-6 text-[0.65rem] font-bold uppercase tracking-[0.22em] text-text-clay">
-            Turn the page to start browsing →
+            Scroll down to start browsing ↓
           </p>
         </div>
         {theme.cover_image_url ? (
@@ -53,14 +53,11 @@ export function CoverBlock({
             <p className="text-[0.6rem] font-bold uppercase tracking-[0.3em] text-muted-foreground">In this issue</p>
             <ol className="mt-3 space-y-1.5 text-sm text-foreground/85">
               {toc.map((entry) => (
-                <li
-                  key={`${entry.label}-${entry.page}`}
-                  className="flex items-baseline justify-between gap-3 border-b border-dashed border-border pb-1"
-                >
-                  <span className="truncate font-semibold">{entry.label}</span>
-                  <span className="text-[0.65rem] font-bold tracking-[0.14em] text-muted-foreground">
-                    {entry.page}
-                  </span>
+                <li key={entry.anchor} className="border-b border-dashed border-border pb-1">
+                  <a href={`#${entry.anchor}`} className="flex items-baseline justify-between gap-3 font-semibold hover:text-link hover:underline">
+                    <span className="truncate">{entry.label}</span>
+                    <span aria-hidden="true" className="text-[0.65rem] font-bold tracking-[0.14em] text-muted-foreground">↓</span>
+                  </a>
                 </li>
               ))}
             </ol>
@@ -73,14 +70,11 @@ export function CoverBlock({
           <p className="text-[0.6rem] font-bold uppercase tracking-[0.3em] text-muted-foreground">In this issue</p>
           <ol className="mt-3 grid gap-x-8 gap-y-1.5 text-sm text-foreground/85 sm:grid-cols-2">
             {toc.map((entry) => (
-              <li
-                key={`${entry.label}-${entry.page}`}
-                className="flex items-baseline justify-between gap-3 border-b border-dashed border-border pb-1"
-              >
-                <span className="truncate font-semibold">{entry.label}</span>
-                <span className="text-[0.65rem] font-bold tracking-[0.14em] text-muted-foreground">
-                  {entry.page}
-                </span>
+              <li key={entry.anchor} className="border-b border-dashed border-border pb-1">
+                <a href={`#${entry.anchor}`} className="flex items-baseline justify-between gap-3 font-semibold hover:text-link hover:underline">
+                  <span className="truncate">{entry.label}</span>
+                  <span aria-hidden="true" className="text-[0.65rem] font-bold tracking-[0.14em] text-muted-foreground">↓</span>
+                </a>
               </li>
             ))}
           </ol>

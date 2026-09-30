@@ -524,6 +524,11 @@ export function IssueBlockBuilder({ issueId }: { issueId: string }) {
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Live preview
           </p>
+          {previewData?.theme?.pdf_url && (
+            <p className="mb-2 rounded-lg bg-amber/15 px-3 py-2 text-xs text-foreground">
+              This issue has a PDF set (Setup tab), so readers see that instead of the sections below — remove it there to preview the block layout.
+            </p>
+          )}
           {previewData ? (
             <div className="max-h-[42rem] overflow-auto rounded-xl bg-background 2xl:max-h-[calc(100vh-10rem)]">
               <FlyerReader data={previewData} />

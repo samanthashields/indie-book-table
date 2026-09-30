@@ -216,57 +216,6 @@
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 
-/* ---------- Flyer reader (flip-book) ---------- */
-:root {
-  --shadow-page: 10px 12px 0 0 color-mix(in oklch, var(--cocoa) 22%, transparent);
-}
-
-.paper-grain {
-  background-image: radial-gradient(color-mix(in oklch, var(--cocoa) 6%, transparent) 0.8px, transparent 0.9px);
-  background-size: 9px 9px;
-}
-
-.flyer-stage {
-  perspective: 2200px;
-  perspective-origin: left center;
-}
-
-.flyer-sheet {
-  transform-origin: left center;
-  backface-visibility: hidden;
-  will-change: transform;
-}
-
-@keyframes page-turn-forward {
-  from { transform: rotateY(0deg); }
-  to { transform: rotateY(-168deg); }
-}
-@keyframes page-turn-back {
-  from { transform: rotateY(-168deg); }
-  to { transform: rotateY(0deg); }
-}
-@keyframes page-shade-forward {
-  0% { opacity: 0; }
-  55% { opacity: 0.55; }
-  100% { opacity: 0.05; }
-}
-@keyframes page-shade-back {
-  0% { opacity: 0.05; }
-  55% { opacity: 0.55; }
-  100% { opacity: 0; }
-}
-
-.turn-forward { animation: page-turn-forward 700ms cubic-bezier(0.5, 0, 0.25, 1) forwards; }
-.turn-back { animation: page-turn-back 700ms cubic-bezier(0.5, 0, 0.25, 1) forwards; }
-.turn-shade-forward { animation: page-shade-forward 700ms ease forwards; }
-.turn-shade-back { animation: page-shade-back 700ms ease forwards; }
-
-@media (prefers-reduced-motion: reduce) {
-  .turn-forward, .turn-back, .turn-shade-forward, .turn-shade-back {
-    animation-duration: 1ms;
-  }
-}
-
 /* Pen "scribbling" thinking state */
 @keyframes pen-scribble {
   0%, 100% { transform: translate(0, 0) rotate(-6deg); }
