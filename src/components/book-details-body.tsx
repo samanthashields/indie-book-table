@@ -57,7 +57,7 @@ export function BookDetailsBody({ bookId, compact = false }: { bookId: string; c
 
   return (
     <form className="space-y-6" onSubmit={(event) => { event.preventDefault(); save(); }}>
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/70 pb-6">
+      <div className={cn("flex flex-wrap items-center justify-between gap-3 border-b border-border/70 pb-6", compact && "pr-10")}>
         <h2 className={compact ? "font-heading text-3xl font-normal" : "font-heading text-4xl font-normal md:text-5xl"}>Book details</h2>
         <Button onClick={save} disabled={updateBook.isPending}>Save changes</Button>
       </div>
