@@ -576,6 +576,7 @@ export type Database = {
           cover_tagline: string | null
           created_at: string
           issue_id: string
+          pdf_url: string | null
           preset: string
           updated_at: string
         }
@@ -586,6 +587,7 @@ export type Database = {
           cover_tagline?: string | null
           created_at?: string
           issue_id: string
+          pdf_url?: string | null
           preset?: string
           updated_at?: string
         }
@@ -596,6 +598,7 @@ export type Database = {
           cover_tagline?: string | null
           created_at?: string
           issue_id?: string
+          pdf_url?: string | null
           preset?: string
           updated_at?: string
         }

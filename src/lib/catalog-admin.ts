@@ -107,7 +107,7 @@ export function useIssueDetail(issueId: string | undefined) {
         supabase.from("catalog_issue_quotas").select("id, category, quota").eq("issue_id", issueId!),
         supabase
           .from("catalog_issue_themes")
-          .select("cover_headline, cover_tagline, cover_image_url, preset, border_pattern")
+          .select("cover_headline, cover_tagline, cover_image_url, pdf_url, preset, border_pattern")
           .eq("issue_id", issueId!)
           .maybeSingle(),
       ]);
@@ -143,7 +143,7 @@ export async function setIssueStatus(issueId: string, status: "draft" | "publish
 
 export async function saveIssueTheme(
   issueId: string,
-  values: { cover_headline: string | null; cover_tagline: string | null },
+  values: { cover_headline?: string | null; cover_tagline?: string | null; cover_image_url?: string | null; pdf_url?: string | null },
 ) {
   const { error } = await supabase
     .from("catalog_issue_themes")
