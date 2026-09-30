@@ -73,7 +73,16 @@ function SubmitPage() {
   if (loading) {
     return (
       <AppShell>
-        <p className="text-sm text-muted-foreground">Getting your details…</p>
+        <PageHeading
+          title={edit ? "Edit your submission" : "Submit your book to The Table"}
+          description="Six short steps. The editors read everything and pick books for each monthly issue."
+        />
+        <div className="space-y-4" aria-hidden="true">
+          <div className="h-14 animate-pulse rounded-xl bg-muted" />
+          <div className="h-14 animate-pulse rounded-xl bg-muted" />
+          <div className="h-32 animate-pulse rounded-xl bg-muted" />
+          <div className="h-14 animate-pulse rounded-xl bg-muted" />
+        </div>
       </AppShell>
     );
   }
