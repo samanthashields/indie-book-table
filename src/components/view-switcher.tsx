@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { LayoutGrid, List } from "lucide-react";
+import { List, Table2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -50,7 +50,7 @@ export function ViewSwitcher({ view, onChange, label = "Choose how items are sho
 }) {
   const options = [
     { value: "list" as const, label: "List", icon: List },
-    { value: "grid" as const, label: "Grid", icon: LayoutGrid },
+    { value: "grid" as const, label: "Table", icon: Table2 },
   ];
 
   return (

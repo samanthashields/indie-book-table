@@ -4,15 +4,14 @@ import { BookOpen, CalendarDays, CircleAlert, Clock3, Lightbulb, MoreVertical, P
 import { toast } from "sonner";
 import { AppShell } from "@/components/app-shell";
 import { BookCover } from "@/components/book-cover";
-import { BookGridCard } from "@/components/book-grid-card";
 import { DeleteCycleDialog } from "@/components/delete-cycle";
-import { ProgressRing } from "@/components/progress-ring";
 
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow as UiTableRow } from "@/components/ui/table";
 import { ViewSwitcher, useCollectionView } from "@/components/view-switcher";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useBooks, useDeleteBook, type BookSummary } from "@/lib/book-db";
@@ -133,46 +132,62 @@ function BookRow({ book, submission, onDelete }: { book: BookSummary; submission
   );
 }
 
-function BookCard({ book, submission, onDelete }: { book: BookSummary; submission?: BookSubmission | undefined; onDelete: (id: string) => void }) {
+function BookTableRow({ book, submission, onDelete }: { book: BookSummary; submission?: BookSubmission | undefined; onDelete: (id: string) => void }) {
   const to = book.hasCycle ? "/books/$bookId" : "/books/$bookId/details";
   return (
-    <BookGridCard
-      size="full"
-      cover={<BookCover src={book.coverUrl} title={book.title} className="w-full" fallbackClassName="text-4xl" />}
-      title={book.title}
-      subtitle={`${book.genre}, by ${book.author}`}
-      link={{ to, params: { bookId: book.id } }}
-      menu={<BookMenu book={book} submission={submission} onDelete={onDelete} />}
-    >
-      <div className="mt-3 flex flex-wrap gap-2">
-        <StatusPill tone={bookStatusTone(book.shelfStatus)}>{bookStatusLabel(book.shelfStatus)}</StatusPill>
-        <NeedsFollowUpPill book={book} />
-        {submission && <span className="relative z-10"><TableChip submission={submission} /></span>}
-      </div>
-      {book.hasCycle && (
-        <div className="mt-4 flex items-center gap-3">
-          <span className={phaseStyle(book.phaseKey ?? "writing_development").dot}>
-            <ProgressRing value={book.progress} label={`${book.progress}% of this book cycle done`} />
-          </span>
-          <div className="min-w-0">
-            {book.phaseName && <p className="truncate text-sm font-semibold">{book.phaseName}</p>}
-            <p className="text-xs text-muted-foreground">{book.stepsDone} of {book.stepsTotal} steps</p>
-          </div>
+    <UiTableRow>
+      <TableCell className="max-w-64">
+        <Link to={to} params={{ bookId: book.id }} className="font-semibold text-foreground hover:text-link hover:underline">{book.title}</Link>
+        <p className="truncate text-xs text-muted-foreground">{book.genre}, by {book.author}</p>
+      </TableCell>
+      <TableCell>
+        <div className="flex flex-wrap gap-1.5">
+          <StatusPill tone={bookStatusTone(book.shelfStatus)}>{bookStatusLabel(book.shelfStatus)}</StatusPill>
+          <NeedsFollowUpPill book={book} />
+          {submission && <TableChip submission={submission} />}
         </div>
-      )}
+      </TableCell>
+      <TableCell>
+        {book.hasCycle ? (
+          <div className="flex items-center gap-2"><Progress value={book.progress} className="h-1.5 w-24" /><span className="text-xs font-semibold">{book.progress}%</span></div>
+        ) : (
+          <span className="text-sm text-muted-foreground">—</span>
+        )}
+      </TableCell>
+      <TableCell className="max-w-56 text-sm text-muted-foreground">
+        {book.hasCycle ? book.nextAction : "Saved for later"}
+      </TableCell>
+      <TableCell className="text-sm">{book.target}</TableCell>
+      <TableCell className="text-right"><BookMenu book={book} submission={submission} onDelete={onDelete} /></TableCell>
+    </UiTableRow>
+  );
+}
 
-      <p className="mt-auto pt-4 text-xs text-muted-foreground">Target publication · {book.target}</p>
-    </BookGridCard>
+function BooksTable({ books, submissionByBook, onDelete }: { books: BookSummary[]; submissionByBook: Map<string, BookSubmission>; onDelete: (id: string) => void }) {
+  return (
+    <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-xs">
+      <Table>
+        <TableHeader>
+          <UiTableRow className="hover:bg-transparent">
+            <TableHead>Title</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Progress</TableHead>
+            <TableHead>Next action</TableHead>
+            <TableHead>Target publication</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </UiTableRow>
+        </TableHeader>
+        <TableBody>
+          {books.map((book) => <BookTableRow key={book.id} book={book} submission={submissionByBook.get(book.id)} onDelete={onDelete} />)}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
 
 function BookGroup({ books, view, submissionByBook, onDelete }: { books: BookSummary[]; view: "list" | "grid"; submissionByBook: Map<string, BookSubmission>; onDelete: (id: string) => void }) {
   if (view === "grid") {
-    return (
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {books.map((book) => <BookCard key={book.id} book={book} submission={submissionByBook.get(book.id)} onDelete={onDelete} />)}
-      </div>
-    );
+    return <BooksTable books={books} submissionByBook={submissionByBook} onDelete={onDelete} />;
   }
   return <div className="space-y-3">{books.map((book) => <BookRow key={book.id} book={book} submission={submissionByBook.get(book.id)} onDelete={onDelete} />)}</div>;
 }
@@ -203,28 +218,24 @@ function BookRowSkeleton() {
   );
 }
 
-function BookCardSkeleton() {
+function BookTableSkeleton() {
   return (
-    <div className="group flex flex-col rounded-2xl border border-border bg-card p-4 shadow-xs" aria-hidden="true">
-      <div className="flex items-start justify-between gap-2">
-        <Skeleton className="aspect-[3/4] w-full rounded-xl" />
-        <Skeleton className="size-8 shrink-0 rounded-md" />
-      </div>
-      <div className="mt-4 space-y-2"><Skeleton className="h-5 w-3/4" /><Skeleton className="h-4 w-1/2" /></div>
-      <div className="mt-3 flex flex-wrap gap-2"><Skeleton className="h-5 w-16" /><Skeleton className="h-5 w-20" /></div>
-      <Skeleton className="mt-4 h-1.5 w-full rounded-full" />
-      <Skeleton className="mt-4 h-3 w-3/4" />
+    <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-xs" aria-hidden="true">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} className="flex items-center gap-4 border-b border-border/70 px-5 py-3 last:border-0">
+          <Skeleton className="h-5 w-40" />
+          <Skeleton className="h-5 w-20" />
+          <Skeleton className="h-5 w-24" />
+          <Skeleton className="ml-auto h-8 w-8 rounded-md" />
+        </div>
+      ))}
     </div>
   );
 }
 
 function BookGroupSkeleton({ view }: { view: "list" | "grid" }) {
   if (view === "grid") {
-    return (
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, i) => <BookCardSkeleton key={i} />)}
-      </div>
-    );
+    return <BookTableSkeleton />;
   }
   return <div className="space-y-3">{Array.from({ length: 4 }).map((_, i) => <BookRowSkeleton key={i} />)}</div>;
 }

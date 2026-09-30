@@ -3,11 +3,11 @@ import { BookOpen, Check, Pencil, Plus } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { BookCover } from "@/components/book-cover";
-import { BookGridCard } from "@/components/book-grid-card";
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
-import { ViewSwitcher, useCollectionView, type CollectionView } from "@/components/view-switcher";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow as UiTableRow } from "@/components/ui/table";
+import { ViewSwitcher, useCollectionView } from "@/components/view-switcher";
 import { useCatalogCoverUrl } from "@/lib/catalog-covers";
 import { useMySubmissions, type SubmissionRow } from "@/lib/catalog-submit";
 import { SUBMISSION_STATUS_LABELS } from "@/lib/submission-schema";
@@ -69,15 +69,13 @@ function Timeline({ step, className }: { step: number; className?: string | unde
 
 const submittedOn = (value: string) => formatDateMDY(value);
 
-function SubmissionCard({ book, view }: { book: SubmissionRow; view: CollectionView }) {
+function SubmissionCard({ book }: { book: SubmissionRow }) {
   const cover = useCatalogCoverUrl(book.cover_image_url);
   const published = book.catalog_issue_selections.filter((s) => s.catalog_issues?.status === "published");
   const upcoming = book.catalog_issue_selections.filter((s) => s.catalog_issues?.status !== "published");
   const step = currentStep(book, published.length > 0);
-  const grid = view === "grid";
 
   const coverImage = <BookCover resolvedSrc={cover.data} title={book.title} className="w-full" fallbackClassName="text-2xl" />;
-  const subtitle = book.genre ? (book.pen_name ? `${book.genre}, by ${book.pen_name}` : book.genre) : book.pen_name ? `by ${book.pen_name}` : undefined;
 
   const pills = (
     <div className="flex flex-wrap items-center gap-2">
@@ -94,7 +92,7 @@ function SubmissionCard({ book, view }: { book: SubmissionRow; view: CollectionV
   );
   const progress = (
     <>
-      {book.status !== "removed" && <Timeline step={step} className={grid ? undefined : "lg:mt-0"} />}
+      {book.status !== "removed" && <Timeline step={step} className="lg:mt-0" />}
       <p className="mt-3 text-sm text-muted-foreground">
         {published.length > 0
           ? `Featured in ${published.map((s) => s.catalog_issues?.display_label).join(", ")}`
@@ -120,16 +118,6 @@ function SubmissionCard({ book, view }: { book: SubmissionRow; view: CollectionV
     </>
   );
 
-  if (grid) {
-    return (
-      <BookGridCard size="sm" cover={coverImage} title={book.title} subtitle={subtitle}>
-        <div className="mt-3">{pills}</div>
-        {notes}
-        {progress}
-      </BookGridCard>
-    );
-  }
-
   return (
     <article className="flex gap-5 rounded-2xl border border-border bg-card p-5 shadow-xs">
       <div className="w-24 shrink-0">{coverImage}</div>
@@ -142,6 +130,66 @@ function SubmissionCard({ book, view }: { book: SubmissionRow; view: CollectionV
         <div className="lg:pt-1">{progress}</div>
       </div>
     </article>
+  );
+}
+
+function SubmissionTableRow({ book }: { book: SubmissionRow }) {
+  const published = book.catalog_issue_selections.filter((s) => s.catalog_issues?.status === "published");
+  const upcoming = book.catalog_issue_selections.filter((s) => s.catalog_issues?.status !== "published");
+
+  return (
+    <UiTableRow>
+      <TableCell className="max-w-56">
+        <p className="truncate font-semibold">{book.title}</p>
+        {book.pen_name && <p className="truncate text-xs text-muted-foreground">by {book.pen_name}</p>}
+      </TableCell>
+      <TableCell>
+        <div className="flex flex-wrap gap-1.5">
+          <StatusPill tone={TONE[book.status] ?? "neutral"}>{SUBMISSION_STATUS_LABELS[book.status] ?? book.status}</StatusPill>
+          {book.catalog_issue_selections.some((s) => s.is_spotlight) && <StatusPill tone="warm">Spotlight</StatusPill>}
+        </div>
+      </TableCell>
+      <TableCell className="max-w-64 text-sm text-muted-foreground">
+        {published.length > 0
+          ? `Featured in ${published.map((s) => s.catalog_issues?.display_label).join(", ")}`
+          : upcoming.length > 0
+            ? `Picked — ${upcoming.map((s) => s.catalog_issues?.display_label).filter(Boolean).join(", ")}`
+            : "Not in an issue yet"}
+      </TableCell>
+      <TableCell className="text-sm text-muted-foreground">{submittedOn(book.submitted_at)}</TableCell>
+      <TableCell className="text-right">
+        <div className="flex flex-wrap justify-end gap-2">
+          <Button variant="outline" size="sm" asChild><Link to="/submit" search={{ edit: book.id }}><Pencil />Edit</Link></Button>
+          {book.book_cycle_id && (
+            <Button variant="ghost" size="sm" asChild><Link to="/books/$bookId/details" params={{ bookId: book.book_cycle_id }}><BookOpen />My Books</Link></Button>
+          )}
+          {published.length > 0 && (
+            <Button variant="ghost" size="sm" asChild><Link to="/table/books/$bookId" params={{ bookId: book.id }}>At The Table</Link></Button>
+          )}
+        </div>
+      </TableCell>
+    </UiTableRow>
+  );
+}
+
+function SubmissionsTable({ books }: { books: SubmissionRow[] }) {
+  return (
+    <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-xs">
+      <Table>
+        <TableHeader>
+          <UiTableRow className="hover:bg-transparent">
+            <TableHead>Title</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Issue</TableHead>
+            <TableHead>Submitted</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </UiTableRow>
+        </TableHeader>
+        <TableBody>
+          {books.map((book) => <SubmissionTableRow key={book.id} book={book} />)}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
 
@@ -167,9 +215,11 @@ function SubmissionsPage() {
             <Button variant="outline" asChild><Link to="/"><BookOpen />Pick a book from My Books</Link></Button>
           </div>
         </div>
+      ) : view === "grid" ? (
+        <SubmissionsTable books={books} />
       ) : (
-        <div className={view === "grid" ? "grid gap-5 lg:grid-cols-2" : "space-y-5"}>
-          {books.map((book) => <SubmissionCard key={book.id} book={book} view={view} />)}
+        <div className="space-y-5">
+          {books.map((book) => <SubmissionCard key={book.id} book={book} />)}
         </div>
       )}
     </AppShell>
