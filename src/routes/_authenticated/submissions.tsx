@@ -2,6 +2,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { BookOpen, Check, Pencil, Plus } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
+import { BookCover } from "@/components/book-cover";
 import { BookGridCard } from "@/components/book-grid-card";
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
@@ -75,11 +76,8 @@ function SubmissionCard({ book, view }: { book: SubmissionRow; view: CollectionV
   const step = currentStep(book, published.length > 0);
   const grid = view === "grid";
 
-  const coverImage = cover.data ? (
-    <img src={cover.data} alt={`Cover of ${book.title}`} className="aspect-[2/3] w-full rounded-lg object-cover shadow-sm" loading="lazy" />
-  ) : (
-    <span className="grid aspect-[2/3] w-full place-items-center rounded-lg bg-teal/15 p-2 text-center font-heading text-sm text-cocoa shadow-sm">{book.title}</span>
-  );
+  const coverImage = <BookCover resolvedSrc={cover.data} title={book.title} className="w-full" fallbackClassName="text-2xl" />;
+  const subtitle = book.genre ? (book.pen_name ? `${book.genre}, by ${book.pen_name}` : book.genre) : book.pen_name ? `by ${book.pen_name}` : undefined;
 
   const pills = (
     <div className="flex flex-wrap items-center gap-2">
@@ -124,8 +122,8 @@ function SubmissionCard({ book, view }: { book: SubmissionRow; view: CollectionV
 
   if (grid) {
     return (
-      <BookGridCard size="sm" cover={coverImage} title={book.title}>
-        <div className="mt-2">{pills}</div>
+      <BookGridCard size="sm" cover={coverImage} title={book.title} subtitle={subtitle}>
+        <div className="mt-3">{pills}</div>
         {notes}
         {progress}
       </BookGridCard>
