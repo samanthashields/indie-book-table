@@ -3,12 +3,12 @@ import { CheckCircle2, CircleDashed, Clock3, Plus } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { BookCover } from "@/components/book-cover";
-import { BookGridCard } from "@/components/book-grid-card";
 import { CycleActionsMenu } from "@/components/delete-cycle";
 import { PageHeading } from "@/components/page-heading";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow as UiTableRow } from "@/components/ui/table";
 import { ViewSwitcher, useCollectionView } from "@/components/view-switcher";
 import { useBooks, type BookSummary } from "@/lib/book-db";
 
@@ -59,21 +59,41 @@ function CycleRow({ book }: { book: BookSummary }) {
   );
 }
 
-function CycleCard({ book }: { book: BookSummary }) {
+function CycleTableRow({ book }: { book: BookSummary }) {
   return (
-    <BookGridCard
-      size="md"
-      cover={<BookCover src={book.coverUrl} title={book.title} className="w-full" fallbackClassName="text-3xl" />}
-      title={book.title}
-      subtitle={`${book.genre}, by ${book.author}`}
-      link={{ to: "/books/$bookId", params: { bookId: book.id } }}
-      menu={<CycleActionsMenu bookId={book.id} title={book.title} total={book.stepsTotal} done={book.stepsDone} />}
-    >
-      <div className="mt-3"><StatusPill tone={book.status.toLowerCase() === "complete" ? "good" : "warm"}>{book.status}</StatusPill></div>
-      <div className="mt-4 flex items-center gap-3"><Progress value={book.progress} className="h-1.5" /><span className="text-xs font-semibold">{book.progress}%</span></div>
-      <p className="mt-3 line-clamp-2 text-sm"><span className="text-muted-foreground">Next:</span> {book.nextAction}</p>
-      <p className="mt-auto pt-4 text-xs text-muted-foreground">Target publication · {book.target}</p>
-    </BookGridCard>
+    <UiTableRow>
+      <TableCell className="max-w-64">
+        <Link to="/books/$bookId" params={{ bookId: book.id }} className="font-semibold text-foreground hover:text-link hover:underline">{book.title}</Link>
+        <p className="truncate text-xs text-muted-foreground">{book.genre}, by {book.author}</p>
+      </TableCell>
+      <TableCell><StatusPill tone={book.status.toLowerCase() === "complete" ? "good" : "warm"}>{book.status}</StatusPill></TableCell>
+      <TableCell><div className="flex items-center gap-2"><Progress value={book.progress} className="h-1.5 w-24" /><span className="text-xs font-semibold">{book.progress}%</span></div></TableCell>
+      <TableCell className="max-w-56 text-sm text-muted-foreground">{book.nextAction}</TableCell>
+      <TableCell className="text-sm">{book.target}</TableCell>
+      <TableCell className="text-right"><CycleActionsMenu bookId={book.id} title={book.title} total={book.stepsTotal} done={book.stepsDone} /></TableCell>
+    </UiTableRow>
+  );
+}
+
+function CyclesTable({ books }: { books: BookSummary[] }) {
+  return (
+    <div className="overflow-x-auto rounded-2xl border border-border bg-card shadow-xs">
+      <Table>
+        <TableHeader>
+          <UiTableRow className="hover:bg-transparent">
+            <TableHead>Title</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Progress</TableHead>
+            <TableHead>Next action</TableHead>
+            <TableHead>Target publication</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </UiTableRow>
+        </TableHeader>
+        <TableBody>
+          {books.map((book) => <CycleTableRow key={book.id} book={book} />)}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
 
@@ -113,7 +133,7 @@ function Cycles() {
                     <p className="text-sm text-muted-foreground">{section.blurb}</p>
                   </div>
                 </div>
-                <div className={view === "grid" ? "grid gap-4 sm:grid-cols-2 xl:grid-cols-3" : "space-y-4"}>{items.map((book) => view === "grid" ? <CycleCard key={book.id} book={book} /> : <CycleRow key={book.id} book={book} />)}</div>
+                {view === "grid" ? <CyclesTable books={items} /> : <div className="space-y-4">{items.map((book) => <CycleRow key={book.id} book={book} />)}</div>}
               </section>
             );
           })}
