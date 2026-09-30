@@ -1,3 +1,5 @@
+import { ListCheck, ListPlus } from "lucide-react";
+
 import type { CatalogBook } from "@/lib/catalog-types";
 import { toWishlistEntry } from "@/lib/wishlist";
 import { cn } from "@/lib/utils";
@@ -50,7 +52,7 @@ export function CircleToggle({
           className,
         )}
       >
-        {circled ? "✓" : "○"}
+        {circled ? <ListCheck className="size-4" /> : <ListPlus className="size-4" />}
       </button>
     </>
   );

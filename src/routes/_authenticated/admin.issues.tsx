@@ -81,6 +81,7 @@ function AdminIssues() {
   };
 
   return (
+    <div className="relative left-1/2 w-[calc(100vw-2.5rem)] -translate-x-1/2 md:w-[calc(100vw-4rem)]">
     <section className="grid gap-8 lg:grid-cols-[260px_1fr]">
       <aside className="space-y-4">
         <div className="rounded-2xl border border-border bg-card p-4">
@@ -174,7 +175,9 @@ function AdminIssues() {
               <TabsTrigger value="layout">Layout</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="setup" className="space-y-8">
+            <TabsContent value="setup">
+          <div className="grid gap-8 xl:grid-cols-2 xl:items-start">
+          <div className="space-y-8">
           <div className="rounded-2xl border border-border bg-card p-5">
 
             <h3 className="font-heading text-2xl font-normal">Cover words</h3>
@@ -304,6 +307,7 @@ function AdminIssues() {
               />
             </div>
           </div>
+          </div>
 
           <div className="rounded-2xl border border-border bg-card p-5">
             <h3 className="font-heading text-2xl font-normal">Sections</h3>
@@ -398,17 +402,17 @@ function AdminIssues() {
               })}
             </div>
           </div>
+          </div>
             </TabsContent>
 
             <TabsContent value="layout">
-              <div className="relative left-1/2 w-[calc(100vw-2.5rem)] -translate-x-1/2 md:w-[calc(100vw-4rem)]">
-                <IssueBlockBuilder issueId={issue.id} />
-              </div>
+              <IssueBlockBuilder issueId={issue.id} />
             </TabsContent>
           </Tabs>
         </div>
 
       )}
     </section>
+    </div>
   );
 }

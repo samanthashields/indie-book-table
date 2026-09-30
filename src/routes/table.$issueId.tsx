@@ -120,12 +120,21 @@ function IssueBody({ data }: { data: IssueData }) {
         <span>{issue?.display_label}</span>
       </nav>
 
-      <header className="mt-4 rounded-3xl border border-border bg-card p-8 md:p-10">
-        <p className="text-sm font-semibold text-text-inkblue">Issue</p>
-        <h1 className="mt-2 font-heading text-4xl">{issue?.cover_headline ?? issue?.display_label}</h1>
-        {issue?.cover_tagline && (
-          <p className="mt-3 max-w-2xl text-lg text-cocoa/80">{issue.cover_tagline}</p>
+      <header className="mt-4 flex flex-wrap items-start gap-6 rounded-3xl border border-border bg-card p-8 md:p-10">
+        {data.theme?.cover_image_url && (
+          <img
+            src={data.theme.cover_image_url}
+            alt=""
+            className="aspect-[2/3] w-32 shrink-0 rounded-2xl object-cover shadow-sm md:w-40"
+          />
         )}
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-text-inkblue">Issue</p>
+          <h1 className="mt-2 font-heading text-4xl">{issue?.cover_headline ?? issue?.display_label}</h1>
+          {issue?.cover_tagline && (
+            <p className="mt-3 max-w-2xl text-lg text-cocoa/80">{issue.cover_tagline}</p>
+          )}
+        </div>
       </header>
 
       {data.theme?.pdf_url ? (
