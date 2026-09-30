@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -7,6 +8,7 @@ import { AppShell } from "@/components/app-shell";
 import { PageHeading } from "@/components/page-heading";
 import { SubmissionForm } from "@/components/submit/submission-form";
 import { supabase } from "@/integrations/supabase/client";
+import { notifyNewSubmission } from "@/lib/catalog-notify.functions";
 import {
   submitCatalogBook,
   updateCatalogSubmission,
@@ -66,6 +68,7 @@ function SubmitPage() {
   const existing = useSubmission(edit);
   const prefill = useCyclePrefill(bookId);
   const [saving, setSaving] = useState(false);
+  const notifyNew = useServerFn(notifyNewSubmission);
 
   const loading =
     user.isLoading || author.isLoading || (edit && existing.isLoading) || (bookId && prefill.isLoading);
@@ -132,8 +135,9 @@ function SubmitPage() {
         await updateCatalogSubmission(userId, edit, values);
         toast.success("Submission updated");
       } else {
-        await submitCatalogBook(userId, values, { bookCycleId: bookId ?? null });
+        const newBookId = await submitCatalogBook(userId, values, { bookCycleId: bookId ?? null });
         toast.success("Your book is with the editors");
+        void notifyNew({ data: { bookId: newBookId } }).catch(() => undefined);
       }
       await queryClient.invalidateQueries({ queryKey: ["catalog"] });
       void navigate({ to: "/submissions" });
