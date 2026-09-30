@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { LayoutGrid, Table2 } from "lucide-react";
 import { toast } from "sonner";
@@ -7,6 +8,7 @@ import { toast } from "sonner";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { notifySubmissionStatusChange } from "@/lib/catalog-notify.functions";
 import { useCatalogCoverUrl } from "@/lib/catalog-covers";
 import {
   addSelection,
@@ -39,6 +41,7 @@ function FeaturePicker({ book, onChanged }: { book: AdminSubmission; onChanged: 
   const detail = useIssueDetail(activeId);
   const [category, setCategory] = useState("");
   const [busy, setBusy] = useState(false);
+  const notifyStatus = useServerFn(notifySubmissionStatusChange);
 
   const categories = [
     ...new Set([
@@ -61,6 +64,7 @@ function FeaturePicker({ book, onChanged }: { book: AdminSubmission; onChanged: 
       await setSubmissionStatus(book.id, "added_to_database");
       await addSelection(activeId, book.id, category.trim(), (detail.data?.selections ?? []).length);
       toast.success(`Added to ${issues.data?.find((issue) => issue.id === activeId)?.display_label ?? "the issue"}`);
+      void notifyStatus({ data: { bookId: book.id, status: "added_to_database" } }).catch(() => undefined);
       onChanged("added_to_database");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Couldn’t add that to the issue");
@@ -101,12 +105,14 @@ function Row({ book, onChanged }: { book: AdminSubmission; onChanged: (newStatus
   const cover = useCatalogCoverUrl(book.cover_image_url);
   const [reason, setReason] = useState(book.removal_reason ?? "");
   const [busy, setBusy] = useState(false);
+  const notifyStatus = useServerFn(notifySubmissionStatusChange);
 
   const act = async (status: string, removalReason?: string | null) => {
     setBusy(true);
     try {
       await setSubmissionStatus(book.id, status, removalReason);
       toast.success("Submission updated");
+      void notifyStatus({ data: { bookId: book.id, status } }).catch(() => undefined);
       onChanged(status);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Couldn’t update that");
@@ -172,12 +178,14 @@ function Row({ book, onChanged }: { book: AdminSubmission; onChanged: (newStatus
 /** A compact row for the table view — the same transitions as Row's cards, minus the issue-picker (kept for Cards). */
 function TableRow({ book, onChanged }: { book: AdminSubmission; onChanged: (newStatus: string) => void }) {
   const [busy, setBusy] = useState(false);
+  const notifyStatus = useServerFn(notifySubmissionStatusChange);
 
   const act = async (status: string) => {
     setBusy(true);
     try {
       await setSubmissionStatus(book.id, status);
       toast.success("Submission updated");
+      void notifyStatus({ data: { bookId: book.id, status } }).catch(() => undefined);
       onChanged(status);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Couldn’t update that");
