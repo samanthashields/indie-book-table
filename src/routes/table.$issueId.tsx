@@ -2,9 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { queryOptions, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 
-import { Button } from "@/components/ui/button";
 import { PublicShell } from "@/components/site/public-shell";
-import { CatalogBookCard } from "@/components/site/catalog-book-card";
+import { FlyerSections } from "@/components/site/flyer/flyer-sections";
 import { WishlistBar } from "@/components/site/wishlist-bar";
 import { SubscribeGateModal } from "@/components/site/subscribe-gate-modal";
 import { useWishlist, useWishlistGate, type WishlistEntry } from "@/lib/wishlist";
@@ -127,33 +126,11 @@ function IssueBody({ data }: { data: IssueData }) {
         {issue?.cover_tagline && (
           <p className="mt-3 max-w-2xl text-lg text-cocoa/80">{issue.cover_tagline}</p>
         )}
-        {issue && (
-          <Button asChild className="mt-5">
-            <Link to="/table/$issueId/flyer" params={{ issueId: issue.id }}>
-              Read the flyer <span aria-hidden="true">→</span>
-            </Link>
-          </Button>
-        )}
       </header>
 
-      {data.categories.map((category) => (
-        <section key={category.category} className="mt-10">
-          <div className="flex items-baseline gap-3">
-            <h2 className="font-heading text-2xl">{category.category}</h2>
-            <span className="text-sm text-muted-foreground">{category.books.length} books</span>
-          </div>
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
-            {category.books.map((book) => (
-              <CatalogBookCard
-                key={book.id}
-                book={book}
-                circled={isCircled(book.id)}
-                onCircle={handleCircle}
-              />
-            ))}
-          </div>
-        </section>
-      ))}
+      <div className="mt-10">
+        <FlyerSections data={data} isCircled={isCircled} onCircle={handleCircle} skipCover />
+      </div>
       <WishlistBar entries={entries} onClear={clear} />
 
       <SubscribeGateModal
