@@ -99,6 +99,7 @@ function AdminLayout() {
           <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         </div>
       </div>
+      <div className="relative left-1/2 w-[calc(100vw-2.5rem)] -translate-x-1/2 md:w-[calc(100vw-4rem)]">
       <div className="grid min-w-0 gap-8 md:grid-cols-[180px_minmax(0,1fr)] lg:grid-cols-[200px_minmax(0,1fr)]">
         <nav className="sticky top-6 hidden self-start border-r border-border pr-5 md:block" aria-label="Admin navigation">
           {sections.map((section) => <div key={section.label} className="mb-6">
@@ -118,6 +119,7 @@ function AdminLayout() {
           </div>)}
         </nav>
         <div className="min-w-0"><Outlet /></div>
+      </div>
       </div>
     </AppShell>
   );
