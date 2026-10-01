@@ -56,7 +56,6 @@ import { Route as AuthenticatedPenThreadIdRouteImport } from './routes/_authenti
 import { Route as AuthenticatedPenButtonsRouteImport } from './routes/_authenticated/pen.buttons'
 import { Route as AuthenticatedTemplatesIndexRouteImport } from './routes/_authenticated/templates.index'
 import { Route as AuthenticatedTemplatesTemplateIdRouteImport } from './routes/_authenticated/templates.$templateId'
-import { Route as TableIssueIdFlyerRouteImport } from './routes/table.$issueId_.flyer'
 import { Route as TableAuthorsAuthorIdRouteImport } from './routes/table.authors.$authorId'
 import { Route as TableBooksBookIdRouteImport } from './routes/table.books.$bookId'
 import { Route as AuthenticatedAdminHelpIndexRouteImport } from './routes/_authenticated/admin.help.index'
@@ -338,11 +337,6 @@ const AuthenticatedTemplatesTemplateIdRoute =
     path: '/templates/$templateId',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const TableIssueIdFlyerRoute = TableIssueIdFlyerRouteImport.update({
-  id: '/table/$issueId_/flyer',
-  path: '/table/$issueId/flyer',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TableAuthorsAuthorIdRoute = TableAuthorsAuthorIdRouteImport.update({
   id: '/table/authors/$authorId',
   path: '/table/authors/$authorId',
@@ -519,7 +513,6 @@ export interface FileRoutesByFullPath {
   '/pen/$threadId': typeof AuthenticatedPenThreadIdRoute
   '/pen/buttons': typeof AuthenticatedPenButtonsRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
-  '/table/$issueId/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -589,7 +582,6 @@ export interface FileRoutesByTo {
   '/pen/$threadId': typeof AuthenticatedPenThreadIdRoute
   '/pen/buttons': typeof AuthenticatedPenButtonsRoute
   '/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
-  '/table/$issueId/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -663,7 +655,6 @@ export interface FileRoutesById {
   '/_authenticated/pen/$threadId': typeof AuthenticatedPenThreadIdRoute
   '/_authenticated/pen/buttons': typeof AuthenticatedPenButtonsRoute
   '/_authenticated/templates/$templateId': typeof AuthenticatedTemplatesTemplateIdRoute
-  '/table/$issueId_/flyer': typeof TableIssueIdFlyerRoute
   '/table/authors/$authorId': typeof TableAuthorsAuthorIdRoute
   '/table/books/$bookId': typeof TableBooksBookIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -737,7 +728,6 @@ export interface FileRouteTypes {
     | '/pen/$threadId'
     | '/pen/buttons'
     | '/templates/$templateId'
-    | '/table/$issueId/flyer'
     | '/table/authors/$authorId'
     | '/table/books/$bookId'
     | '/admin/'
@@ -807,7 +797,6 @@ export interface FileRouteTypes {
     | '/pen/$threadId'
     | '/pen/buttons'
     | '/templates/$templateId'
-    | '/table/$issueId/flyer'
     | '/table/authors/$authorId'
     | '/table/books/$bookId'
     | '/admin'
@@ -880,7 +869,6 @@ export interface FileRouteTypes {
     | '/_authenticated/pen/$threadId'
     | '/_authenticated/pen/buttons'
     | '/_authenticated/templates/$templateId'
-    | '/table/$issueId_/flyer'
     | '/table/authors/$authorId'
     | '/table/books/$bookId'
     | '/_authenticated/admin/'
@@ -924,7 +912,6 @@ export interface RootRouteChildren {
   IssuesIndexRoute: typeof IssuesIndexRoute
   JournalIndexRoute: typeof JournalIndexRoute
   TableIndexRoute: typeof TableIndexRoute
-  TableIssueIdFlyerRoute: typeof TableIssueIdFlyerRoute
   TableAuthorsAuthorIdRoute: typeof TableAuthorsAuthorIdRoute
   TableBooksBookIdRoute: typeof TableBooksBookIdRoute
   ApiPublicEmailAssetNameRoute: typeof ApiPublicEmailAssetNameRoute
@@ -1265,13 +1252,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTemplatesTemplateIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/table/$issueId_/flyer': {
-      id: '/table/$issueId_/flyer'
-      path: '/table/$issueId/flyer'
-      fullPath: '/table/$issueId/flyer'
-      preLoaderRoute: typeof TableIssueIdFlyerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/table/authors/$authorId': {
       id: '/table/authors/$authorId'
       path: '/table/authors/$authorId'
@@ -1586,7 +1566,6 @@ const rootRouteChildren: RootRouteChildren = {
   IssuesIndexRoute: IssuesIndexRoute,
   JournalIndexRoute: JournalIndexRoute,
   TableIndexRoute: TableIndexRoute,
-  TableIssueIdFlyerRoute: TableIssueIdFlyerRoute,
   TableAuthorsAuthorIdRoute: TableAuthorsAuthorIdRoute,
   TableBooksBookIdRoute: TableBooksBookIdRoute,
   ApiPublicEmailAssetNameRoute: ApiPublicEmailAssetNameRoute,
