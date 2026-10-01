@@ -29,7 +29,7 @@ function AdminJournal() {
   const posts = usePosts();
 
   return (
-    <section className="max-w-3xl space-y-5">
+    <section className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="font-heading text-2xl font-normal">All posts</h2>

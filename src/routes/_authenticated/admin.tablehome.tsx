@@ -17,7 +17,7 @@ function AdminTableHome() {
   };
 
   return (
-    <section className="max-w-3xl rounded-2xl border border-border bg-card p-6">
+    <section className="rounded-2xl border border-border bg-card p-6">
       <h2 className="font-heading text-2xl font-normal">Table homepage</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         The words and pictures on the front page of The Table. Leave a field empty to use the wording we ship with.

@@ -119,7 +119,7 @@ function PenImageEditor() {
 function AdminCycleTour() {
   const steps = useCycleTourSteps({ includeDisabled: true });
   return (
-    <section className="max-w-3xl">
+    <section>
       <h2 className="font-heading text-2xl font-normal">Book Cycle tour</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         The words on the welcome window and on each screen Pen shows as an author opens their first Book Cycle. The order and the part of the page each screen points at are fixed; you can change the words or hide a screen. Changes reach authors within a minute.
