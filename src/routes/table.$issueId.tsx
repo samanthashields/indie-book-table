@@ -4,6 +4,7 @@ import { queryOptions, useQuery, useSuspenseQuery } from "@tanstack/react-query"
 
 import { PublicShell } from "@/components/site/public-shell";
 import { CatalogBookCard } from "@/components/site/catalog-book-card";
+import { PdfFlipbook } from "@/components/site/pdf-flipbook";
 import { WishlistBar } from "@/components/site/wishlist-bar";
 import { SubscribeGateModal } from "@/components/site/subscribe-gate-modal";
 import { useWishlist, useWishlistGate, type WishlistEntry } from "@/lib/wishlist";
@@ -138,12 +139,8 @@ function IssueBody({ data }: { data: IssueData }) {
       </header>
 
       {data.theme?.pdf_url ? (
-        <div className="mt-10 overflow-hidden rounded-2xl border-2 border-ink bg-card">
-          <iframe
-            title={`${issue?.display_label ?? "Issue"} PDF`}
-            src={data.theme.pdf_url}
-            className="h-[min(90vh,60rem)] w-full"
-          />
+        <div className="mt-10">
+          <PdfFlipbook url={data.theme.pdf_url} title={`${issue?.display_label ?? "Issue"} flyer`} />
         </div>
       ) : (
         data.categories.map((category) => (
