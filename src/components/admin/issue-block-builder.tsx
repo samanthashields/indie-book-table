@@ -319,7 +319,7 @@ export function IssueBlockBuilder({ issueId }: { issueId: string }) {
               )}
 
               {selected.kind === "sectionBanner" && (
-                <div className="mt-4 grid max-w-3xl gap-4 md:grid-cols-3">
+                <div className="mt-4 grid gap-4 md:grid-cols-3">
                   <label className={fieldLabel}>
                     Section name
                     <Input
@@ -362,7 +362,7 @@ export function IssueBlockBuilder({ issueId }: { issueId: string }) {
               )}
 
               {selected.kind === "hero" && (
-                <div className="mt-4 grid max-w-3xl gap-4 md:grid-cols-2">
+                <div className="mt-4 grid gap-4 md:grid-cols-2">
                   <label className={fieldLabel}>
                     Book
                     <select
@@ -450,7 +450,7 @@ export function IssueBlockBuilder({ issueId }: { issueId: string }) {
               )}
 
               {selected.kind === "authorSpotlight" && (
-                <div className="mt-4 grid max-w-4xl gap-4 md:grid-cols-2">
+                <div className="mt-4 grid gap-4 md:grid-cols-2">
                   <label className={fieldLabel}>
                     Author
                     <select
@@ -487,7 +487,7 @@ export function IssueBlockBuilder({ issueId }: { issueId: string }) {
               )}
 
               {selected.kind === "personality" && (
-                <div className="mt-4 grid max-w-4xl gap-4 md:grid-cols-2">
+                <div className="mt-4 grid gap-4 md:grid-cols-2">
                   <label className={fieldLabel}>
                     Heading
                     <Input
