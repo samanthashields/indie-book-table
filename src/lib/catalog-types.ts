@@ -86,6 +86,8 @@ export type CatalogIssue = {
     cover_image_url: string | null;
     /** When set, the public issue page renders this PDF instead of the blocks. */
     pdf_url: string | null;
+    /** Hides the headline and tagline so the cover banner image stands alone. */
+    hide_cover_text?: boolean;
   };
   pageThemes?: CatalogPageTheme[];
   blocks?: StoredFlyerBlock[];

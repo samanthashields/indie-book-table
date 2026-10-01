@@ -7,6 +7,7 @@ import { FileText, Star, Trash2, Upload } from "lucide-react";
 import { StatusPill } from "@/components/status-pill";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -22,7 +23,7 @@ import {
   useAdminSubmissions,
   useIssueDetail,
 } from "@/lib/catalog-admin";
-import { uploadCatalogCover, useCatalogCoverUrl } from "@/lib/catalog-covers";
+import { ISSUE_BANNER_MAX_BYTES, uploadCatalogCover, useCatalogCoverUrl } from "@/lib/catalog-covers";
 import { removeIssuePdf, uploadIssuePdf, useSignedIssuePdf } from "@/lib/catalog-issue-pdf";
 import { useCurrentUser } from "@/lib/use-current-user";
 import { IssueBlockBuilder } from "@/components/admin/issue-block-builder";
@@ -193,10 +194,11 @@ function AdminIssues() {
 
             <div className="mt-5">
               <p className="text-sm font-semibold">Cover image</p>
-              <p className="mt-1 text-sm text-muted-foreground">Shown on the issue's cover section. Optional — without one, the cover shows a table of contents instead.</p>
+              <p className="mt-1 text-sm text-muted-foreground">Shown as a wide banner across the top of the issue's page. Optional.</p>
+              <p className="mt-1 text-sm text-muted-foreground">Best as a wide image, about 2400 × 800 px (3:1). JPG, PNG or WebP, up to 5 MB.</p>
               <div className="mt-3 flex flex-wrap items-center gap-4">
                 {coverPreview.data && (
-                  <img src={coverPreview.data} alt="Issue cover preview" className="aspect-[2/3] w-20 rounded-lg object-cover shadow-sm" />
+                  <img src={coverPreview.data} alt="Issue cover preview" className="aspect-[3/1] w-48 rounded-lg object-cover shadow-sm" />
                 )}
                 <div className="flex flex-wrap gap-2">
                   <Button
@@ -221,6 +223,11 @@ function AdminIssues() {
                   onChange={(event) => {
                     const file = event.target.files?.[0];
                     if (!file || !currentUser.data?.id) return;
+                    if (file.size > ISSUE_BANNER_MAX_BYTES) {
+                      toast.error(`That image is ${(file.size / 1024 / 1024).toFixed(1)} MB. Please use one under 5 MB.`);
+                      if (coverInput.current) coverInput.current.value = "";
+                      return;
+                    }
                     setUploadingCover(true);
                     void run(async () => {
                       const path = await uploadCatalogCover(currentUser.data!.id, file);
@@ -232,6 +239,20 @@ function AdminIssues() {
                   }}
                 />
               </div>
+              {theme?.cover_image_url && (
+                <label className="mt-4 flex items-start gap-3 text-sm">
+                  <Switch
+                    checked={theme.hide_cover_text ?? false}
+                    onCheckedChange={(checked) =>
+                      void run(() => saveIssueTheme(issue.id, { hide_cover_text: checked }), checked ? "Headline and tagline hidden" : "Headline and tagline shown")
+                    }
+                  />
+                  <span>
+                    <span className="block font-semibold">Hide headline and tagline</span>
+                    <span className="block text-muted-foreground">Use this when the banner image already has the words on it.</span>
+                  </span>
+                </label>
+              )}
             </div>
 
             <Button

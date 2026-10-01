@@ -160,7 +160,7 @@ export async function loadIssueCatalog(
 
   let query = supabase
     .from("catalog_issues")
-    .select("id, display_label, issue_month, catalog_issue_themes ( preset, border_pattern, cover_headline, cover_tagline, cover_image_url, pdf_url )");
+    .select("id, display_label, issue_month, catalog_issue_themes ( preset, border_pattern, cover_headline, cover_tagline, cover_image_url, pdf_url, hide_cover_text )");
   if (!options?.includeDrafts) query = query.eq("status", "published");
 
   query = issueId
@@ -228,6 +228,7 @@ export async function loadIssueCatalog(
       cover_tagline: theme?.cover_tagline ?? null,
       cover_image_url: await signCoverPath(supabase, theme?.cover_image_url),
       pdf_url: await signPdfPath(theme?.pdf_url),
+      hide_cover_text: theme?.hide_cover_text ?? false,
     },
     blocks: await Promise.all(
       ((blockRows ?? []) as unknown as StoredFlyerBlock[]).map(async (row) => ({
