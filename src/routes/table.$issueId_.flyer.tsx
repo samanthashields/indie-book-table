@@ -1,8 +1,11 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 
 /** Old flyer links now open the issue page, which renders the flyer itself. */
 export const Route = createFileRoute("/table/$issueId_/flyer")({
-  beforeLoad: ({ params }) => {
-    throw redirect({ to: "/table/$issueId", params: { issueId: params.issueId }, statusCode: 301 });
-  },
+  component: FlyerRedirect,
 });
+
+function FlyerRedirect() {
+  const { issueId } = Route.useParams();
+  return <Navigate to="/table/$issueId" params={{ issueId }} replace />;
+}
