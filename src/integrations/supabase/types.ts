@@ -575,7 +575,6 @@ export type Database = {
           cover_image_url: string | null
           cover_tagline: string | null
           created_at: string
-          hide_cover_text: boolean
           issue_id: string
           pdf_url: string | null
           preset: string
@@ -587,7 +586,6 @@ export type Database = {
           cover_image_url?: string | null
           cover_tagline?: string | null
           created_at?: string
-          hide_cover_text?: boolean
           issue_id: string
           pdf_url?: string | null
           preset?: string
@@ -599,7 +597,6 @@ export type Database = {
           cover_image_url?: string | null
           cover_tagline?: string | null
           created_at?: string
-          hide_cover_text?: boolean
           issue_id?: string
           pdf_url?: string | null
           preset?: string
