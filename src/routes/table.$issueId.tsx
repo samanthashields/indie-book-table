@@ -3,7 +3,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { queryOptions, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 
 import { PublicShell } from "@/components/site/public-shell";
-import { CatalogBookCard } from "@/components/site/catalog-book-card";
+import { FlyerSections } from "@/components/site/flyer/flyer-sections";
 import { PdfFlipbook } from "@/components/site/pdf-flipbook";
 import { WishlistBar } from "@/components/site/wishlist-bar";
 import { SubscribeGateModal } from "@/components/site/subscribe-gate-modal";
@@ -149,24 +149,9 @@ function IssueBody({ data }: { data: IssueData }) {
           <PdfFlipbook url={data.theme.pdf_url} title={`${issue?.display_label ?? "Issue"} flyer`} />
         </div>
       ) : (
-        data.categories.map((category) => (
-          <section key={category.category} className="mt-10">
-            <div className="flex items-baseline gap-3">
-              <h2 className="font-heading text-2xl">{category.category}</h2>
-              <span className="text-sm text-muted-foreground">{category.books.length} books</span>
-            </div>
-            <div className="mt-4 grid gap-4 md:grid-cols-2">
-              {category.books.map((book) => (
-                <CatalogBookCard
-                  key={book.id}
-                  book={book}
-                  circled={isCircled(book.id)}
-                  onCircle={handleCircle}
-                />
-              ))}
-            </div>
-          </section>
-        ))
+        <div className="mt-10">
+          <FlyerSections data={data} isCircled={isCircled} onCircle={handleCircle} skipCover />
+        </div>
       )}
       <WishlistBar entries={entries} onClear={clear} />
 
