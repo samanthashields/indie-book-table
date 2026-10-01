@@ -3,6 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const COVER_BUCKET = "catalog-covers";
 
+/** Suggested upper limit for an issue banner image, shown to admins and enforced on upload. */
+export const ISSUE_BANNER_MAX_BYTES = 5 * 1024 * 1024;
+
 const slug = (name: string) =>
   name.toLowerCase().replace(/[^a-z0-9.]+/g, "-").replace(/^-|-$/g, "");
 
