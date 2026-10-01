@@ -1,4 +1,5 @@
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { Maximize2, Minimize2 } from "lucide-react";
 import HTMLFlipBook from "react-pageflip";
 
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,12 @@ const Page = forwardRef<HTMLDivElement, { image: PageImage; label: string }>(fun
 ) {
   return (
     <div ref={ref} className="bg-white">
-      <img src={image.src} alt={label} className="h-full w-full select-none object-contain" draggable={false} />
+      <img
+        src={image.src}
+        alt={label}
+        className="h-full w-full select-none object-contain"
+        draggable={false}
+      />
     </div>
   );
 });
@@ -27,12 +33,16 @@ async function renderPdf(url: string, signal: { cancelled: boolean }): Promise<P
   for (let i = 1; i <= doc.numPages; i++) {
     if (signal.cancelled) break;
     const page = await doc.getPage(i);
-    const viewport = page.getViewport({ scale: 1.6 });
+    const viewport = page.getViewport({ scale: 2 });
     const canvas = document.createElement("canvas");
     canvas.width = viewport.width;
     canvas.height = viewport.height;
     await page.render({ canvas, viewport }).promise;
-    pages.push({ src: canvas.toDataURL("image/jpeg", 0.85), width: viewport.width, height: viewport.height });
+    pages.push({
+      src: canvas.toDataURL("image/jpeg", 0.85),
+      width: viewport.width,
+      height: viewport.height,
+    });
     page.cleanup();
   }
   return pages;
@@ -44,6 +54,8 @@ export function PdfFlipbook({ url, title }: { url: string; title: string }) {
   const [current, setCurrent] = useState(0);
   const [boxWidth, setBoxWidth] = useState(0);
   const [viewportHeight, setViewportHeight] = useState(900);
+  const [expanded, setExpanded] = useState(false);
+  const [flipped, setFlipped] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const book = useRef<any>(null);
@@ -75,6 +87,18 @@ export function PdfFlipbook({ url, title }: { url: string; title: string }) {
     };
   }, [pages]);
 
+  useEffect(() => {
+    if (!expanded) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setExpanded(false);
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [expanded]);
+
   const flip = useCallback((dir: 1 | -1) => {
     const flipper = book.current?.pageFlip();
     if (!flipper) return;
@@ -87,7 +111,9 @@ export function PdfFlipbook({ url, title }: { url: string; title: string }) {
       <div className="rounded-2xl border-2 border-ink bg-card p-8 text-center">
         <p className="text-muted-foreground">We couldn't load the flyer here.</p>
         <Button asChild className="mt-4">
-          <a href={url} target="_blank" rel="noreferrer">Open the PDF</a>
+          <a href={url} target="_blank" rel="noreferrer">
+            Open the PDF
+          </a>
         </Button>
       </div>
     );
@@ -108,14 +134,19 @@ export function PdfFlipbook({ url, title }: { url: string; title: string }) {
   // Capped so a full page always fits on screen without scrolling.
   const ratio = first.height / first.width;
   const fitWidth = Math.floor(portrait ? boxWidth : boxWidth / 2);
-  const maxHeight = Math.max(360, viewportHeight - 200);
+  const maxHeight = Math.max(360, viewportHeight - (expanded ? 150 : 200));
   const pageWidth = Math.max(240, Math.min(fitWidth, Math.floor(maxHeight / ratio)));
   const pageHeight = Math.round(pageWidth * ratio);
 
   return (
     <div
-      className="rounded-2xl border-2 border-ink bg-card p-4 md:p-6"
+      className={
+        expanded
+          ? "fixed inset-0 z-50 flex flex-col justify-center overflow-auto bg-card p-4 md:p-6"
+          : "rounded-2xl border-2 border-ink bg-card p-4 md:p-6"
+      }
       role="region"
+      aria-modal={expanded || undefined}
       aria-label={`${title}, page ${current + 1} of ${pages.length}`}
       tabIndex={0}
       onKeyDown={(e) => {
@@ -123,6 +154,12 @@ export function PdfFlipbook({ url, title }: { url: string; title: string }) {
         if (e.key === "ArrowLeft") flip(-1);
       }}
     >
+      <div className="mb-3 flex justify-end">
+        <Button variant="outline" size="sm" onClick={() => setExpanded((v) => !v)}>
+          {expanded ? <Minimize2 aria-hidden /> : <Maximize2 aria-hidden />}
+          {expanded ? "Close larger view" : "View larger"}
+        </Button>
+      </div>
       <div ref={boxRef} className="flex w-full justify-center">
         {boxWidth > 0 && (
           <HTMLFlipBook
@@ -141,7 +178,7 @@ export function PdfFlipbook({ url, title }: { url: string; title: string }) {
             maxShadowOpacity={0.35}
             mobileScrollSupport
             flippingTime={700}
-            startPage={0}
+            startPage={current}
             startZIndex={0}
             autoSize={false}
             clickEventForward
@@ -151,7 +188,10 @@ export function PdfFlipbook({ url, title }: { url: string; title: string }) {
             disableFlipByClick={false}
             className=""
             style={{}}
-            onFlip={(e: { data: number }) => setCurrent(e.data)}
+            onFlip={(e: { data: number }) => {
+              setCurrent(e.data);
+              setFlipped(true);
+            }}
           >
             {pages.map((image, i) => (
               <Page key={i} image={image} label={`Page ${i + 1}`} />
@@ -170,6 +210,11 @@ export function PdfFlipbook({ url, title }: { url: string; title: string }) {
           Next page
         </Button>
       </div>
+      {!flipped && (
+        <p className="mt-3 text-center text-sm text-muted-foreground">
+          Click or drag a bottom corner of the page to turn it.
+        </p>
+      )}
       <p className="mt-2 text-center text-sm">
         <a href={url} target="_blank" rel="noreferrer" className="underline underline-offset-2">
           Open the PDF in a new tab
