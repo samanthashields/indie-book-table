@@ -128,7 +128,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
               to={signedIn ? "/" : "/auth"}
               className="ml-2 rounded-lg bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              {signedIn ? "Author's Workshop" : "Sign in"}
+              {signedIn ? "Author's Workshop" : "Log in"}
             </Link>
           </nav>
 
@@ -169,7 +169,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
               onClick={() => setMenuOpen(false)}
               className="mt-2 flex h-12 items-center justify-center rounded-lg bg-primary px-4 text-primary-foreground"
             >
-              {signedIn ? "Author's Workshop" : "Sign in"}
+              {signedIn ? "Author's Workshop" : "Log in"}
             </Link>
           </nav>
         )}
