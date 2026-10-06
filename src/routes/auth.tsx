@@ -11,6 +11,10 @@ import falconAsset from "@/assets/falcon.svg.asset.json";
 type Mode = "signin" | "signup";
 
 export const Route = createFileRoute("/auth")({
+  validateSearch: (search: Record<string, unknown>): { mode?: Mode | undefined } => {
+    const mode = search["mode"];
+    return { mode: mode === "signup" || mode === "signin" ? mode : undefined };
+  },
   head: () => ({
     meta: [
       { title: "Sign in — The Indie Book Table" },
@@ -57,7 +61,8 @@ function GoogleIcon() {
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<Mode>("signin");
+  const { mode: initialMode } = Route.useSearch();
+  const [mode, setMode] = useState<Mode>(initialMode ?? "signin");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

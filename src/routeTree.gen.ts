@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as MissionRouteImport } from './routes/mission'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as UnlockRouteImport } from './routes/unlock'
+import { Route as WorkshopRouteImport } from './routes/workshop'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedCollaborationsRouteImport } from './routes/_authenticated/collaborations'
@@ -45,6 +46,7 @@ import { Route as AuthenticatedAdminSubscribersRouteImport } from './routes/_aut
 import { Route as AuthenticatedAdminSupportRouteImport } from './routes/_authenticated/admin.support'
 import { Route as AuthenticatedAdminTablehomeRouteImport } from './routes/_authenticated/admin.tablehome'
 import { Route as AuthenticatedAdminTemplatesRouteImport } from './routes/_authenticated/admin.templates'
+import { Route as AuthenticatedAdminWorkshoppageRouteImport } from './routes/_authenticated/admin.workshoppage'
 import { Route as AuthenticatedBooksBookIdRouteImport } from './routes/_authenticated/books.$bookId'
 import { Route as AuthenticatedBooksAddRouteImport } from './routes/_authenticated/books.add'
 import { Route as AuthenticatedBooksNewRouteImport } from './routes/_authenticated/books.new'
@@ -103,6 +105,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 const UnlockRoute = UnlockRouteImport.update({
   id: '/unlock',
   path: '/unlock',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkshopRoute = WorkshopRouteImport.update({
+  id: '/workshop',
+  path: '/workshop',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
@@ -275,6 +282,12 @@ const AuthenticatedAdminTemplatesRoute =
   AuthenticatedAdminTemplatesRouteImport.update({
     id: '/templates',
     path: '/templates',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminWorkshoppageRoute =
+  AuthenticatedAdminWorkshoppageRouteImport.update({
+    id: '/workshoppage',
+    path: '/workshoppage',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedBooksBookIdRoute =
@@ -482,6 +495,7 @@ export interface FileRoutesByFullPath {
   '/mission': typeof MissionRoute
   '/reset-password': typeof ResetPasswordRoute
   '/unlock': typeof UnlockRoute
+  '/workshop': typeof WorkshopRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/collaborations': typeof AuthenticatedCollaborationsRoute
   '/cycles': typeof AuthenticatedCyclesRoute
@@ -511,6 +525,7 @@ export interface FileRoutesByFullPath {
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/admin/tablehome': typeof AuthenticatedAdminTablehomeRoute
   '/admin/templates': typeof AuthenticatedAdminTemplatesRoute
+  '/admin/workshoppage': typeof AuthenticatedAdminWorkshoppageRoute
   '/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
   '/books/add': typeof AuthenticatedBooksAddRoute
   '/books/new': typeof AuthenticatedBooksNewRoute
@@ -553,6 +568,7 @@ export interface FileRoutesByTo {
   '/mission': typeof MissionRoute
   '/reset-password': typeof ResetPasswordRoute
   '/unlock': typeof UnlockRoute
+  '/workshop': typeof WorkshopRoute
   '/collaborations': typeof AuthenticatedCollaborationsRoute
   '/cycles': typeof AuthenticatedCyclesRoute
   '/my-table': typeof AuthenticatedMyTableRoute
@@ -582,6 +598,7 @@ export interface FileRoutesByTo {
   '/admin/support': typeof AuthenticatedAdminSupportRoute
   '/admin/tablehome': typeof AuthenticatedAdminTablehomeRoute
   '/admin/templates': typeof AuthenticatedAdminTemplatesRoute
+  '/admin/workshoppage': typeof AuthenticatedAdminWorkshoppageRoute
   '/books/add': typeof AuthenticatedBooksAddRoute
   '/books/new': typeof AuthenticatedBooksNewRoute
   '/help/releases': typeof AuthenticatedHelpReleasesRoute
@@ -625,6 +642,7 @@ export interface FileRoutesById {
   '/mission': typeof MissionRoute
   '/reset-password': typeof ResetPasswordRoute
   '/unlock': typeof UnlockRoute
+  '/workshop': typeof WorkshopRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/collaborations': typeof AuthenticatedCollaborationsRoute
   '/_authenticated/cycles': typeof AuthenticatedCyclesRoute
@@ -655,6 +673,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/support': typeof AuthenticatedAdminSupportRoute
   '/_authenticated/admin/tablehome': typeof AuthenticatedAdminTablehomeRoute
   '/_authenticated/admin/templates': typeof AuthenticatedAdminTemplatesRoute
+  '/_authenticated/admin/workshoppage': typeof AuthenticatedAdminWorkshoppageRoute
   '/_authenticated/books/$bookId': typeof AuthenticatedBooksBookIdRouteWithChildren
   '/_authenticated/books/add': typeof AuthenticatedBooksAddRoute
   '/_authenticated/books/new': typeof AuthenticatedBooksNewRoute
@@ -700,6 +719,7 @@ export interface FileRouteTypes {
     | '/mission'
     | '/reset-password'
     | '/unlock'
+    | '/workshop'
     | '/admin'
     | '/collaborations'
     | '/cycles'
@@ -729,6 +749,7 @@ export interface FileRouteTypes {
     | '/admin/support'
     | '/admin/tablehome'
     | '/admin/templates'
+    | '/admin/workshoppage'
     | '/books/$bookId'
     | '/books/add'
     | '/books/new'
@@ -771,6 +792,7 @@ export interface FileRouteTypes {
     | '/mission'
     | '/reset-password'
     | '/unlock'
+    | '/workshop'
     | '/collaborations'
     | '/cycles'
     | '/my-table'
@@ -800,6 +822,7 @@ export interface FileRouteTypes {
     | '/admin/support'
     | '/admin/tablehome'
     | '/admin/templates'
+    | '/admin/workshoppage'
     | '/books/add'
     | '/books/new'
     | '/help/releases'
@@ -842,6 +865,7 @@ export interface FileRouteTypes {
     | '/mission'
     | '/reset-password'
     | '/unlock'
+    | '/workshop'
     | '/_authenticated/admin'
     | '/_authenticated/collaborations'
     | '/_authenticated/cycles'
@@ -872,6 +896,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/support'
     | '/_authenticated/admin/tablehome'
     | '/_authenticated/admin/templates'
+    | '/_authenticated/admin/workshoppage'
     | '/_authenticated/books/$bookId'
     | '/_authenticated/books/add'
     | '/_authenticated/books/new'
@@ -916,6 +941,7 @@ export interface RootRouteChildren {
   MissionRoute: typeof MissionRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   UnlockRoute: typeof UnlockRoute
+  WorkshopRoute: typeof WorkshopRoute
   ApiCoachPlanRoute: typeof ApiCoachPlanRoute
   ApiPenRoute: typeof ApiPenRoute
   JournalSlugRoute: typeof JournalSlugRoute
@@ -969,6 +995,13 @@ declare module '@tanstack/react-router' {
       path: '/unlock'
       fullPath: '/unlock'
       preLoaderRoute: typeof UnlockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/workshop': {
+      id: '/workshop'
+      path: '/workshop'
+      fullPath: '/workshop'
+      preLoaderRoute: typeof WorkshopRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/': {
@@ -1186,6 +1219,13 @@ declare module '@tanstack/react-router' {
       path: '/templates'
       fullPath: '/admin/templates'
       preLoaderRoute: typeof AuthenticatedAdminTemplatesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/workshoppage': {
+      id: '/_authenticated/admin/workshoppage'
+      path: '/workshoppage'
+      fullPath: '/admin/workshoppage'
+      preLoaderRoute: typeof AuthenticatedAdminWorkshoppageRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/books/$bookId': {
@@ -1452,6 +1492,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminSupportRoute: typeof AuthenticatedAdminSupportRoute
   AuthenticatedAdminTablehomeRoute: typeof AuthenticatedAdminTablehomeRoute
   AuthenticatedAdminTemplatesRoute: typeof AuthenticatedAdminTemplatesRoute
+  AuthenticatedAdminWorkshoppageRoute: typeof AuthenticatedAdminWorkshoppageRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminHelpArticleIdRoute: typeof AuthenticatedAdminHelpArticleIdRoute
   AuthenticatedAdminJournalPostIdRoute: typeof AuthenticatedAdminJournalPostIdRoute
@@ -1475,6 +1516,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminSupportRoute: AuthenticatedAdminSupportRoute,
   AuthenticatedAdminTablehomeRoute: AuthenticatedAdminTablehomeRoute,
   AuthenticatedAdminTemplatesRoute: AuthenticatedAdminTemplatesRoute,
+  AuthenticatedAdminWorkshoppageRoute: AuthenticatedAdminWorkshoppageRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   AuthenticatedAdminHelpArticleIdRoute: AuthenticatedAdminHelpArticleIdRoute,
   AuthenticatedAdminJournalPostIdRoute: AuthenticatedAdminJournalPostIdRoute,
@@ -1578,6 +1620,7 @@ const rootRouteChildren: RootRouteChildren = {
   MissionRoute: MissionRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   UnlockRoute: UnlockRoute,
+  WorkshopRoute: WorkshopRoute,
   ApiCoachPlanRoute: ApiCoachPlanRoute,
   ApiPenRoute: ApiPenRoute,
   JournalSlugRoute: JournalSlugRoute,
