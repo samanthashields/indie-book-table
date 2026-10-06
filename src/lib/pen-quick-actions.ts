@@ -86,7 +86,7 @@ export function useSavePenQuickActions() {
     mutationFn: async (input: { section: PenSection; actions: PenQuickAction[] }) => {
       const { data: userData } = await supabase.auth.getUser();
       const userId = userData.user?.id;
-      if (!userId) throw new Error("Please sign in first.");
+      if (!userId) throw new Error("Please log in first.");
 
       const { error: clearError } = await supabase
         .from("pen_quick_actions")

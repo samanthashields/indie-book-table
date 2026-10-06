@@ -54,7 +54,7 @@ export function useCreatePenThread() {
     mutationFn: async (input: { title?: string; bookId?: string | null }) => {
       const { data: userData } = await supabase.auth.getUser();
       const userId = userData.user?.id;
-      if (!userId) throw new Error("Please sign in first.");
+      if (!userId) throw new Error("Please log in first.");
       const { data, error } = await supabase
         .from("pen_threads")
         .insert({

@@ -147,7 +147,7 @@ export function useSubmitFeatureRequest() {
   return useMutation({
     mutationFn: async (input: FeatureRequestDraft) => {
       const { data: auth } = await supabase.auth.getUser();
-      if (!auth.user) throw new Error("Sign in first");
+      if (!auth.user) throw new Error("Log in first");
       const { data, error } = await supabase
         .from("feature_requests")
         .insert({
@@ -205,7 +205,7 @@ export function useToggleFeatureVote() {
   return useMutation({
     mutationFn: async (input: { requestId: string; voted: boolean }) => {
       const { data: auth } = await supabase.auth.getUser();
-      if (!auth.user) throw new Error("Sign in first");
+      if (!auth.user) throw new Error("Log in first");
       if (input.voted) {
         const { error } = await supabase
           .from("feature_request_votes")
@@ -280,7 +280,7 @@ export const MAX_FEATURE_ATTACHMENTS = 5;
 /** Uploads a screenshot into the signed-in author's own folder. */
 export async function uploadFeatureAttachment(file: File): Promise<FeatureAttachment> {
   const { data: auth } = await supabase.auth.getUser();
-  if (!auth.user) throw new Error("Sign in first");
+  if (!auth.user) throw new Error("Log in first");
   if (!file.type.startsWith("image/")) throw new Error("Only images can be attached");
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
   const path = `${auth.user.id}/${crypto.randomUUID()}-${safeName}`;

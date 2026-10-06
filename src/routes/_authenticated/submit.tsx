@@ -88,7 +88,7 @@ function SubmitPage() {
   }
 
   const userId = user.data?.id;
-  if (!userId) return <AppShell><p className="text-sm text-muted-foreground">Sign in to submit a book.</p></AppShell>;
+  if (!userId) return <AppShell><p className="text-sm text-muted-foreground">Log in to submit a book.</p></AppShell>;
 
   const row = existing.data;
   const cycle = prefill.data;

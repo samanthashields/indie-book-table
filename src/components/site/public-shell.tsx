@@ -188,7 +188,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
             {!signedIn && (
               <Link to="/workshop" className="hover:text-foreground" activeProps={{ className: "font-semibold text-foreground" }}>Author's Workshop</Link>
             )}
-            <Link to="/auth" className="hover:text-foreground">Author sign in</Link>
+            <Link to="/auth" className="hover:text-foreground">Author log in</Link>
             <ThemeToggle />
           </div>
         </div>

@@ -73,7 +73,7 @@ function AdminLayout() {
               <Link to="/">Back to my books</Link>
             </Button>
             <Button asChild variant="secondary">
-              <Link to="/auth">Sign in with another account</Link>
+              <Link to="/auth">Log in with another account</Link>
             </Button>
           </div>
         </div>

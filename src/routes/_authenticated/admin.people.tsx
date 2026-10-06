@@ -211,7 +211,7 @@ function InviteAdminPanel({ onInvited }: { onInvited: () => void }) {
             Send invite
           </Button>
           <p className="text-xs text-muted-foreground sm:col-span-3">
-            They’ll get an email to set a password, and their account already has admin access when they sign in.
+            They’ll get an email to set a password, and their account already has admin access when they log in.
           </p>
         </div>
       )}

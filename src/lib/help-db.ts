@@ -188,7 +188,7 @@ export function useOpenTicket() {
     mutationFn: async (input: { subject: string; body: string; attachment_path?: string | null; featureRequestId?: string | null }) => {
       const { data: userData } = await supabase.auth.getUser();
       const userId = userData.user?.id;
-      if (!userId) throw new Error("Sign in again to contact support.");
+      if (!userId) throw new Error("Log in again to contact support.");
       const { data, error } = await supabase
         .from("support_tickets")
         .insert({ user_id: userId, subject: input.subject, status: "new", feature_request_id: input.featureRequestId ?? null })
@@ -215,7 +215,7 @@ export function useReplyToTicket() {
     mutationFn: async (input: { ticketId: string; body: string; fromAdmin: boolean; status?: TicketStatus; notifyUserId?: string }) => {
       const { data: userData } = await supabase.auth.getUser();
       const userId = userData.user?.id;
-      if (!userId) throw new Error("Sign in again to reply.");
+      if (!userId) throw new Error("Log in again to reply.");
       const { error } = await supabase.from("support_messages").insert({
         ticket_id: input.ticketId,
         sender_user_id: userId,

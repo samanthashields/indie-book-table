@@ -41,7 +41,7 @@ export function useSaveWorkshopOnboardingState() {
     mutationFn: async (patch: Partial<Omit<WorkshopOnboardingState, "user_id" | "updated_at">>) => {
       const { data: userData } = await supabase.auth.getUser();
       const user = userData.user;
-      if (!user) throw new Error("Sign in again to save your preference");
+      if (!user) throw new Error("Log in again to save your preference");
       const { error } = await supabase.from("workshop_onboarding_state").upsert(
         { user_id: user.id, ...patch },
         { onConflict: "user_id" },
