@@ -1,0 +1,1 @@
+DELETE FROM public.catalog_site_content WHERE key IN ('mission.headline', 'mission.body');
