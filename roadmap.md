@@ -125,3 +125,8 @@
 - [x] Add a guided, restartable Workshop walkthrough
 - [x] Add admin-managed welcome copy, media, walkthrough screens, ordering, publishing, and preview
 - [x] Verify the complete experience in desktop and mobile browsers
+
+## Oct 5 — Public pages
+
+- [ ] Mission page rewrite: statement hero, principles, "what we ask every book", closing call to action, active nav state
+- [ ] Public Author's Workshop landing page (`/workshop`), sign-up deep link (`/auth?mode=signup`), Admin → Workshop page

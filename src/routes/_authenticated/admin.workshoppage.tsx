@@ -3,11 +3,11 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { SiteCopyField } from "@/components/admin/site-copy-field";
 import { useSiteCopy } from "@/lib/catalog-admin";
-import { MISSION_FIELDS } from "@/lib/site-copy";
+import { WORKSHOP_FIELDS } from "@/lib/site-copy";
 
-export const Route = createFileRoute("/_authenticated/admin/missionpage")({ component: AdminMissionPage });
+export const Route = createFileRoute("/_authenticated/admin/workshoppage")({ component: AdminWorkshopPage });
 
-function AdminMissionPage() {
+function AdminWorkshopPage() {
   const copy = useSiteCopy();
   const queryClient = useQueryClient();
   const values = new Map((copy.data ?? []).map((row) => [row.key, row.value]));
@@ -18,12 +18,12 @@ function AdminMissionPage() {
 
   return (
     <section className="rounded-2xl border border-border bg-card p-6">
-      <h2 className="font-heading text-2xl font-normal">Mission page</h2>
+      <h2 className="font-heading text-2xl font-normal">Workshop page</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        Everything on the mission page, in page order. Leave a field empty to use the wording we ship with.
+        Every heading, paragraph, plan detail and picture on the public Author’s Workshop page. Leave a field empty to use the wording we ship with.
       </p>
       <div className="mt-6 space-y-4">
-        {MISSION_FIELDS.map((field) => (
+        {WORKSHOP_FIELDS.map((field) => (
           <SiteCopyField
             key={field.key}
             field={field}

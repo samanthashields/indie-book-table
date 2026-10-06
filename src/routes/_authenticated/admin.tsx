@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_authenticated/admin")({ component: Admin
 
 type AdminPath =
   | "/admin" | "/admin/submissions" | "/admin/issues" | "/admin/journal" | "/admin/tablehome"
-  | "/admin/missionpage" | "/admin/sitewords" | "/admin/people" | "/admin/subscribers"
+  | "/admin/missionpage" | "/admin/workshoppage" | "/admin/sitewords" | "/admin/people" | "/admin/subscribers"
   | "/admin/templates" | "/admin/challenges" | "/admin/onboarding" | "/admin/cycle-tour" | "/admin/help"
   | "/admin/support" | "/admin/requests" | "/admin/releases" | "/admin/activity";
 
@@ -22,7 +22,9 @@ const sections: AdminSection[] = [
   { label: "Editorial", items: [
     { label: "Submissions", to: "/admin/submissions" as const }, { label: "Issues", to: "/admin/issues" as const },
     { label: "Journal", to: "/admin/journal" as const }, { label: "Table homepage", to: "/admin/tablehome" as const },
-    { label: "Mission page", to: "/admin/missionpage" as const }, { label: "Site words", to: "/admin/sitewords" as const },
+    { label: "Mission page", to: "/admin/missionpage" as const },
+    { label: "Workshop page", to: "/admin/workshoppage" as const },
+    { label: "Site words", to: "/admin/sitewords" as const },
   ] },
   { label: "Community", items: [{ label: "People", to: "/admin/people" as const }, { label: "Community list", to: "/admin/subscribers" as const }] },
   { label: "Workshop", items: [
