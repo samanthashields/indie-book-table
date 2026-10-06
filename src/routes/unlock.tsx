@@ -167,7 +167,7 @@ function UnlockPage() {
             onClick={() => setShowEntry(true)}
             className="text-xs text-muted-foreground/60 underline-offset-4 hover:underline"
           >
-            Admin sign in
+            Admin log in
           </button>
         )}
       </footer>

@@ -60,7 +60,7 @@ export const SITE_COPY_DEFAULTS: Record<string, string> = {
   "workshop.hero.body":
     "The Author's Workshop guides you through every phase of making a book, from first draft to launch day and beyond. Plan your book, bring in your team, and always know your next step.",
   "workshop.hero.cta": "Create your free account",
-  "workshop.hero.signin": "Already have an account? Sign in",
+  "workshop.hero.signin": "Already have an account? Log in",
   "workshop.hero.image": tableStrip3,
   "workshop.phases.title": "Your book, one phase at a time",
   "workshop.phases.intro":
@@ -184,7 +184,7 @@ export const WORKSHOP_FIELDS: SiteCopyField[] = [
   { key: "workshop.hero.title", label: "Hero headline", kind: "text" },
   { key: "workshop.hero.body", label: "Hero sub-headline", kind: "long" },
   { key: "workshop.hero.cta", label: "Hero button words", kind: "text" },
-  { key: "workshop.hero.signin", label: "Sign-in link words", kind: "text" },
+  { key: "workshop.hero.signin", label: "Log-in link words", kind: "text" },
   { key: "workshop.hero.image", label: "Hero image", kind: "image" },
   { key: "workshop.phases.title", label: "Phases heading", kind: "text" },
   { key: "workshop.phases.intro", label: "Phases intro", kind: "long" },

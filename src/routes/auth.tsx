@@ -17,17 +17,17 @@ export const Route = createFileRoute("/auth")({
   },
   head: () => ({
     meta: [
-      { title: "Sign in — The Indie Book Table" },
+      { title: "Log in — The Indie Book Table" },
       {
         name: "description",
         content:
-          "Sign in to your publishing workspace, or create an author or collaborator account.",
+          "Log in to your publishing workspace, or create an author or collaborator account.",
       },
-      { property: "og:title", content: "Sign in — The Indie Book Table" },
+      { property: "og:title", content: "Log in — The Indie Book Table" },
       {
         property: "og:description",
         content:
-          "Sign in to your publishing workspace, or create an author or collaborator account.",
+          "Log in to your publishing workspace, or create an author or collaborator account.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -109,7 +109,7 @@ function AuthPage() {
       redirect_uri: window.location.origin,
     });
     if (result.error) {
-      setError(result.error.message ?? "Google sign-in failed");
+      setError(result.error.message ?? "Google log in failed");
       return;
     }
     if (result.redirected) return;
@@ -154,7 +154,7 @@ function AuthPage() {
               setMode("signin");
             }}
           >
-            Back to sign in
+            Back to log in
           </Button>
         </div>
       </div>
@@ -219,7 +219,7 @@ function AuthPage() {
           <div className="mb-6 grid grid-cols-2 rounded-xl bg-secondary p-1">
             {(
               [
-                ["signin", "Sign in"],
+                ["signin", "Log in"],
                 ["signup", "Create account"],
               ] as const
             ).map(([value, label]) => (
@@ -241,7 +241,7 @@ function AuthPage() {
           </div>
 
           <h1 className="font-heading text-3xl font-normal">
-            {mode === "signin" ? "Author's Workshop Sign In" : "Author's Workshop Sign Up"}
+            {mode === "signin" ? "Author's Workshop Log In" : "Author's Workshop Sign Up"}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {mode === "signin"
@@ -310,7 +310,7 @@ function AuthPage() {
             )}
 
             <Button type="submit" className="w-full" disabled={busy}>
-              {busy ? "One moment…" : mode === "signin" ? "Sign in" : "Create account"}
+              {busy ? "One moment…" : mode === "signin" ? "Log in" : "Create account"}
             </Button>
           </form>
 

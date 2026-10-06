@@ -21,7 +21,7 @@ export const Route = createFileRoute("/api/pen")({
         if (!apiKey) return new Response("Pen is not configured for this app yet.", { status: 500 });
 
         const auth = await authenticateRequest(request);
-        if (!auth) return new Response("Please sign in to talk to Pen.", { status: 401 });
+        if (!auth) return new Response("Please log in to talk to Pen.", { status: 401 });
         const { supabase, userId } = auth;
 
         const body = (await request.json()) as PenRequestBody;

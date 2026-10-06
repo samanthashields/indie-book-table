@@ -4,10 +4,10 @@ import {
   ChevronDown,
   LifeBuoy,
   Library,
+  type LucideIcon,
   LogOut,
   Menu,
   MessageCircle,
-  Newspaper,
   Send,
   Shield,
   Sparkles,
@@ -36,23 +36,31 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import falconAsset from "@/assets/falcon.svg.asset.json";
 
-const primaryNav = [
-  { label: "My Books", to: "/" as const, icon: Library },
-  { label: "My Cycles", to: "/cycles" as const, icon: Sparkles },
-  { label: "Templates", to: "/templates" as const, icon: BookOpen },
-  { label: "Pen", to: "/pen" as const, icon: MessageCircle },
-  { label: "The Table", to: "/table" as const, icon: Utensils },
-  { label: "Help Center", to: "/help" as const, icon: LifeBuoy },
+type NavItem = { label: string; to: string; icon: LucideIcon };
+type NavGroup = { label: string; items: NavItem[] };
+
+const navGroups: NavGroup[] = [
+  {
+    label: "Books",
+    items: [
+      { label: "My Books", to: "/", icon: Library },
+      { label: "My Submissions", to: "/submissions", icon: Send },
+    ],
+  },
+  {
+    label: "Book Cycles",
+    items: [
+      { label: "My Cycles", to: "/cycles", icon: Sparkles },
+      { label: "Templates", to: "/templates", icon: BookOpen },
+      { label: "Collaborations", to: "/collaborations", icon: Users },
+      { label: "Pen", to: "/pen", icon: MessageCircle },
+      { label: "My Table", to: "/my-table", icon: Trophy },
+    ],
+  },
 ];
 
-const moreNav = [
-  { label: "My Table", to: "/my-table" as const, icon: Trophy },
-  { label: "Collaborations", to: "/collaborations" as const, icon: Users },
-  { label: "My Submissions", to: "/submissions" as const, icon: Send },
-  { label: "Journal", to: "/journal" as const, icon: Newspaper },
-];
-
-const allNav = [...primaryNav, ...moreNav];
+/** Routes that belong to a group without being in its menu (e.g. a single book's pages). */
+const extraGroupPaths: Record<string, string[]> = { Books: ["/books"] };
 
 export function AppShell({
   children,
@@ -83,7 +91,10 @@ export function AppShell({
   const userId = user.data?.id;
 
   const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
-  const moreActive = moreNav.some((item) => isActive(item.to));
+  const groupActive = (group: NavGroup) =>
+    group.items.some((item) => isActive(item.to)) ||
+    (extraGroupPaths[group.label] ?? []).some((path) => pathname.startsWith(path));
+  const helpActive = isActive("/help");
 
   useEffect(() => {
     if (!userId) return;
@@ -122,50 +133,54 @@ export function AppShell({
               </span>
             </Link>
             <nav className="hidden items-center gap-1 lg:flex">
-              {primaryNav.map(({ label, to }) => (
-                <Link
-                  key={label}
-                  to={to}
-                  className={cn(
-                    "rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
-                    isActive(to)
-                      ? "bg-secondary text-foreground"
-                      : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  {label}
-                </Link>
+              {navGroups.map((group) => (
+                <DropdownMenu key={group.label}>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type="button"
+                      className={cn(
+                        "flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
+                        groupActive(group)
+                          ? "bg-secondary text-foreground"
+                          : "text-muted-foreground hover:text-foreground",
+                      )}
+                    >
+                      {group.label}
+                      <ChevronDown className="size-3.5" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    {group.items.map(({ label, to, icon: Icon }) => (
+                      <DropdownMenuItem key={label} asChild>
+                        <Link to={to}>
+                          <Icon className="size-4" />
+                          {label}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ))}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button
-                    type="button"
-                    className={cn(
-                      "flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
-                      moreActive
-                        ? "bg-secondary text-foreground"
-                        : "text-muted-foreground hover:text-foreground",
-                    )}
-                  >
-                    More
-                    <ChevronDown className="size-3.5" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start">
-                  {moreNav.map(({ label, to, icon: Icon }) => (
-                    <DropdownMenuItem key={label} asChild>
-                      <Link to={to}>
-                        <Icon className="size-4" />
-                        {label}
-                      </Link>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Link
+                to="/table"
+                className="rounded-lg px-3 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+              >
+                The Table
+              </Link>
             </nav>
           </div>
 
           <div className="flex shrink-0 items-center gap-1">
+            <Button
+              asChild
+              variant="ghost"
+              size="icon"
+              className={cn(helpActive && "bg-secondary text-foreground")}
+            >
+              <Link to="/help" aria-label="Help Center" title="Help Center">
+                <LifeBuoy />
+              </Link>
+            </Button>
             <NotificationBell />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -237,7 +252,31 @@ export function AppShell({
               </Button>
             </div>
             <nav className="space-y-1">
-              {allNav.map(({ label, to, icon: Icon }) => (
+              {navGroups.map((group) => (
+                <div key={group.label} className="pb-2">
+                  <p className="px-3 pb-1 pt-2 text-xs font-semibold text-muted-foreground">{group.label}</p>
+                  {group.items.map(({ label, to, icon: Icon }) => (
+                    <Link
+                      key={label}
+                      to={to}
+                      onClick={() => setNavOpen(false)}
+                      className={cn(
+                        "flex h-11 items-center gap-3 rounded-lg px-3 text-sm font-semibold transition-colors",
+                        isActive(to)
+                          ? "bg-secondary text-foreground"
+                          : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground",
+                      )}
+                    >
+                      <Icon className="size-5 shrink-0" />
+                      {label}
+                    </Link>
+                  ))}
+                </div>
+              ))}
+              {[
+                { label: "The Table", to: "/table", icon: Utensils },
+                { label: "Help Center", to: "/help", icon: LifeBuoy },
+              ].map(({ label, to, icon: Icon }) => (
                 <Link
                   key={label}
                   to={to}

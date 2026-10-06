@@ -42,7 +42,7 @@ export function MarkdownEditor({
     setBusy(true);
     try {
       const { data: userData } = await supabase.auth.getUser();
-      if (!userData.user) throw new Error("Sign in again to upload images.");
+      if (!userData.user) throw new Error("Log in again to upload images.");
       const path = await uploadCatalogCover(userData.user.id, file);
       const url = await signCatalogCover(path, 60 * 60 * 24 * 365);
       onChange(`${value}\n\n![${file.name.replace(/\.[a-z0-9]+$/i, "")}](${url})\n`);

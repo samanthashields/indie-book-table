@@ -90,7 +90,7 @@ function PostEditor() {
     setBusy(true);
     try {
       const { data: userData } = await supabase.auth.getUser();
-      if (!userData.user) throw new Error("Sign in again to upload images.");
+      if (!userData.user) throw new Error("Log in again to upload images.");
       const path = await uploadCatalogCover(userData.user.id, file);
       if (target === "cover") setDraft((current) => ({ ...current, cover_image_url: path }));
       else {
