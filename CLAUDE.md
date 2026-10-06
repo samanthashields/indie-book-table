@@ -1,14 +1,14 @@
-# The Indie Table — project brief for AI coding assistants
+# The Indie Book Table — project brief for AI coding assistants
 
 Read this at the start of every session. It keeps Claude Code and Cursor consistent with the product's structure and the specs. If code and this brief conflict, stop and flag it rather than guessing.
 
-## Naming — currently inconsistent, needs reconciling
+## Naming — settled
 
-The locked brand is **The Indie Table**. The live app currently shows **"The Indie Book Table"** in the header and some copy (a leftover from an earlier working name). Don't silently "fix" this in either direction — flag it to Sam and confirm which is canonical before changing header/copy text.
+The canonical brand is **The Indie Book Table** (confirmed by Sam, Oct 5). "The Indie Table" was an earlier working name; don't reintroduce it. "The Table" still means the public catalog.
 
 ## Product
 
-**The Indie Table** is a B2C SaaS product for self-published (indie) authors. Built in Lovable, synced to GitHub (`main` is the source of truth). Three surfaces under one brand and one account:
+**The Indie Book Table** is a B2C SaaS product for self-published (indie) authors. Built in Lovable, synced to GitHub (`main` is the source of truth). Three surfaces under one brand and one account:
 
 - **Author's Workshop** — private, authed. The author's home and expandable container. Holds **Book Cycles** (the guided, phased book-production tool) and **Book listing profiles** (per-book public listings the author manages here). Built to add more author tools later.
 - **The Table** — public. A browsable catalog of indie books and author profiles; authors submit books to be listed. Ships as a monthly **flyer/issue** (see Flyer system below).
@@ -16,7 +16,7 @@ The locked brand is **The Indie Table**. The live app currently shows **"The Ind
 
 ## Vocabulary (use these exact terms in code, copy, and comments)
 
-- **The Indie Table** — the product/brand (see naming note above)
+- **The Indie Book Table** — the product/brand (see naming note above)
 - **Author's Workshop** — the private authed home
 - **Book Cycles** — the phased production tool inside the Workshop
 - **Pen** (full name Penny) — the AI book coach
@@ -46,7 +46,7 @@ Each monthly issue is authored as an ordered sequence of **blocks** (Cover, Sect
 - One design system across all surfaces. Build from existing tokens/components; add to the system before using something new — no one-off colors, fonts, or card styles.
 - Avoid generic AI-design tells: identical rounded-card shadows, ALL-CAPS eyebrow labels, a "→" on every button, the warm-cream+terracotta cliché.
 - The arc is private manuscript → public book: the Workshop is quiet/focused; The Table is brighter/celebratory — same system, not two looks.
-- Copy: sentence case. Pen's voice is plain, warm, encouraging, one clear next step. CTAs say what happens ("List on The Indie Table", "Mark complete", "Approve cover").
+- Copy: sentence case. Pen's voice is plain, warm, encouraging, one clear next step. CTAs say what happens ("List on The Table", "Mark complete", "Approve cover").
 - Mobile + desktop responsive, visible keyboard focus, respect reduced-motion — **except** the Admin authoring workspace, which is fine designed desktop-first (internal tool).
 
 ## Architecture / tech notes
